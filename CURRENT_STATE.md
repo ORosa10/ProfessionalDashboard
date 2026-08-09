@@ -18,7 +18,7 @@ Foundation / v0 app shell.
 
 Turn the Jobs section into the first real end-to-end learning loop:
 
-1. define an initial `SearchProfile` using `WHAT Ã— WHERE Ã— WHO Ã— SOURCE`;
+1. define an initial `SearchProfile` using `WHAT × WHERE × WHO × SOURCE`;
 2. persist Opportunities, Companies, Sources, SearchProfiles, and reviews;
 3. connect the first genuine job source or career-page monitor;
 4. ingest real opportunities into the Inbox;

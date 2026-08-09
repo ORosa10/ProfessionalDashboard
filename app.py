@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from pathlib import Path
+
+import pandas as pd
 import streamlit as st
 
 
@@ -72,19 +75,88 @@ def opportunities_page() -> None:
 
 def jobs_page() -> None:
     header("Jobs", "The first real sourcing engine, structured as WHAT × WHERE × WHO × SOURCE.")
-    what, where, who, source = st.columns(4)
-    what.text_input("WHAT", placeholder="Roles, functions, seniority")
-    where.text_input("WHERE", placeholder="Locations, remote preference")
-    who.text_input("WHO", placeholder="Companies, sectors, stages")
-    source.text_input("SOURCE", placeholder="Boards, ATS, career pages")
-    st.warning("This is currently an interface preview. Search persistence and sourcing are the next implementation step.", icon="ℹ️")
+    st.success("Initial SearchProfile v0.1 is defined and intentionally stored outside the public repository.")
+    st.markdown(
+        "The profile evaluates seniority by role family, uses penalties instead of premature hard filters, "
+        "and keeps a dedicated exploration bucket. Personal language, citizenship, and compensation inputs "
+        "remain private."
+    )
+    st.info(
+        "Next build step: persist this profile, create the first Company Universe, and connect a real source.",
+        icon="🛠️",
+    )
 
 
 def companies_page() -> None:
-    placeholder(
+    header(
         "Companies",
-        "The Company Universe and career-page monitoring workspace.",
-        "Create Company records and add the first manually curated target list.",
+        "Review the first Company Universe across employer archetypes and target regions.",
+    )
+    data_path = Path(__file__).parent / "data" / "company_universe.csv"
+    universe = pd.read_csv(data_path).fillna("")
+
+    region_options = sorted(universe["region"].unique())
+    selected_regions = st.multiselect("Filter regions", region_options, default=region_options)
+    filtered = universe[universe["region"].isin(selected_regions)].copy()
+
+    st.caption(
+        f"Showing {len(filtered)} canonical companies. Global and local career pages roll up to one company; "
+        "duplicate vacancies will retain multiple source links."
+    )
+    review_columns = [
+        "company",
+        "region",
+        "locations",
+        "archetype",
+        "why_test",
+        "career_url",
+        "source_strategy",
+        "rating",
+        "notes",
+    ]
+    edited = st.data_editor(
+        filtered[review_columns],
+        hide_index=True,
+        width="stretch",
+        height=620,
+        disabled=[
+            "company",
+            "region",
+            "locations",
+            "archetype",
+            "why_test",
+            "career_url",
+            "source_strategy",
+        ],
+        column_config={
+            "company": st.column_config.TextColumn("Company", width="medium"),
+            "region": st.column_config.TextColumn("Region", width="small"),
+            "locations": st.column_config.TextColumn("Locations", width="medium"),
+            "archetype": st.column_config.TextColumn("Archetype", width="medium"),
+            "why_test": st.column_config.TextColumn("Why test", width="large"),
+            "career_url": st.column_config.LinkColumn("Careers", display_text="Open"),
+            "source_strategy": st.column_config.TextColumn("Source structure", width="large"),
+            "rating": st.column_config.SelectboxColumn(
+                "Rating",
+                options=["Unrated", "A", "B", "C", "Exclude"],
+                required=True,
+                width="small",
+            ),
+            "notes": st.column_config.TextColumn("Your notes", width="large"),
+        },
+        key="company_universe_editor",
+    )
+
+    st.download_button(
+        "Download ratings as CSV",
+        data=edited.to_csv(index=False).encode("utf-8-sig"),
+        file_name="company_universe_ratings.csv",
+        mime="text/csv",
+        type="primary",
+    )
+    st.info(
+        "Ratings are editable now but not yet durable. Download the CSV before the app resets; database persistence is the next infrastructure step.",
+        icon="ℹ️",
     )
 
 

@@ -21,4 +21,4 @@ The repository is structured for Streamlit Community Cloud:
 
 Every push to the connected branch will trigger an automatic app update.
 
-See [PRODUCT_BLUEPRINT.md](PRODUCT_BLUEPRINT.md) for the product direction, [SEARCH_PROFILE.md](SEARCH_PROFILE.md) for the initial job sourcing hypothesis, and [CURRENT_STATE.md](CURRENT_STATE.md) for the current implementation status.
+See [PRODUCT_BLUEPRINT.md](PRODUCT_BLUEPRINT.md) for the product direction and [CURRENT_STATE.md](CURRENT_STATE.md) for the current implementation status. The personal SearchProfile is intentionally kept outside the public repository.

@@ -56,8 +56,8 @@ def home_page() -> None:
         st.markdown(
             """
             <div class="status-card"><strong>1. App shell</strong><br><span class="muted">Ready for deployment and iteration.</span></div>
-            <div class="status-card"><strong>2. Persistence</strong><br><span class="muted">Next: choose durable external storage for Streamlit Cloud.</span></div>
-            <div class="status-card"><strong>3. First real sourcing</strong><br><span class="muted">Next: define the first SearchProfile and source.</span></div>
+            <div class="status-card"><strong>2. Persistence</strong><br><span class="muted">Direct GitHub saving is active for company feedback.</span></div>
+            <div class="status-card"><strong>3. First real sourcing</strong><br><span class="muted">Next: turn the rated Company Universe into monitored job sources.</span></div>
             """,
             unsafe_allow_html=True,
         )
@@ -84,7 +84,7 @@ def jobs_page() -> None:
         "remain private."
     )
     st.info(
-        "Next build step: persist this profile, create the first Company Universe, and connect a real source.",
+        "Next build step: rate the Company Universe and connect the first real career-page source.",
         icon="🛠️",
     )
 

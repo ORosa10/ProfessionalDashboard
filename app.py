@@ -95,7 +95,10 @@ def companies_page() -> None:
         "Review the first Company Universe across employer archetypes and target regions.",
     )
     data_path = Path(__file__).parent / "data" / "company_universe.csv"
+    category_path = Path(__file__).parent / "data" / "company_categories.csv"
     universe = pd.read_csv(data_path).fillna("")
+    categories = pd.read_csv(category_path)
+    universe = universe.merge(categories, on="canonical_company_id", how="left", validate="one_to_one")
     token = github_token()
     ratings_sha = None
 
@@ -124,16 +127,30 @@ def companies_page() -> None:
         how="left",
     )
 
+    filter_left, filter_right = st.columns(2)
     region_options = sorted(universe["region"].unique())
-    selected_regions = st.multiselect("Filter regions", region_options, default=region_options)
-    filtered = universe[universe["region"].isin(selected_regions)].copy()
+    category_options = sorted(universe["company_category"].unique())
+    with filter_left:
+        selected_regions = st.multiselect("Filter regions", region_options, default=region_options)
+    with filter_right:
+        selected_categories = st.multiselect(
+            "Filter company categories",
+            category_options,
+            default=category_options,
+        )
+    filtered = universe[
+        universe["region"].isin(selected_regions)
+        & universe["company_category"].isin(selected_categories)
+    ].copy()
 
     st.caption(
-        f"Showing {len(filtered)} canonical companies. Global and local career pages roll up to one company; "
+        f"Showing {len(filtered)} canonical companies across {len(selected_categories)} categories. "
+        "Global and local career pages roll up to one company; "
         "duplicate vacancies will retain multiple source links."
     )
     review_columns = [
         "company",
+        "company_category",
         "region",
         "locations",
         "archetype",
@@ -150,6 +167,7 @@ def companies_page() -> None:
         height=620,
         disabled=[
             "company",
+            "company_category",
             "region",
             "locations",
             "archetype",
@@ -159,6 +177,7 @@ def companies_page() -> None:
         ],
         column_config={
             "company": st.column_config.TextColumn("Company", width="medium"),
+            "company_category": st.column_config.TextColumn("Category", width="medium"),
             "region": st.column_config.TextColumn("Region", width="small"),
             "locations": st.column_config.TextColumn("Locations", width="medium"),
             "archetype": st.column_config.TextColumn("Archetype", width="medium"),

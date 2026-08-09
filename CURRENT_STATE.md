@@ -13,6 +13,7 @@ Foundation / v0 app shell.
 - first navigable application shell with Jobs and Companies grouped under Opportunities
 - SearchProfile workflow designed; no personal profile data is stored in the public repository
 - researched Company Universe v0.2 with 48 canonical employers, including a 21-company consulting cohort
+- five-category company taxonomy with filtering by employer type
 - direct Streamlit-to-GitHub persistence for company ratings and notes
 - placeholder sections for the future product areas
 - dependency and deployment configuration

@@ -1,4 +1,4 @@
-# Professional Dashboard / Opportunity Radar â€” Product Blueprint
+# Professional Dashboard / Opportunity Radar — Product Blueprint
 
 ## Purpose
 
@@ -9,7 +9,7 @@ The product should answer one practical question: **Which professional opportuni
 ## Core operating model
 
 ```text
-SOURCES â†’ DISCOVERY â†’ OPPORTUNITY INBOX â†’ REVIEW â†’ ACTIVE â†’ OUTCOME
+SOURCES → DISCOVERY → OPPORTUNITY INBOX → REVIEW → ACTIVE → OUTCOME
 ```
 
 - **Sources** are websites, APIs, feeds, career pages, newsletters, alerts, or manual inputs.
@@ -26,13 +26,13 @@ The system supports decision-making; it does not make final career decisions aut
 Jobs are the first product wedge. Job sourcing is modelled as:
 
 ```text
-WHAT Ã— WHERE Ã— WHO Ã— SOURCE
+WHAT × WHERE × WHO × SOURCE
 ```
 
-- **WHAT** â€” target roles, functions, seniority, keywords, skills, industries, and exclusions.
-- **WHERE** â€” geography, remote/hybrid/on-site preference, countries, cities, and time zones.
-- **WHO** â€” target companies, company types, size/stage, sectors, and hiring signals.
-- **SOURCE** â€” job boards, professional networks, ATS/career pages, recruiters, aggregators, newsletters, referrals, and saved searches.
+- **WHAT** — target roles, functions, seniority, keywords, skills, industries, and exclusions.
+- **WHERE** — geography, remote/hybrid/on-site preference, countries, cities, and time zones.
+- **WHO** — target companies, company types, size/stage, sectors, and hiring signals.
+- **SOURCE** — job boards, professional networks, ATS/career pages, recruiters, aggregators, newsletters, referrals, and saved searches.
 
 This makes searches explicit, composable, and debuggable. A poor result should be traceable to a profile assumption, company universe, source, query, extraction issue, or freshness problem.
 
@@ -58,24 +58,24 @@ Do **not** build sophisticated scoring before collecting real feedback. Early sc
 
 The platform has a shared source/discovery framework with several engines:
 
-1. **Jobs** â€” full-time roles; the first production-quality sourcing flow.
-2. **Tenders** â€” public and private procurement or RFP opportunities.
-3. **Consulting / Freelance** â€” contract, fractional, project, and independent work.
-4. **Expert** â€” expert-network calls, advisory, board, mentoring, speaking, and specialist work.
-5. **Company Radar** â€” monitored target companies, career pages, and company signals.
-6. **Experimental** â€” uncertain or niche discovery channels tested without distorting the core product.
+1. **Jobs** — full-time roles; the first production-quality sourcing flow.
+2. **Tenders** — public and private procurement or RFP opportunities.
+3. **Consulting / Freelance** — contract, fractional, project, and independent work.
+4. **Expert** — expert-network calls, advisory, board, mentoring, speaking, and specialist work.
+5. **Company Radar** — monitored target companies, career pages, and company signals.
+6. **Experimental** — uncertain or niche discovery channels tested without distorting the core product.
 
 Engines share common opportunity objects and review mechanics while retaining domain-specific fields and sourcing logic.
 
 ## Main app sections
 
-- **Home** â€” daily briefing: new items, review queue, active next steps, and notable radar signals.
-- **Opportunities** â€” unified inbox and searchable catalogue across opportunity types.
-- **Jobs** â€” job-specific discovery, filters, profiles, searches, and review workflow.
-- **Companies** â€” Company Universe, company records, career-page monitoring, and company insights.
-- **Pipeline** â€” active pursuits, stages, tasks, deadlines, and outcomes.
-- **Ideas & Projects** â€” self-created opportunities, experiments, collaborations, and projects.
-- **Sources / Radar** â€” sources, health/freshness, search runs, monitoring, and discovery diagnostics.
+- **Home** — daily briefing: new items, review queue, active next steps, and notable radar signals.
+- **Opportunities** — unified inbox and searchable catalogue across opportunity types.
+- **Jobs** — job-specific discovery, filters, profiles, searches, and review workflow.
+- **Companies** — Company Universe, company records, career-page monitoring, and company insights.
+- **Pipeline** — active pursuits, stages, tasks, deadlines, and outcomes.
+- **Ideas & Projects** — self-created opportunities, experiments, collaborations, and projects.
+- **Sources / Radar** — sources, health/freshness, search runs, monitoring, and discovery diagnostics.
 
 ## Core objects
 
@@ -93,7 +93,7 @@ A configured discovery input: provider, career page, feed, query, integration, o
 
 ### SearchProfile
 
-A reusable definition of desired opportunities. For jobs it expresses `WHAT Ã— WHERE Ã— WHO Ã— SOURCE`, including inclusions and exclusions. Profiles evolve from explicit preferences and observed review feedback.
+A reusable definition of desired opportunities. For jobs it expresses `WHAT × WHERE × WHO × SOURCE`, including inclusions and exclusions. Profiles evolve from explicit preferences and observed review feedback.
 
 ## Product principles
 
@@ -108,11 +108,11 @@ A reusable definition of desired opportunities. For jobs it expresses `WHAT Ã�
 
 v0 validates the full learning loop around jobs rather than simulating a complete platform.
 
-1. **App shell** â€” navigation for the main sections and a job-focused default experience.
-2. **Persistence** â€” durable storage for Opportunities, Companies, Sources, SearchProfiles, reviews, pipeline states, and notes.
-3. **Source framework** â€” a minimal extensible model for sources, runs, normalized results, deduplication, and freshness/error visibility.
-4. **First real sourcing** â€” connect at least one real job source or monitored career-page flow and ingest listings into the Inbox.
-5. **Review and pipeline loop** â€” support `Interested` / `Maybe` / `Pass`, reasons, notes, active stages, and outcomes.
-6. **Company Universe baseline** â€” manually add and monitor target companies, including career-page URLs.
+1. **App shell** — navigation for the main sections and a job-focused default experience.
+2. **Persistence** — durable storage for Opportunities, Companies, Sources, SearchProfiles, reviews, pipeline states, and notes.
+3. **Source framework** — a minimal extensible model for sources, runs, normalized results, deduplication, and freshness/error visibility.
+4. **First real sourcing** — connect at least one real job source or monitored career-page flow and ingest listings into the Inbox.
+5. **Review and pipeline loop** — support `Interested` / `Maybe` / `Pass`, reasons, notes, active stages, and outcomes.
+6. **Company Universe baseline** — manually add and monitor target companies, including career-page URLs.
 
 Only after real usage should the product prioritize richer ranking, automatic search calibration, additional engines, dashboards, and advanced integrations.

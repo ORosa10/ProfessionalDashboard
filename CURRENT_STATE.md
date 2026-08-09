@@ -10,7 +10,7 @@ Foundation / v0 app shell.
 
 - GitHub repository and Streamlit-ready project structure
 - consolidated product blueprint
-- first navigable application shell
+- first navigable application shell with Jobs and Companies grouped under Opportunities
 - placeholder sections for the future product areas
 - dependency and deployment configuration
 

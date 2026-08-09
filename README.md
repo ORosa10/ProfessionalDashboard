@@ -21,7 +21,7 @@ The repository is structured for Streamlit Community Cloud:
 
 Every push to the connected branch will trigger an automatic app update.
 
-Company ratings and notes can be saved from the Streamlit interface directly to
+Company ratings, contact strength, and notes can be saved from the Streamlit interface directly to
 the repository. See [GITHUB_SAVE_SETUP.md](GITHUB_SAVE_SETUP.md) for the one-time setup.
 
 See [PRODUCT_BLUEPRINT.md](PRODUCT_BLUEPRINT.md) for the product direction and [CURRENT_STATE.md](CURRENT_STATE.md) for the current implementation status. The personal SearchProfile is intentionally kept outside the public repository.

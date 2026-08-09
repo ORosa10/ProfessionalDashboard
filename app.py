@@ -94,11 +94,25 @@ def companies_page() -> None:
         "Companies",
         "Review the first Company Universe across employer archetypes and target regions.",
     )
-    data_path = Path(__file__).parent / "data" / "company_universe.csv"
-    category_path = Path(__file__).parent / "data" / "company_categories.csv"
+    data_dir = Path(__file__).parent / "data"
+    data_path = data_dir / "company_universe.csv"
+    category_path = data_dir / "company_categories.csv"
     universe = pd.read_csv(data_path).fillna("")
     categories = pd.read_csv(category_path)
+    for wave_path in sorted(data_dir.glob("company_universe_wave*.csv")):
+        wave = pd.read_csv(wave_path).fillna("")
+        categories = pd.concat(
+            [categories, wave[["canonical_company_id", "company_category"]]],
+            ignore_index=True,
+        )
+        universe = pd.concat(
+            [universe, wave.drop(columns=["company_category"])],
+            ignore_index=True,
+        )
     universe = universe.merge(categories, on="canonical_company_id", how="left", validate="one_to_one")
+    url_overrides = pd.read_csv(data_dir / "company_url_overrides.csv").set_index("canonical_company_id")
+    overridden_urls = universe["canonical_company_id"].map(url_overrides["career_url"])
+    universe["career_url"] = overridden_urls.fillna(universe["career_url"])
     token = github_token()
     ratings_sha = None
 
@@ -106,19 +120,27 @@ def companies_page() -> None:
         try:
             saved_ratings, ratings_sha = load_ratings(token)
         except Exception:
-            saved_ratings = pd.DataFrame(columns=["canonical_company_id", "rating", "notes"])
+            saved_ratings = pd.DataFrame(
+                columns=["canonical_company_id", "rating", "contact_strength", "notes"]
+            )
             st.warning("GitHub ratings could not be loaded. The company list is still available.")
     else:
-        saved_ratings = pd.DataFrame(columns=["canonical_company_id", "rating", "notes"])
+        saved_ratings = pd.DataFrame(
+            columns=["canonical_company_id", "rating", "contact_strength", "notes"]
+        )
 
     base_ratings = universe[["canonical_company_id", "rating", "notes"]].copy()
+    base_ratings["contact_strength"] = "None"
     if not saved_ratings.empty:
-        base_ratings = base_ratings.drop(columns=["rating", "notes"]).merge(
-            saved_ratings[["canonical_company_id", "rating", "notes"]],
+        if "contact_strength" not in saved_ratings.columns:
+            saved_ratings["contact_strength"] = "None"
+        base_ratings = base_ratings.drop(columns=["rating", "contact_strength", "notes"]).merge(
+            saved_ratings[["canonical_company_id", "rating", "contact_strength", "notes"]],
             on="canonical_company_id",
             how="left",
         )
         base_ratings["rating"] = base_ratings["rating"].fillna("Unrated")
+        base_ratings["contact_strength"] = base_ratings["contact_strength"].fillna("None")
         base_ratings["notes"] = base_ratings["notes"].fillna("")
 
     universe = universe.drop(columns=["rating", "notes"]).merge(
@@ -143,6 +165,15 @@ def companies_page() -> None:
         & universe["company_category"].isin(selected_categories)
     ].copy()
 
+    metric_total, metric_rated, metric_a, metric_contacts, metric_excluded = st.columns(5)
+    rated_count = int((universe["rating"] != "Unrated").sum())
+    metric_total.metric("Company Universe", len(universe))
+    metric_rated.metric("Rated", rated_count)
+    metric_a.metric("A priority", int((universe["rating"] == "A").sum()))
+    metric_contacts.metric("Warm contacts", int(universe["contact_strength"].isin(["Warm contact", "Strong referral"]).sum()))
+    metric_excluded.metric("Excluded", int((universe["rating"] == "Exclude").sum()))
+    st.progress(rated_count / len(universe), text=f"Rating progress: {rated_count} / {len(universe)}")
+
     st.caption(
         f"Showing {len(filtered)} canonical companies across {len(selected_categories)} categories. "
         "Global and local career pages roll up to one company; "
@@ -158,6 +189,7 @@ def companies_page() -> None:
         "career_url",
         "source_strategy",
         "rating",
+        "contact_strength",
         "notes",
     ]
     edited = st.data_editor(
@@ -190,18 +222,26 @@ def companies_page() -> None:
                 required=True,
                 width="small",
             ),
+            "contact_strength": st.column_config.SelectboxColumn(
+                "Contact",
+                options=["None", "Known contact", "Warm contact", "Strong referral"],
+                required=True,
+                width="medium",
+            ),
             "notes": st.column_config.TextColumn("Your notes", width="large"),
         },
         key="company_universe_editor",
     )
 
     if token:
-        if st.button("Save ratings to GitHub", type="primary"):
+        if st.button("Save feedback to GitHub", type="primary"):
             updated = base_ratings.set_index("canonical_company_id")
             edited_with_ids = edited.copy()
             edited_with_ids.insert(0, "canonical_company_id", filtered["canonical_company_id"].values)
             edited_with_ids = edited_with_ids.set_index("canonical_company_id")
-            updated.loc[edited_with_ids.index, ["rating", "notes"]] = edited_with_ids[["rating", "notes"]]
+            updated.loc[edited_with_ids.index, ["rating", "contact_strength", "notes"]] = edited_with_ids[
+                ["rating", "contact_strength", "notes"]
+            ]
             try:
                 save_ratings(token, updated.reset_index(), ratings_sha)
             except Exception:

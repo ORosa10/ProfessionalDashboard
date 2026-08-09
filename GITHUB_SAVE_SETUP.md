@@ -1,6 +1,6 @@
 # Enable direct saving from Streamlit
 
-The app stores company feedback in `data/company_ratings.csv` in this repository.
+The app stores company rating, contact strength, and notes in `data/company_ratings.csv` in this repository.
 
 One-time setup:
 
@@ -14,4 +14,4 @@ One-time setup:
 token = "PASTE_THE_FINE_GRAINED_TOKEN_HERE"
 ```
 
-Never commit the token to the repository. Once this setting is saved, the Companies page shows a **Save ratings to GitHub** button and no download/upload step is needed.
+Never commit the token to the repository. Once this setting is saved, the Companies page shows a **Save feedback to GitHub** button and no download/upload step is needed.

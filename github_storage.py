@@ -34,7 +34,9 @@ def _headers(token: str) -> dict[str, str]:
 def load_ratings(token: str) -> tuple[pd.DataFrame, str | None]:
     response = requests.get(API_URL, headers=_headers(token), params={"ref": BRANCH}, timeout=20)
     if response.status_code == 404:
-        return pd.DataFrame(columns=["canonical_company_id", "rating", "notes"]), None
+        return pd.DataFrame(
+            columns=["canonical_company_id", "rating", "contact_strength", "notes"]
+        ), None
     response.raise_for_status()
     payload = response.json()
     content = base64.b64decode(payload["content"]).decode("utf-8-sig")

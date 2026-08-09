@@ -67,15 +67,19 @@ The platform has a shared source/discovery framework with several engines:
 
 Engines share common opportunity objects and review mechanics while retaining domain-specific fields and sourcing logic.
 
-## Main app sections
+## Main app hierarchy
 
-- **Home** — daily briefing: new items, review queue, active next steps, and notable radar signals.
-- **Opportunities** — unified inbox and searchable catalogue across opportunity types.
-- **Jobs** — job-specific discovery, filters, profiles, searches, and review workflow.
-- **Companies** — Company Universe, company records, career-page monitoring, and company insights.
-- **Pipeline** — active pursuits, stages, tasks, deadlines, and outcomes.
-- **Ideas & Projects** — self-created opportunities, experiments, collaborations, and projects.
-- **Sources / Radar** — sources, health/freshness, search runs, monitoring, and discovery diagnostics.
+- **Dashboard**
+  - **Home** — daily briefing: new items, review queue, active next steps, and notable radar signals.
+- **Opportunities**
+  - **Overview** — unified inbox and searchable catalogue across opportunity types.
+  - **Jobs** — job-specific discovery, filters, profiles, searches, and review workflow.
+  - **Companies** — Company Universe, company records, career-page monitoring, and company insights.
+- **Workspace**
+  - **Pipeline** — active pursuits, stages, tasks, deadlines, and outcomes.
+  - **Ideas & Projects** — self-created opportunities, experiments, collaborations, and projects.
+- **System**
+  - **Sources / Radar** — sources, health/freshness, search runs, monitoring, and discovery diagnostics.
 
 ## Core objects
 

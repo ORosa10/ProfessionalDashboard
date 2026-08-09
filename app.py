@@ -23,17 +23,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-SECTIONS = [
-    "Home",
-    "Opportunities",
-    "Jobs",
-    "Companies",
-    "Pipeline",
-    "Ideas & Projects",
-    "Sources / Radar",
-]
-
-
 def header(title: str, description: str) -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title(title)
@@ -45,14 +34,7 @@ def placeholder(title: str, body: str, next_step: str) -> None:
     st.info(f"Next build step: {next_step}", icon="🛠️")
 
 
-with st.sidebar:
-    st.title("🧭 Professional Dashboard")
-    st.caption("Personal opportunity intelligence")
-    section = st.radio("Navigation", SECTIONS, label_visibility="collapsed")
-    st.divider()
-    st.caption("v0 foundation · Build for iteration")
-
-if section == "Home":
+def home_page() -> None:
     header(
         "Good evening",
         "Your future daily view of new opportunities, decisions, and active next steps.",
@@ -79,14 +61,16 @@ if section == "Home":
         st.code("SOURCES → DISCOVERY → INBOX → REVIEW → ACTIVE → OUTCOME")
         st.caption("Jobs are the first product wedge. Scoring comes only after real feedback.")
 
-elif section == "Opportunities":
+
+def opportunities_page() -> None:
     placeholder(
-        "Opportunities",
+        "Opportunity overview",
         "The unified inbox and catalogue for all professional opportunity types.",
         "Add the Opportunity model, durable storage, and the review queue.",
     )
 
-elif section == "Jobs":
+
+def jobs_page() -> None:
     header("Jobs", "The first real sourcing engine, structured as WHAT × WHERE × WHO × SOURCE.")
     what, where, who, source = st.columns(4)
     what.text_input("WHAT", placeholder="Roles, functions, seniority")
@@ -95,30 +79,61 @@ elif section == "Jobs":
     source.text_input("SOURCE", placeholder="Boards, ATS, career pages")
     st.warning("This is currently an interface preview. Search persistence and sourcing are the next implementation step.", icon="ℹ️")
 
-elif section == "Companies":
+
+def companies_page() -> None:
     placeholder(
         "Companies",
         "The Company Universe and career-page monitoring workspace.",
         "Create Company records and add the first manually curated target list.",
     )
 
-elif section == "Pipeline":
+
+def pipeline_page() -> None:
     placeholder(
         "Pipeline",
         "Active pursuits, stages, deadlines, next actions, and outcomes.",
         "Define pipeline stages after the first review workflow is usable.",
     )
 
-elif section == "Ideas & Projects":
+
+def ideas_page() -> None:
     placeholder(
         "Ideas & Projects",
         "Self-created opportunities, experiments, collaborations, and possible projects.",
         "Add this engine after the job learning loop is working.",
     )
 
-else:
+
+def sources_page() -> None:
     placeholder(
         "Sources / Radar",
         "Source configuration, freshness, run history, monitoring, and discovery diagnostics.",
         "Implement the shared Source and source-run framework with one genuine job source.",
     )
+
+
+with st.sidebar:
+    st.title("🧭 Professional Dashboard")
+    st.caption("Personal opportunity intelligence")
+
+navigation = st.navigation(
+    {
+        "Dashboard": [st.Page(home_page, title="Home")],
+        "Opportunities": [
+            st.Page(opportunities_page, title="Overview"),
+            st.Page(jobs_page, title="Jobs"),
+            st.Page(companies_page, title="Companies"),
+        ],
+        "Workspace": [
+            st.Page(pipeline_page, title="Pipeline"),
+            st.Page(ideas_page, title="Ideas & Projects"),
+        ],
+        "System": [st.Page(sources_page, title="Sources / Radar")],
+    }
+)
+
+with st.sidebar:
+    st.divider()
+    st.caption("v0 foundation · Build for iteration")
+
+navigation.run()

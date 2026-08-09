@@ -44,6 +44,18 @@ Each company can carry sector, geography, stage/size, priority, career-page URL,
 
 **Company Radar** turns companies into an ongoing discovery channel. It should detect relevant hiring activity and career-page changes, and eventually other company-level signals. It may surface both explicit vacancies and reasons to investigate a company.
 
+### Group, entity, and source identity
+
+Multinational groups must not create duplicate companies or duplicate opportunities. The model distinguishes:
+
+- **Company** — the canonical group or standalone employer used for rating and monitoring.
+- **CompanyEntity** — a local legal entity, subsidiary, brand, or business unit linked to its canonical parent.
+- **CompanyAlias** — alternate names, abbreviations, domains, and ATS employer names used for identity resolution.
+- **Source** — each global career portal, country portal, subsidiary portal, ATS tenant, or external board.
+- **OpportunitySource** — an observation linking one canonical Opportunity to every source where it was found.
+
+A global careers page and its local country pages therefore remain separate Sources but roll up to one Company. Opportunity deduplication should prefer stable requisition IDs and canonical URLs, then use a fingerprint based on canonical company, normalized title, location cluster, and description similarity. Merging must preserve all source URLs plus `first_seen` and `last_seen` timestamps.
+
 ## Feedback-driven calibration
 
 The review actions `Interested`, `Maybe`, and `Pass` are product data, not merely labels.

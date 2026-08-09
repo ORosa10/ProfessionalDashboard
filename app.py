@@ -5,7 +5,7 @@ import streamlit as st
 
 st.set_page_config(
     page_title="Professional Dashboard",
-    page_icon="ðŸ§­",
+    page_icon="🧭",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -42,15 +42,15 @@ def header(title: str, description: str) -> None:
 
 def placeholder(title: str, body: str, next_step: str) -> None:
     header(title, body)
-    st.info(f"Next build step: {next_step}", icon="ðŸ› ï¸")
+    st.info(f"Next build step: {next_step}", icon="🛠️")
 
 
 with st.sidebar:
-    st.title("ðŸ§­ Professional Dashboard")
+    st.title("🧭 Professional Dashboard")
     st.caption("Personal opportunity intelligence")
     section = st.radio("Navigation", SECTIONS, label_visibility="collapsed")
     st.divider()
-    st.caption("v0 foundation Â· Build for iteration")
+    st.caption("v0 foundation · Build for iteration")
 
 if section == "Home":
     header(
@@ -76,7 +76,7 @@ if section == "Home":
         )
     with right:
         st.subheader("Operating model")
-        st.code("SOURCES â†’ DISCOVERY â†’ INBOX â†’ REVIEW â†’ ACTIVE â†’ OUTCOME")
+        st.code("SOURCES → DISCOVERY → INBOX → REVIEW → ACTIVE → OUTCOME")
         st.caption("Jobs are the first product wedge. Scoring comes only after real feedback.")
 
 elif section == "Opportunities":
@@ -87,13 +87,13 @@ elif section == "Opportunities":
     )
 
 elif section == "Jobs":
-    header("Jobs", "The first real sourcing engine, structured as WHAT Ã— WHERE Ã— WHO Ã— SOURCE.")
+    header("Jobs", "The first real sourcing engine, structured as WHAT × WHERE × WHO × SOURCE.")
     what, where, who, source = st.columns(4)
     what.text_input("WHAT", placeholder="Roles, functions, seniority")
     where.text_input("WHERE", placeholder="Locations, remote preference")
     who.text_input("WHO", placeholder="Companies, sectors, stages")
     source.text_input("SOURCE", placeholder="Boards, ATS, career pages")
-    st.warning("This is currently an interface preview. Search persistence and sourcing are the next implementation step.", icon="â„¹ï¸")
+    st.warning("This is currently an interface preview. Search persistence and sourcing are the next implementation step.", icon="ℹ️")
 
 elif section == "Companies":
     placeholder(

@@ -5,6 +5,8 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from github_storage import github_token, load_ratings, save_ratings
+
 
 st.set_page_config(
     page_title="Professional Dashboard",
@@ -94,6 +96,33 @@ def companies_page() -> None:
     )
     data_path = Path(__file__).parent / "data" / "company_universe.csv"
     universe = pd.read_csv(data_path).fillna("")
+    token = github_token()
+    ratings_sha = None
+
+    if token:
+        try:
+            saved_ratings, ratings_sha = load_ratings(token)
+        except Exception:
+            saved_ratings = pd.DataFrame(columns=["canonical_company_id", "rating", "notes"])
+            st.warning("GitHub ratings could not be loaded. The company list is still available.")
+    else:
+        saved_ratings = pd.DataFrame(columns=["canonical_company_id", "rating", "notes"])
+
+    base_ratings = universe[["canonical_company_id", "rating", "notes"]].copy()
+    if not saved_ratings.empty:
+        base_ratings = base_ratings.drop(columns=["rating", "notes"]).merge(
+            saved_ratings[["canonical_company_id", "rating", "notes"]],
+            on="canonical_company_id",
+            how="left",
+        )
+        base_ratings["rating"] = base_ratings["rating"].fillna("Unrated")
+        base_ratings["notes"] = base_ratings["notes"].fillna("")
+
+    universe = universe.drop(columns=["rating", "notes"]).merge(
+        base_ratings,
+        on="canonical_company_id",
+        how="left",
+    )
 
     region_options = sorted(universe["region"].unique())
     selected_regions = st.multiselect("Filter regions", region_options, default=region_options)
@@ -147,17 +176,24 @@ def companies_page() -> None:
         key="company_universe_editor",
     )
 
-    st.download_button(
-        "Download ratings as CSV",
-        data=edited.to_csv(index=False).encode("utf-8-sig"),
-        file_name="company_universe_ratings.csv",
-        mime="text/csv",
-        type="primary",
-    )
-    st.info(
-        "Ratings are editable now but not yet durable. Download the CSV before the app resets; database persistence is the next infrastructure step.",
-        icon="ℹ️",
-    )
+    if token:
+        if st.button("Save ratings to GitHub", type="primary"):
+            updated = base_ratings.set_index("canonical_company_id")
+            edited_with_ids = edited.copy()
+            edited_with_ids.insert(0, "canonical_company_id", filtered["canonical_company_id"].values)
+            edited_with_ids = edited_with_ids.set_index("canonical_company_id")
+            updated.loc[edited_with_ids.index, ["rating", "notes"]] = edited_with_ids[["rating", "notes"]]
+            try:
+                save_ratings(token, updated.reset_index(), ratings_sha)
+            except Exception:
+                st.error("Saving to GitHub failed. Refresh the page and try again.")
+            else:
+                st.success("Saved directly to GitHub. Streamlit will load the new ratings automatically.")
+    else:
+        st.info(
+            "Direct GitHub saving is ready. Add the repository token once in Streamlit Secrets to enable the Save button.",
+            icon="ℹ️",
+        )
 
 
 def pipeline_page() -> None:

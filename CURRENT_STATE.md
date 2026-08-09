@@ -13,6 +13,7 @@ Foundation / v0 app shell.
 - first navigable application shell with Jobs and Companies grouped under Opportunities
 - SearchProfile workflow designed; no personal profile data is stored in the public repository
 - researched Company Universe v0.1 prepared for user rating
+- direct Streamlit-to-GitHub persistence for company ratings and notes
 - placeholder sections for the future product areas
 - dependency and deployment configuration
 
@@ -20,8 +21,8 @@ Foundation / v0 app shell.
 
 Turn the Jobs section into the first real end-to-end learning loop:
 
-1. collect `A / B / C / Exclude` feedback on the initial Company Universe;
-2. persist Opportunities, Companies, Sources, SearchProfiles, company ratings, and reviews;
+1. enable the repository-scoped token in Streamlit and collect `A / B / C / Exclude` feedback;
+2. extend persistence from company ratings to Opportunities, Sources, SearchProfiles, and reviews;
 3. connect the first genuine job source or career-page monitor;
 4. ingest real opportunities into the Inbox;
 5. collect `Interested` / `Maybe` / `Pass` feedback and pass reasons.
@@ -35,4 +36,4 @@ Turn the Jobs section into the first real end-to-end learning loop:
 
 ## Deployment model
 
-The app will run on Streamlit Community Cloud and track the GitHub repository. Code changes are deployed automatically from GitHub. Durable production persistence must use an external database; the Streamlit app filesystem must not be treated as permanent storage.
+The app will run on Streamlit Community Cloud and track the GitHub repository. Code changes are deployed automatically from GitHub. The Streamlit filesystem is not treated as permanent storage: during v0, editable feedback is committed directly to dedicated CSV files in GitHub. An external database can be introduced later if the data model or write volume requires it.

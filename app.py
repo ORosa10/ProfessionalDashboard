@@ -181,6 +181,9 @@ def companies_page() -> None:
     )
     review_columns = [
         "company",
+        "rating",
+        "contact_strength",
+        "notes",
         "company_category",
         "region",
         "locations",
@@ -188,9 +191,6 @@ def companies_page() -> None:
         "why_test",
         "career_url",
         "source_strategy",
-        "rating",
-        "contact_strength",
-        "notes",
     ]
     edited = st.data_editor(
         filtered[review_columns],

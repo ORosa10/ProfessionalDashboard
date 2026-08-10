@@ -150,7 +150,7 @@ def companies_page() -> None:
     )
     universe["company_description"] = (
         universe["archetype"].str.strip()
-        + " — "
+        + "\n"
         + universe["why_test"].str.strip()
     )
 
@@ -207,6 +207,7 @@ def companies_page() -> None:
         hide_index=True,
         width="stretch",
         height=620,
+        row_height=96,
         disabled=[
             "company",
             "company_category",
@@ -222,7 +223,7 @@ def companies_page() -> None:
             "company": st.column_config.TextColumn("Company", width="medium"),
             "company_description": st.column_config.TextColumn(
                 "What they do / why relevant",
-                width="large",
+                width=560,
             ),
             "company_category": st.column_config.TextColumn("Category", width="medium"),
             "region": st.column_config.TextColumn("Region", width="small"),

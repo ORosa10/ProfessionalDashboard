@@ -179,6 +179,10 @@ def companies_page() -> None:
         "Global and local career pages roll up to one company; "
         "duplicate vacancies will retain multiple source links."
     )
+    st.caption(
+        "Keyboard rating: select a Rating cell, type A, B, C or X, then press Enter or Tab. "
+        "X means Exclude. Save all changes with the button below."
+    )
     review_columns = [
         "company",
         "rating",
@@ -216,10 +220,11 @@ def companies_page() -> None:
             "why_test": st.column_config.TextColumn("Why test", width="large"),
             "career_url": st.column_config.LinkColumn("Careers", display_text="Open"),
             "source_strategy": st.column_config.TextColumn("Source structure", width="large"),
-            "rating": st.column_config.SelectboxColumn(
+            "rating": st.column_config.TextColumn(
                 "Rating",
-                options=["Unrated", "A", "B", "C", "Exclude"],
-                required=True,
+                help="Type A, B, C or X and confirm with Enter or Tab.",
+                validate=r"^(Unrated|unrated|U|u|A|a|B|b|C|c|Exclude|exclude|X|x)$",
+                max_chars=7,
                 width="small",
             ),
             "contact_strength": st.column_config.SelectboxColumn(
@@ -239,15 +244,35 @@ def companies_page() -> None:
             edited_with_ids = edited.copy()
             edited_with_ids.insert(0, "canonical_company_id", filtered["canonical_company_id"].values)
             edited_with_ids = edited_with_ids.set_index("canonical_company_id")
-            updated.loc[edited_with_ids.index, ["rating", "contact_strength", "notes"]] = edited_with_ids[
-                ["rating", "contact_strength", "notes"]
-            ]
-            try:
-                save_ratings(token, updated.reset_index(), ratings_sha)
-            except Exception:
-                st.error("Saving to GitHub failed. Refresh the page and try again.")
+            rating_aliases = {
+                "UNRATED": "Unrated",
+                "U": "Unrated",
+                "A": "A",
+                "B": "B",
+                "C": "C",
+                "EXCLUDE": "Exclude",
+                "X": "Exclude",
+            }
+            raw_ratings = edited_with_ids["rating"].fillna("").astype(str).str.strip()
+            normalized_ratings = raw_ratings.str.upper().map(rating_aliases)
+            invalid_ratings = normalized_ratings.isna()
+            if invalid_ratings.any():
+                invalid_values = ", ".join(sorted(raw_ratings[invalid_ratings].unique()))
+                st.error(
+                    f"Invalid rating: {invalid_values or 'blank'}. "
+                    "Use A, B, C, X/Exclude or U/Unrated."
+                )
             else:
-                st.success("Saved directly to GitHub. Streamlit will load the new ratings automatically.")
+                edited_with_ids["rating"] = normalized_ratings
+                updated.loc[edited_with_ids.index, ["rating", "contact_strength", "notes"]] = edited_with_ids[
+                    ["rating", "contact_strength", "notes"]
+                ]
+                try:
+                    save_ratings(token, updated.reset_index(), ratings_sha)
+                except Exception:
+                    st.error("Saving to GitHub failed. Refresh the page and try again.")
+                else:
+                    st.success("Saved directly to GitHub. Streamlit will load the new ratings automatically.")
     else:
         st.info(
             "Direct GitHub saving is ready. Add the repository token once in Streamlit Secrets to enable the Save button.",

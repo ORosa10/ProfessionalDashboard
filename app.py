@@ -148,6 +148,11 @@ def companies_page() -> None:
         on="canonical_company_id",
         how="left",
     )
+    universe["company_description"] = (
+        universe["archetype"].str.strip()
+        + " — "
+        + universe["why_test"].str.strip()
+    )
 
     filter_left, filter_right = st.columns(2)
     region_options = sorted(universe["region"].unique())
@@ -186,6 +191,7 @@ def companies_page() -> None:
     review_columns = [
         "company",
         "rating",
+        "company_description",
         "contact_strength",
         "notes",
         "company_category",
@@ -204,6 +210,7 @@ def companies_page() -> None:
         disabled=[
             "company",
             "company_category",
+            "company_description",
             "region",
             "locations",
             "archetype",
@@ -213,6 +220,10 @@ def companies_page() -> None:
         ],
         column_config={
             "company": st.column_config.TextColumn("Company", width="medium"),
+            "company_description": st.column_config.TextColumn(
+                "What they do / why relevant",
+                width="large",
+            ),
             "company_category": st.column_config.TextColumn("Category", width="medium"),
             "region": st.column_config.TextColumn("Region", width="small"),
             "locations": st.column_config.TextColumn("Locations", width="medium"),

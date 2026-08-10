@@ -101,7 +101,7 @@ A normalized item discovered or manually created. It includes type, title, compa
 
 ### Company
 
-An organization in the Company Universe or referenced by an opportunity. It includes identity, a broad `CompanyCategory`, a more specific archetype, metadata, priority, career/source URLs, monitoring configuration, notes, and opportunity relationships. The initial categories are `Consulting`, `Banking & Financial Services`, `Private Equity & Asset Management`, `Corporate`, and `Holding & Conglomerate`. Category belongs to the canonical company, not to each local career-page source.
+An organization in the Company Universe or referenced by an opportunity. It includes identity, a broad `CompanyCategory`, a more specific archetype, metadata, priority, career/source URLs, monitoring configuration, notes, and opportunity relationships. The working categories are `Consulting`, `Banking & Financial Services`, `Investment Banking`, `Public Markets & Asset Management`, `Private Equity & Private Markets`, `Specialist & Boutique Funds`, `Corporate`, and `Holding & Conglomerate`. Category belongs to the canonical company, not to each local career-page source. The taxonomy should stay broad enough for practical reviewing; finer business lines belong in the archetype and individual opportunity data.
 
 ### Source
 

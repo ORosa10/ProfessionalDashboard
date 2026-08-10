@@ -110,6 +110,14 @@ def companies_page() -> None:
             ignore_index=True,
         )
     universe = universe.merge(categories, on="canonical_company_id", how="left", validate="one_to_one")
+    universe["company_category"] = universe["company_category"].replace(
+        {"Private Equity & Asset Management": "Private Equity & Private Markets"}
+    )
+    category_overrides_path = data_dir / "company_category_overrides.csv"
+    if category_overrides_path.exists():
+        category_overrides = pd.read_csv(category_overrides_path).set_index("canonical_company_id")
+        overridden_categories = universe["canonical_company_id"].map(category_overrides["company_category"])
+        universe["company_category"] = overridden_categories.fillna(universe["company_category"])
     url_overrides = pd.read_csv(data_dir / "company_url_overrides.csv").set_index("canonical_company_id")
     overridden_urls = universe["canonical_company_id"].map(url_overrides["career_url"])
     universe["career_url"] = overridden_urls.fillna(universe["career_url"])

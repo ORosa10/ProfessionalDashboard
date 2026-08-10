@@ -12,11 +12,12 @@ Foundation / v0 app shell.
 - consolidated product blueprint
 - first navigable application shell with Jobs and Companies grouped under Opportunities
 - SearchProfile workflow designed; no personal profile data is stored in the public repository
-- researched Company Universe v0.3 with 219 canonical employers across consulting, financial services, investments, corporates, and holdings
-- five-category company taxonomy with filtering by employer type
+- researched Company Universe v0.4 with 261 canonical employers across consulting, banking, investment banking, public markets, private markets, specialist funds, corporates, and holdings
+- eight-category company taxonomy that keeps public markets, private markets, specialist funds, and investment banking distinct without over-segmenting the universe
 - rating-progress metrics and source metadata prepared for staged career-page monitoring
 - structured contact-strength feedback for known contacts, warm introductions, and strong referrals
 - direct Streamlit-to-GitHub persistence for company ratings and notes
+- company ratings currently capture intrinsic interest in the firm and its work; contacts and later feasibility signals remain separate prioritization layers
 - placeholder sections for the future product areas
 - dependency and deployment configuration
 

@@ -303,7 +303,9 @@ def extract_phenom_records(html: str) -> tuple[list[dict], int]:
         payload, _ = json.JSONDecoder().raw_decode(html[start + len(marker):])
         search = payload.get("eagerLoadRefineSearch", {})
         data = search.get("data", search)
-        return data.get("jobs", []) or [], int(data.get("totalHits") or 0)
+        return data.get("jobs", []) or [], int(
+            data.get("totalHits") or search.get("totalHits") or search.get("hits") or 0
+        )
     except (json.JSONDecodeError, TypeError, ValueError, AttributeError):
         return [], 0
 

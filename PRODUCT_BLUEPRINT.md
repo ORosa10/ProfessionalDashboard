@@ -40,7 +40,7 @@ This makes searches explicit, composable, and debuggable. A poor result should b
 
 The **Company Universe** is the maintained set of companies worth monitoring, independent of whether they have an open role today. Companies may come from target lists, discoveries, manual additions, or later from signals and recommendations.
 
-Each company can carry sector, geography, stage/size, priority, career-page URL, notes, and monitoring status. The system should monitor career pages and related sources to surface new or changed openings.
+Each company can carry sector, geography, stage/size, career-page URL, notes, and monitoring status. Company evaluation keeps three distinct user signals: `IntrinsicInterest` (appeal of the firm and its work), `Familiarity` (how well the user actually knows it), and `AccessStrength` (none, known contact, warm introduction, strong reference, or direct route). These signals may affect review order but must not be collapsed into one opaque rating.
 
 **Company Radar** turns companies into an ongoing discovery channel. It should detect relevant hiring activity and career-page changes, and eventually other company-level signals. It may surface both explicit vacancies and reasons to investigate a company.
 
@@ -111,6 +111,10 @@ A configured discovery input: provider, career page, feed, query, integration, o
 
 A reusable definition of desired opportunities. For jobs it expresses `WHAT × WHERE × WHO × SOURCE`, including inclusions and exclusions. Profiles evolve from explicit preferences and observed review feedback.
 
+### CountryCityProfile
+
+A versioned set of location-economics assumptions for a country and city: currency, tax year, household assumptions, gross-to-net inputs, rent, recurring living costs, transport, health costs, relocation costs, target disposable income, and uncertainty. It produces a minimum viable compensation estimate and a preferred range. Opportunities can be labelled `Financially viable`, `Below threshold`, or `Unknown`; below-threshold and unknown roles remain recoverable exploration items rather than being deleted.
+
 ## Product principles
 
 - **Build for iteration, not completeness.** Prefer a usable learning loop over a broad but inert platform.
@@ -130,5 +134,6 @@ v0 validates the full learning loop around jobs rather than simulating a complet
 4. **First real sourcing** — connect at least one real job source or monitored career-page flow and ingest listings into the Inbox.
 5. **Review and pipeline loop** — support `Interested` / `Maybe` / `Pass`, reasons, notes, active stages, and outcomes.
 6. **Company Universe baseline** — manually add and monitor target companies, including career-page URLs.
+7. **Company signals and location economics** — add intrinsic interest, familiarity, access/reference strength, and country/city compensation viability; connect them to opportunity filters after the Big Four review loop is calibrated.
 
 Only after real usage should the product prioritize richer ranking, automatic search calibration, additional engines, dashboards, and advanced integrations.

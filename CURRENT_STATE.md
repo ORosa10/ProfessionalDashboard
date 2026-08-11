@@ -21,7 +21,7 @@ Foundation / v0 app shell.
 - first live Jobs Inbox with company and country/market filters
 - Big Four-only sourcing pilot for Deloitte, PwC, EY, and KPMG, scheduled daily through GitHub Actions; broader rated-company monitoring remains intentionally deferred until the pilot is calibrated
 - official-ATS adapters for EY target markets, Deloitte Germany, PwC Germany/UK, and KPMG Germany, with verified individual vacancy URLs and parser regression tests
-- 224 verified open Big Four roles in the current snapshot (101 EY, 12 Deloitte, 91 KPMG, 20 PwC); the scheduled full run expands PwC beyond the first validation page
+- 410 verified open Big Four roles in the current snapshot (102 EY, 12 Deloitte, 91 KPMG, 205 PwC), with PwC pagination fixed and every role carrying an English description
 - editable job feedback with `Interested / Maybe / Pass`, recurring reason comments, and direct GitHub persistence
 - feedback-informed review ordering that remains transparent and exploratory rather than hard-excluding low-ranked roles
 - role-focused English descriptions with employer boilerplate removed, plus logical deduplication of the same role advertised across multiple cities
@@ -37,6 +37,8 @@ Turn the Jobs section into the first real end-to-end learning loop:
 3. complete dedicated adapters for remaining Big Four country portals;
 4. validate closure detection before removing any stale vacancy from the open inbox;
 5. only then expand monitoring from Big Four to other rated company categories.
+
+The next product layer is defined but not yet implemented: separate company `IntrinsicInterest`, `Familiarity`, and `AccessStrength` signals, plus versioned country/city economics that estimate minimum viable compensation and add a recoverable `Financially viable / Below threshold / Unknown` opportunity filter.
 
 ## Explicitly deferred
 

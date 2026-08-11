@@ -103,7 +103,7 @@ class BigFourPilotTest(unittest.TestCase):
         self.assertEqual(postings[0]["_verification"], "schema.org/JobPosting microdata")
 
     def test_extracts_server_rendered_phenom_results(self):
-        html = '<script>phApp.ddo = {"eagerLoadRefineSearch":{"data":{"totalHits":1,"jobs":[{"jobId":"42","title":"Finance Consultant"}]}}};</script>'
+        html = '<script>phApp.ddo = {"eagerLoadRefineSearch":{"totalHits":1,"data":{"jobs":[{"jobId":"42","title":"Finance Consultant"}]}}};</script>'
         records, total = extract_phenom_records(html)
         self.assertEqual(total, 1)
         self.assertEqual(records[0]["jobId"], "42")

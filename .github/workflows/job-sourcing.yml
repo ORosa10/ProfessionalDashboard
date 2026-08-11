@@ -31,6 +31,8 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
+      - name: Test Big Four adapters
+        run: python -m unittest sourcing.test_big4_pilot
       - name: Check Big Four career pages
         run: python -m sourcing.big4_pilot --max-pages 40
       - name: Persist sourcing results
@@ -42,5 +44,18 @@ jobs:
             echo "No sourcing changes"
           else
             git commit -m "Refresh sourced jobs"
-            git push
+            for attempt in 1 2 3; do
+              git fetch origin main
+              if ! git rebase origin/main; then
+                git rebase --abort
+                echo "Generated sourcing files conflict with newer main"
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+              sleep $((attempt * 5))
+            done
+            echo "Could not push sourcing results after three attempts"
+            exit 1
           fi

@@ -6,7 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from github_storage import github_token, load_ratings, save_ratings
-from jobs_ui import render_jobs, render_sources
+from jobs_ui import VERIFIED_JOB_TYPES, render_jobs, render_sources
 
 st.set_page_config(
     page_title="Professional Dashboard",
@@ -46,11 +46,11 @@ def home_page() -> None:
     header("Good morning", "Your daily view of sourced opportunities, decisions, and active next steps.")
     runs_path = DATA_DIR / "source_runs.csv"
     job_frames = []
-    for jobs_path in [DATA_DIR / "jobs.csv", DATA_DIR / "job_opportunities.csv"]:
+    for jobs_path in [DATA_DIR / "jobs.csv"]:
         if jobs_path.exists():
             frame = pd.read_csv(jobs_path).fillna("")
             if "verification" in frame.columns:
-                frame = frame[frame["verification"].eq("schema.org/JobPosting")]
+                frame = frame[frame["verification"].isin(VERIFIED_JOB_TYPES)]
             job_frames.append(frame)
     jobs = pd.concat(job_frames, ignore_index=True, sort=False).fillna("") if job_frames else pd.DataFrame()
     if not jobs.empty:

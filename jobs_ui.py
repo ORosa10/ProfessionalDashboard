@@ -6,22 +6,42 @@ import pandas as pd
 import streamlit as st
 
 DATA_DIR = Path(__file__).parent / "data"
+VERIFIED_JOB_TYPES = {
+    "schema.org/JobPosting",
+    "schema.org/JobPosting JSON-LD",
+    "schema.org/JobPosting microdata",
+    "official ATS vacancy detail",
+}
+
+
+def _country_from_market_and_location(market: str, location: str) -> str:
+    if market != "Nordics":
+        return market
+    normalized = location.lower()
+    country_terms = {
+        "Sweden": ("sweden", "stockholm", "gothenburg", "malmö", "malmo"),
+        "Denmark": ("denmark", "copenhagen", "aarhus"),
+        "Norway": ("norway", "oslo", "bergen"),
+        "Finland": ("finland", "helsinki", "espoo"),
+    }
+    matches = [
+        country
+        for country, terms in country_terms.items()
+        if any(term in normalized for term in terms)
+    ]
+    return "; ".join(matches) if matches else "Nordics"
 
 
 def render_jobs() -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title("Jobs")
-    st.caption("Live opportunity inbox from rated companies and verified official career pages.")
+    st.caption("Verified individual vacancies from the official Big Four career portals.")
     frames: list[pd.DataFrame] = []
-    radar_path = DATA_DIR / "job_opportunities.csv"
-    if radar_path.exists():
-        frames.append(pd.read_csv(radar_path).fillna(""))
-
     pilot_path = DATA_DIR / "jobs.csv"
     if pilot_path.exists():
         pilot = pd.read_csv(pilot_path).fillna("")
         if "verification" in pilot.columns:
-            pilot = pilot[pilot["verification"].eq("schema.org/JobPosting")].copy()
+            pilot = pilot[pilot["verification"].isin(VERIFIED_JOB_TYPES)].copy()
         if not pilot.empty:
             pilot = pilot.rename(
                 columns={
@@ -30,6 +50,10 @@ def render_jobs() -> None:
                     "location": "cities",
                     "job_url": "source_url",
                 }
+            )
+            pilot["countries"] = pilot.apply(
+                lambda row: _country_from_market_and_location(row["countries"], row["cities"]),
+                axis=1,
             )
             pilot["role_family"] = "Other relevant finance"
             pilot["seniority"] = ""
@@ -115,8 +139,8 @@ def render_jobs() -> None:
     c3.metric("A-rated companies", int(view["rating"].eq("A").sum()))
     c4.metric("Selected countries", len(selected_countries))
     st.caption(
-        "Multi-location opportunities appear under every listed country. The radar scans A first, "
-        "then B, while C remains an exploration pool; Exclude and Unrated companies are skipped."
+        "Pilot scope: Deloitte, PwC, EY and KPMG only. Multi-location opportunities appear under "
+        "every listed country; Nordic vacancies are split by country when the official location allows it."
     )
 
     columns = [

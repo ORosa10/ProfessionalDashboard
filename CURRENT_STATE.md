@@ -18,8 +18,9 @@ Foundation / v0 app shell.
 - structured contact-strength feedback for known contacts, warm introductions, and strong referrals
 - direct Streamlit-to-GitHub persistence for company ratings and notes
 - company ratings currently capture intrinsic interest in the firm and its work; contacts and later feasibility signals remain separate prioritization layers
-- first live Jobs Inbox with country, company-rating, and role-family filters
-- rotating Jobs Radar specification for official career-page monitoring of rated companies
+- first live Jobs Inbox with company and country/market filters
+- Big Four-only sourcing pilot for Deloitte, PwC, EY, and KPMG, scheduled daily through GitHub Actions; broader rated-company monitoring remains intentionally deferred until the pilot is calibrated
+- first dedicated official-ATS adapters for EY target markets and Deloitte Germany, with verified individual vacancy URLs and parser regression tests
 - placeholder sections for the future product areas
 - dependency and deployment configuration
 

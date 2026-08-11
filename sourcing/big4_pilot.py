@@ -33,17 +33,21 @@ BLOCKED_HINTS = (
     "privacy", "cookie", "terms", "accessibility", "contact", "login", "sign in",
     "talent community", "events", "students", "graduates",
 )
+SUCCESSFACTORS_HOSTS = ("careers.ey.com", "jobs.deloitte.de")
 HEADERS = {
     "User-Agent": "ProfessionalDashboard/0.2 (+https://github.com/ORosa10/ProfessionalDashboard)"
 }
 
 MARKET_LOCATION_TERMS = {
-    "Czechia": ("czech", "praha", "prague", "brno", "ostrava"),
-    "Germany": ("germany", "deutschland", "munich", "münchen", "berlin", "frankfurt", "hamburg"),
-    "Austria": ("austria", "österreich", "vienna", "wien"),
-    "Switzerland": ("switzerland", "schweiz", "zurich", "zürich"),
-    "United Kingdom": ("united kingdom", "uk", "london", "england"),
-    "Nordics": ("sweden", "stockholm", "denmark", "copenhagen", "norway", "oslo", "finland", "helsinki"),
+    "Czechia": ("czech", "praha", "prague", "brno", "ostrava", ", cz"),
+    "Germany": ("germany", "deutschland", "munich", "münchen", "berlin", "frankfurt", "hamburg", ", de"),
+    "Austria": ("austria", "österreich", "vienna", "wien", ", at"),
+    "Switzerland": ("switzerland", "schweiz", "zurich", "zürich", ", ch"),
+    "United Kingdom": ("united kingdom", "uk", "london", "england", ", gb"),
+    "Nordics": (
+        "sweden", "stockholm", "denmark", "copenhagen", "norway", "oslo",
+        "finland", "helsinki", ", se", ", dk", ", no", ", fi",
+    ),
 }
 
 
@@ -82,7 +86,7 @@ def _iter_jsonld_objects(value):
             yield from _iter_jsonld_objects(value["@graph"])
 
 
-def extract_job_postings(soup: BeautifulSoup) -> list[dict]:
+def extract_job_postings(soup: BeautifulSoup, page_url: str = "") -> list[dict]:
     postings: list[dict] = []
     for script in soup.find_all("script", attrs={"type": "application/ld+json"}):
         raw = script.string or script.get_text()
@@ -96,7 +100,55 @@ def extract_job_postings(soup: BeautifulSoup) -> list[dict]:
             obj_type = obj.get("@type")
             types = obj_type if isinstance(obj_type, list) else [obj_type]
             if any(str(t).lower() == "jobposting" for t in types if t):
+                obj["_verification"] = "schema.org/JobPosting JSON-LD"
                 postings.append(obj)
+    for shell in soup.find_all(
+        attrs={"itemtype": re.compile(r"schema\.org/JobPosting", re.IGNORECASE)}
+    ):
+        title_node = shell.find(attrs={"itemprop": "title"})
+        date_node = shell.find(attrs={"itemprop": "datePosted"})
+        title = normalize(
+            (title_node.get("content") if title_node else "")
+            or (title_node.get_text(" ", strip=True) if title_node else "")
+        )
+        if not title:
+            continue
+        locations: list[dict] = []
+        for address in shell.find_all(attrs={"itemprop": "address"}):
+            values: dict[str, str] = {}
+            for key in ("addressLocality", "addressRegion", "addressCountry", "postalCode"):
+                node = address.find(attrs={"itemprop": key})
+                if node:
+                    values[key] = normalize(node.get("content") or node.get_text(" ", strip=True))
+            if values:
+                locations.append({"@type": "Place", "address": values})
+        postings.append(
+            {
+                "@type": "JobPosting",
+                "title": title,
+                "datePosted": normalize(
+                    (date_node.get("content") if date_node else "")
+                    or (date_node.get_text(" ", strip=True) if date_node else "")
+                ),
+                "jobLocation": locations,
+                "_verification": "schema.org/JobPosting microdata",
+            }
+        )
+    if not postings and page_url and is_successfactors_job_url(page_url):
+        title_meta = soup.find("meta", attrs={"property": "og:title"})
+        title = normalize(title_meta.get("content", "") if title_meta else "")
+        location_node = soup.select_one(".jobLocation, .jobGeoLocation")
+        location = normalize(location_node.get_text(" ", strip=True) if location_node else "")
+        job_shell = soup.select_one(".jobDisplayShell, .jobDisplay")
+        if title and location and job_shell:
+            postings.append(
+                {
+                    "@type": "JobPosting",
+                    "title": title,
+                    "jobLocation": {"@type": "Place", "address": location},
+                    "_verification": "official ATS vacancy detail",
+                }
+            )
     return postings
 
 
@@ -141,6 +193,37 @@ def should_follow(title: str, href: str) -> bool:
     )
 
 
+def is_successfactors_job_url(url: str) -> bool:
+    """Return True only for an individual SuccessFactors vacancy URL."""
+    parsed = urlparse(url)
+    host = parsed.netloc.lower().split(":")[0]
+    if not any(host == item or host.endswith("." + item) for item in SUCCESSFACTORS_HOSTS):
+        return False
+    return bool(re.search(r"/(?:ey/)?job/.+/\d+/?$", parsed.path, flags=re.IGNORECASE))
+
+
+def ordered_follow_links(soup: BeautifulSoup, page_url: str, source: pd.Series) -> list[str]:
+    """Prefer real ATS vacancies, ordered by title relevance, over navigation links."""
+    links: dict[str, tuple[int, str]] = {}
+    for anchor in soup.find_all("a", href=True):
+        title = normalize(anchor.get_text(" ", strip=True))
+        href = urljoin(page_url, anchor.get("href", ""))
+        if not href.startswith("http") or not allowed(href, source.allowed_domains):
+            continue
+        if is_successfactors_job_url(href):
+            score, _ = relevance(title)
+            links[href] = (score, title)
+        elif should_follow(title, href):
+            links.setdefault(href, (0, title))
+    return [
+        href
+        for href, _ in sorted(
+            links.items(),
+            key=lambda item: (-item[1][0], item[1][1].lower(), item[0]),
+        )
+    ]
+
+
 def posting_to_job(posting: dict, page_url: str, source: pd.Series, started: str) -> dict | None:
     title = normalize(str(posting.get("title") or posting.get("name") or ""))
     if not title:
@@ -177,7 +260,7 @@ def posting_to_job(posting: dict, page_url: str, source: pd.Series, started: str
         "last_seen_at": started,
         "relevance_score": score,
         "matched_terms": terms,
-        "verification": "schema.org/JobPosting",
+        "verification": posting.get("_verification") or "schema.org/JobPosting",
         "status": "New",
     }
 
@@ -203,7 +286,7 @@ def discover_jobs(source: pd.Series, max_pages: int = 40) -> tuple[list[dict], d
             continue
 
         soup = BeautifulSoup(response.text, "html.parser")
-        postings = extract_job_postings(soup)
+        postings = extract_job_postings(soup, response.url)
         if postings:
             candidate_pages += 1
             for posting in postings:
@@ -211,16 +294,9 @@ def discover_jobs(source: pd.Series, max_pages: int = 40) -> tuple[list[dict], d
                 if job:
                     jobs[job["job_id"]] = job
 
-        if depth < 2:
-            for anchor in soup.find_all("a", href=True):
-                title = normalize(anchor.get_text(" ", strip=True))
-                href = urljoin(response.url, anchor.get("href", ""))
-                if (
-                    href.startswith("http")
-                    and allowed(href, source.allowed_domains)
-                    and href not in queued
-                    and should_follow(title, href)
-                ):
+        if depth < 2 and not postings:
+            for href in ordered_follow_links(soup, response.url, source):
+                if href not in queued:
                     queue.append((href, depth + 1))
                     queued.add(href)
         time.sleep(0.35)
@@ -246,18 +322,17 @@ def merge_jobs(new_jobs: pd.DataFrame) -> pd.DataFrame:
         "discovered_at", "last_seen_at", "relevance_score", "matched_terms",
         "verification", "status",
     ]
-    if new_jobs.empty:
-        return pd.DataFrame(columns=columns)
-
-    new_jobs = new_jobs[columns].copy()
-    if not JOBS_PATH.exists():
-        return new_jobs.sort_values(["relevance_score", "company"], ascending=[False, True])
-
-    old = pd.read_csv(JOBS_PATH).fillna("")
+    old = pd.read_csv(JOBS_PATH).fillna("") if JOBS_PATH.exists() else pd.DataFrame()
     if "verification" not in old.columns:
         old = pd.DataFrame(columns=columns)
     else:
         old = old.reindex(columns=columns, fill_value="")
+    if new_jobs.empty:
+        return old
+
+    new_jobs = new_jobs[columns].copy()
+    if old.empty:
+        return new_jobs.sort_values(["relevance_score", "company"], ascending=[False, True])
 
     old_idx = old.set_index("job_id")
     new_idx = new_jobs.set_index("job_id")
@@ -265,7 +340,9 @@ def merge_jobs(new_jobs: pd.DataFrame) -> pd.DataFrame:
     if len(common):
         new_idx.loc[common, "discovered_at"] = old_idx.loc[common, "discovered_at"]
         new_idx.loc[common, "status"] = old_idx.loc[common, "status"]
-    return new_idx.reset_index()[columns].sort_values(
+    missing = old_idx.loc[~old_idx.index.isin(new_idx.index)]
+    combined = pd.concat([new_idx, missing])
+    return combined.reset_index()[columns].sort_values(
         ["relevance_score", "last_seen_at"], ascending=[False, False]
     )
 

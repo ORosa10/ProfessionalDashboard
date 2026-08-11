@@ -48,9 +48,10 @@ def render_jobs() -> None:
                     "job_id": "opportunity_id",
                     "market": "countries",
                     "location": "cities",
-                    "job_url": "source_url",
                 }
             )
+            if "job_url" in pilot.columns:
+                pilot["source_url"] = pilot["job_url"]
             pilot["countries"] = pilot.apply(
                 lambda row: _country_from_market_and_location(row["countries"], row["cities"]),
                 axis=1,
@@ -136,7 +137,10 @@ def render_jobs() -> None:
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Open opportunities", len(view))
     c2.metric("New", int(view["review_status"].eq("New").sum()))
-    c3.metric("A-rated companies", int(view["rating"].eq("A").sum()))
+    c3.metric(
+        "A-rated companies",
+        view.loc[view["rating"].eq("A"), "company"].nunique(),
+    )
     c4.metric("Selected countries", len(selected_countries))
     st.caption(
         "Pilot scope: Deloitte, PwC, EY and KPMG only. Multi-location opportunities appear under "

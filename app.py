@@ -61,9 +61,10 @@ def home_page() -> None:
             job_frames.append(frame)
     jobs = pd.concat(job_frames, ignore_index=True, sort=False).fillna("") if job_frames else pd.DataFrame()
     if not jobs.empty:
-        jobs["_source_url"] = jobs.get("source_url", "")
         if "job_url" in jobs.columns:
-            jobs["_source_url"] = jobs["_source_url"].where(jobs["_source_url"].ne(""), jobs["job_url"])
+            jobs["_source_url"] = jobs["job_url"]
+        else:
+            jobs["_source_url"] = jobs.get("source_url", "")
         jobs = jobs.drop_duplicates("_source_url", keep="last")
         jobs["_market"] = jobs.get("countries", "")
         if "market" in jobs.columns:

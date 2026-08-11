@@ -11,15 +11,48 @@ DATA_DIR = Path(__file__).parent / "data"
 def render_jobs() -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title("Jobs")
-    st.caption("Live pilot: PwC · EY · Deloitte · KPMG across your priority markets.")
-    jobs_path = DATA_DIR / "jobs.csv"
-    if not jobs_path.exists():
+    st.caption("Live opportunity inbox from rated companies and verified official career pages.")
+    frames: list[pd.DataFrame] = []
+    radar_path = DATA_DIR / "job_opportunities.csv"
+    if radar_path.exists():
+        frames.append(pd.read_csv(radar_path).fillna(""))
+
+    pilot_path = DATA_DIR / "jobs.csv"
+    if pilot_path.exists():
+        pilot = pd.read_csv(pilot_path).fillna("")
+        if "verification" in pilot.columns:
+            pilot = pilot[pilot["verification"].eq("schema.org/JobPosting")].copy()
+        if not pilot.empty:
+            pilot = pilot.rename(
+                columns={
+                    "job_id": "opportunity_id",
+                    "market": "countries",
+                    "location": "cities",
+                    "job_url": "source_url",
+                }
+            )
+            pilot["role_family"] = "Other relevant finance"
+            pilot["seniority"] = ""
+            if "matched_terms" in pilot.columns:
+                pilot["fit_note"] = pilot["matched_terms"].apply(
+                    lambda value: f"Matched role terms: {value}"
+                    if value
+                    else "Verified role from the Big Four pilot."
+                )
+            else:
+                pilot["fit_note"] = "Verified role from the Big Four pilot."
+            if "status" in pilot.columns:
+                pilot["status"] = pilot["status"].replace("", "Open")
+            else:
+                pilot["status"] = "Open"
+            pilot["review_status"] = "New"
+            frames.append(pilot)
+
+    if not frames:
         st.warning("The sourcing workflow has not produced its first verified vacancy snapshot yet.")
         return
-
-    jobs = pd.read_csv(jobs_path).fillna("")
-    if "verification" in jobs.columns:
-        jobs = jobs[jobs["verification"].eq("schema.org/JobPosting")].copy()
+    jobs = pd.concat(frames, ignore_index=True, sort=False).fillna("")
+    jobs = jobs.drop_duplicates("source_url", keep="last")
     if jobs.empty:
         st.info(
             "The latest run did not verify any individual vacancies yet. "
@@ -27,48 +60,94 @@ def render_jobs() -> None:
         )
         return
 
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Verified vacancies", len(jobs))
-    c2.metric("Companies", jobs["company"].nunique())
-    c3.metric("Markets", jobs["market"].nunique())
+    ratings_path = DATA_DIR / "company_ratings.csv"
+    if ratings_path.exists():
+        ratings = pd.read_csv(ratings_path).fillna("")[["canonical_company_id", "rating"]]
+        jobs = jobs.merge(ratings, on="canonical_company_id", how="left")
+    else:
+        jobs["rating"] = "Unrated"
+    jobs["rating"] = jobs["rating"].replace("", "Unrated")
+    for required, default in {
+        "countries": "",
+        "cities": "",
+        "role_family": "Other relevant finance",
+        "seniority": "",
+        "fit_note": "",
+        "discovered_at": "",
+        "status": "Open",
+        "review_status": "New",
+    }.items():
+        if required not in jobs.columns:
+            jobs[required] = default
 
-    companies = sorted(jobs["company"].unique())
-    markets = sorted(jobs["market"].unique())
-    left, right = st.columns(2)
-    selected_companies = left.multiselect("Companies", companies, default=companies)
-    selected_markets = right.multiselect("Markets", markets, default=markets)
+    countries = sorted(
+        {
+            country.strip()
+            for value in jobs["countries"]
+            for country in str(value).split(";")
+            if country.strip()
+        }
+    )
+    ratings = [rating for rating in ["A", "B", "C", "Unrated"] if rating in set(jobs["rating"])]
+    roles = sorted(value for value in jobs["role_family"].unique() if value)
+    f1, f2, f3 = st.columns(3)
+    selected_countries = f1.multiselect("Countries", countries, default=countries)
+    selected_ratings = f2.multiselect("Company rating", ratings, default=ratings)
+    selected_roles = f3.multiselect("Role family", roles, default=roles)
+    selected_country_set = set(selected_countries)
+    country_match = jobs["countries"].apply(
+        lambda value: bool(
+            {country.strip() for country in str(value).split(";") if country.strip()}
+            & selected_country_set
+        )
+    )
     view = jobs[
-        jobs["company"].isin(selected_companies)
-        & jobs["market"].isin(selected_markets)
+        country_match
+        & jobs["rating"].isin(selected_ratings)
+        & jobs["role_family"].isin(selected_roles)
+        & jobs["status"].eq("Open")
     ].copy()
-    view = view.sort_values(["relevance_score", "last_seen_at"], ascending=[False, False])
+    view = view.sort_values(["rating", "discovered_at"], ascending=[True, False])
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Open opportunities", len(view))
+    c2.metric("New", int(view["review_status"].eq("New").sum()))
+    c3.metric("A-rated companies", int(view["rating"].eq("A").sum()))
+    c4.metric("Selected countries", len(selected_countries))
+    st.caption(
+        "Multi-location opportunities appear under every listed country. The radar scans A first, "
+        "then B, while C remains an exploration pool; Exclude and Unrated companies are skipped."
+    )
 
     columns = [
-        "company",
         "title",
-        "location",
-        "market",
-        "job_url",
-        "date_posted",
-        "relevance_score",
-        "matched_terms",
-        "last_seen_at",
+        "company",
+        "rating",
+        "countries",
+        "cities",
+        "role_family",
+        "seniority",
+        "fit_note",
+        "discovered_at",
+        "source_url",
     ]
-    columns = [column for column in columns if column in view.columns]
     st.dataframe(
         view[columns],
         hide_index=True,
         width="stretch",
+        height=620,
+        row_height=82,
         column_config={
-            "company": st.column_config.TextColumn("Company", width="small"),
-            "title": st.column_config.TextColumn("Role", width="large"),
-            "location": st.column_config.TextColumn("Location", width="medium"),
-            "market": st.column_config.TextColumn("Market", width="small"),
-            "job_url": st.column_config.LinkColumn("Open job", display_text="Open job", width="small"),
-            "date_posted": st.column_config.TextColumn("Posted", width="small"),
-            "relevance_score": st.column_config.NumberColumn("Relevance", width="small"),
-            "matched_terms": st.column_config.TextColumn("Matched terms", width="medium"),
-            "last_seen_at": st.column_config.TextColumn("Last seen", width="medium"),
+            "title": st.column_config.TextColumn("Opportunity", width="large"),
+            "company": st.column_config.TextColumn("Company", width="medium"),
+            "rating": st.column_config.TextColumn("Company rating", width="small"),
+            "countries": st.column_config.TextColumn("Countries", width="medium"),
+            "cities": st.column_config.TextColumn("Cities", width="medium"),
+            "role_family": st.column_config.TextColumn("Role family", width="medium"),
+            "seniority": st.column_config.TextColumn("Seniority", width="small"),
+            "fit_note": st.column_config.TextColumn("Why it may fit", width=520),
+            "discovered_at": st.column_config.TextColumn("Discovered", width="small"),
+            "source_url": st.column_config.LinkColumn("Official job", display_text="Open", width="small"),
         },
     )
 

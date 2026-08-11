@@ -44,19 +44,33 @@ def placeholder(title: str, body: str, next_step: str) -> None:
 
 def home_page() -> None:
     header("Good morning", "Your daily view of sourced opportunities, decisions, and active next steps.")
-    jobs_path = DATA_DIR / "jobs.csv"
     runs_path = DATA_DIR / "source_runs.csv"
-    jobs = pd.read_csv(jobs_path).fillna("") if jobs_path.exists() else pd.DataFrame()
+    job_frames = []
+    for jobs_path in [DATA_DIR / "jobs.csv", DATA_DIR / "job_opportunities.csv"]:
+        if jobs_path.exists():
+            frame = pd.read_csv(jobs_path).fillna("")
+            if "verification" in frame.columns:
+                frame = frame[frame["verification"].eq("schema.org/JobPosting")]
+            job_frames.append(frame)
+    jobs = pd.concat(job_frames, ignore_index=True, sort=False).fillna("") if job_frames else pd.DataFrame()
+    if not jobs.empty:
+        jobs["_source_url"] = jobs.get("source_url", "")
+        if "job_url" in jobs.columns:
+            jobs["_source_url"] = jobs["_source_url"].where(jobs["_source_url"].ne(""), jobs["job_url"])
+        jobs = jobs.drop_duplicates("_source_url", keep="last")
+        jobs["_market"] = jobs.get("countries", "")
+        if "market" in jobs.columns:
+            jobs["_market"] = jobs["_market"].where(jobs["_market"].ne(""), jobs["market"])
     runs = pd.read_csv(runs_path).fillna("") if runs_path.exists() else pd.DataFrame()
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Tracked job links", len(jobs))
     col2.metric("Companies with jobs", jobs["company"].nunique() if not jobs.empty else 0)
-    col3.metric("Markets", jobs["market"].nunique() if not jobs.empty else 0)
+    col3.metric("Markets", jobs["_market"].nunique() if not jobs.empty else 0)
     col4.metric("Source runs", len(runs))
     st.subheader("Operating model")
     st.code("COMPANY RADAR → CAREER PAGES → DISCOVERY → JOBS INBOX → FEEDBACK → CALIBRATION")
     if jobs.empty:
-        st.info("The Big Four sourcing pilot is ready. The first GitHub Actions run will populate the Jobs page automatically.")
+        st.info("The sourcing framework is ready. Scheduled runs will populate the Jobs page automatically.")
     else:
         st.success("Live sourcing is active. Open Jobs to review the latest discovered vacancies.")
 

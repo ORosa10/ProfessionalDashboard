@@ -18,6 +18,8 @@ Foundation / v0 app shell.
 - structured contact-strength feedback for known contacts, warm introductions, and strong referrals
 - direct Streamlit-to-GitHub persistence for company ratings and notes
 - company ratings currently capture intrinsic interest in the firm and its work; contacts and later feasibility signals remain separate prioritization layers
+- first live Jobs Inbox with country, company-rating, and role-family filters
+- rotating Jobs Radar specification for official career-page monitoring of rated companies
 - placeholder sections for the future product areas
 - dependency and deployment configuration
 

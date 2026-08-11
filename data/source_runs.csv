@@ -1,0 +1,25 @@
+run_at,source_id,company,market,seed_url,pages_checked,jobs_found,errors
+2026-08-11T09:50:05.314253+00:00,pwc-cz,PwC,Czechia,https://www.pwc.com/cz/en/kariera.html,1,6,
+2026-08-11T09:50:06.271354+00:00,pwc-de,PwC,Germany,https://www.pwc.de/en/careers.html,1,0,https://www.pwc.de/en/careers.html: HTTPError
+2026-08-11T09:50:06.860023+00:00,pwc-at,PwC,Austria,https://www.pwc.at/en/careers.html,4,20,
+2026-08-11T09:50:13.447640+00:00,pwc-ch,PwC,Switzerland,https://www.pwc.ch/en/careers.html,1,0,https://www.pwc.ch/en/careers.html: HTTPError
+2026-08-11T09:50:14.313887+00:00,pwc-uk,PwC,United Kingdom,https://www.pwc.co.uk/careers.html,4,75,
+2026-08-11T09:50:19.123727+00:00,pwc-nordics,PwC,Nordics,https://www.pwc.com/gx/en/careers.html,1,7,
+2026-08-11T09:50:19.930728+00:00,ey-cz,EY,Czechia,https://www.ey.com/en_cz/careers,3,48,
+2026-08-11T09:50:26.720764+00:00,ey-de,EY,Germany,https://www.ey.com/en_de/careers,1,0,https://www.ey.com/en_de/careers: HTTPError
+2026-08-11T09:50:26.894069+00:00,ey-at,EY,Austria,https://www.ey.com/en_at/careers,1,0,https://www.ey.com/en_at/careers: HTTPError
+2026-08-11T09:50:27.120719+00:00,ey-ch,EY,Switzerland,https://www.ey.com/en_ch/careers,2,46,
+2026-08-11T09:50:31.595286+00:00,ey-uk,EY,United Kingdom,https://www.ey.com/en_uk/careers,2,22,
+2026-08-11T09:50:34.034232+00:00,ey-nordics,EY,Nordics,https://www.ey.com/en_gl/careers,2,41,
+2026-08-11T09:50:36.303214+00:00,deloitte-cz,Deloitte,Czechia,https://www.deloitte.com/cz-sk/en/careers.html,3,40,
+2026-08-11T09:50:42.291210+00:00,deloitte-de,Deloitte,Germany,https://www.deloitte.com/de/de/careers.html,1,29,
+2026-08-11T09:50:42.977298+00:00,deloitte-at,Deloitte,Austria,https://www.deloitte.com/at/de/careers.html,1,18,
+2026-08-11T09:50:43.590582+00:00,deloitte-ch,Deloitte,Switzerland,https://www.deloitte.com/ch/en/careers.html,2,38,
+2026-08-11T09:50:45.098719+00:00,deloitte-uk,Deloitte,United Kingdom,https://www.deloitte.com/uk/en/careers.html,3,39,
+2026-08-11T09:50:49.290690+00:00,deloitte-nordics,Deloitte,Nordics,https://www.deloitte.com/global/en/careers.html,2,18,
+2026-08-11T09:50:50.643157+00:00,kpmg-cz,KPMG,Czechia,https://kpmg.com/cz/en/home/careers.html,2,1,
+2026-08-11T09:50:52.580691+00:00,kpmg-de,KPMG,Germany,https://kpmg.com/de/en/home/careers.html,1,0,
+2026-08-11T09:50:54.024384+00:00,kpmg-at,KPMG,Austria,https://kpmg.com/at/en/home/careers.html,1,0,https://kpmg.com/at/en/home/careers.html: HTTPError
+2026-08-11T09:50:54.777206+00:00,kpmg-ch,KPMG,Switzerland,https://kpmg.com/ch/en/home/careers.html,8,39,
+2026-08-11T09:51:02.240516+00:00,kpmg-uk,KPMG,United Kingdom,https://kpmg.com/uk/en/home/careers.html,2,1,
+2026-08-11T09:51:03.681088+00:00,kpmg-nordics,KPMG,Nordics,https://kpmg.com/xx/en/home/careers.html,1,0,https://kpmg.com/xx/en/home/careers.html: HTTPError

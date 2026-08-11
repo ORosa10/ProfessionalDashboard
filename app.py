@@ -6,7 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from github_storage import github_token, load_ratings, save_ratings
-
+from jobs_ui import render_jobs, render_sources
 
 st.set_page_config(
     page_title="Professional Dashboard",
@@ -28,6 +28,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+DATA_DIR = Path(__file__).parent / "data"
+
+
 def header(title: str, description: str) -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title(title)
@@ -40,288 +43,160 @@ def placeholder(title: str, body: str, next_step: str) -> None:
 
 
 def home_page() -> None:
-    header(
-        "Good evening",
-        "Your future daily view of new opportunities, decisions, and active next steps.",
-    )
+    header("Good morning", "Your daily view of sourced opportunities, decisions, and active next steps.")
+    jobs_path = DATA_DIR / "jobs.csv"
+    runs_path = DATA_DIR / "source_runs.csv"
+    jobs = pd.read_csv(jobs_path).fillna("") if jobs_path.exists() else pd.DataFrame()
+    runs = pd.read_csv(runs_path).fillna("") if runs_path.exists() else pd.DataFrame()
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("New opportunities", 0)
-    col2.metric("Needs review", 0)
-    col3.metric("Active", 0)
-    col4.metric("Radar signals", 0)
-
-    st.subheader("Foundation status")
-    left, right = st.columns([1.4, 1])
-    with left:
-        st.markdown(
-            """
-            <div class="status-card"><strong>1. App shell</strong><br><span class="muted">Ready for deployment and iteration.</span></div>
-            <div class="status-card"><strong>2. Persistence</strong><br><span class="muted">Direct GitHub saving is active for company feedback.</span></div>
-            <div class="status-card"><strong>3. First real sourcing</strong><br><span class="muted">Next: turn the rated Company Universe into monitored job sources.</span></div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with right:
-        st.subheader("Operating model")
-        st.code("SOURCES → DISCOVERY → INBOX → REVIEW → ACTIVE → OUTCOME")
-        st.caption("Jobs are the first product wedge. Scoring comes only after real feedback.")
+    col1.metric("Tracked job links", len(jobs))
+    col2.metric("Companies with jobs", jobs["company"].nunique() if not jobs.empty else 0)
+    col3.metric("Markets", jobs["market"].nunique() if not jobs.empty else 0)
+    col4.metric("Source runs", len(runs))
+    st.subheader("Operating model")
+    st.code("COMPANY RADAR → CAREER PAGES → DISCOVERY → JOBS INBOX → FEEDBACK → CALIBRATION")
+    if jobs.empty:
+        st.info("The Big Four sourcing pilot is ready. The first GitHub Actions run will populate the Jobs page automatically.")
+    else:
+        st.success("Live sourcing is active. Open Jobs to review the latest discovered vacancies.")
 
 
 def opportunities_page() -> None:
     placeholder(
         "Opportunity overview",
-        "The unified inbox and catalogue for all professional opportunity types.",
-        "Add the Opportunity model, durable storage, and the review queue.",
+        "The unified inbox and catalogue for jobs and broader professional opportunities.",
+        "Add non-job opportunity types after the job learning loop is working.",
     )
 
 
 def jobs_page() -> None:
-    header("Jobs", "The first real sourcing engine, structured as WHAT × WHERE × WHO × SOURCE.")
-    st.success("Initial SearchProfile v0.1 is defined and intentionally stored outside the public repository.")
-    st.markdown(
-        "The profile evaluates seniority by role family, uses penalties instead of premature hard filters, "
-        "and keeps a dedicated exploration bucket. Personal language, citizenship, and compensation inputs "
-        "remain private."
-    )
-    st.info(
-        "Next build step: rate the Company Universe and connect the first real career-page source.",
-        icon="🛠️",
-    )
+    render_jobs()
 
 
-def companies_page() -> None:
-    header(
-        "Companies",
-        "Review the first Company Universe across employer archetypes and target regions.",
-    )
-    data_dir = Path(__file__).parent / "data"
-    data_path = data_dir / "company_universe.csv"
-    category_path = data_dir / "company_categories.csv"
-    universe = pd.read_csv(data_path).fillna("")
-    categories = pd.read_csv(category_path)
-    for wave_path in sorted(data_dir.glob("company_universe_wave*.csv")):
+def _load_company_universe() -> pd.DataFrame:
+    universe = pd.read_csv(DATA_DIR / "company_universe.csv").fillna("")
+    categories = pd.read_csv(DATA_DIR / "company_categories.csv").fillna("")
+    for wave_path in sorted(DATA_DIR.glob("company_universe_wave*.csv")):
         wave = pd.read_csv(wave_path).fillna("")
-        categories = pd.concat(
-            [categories, wave[["canonical_company_id", "company_category"]]],
-            ignore_index=True,
-        )
-        universe = pd.concat(
-            [universe, wave.drop(columns=["company_category"])],
-            ignore_index=True,
-        )
-    universe = universe.merge(categories, on="canonical_company_id", how="left", validate="one_to_one")
+        if "company_category" in wave.columns:
+            categories = pd.concat(
+                [categories, wave[["canonical_company_id", "company_category"]]],
+                ignore_index=True,
+            )
+            wave = wave.drop(columns=["company_category"])
+        universe = pd.concat([universe, wave], ignore_index=True)
+    universe = universe.drop_duplicates("canonical_company_id", keep="last")
+    categories = categories.drop_duplicates("canonical_company_id", keep="last")
+    universe = universe.merge(categories, on="canonical_company_id", how="left")
     universe["company_category"] = universe["company_category"].replace(
         {"Private Equity & Asset Management": "Private Equity & Private Markets"}
     )
-    category_overrides_path = data_dir / "company_category_overrides.csv"
-    if category_overrides_path.exists():
-        category_overrides = pd.read_csv(category_overrides_path).set_index("canonical_company_id")
-        overridden_categories = universe["canonical_company_id"].map(category_overrides["company_category"])
-        universe["company_category"] = overridden_categories.fillna(universe["company_category"])
-    url_overrides = pd.read_csv(data_dir / "company_url_overrides.csv").set_index("canonical_company_id")
-    overridden_urls = universe["canonical_company_id"].map(url_overrides["career_url"])
-    universe["career_url"] = overridden_urls.fillna(universe["career_url"])
+    overrides_path = DATA_DIR / "company_category_overrides.csv"
+    if overrides_path.exists():
+        overrides = pd.read_csv(overrides_path).set_index("canonical_company_id")
+        mapped = universe["canonical_company_id"].map(overrides["company_category"])
+        universe["company_category"] = mapped.fillna(universe["company_category"])
+    url_path = DATA_DIR / "company_url_overrides.csv"
+    if url_path.exists():
+        url_overrides = pd.read_csv(url_path).set_index("canonical_company_id")
+        mapped = universe["canonical_company_id"].map(url_overrides["career_url"])
+        universe["career_url"] = mapped.fillna(universe["career_url"])
+    return universe.fillna("")
+
+
+def companies_page() -> None:
+    header("Companies", "Your rated Company Universe and the input layer for company-driven job sourcing.")
+    universe = _load_company_universe()
     token = github_token()
     ratings_sha = None
-
     if token:
         try:
             saved_ratings, ratings_sha = load_ratings(token)
         except Exception:
-            saved_ratings = pd.DataFrame(
-                columns=["canonical_company_id", "rating", "contact_strength", "notes"]
-            )
-            st.warning("GitHub ratings could not be loaded. The company list is still available.")
+            saved_ratings = pd.DataFrame(columns=["canonical_company_id", "rating", "contact_strength", "notes"])
+            st.warning("GitHub ratings could not be loaded. Showing the base universe.")
     else:
-        saved_ratings = pd.DataFrame(
-            columns=["canonical_company_id", "rating", "contact_strength", "notes"]
-        )
+        saved_ratings = pd.DataFrame(columns=["canonical_company_id", "rating", "contact_strength", "notes"])
 
-    base_ratings = universe[["canonical_company_id", "rating", "notes"]].copy()
-    base_ratings["contact_strength"] = "None"
-    if not saved_ratings.empty:
+    base = universe[["canonical_company_id"]].copy()
+    if saved_ratings.empty:
+        base["rating"] = universe.get("rating", "Unrated")
+        base["contact_strength"] = "None"
+        base["notes"] = universe.get("notes", "")
+    else:
         if "contact_strength" not in saved_ratings.columns:
             saved_ratings["contact_strength"] = "None"
-        base_ratings = base_ratings.drop(columns=["rating", "contact_strength", "notes"]).merge(
-            saved_ratings[["canonical_company_id", "rating", "contact_strength", "notes"]],
-            on="canonical_company_id",
-            how="left",
-        )
-        base_ratings["rating"] = base_ratings["rating"].fillna("Unrated")
-        base_ratings["contact_strength"] = base_ratings["contact_strength"].fillna("None")
-        base_ratings["notes"] = base_ratings["notes"].fillna("")
+        base = base.merge(saved_ratings, on="canonical_company_id", how="left")
+        base["rating"] = base["rating"].replace("", pd.NA).fillna("Unrated")
+        base["contact_strength"] = base["contact_strength"].replace("", pd.NA).fillna("None")
+        base["notes"] = base["notes"].fillna("")
+    universe = universe.drop(columns=[c for c in ["rating", "notes"] if c in universe.columns]).merge(base, on="canonical_company_id", how="left")
+    universe["company_description"] = universe["archetype"].astype(str).str.strip() + "\n" + universe["why_test"].astype(str).str.strip()
 
-    universe = universe.drop(columns=["rating", "notes"]).merge(
-        base_ratings,
-        on="canonical_company_id",
-        how="left",
-    )
-    universe["company_description"] = (
-        universe["archetype"].str.strip()
-        + "\n"
-        + universe["why_test"].str.strip()
-    )
+    left, right = st.columns(2)
+    regions = sorted(x for x in universe["region"].unique() if x)
+    categories = sorted(x for x in universe["company_category"].unique() if x)
+    selected_regions = left.multiselect("Filter regions", regions, default=regions)
+    selected_categories = right.multiselect("Filter company categories", categories, default=categories)
+    filtered = universe[universe["region"].isin(selected_regions) & universe["company_category"].isin(selected_categories)].copy()
 
-    filter_left, filter_right = st.columns(2)
-    region_options = sorted(universe["region"].unique())
-    category_options = sorted(universe["company_category"].unique())
-    with filter_left:
-        selected_regions = st.multiselect("Filter regions", region_options, default=region_options)
-    with filter_right:
-        selected_categories = st.multiselect(
-            "Filter company categories",
-            category_options,
-            default=category_options,
-        )
-    filtered = universe[
-        universe["region"].isin(selected_regions)
-        & universe["company_category"].isin(selected_categories)
-    ].copy()
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Company Universe", len(universe))
+    m2.metric("A priority", int((universe["rating"] == "A").sum()))
+    m3.metric("B priority", int((universe["rating"] == "B").sum()))
+    m4.metric("Excluded", int((universe["rating"] == "Exclude").sum()))
 
-    metric_total, metric_rated, metric_a, metric_contacts, metric_excluded = st.columns(5)
-    rated_count = int((universe["rating"] != "Unrated").sum())
-    metric_total.metric("Company Universe", len(universe))
-    metric_rated.metric("Rated", rated_count)
-    metric_a.metric("A priority", int((universe["rating"] == "A").sum()))
-    metric_contacts.metric("Warm contacts", int(universe["contact_strength"].isin(["Warm contact", "Strong referral"]).sum()))
-    metric_excluded.metric("Excluded", int((universe["rating"] == "Exclude").sum()))
-    st.progress(rated_count / len(universe), text=f"Rating progress: {rated_count} / {len(universe)}")
-
-    st.caption(
-        f"Showing {len(filtered)} canonical companies across {len(selected_categories)} categories. "
-        "Global and local career pages roll up to one company; "
-        "duplicate vacancies will retain multiple source links."
-    )
-    st.caption(
-        "Keyboard rating: select a Rating cell, type A, B, C or X, then press Enter or Tab. "
-        "X means Exclude. Save all changes with the button below."
-    )
-    review_columns = [
-        "company",
-        "rating",
-        "company_description",
-        "contact_strength",
-        "notes",
-        "company_category",
-        "region",
-        "locations",
-        "archetype",
-        "why_test",
-        "career_url",
-        "source_strategy",
-    ]
+    columns = ["company", "rating", "company_description", "contact_strength", "notes", "company_category", "region", "locations", "career_url"]
     edited = st.data_editor(
-        filtered[review_columns],
+        filtered[columns],
         hide_index=True,
         width="stretch",
         height=620,
-        row_height=96,
-        disabled=[
-            "company",
-            "company_category",
-            "company_description",
-            "region",
-            "locations",
-            "archetype",
-            "why_test",
-            "career_url",
-            "source_strategy",
-        ],
+        row_height=90,
+        disabled=["company", "company_description", "company_category", "region", "locations", "career_url"],
         column_config={
             "company": st.column_config.TextColumn("Company", width="medium"),
-            "company_description": st.column_config.TextColumn(
-                "What they do / why relevant",
-                width=560,
-            ),
-            "company_category": st.column_config.TextColumn("Category", width="medium"),
-            "region": st.column_config.TextColumn("Region", width="small"),
-            "locations": st.column_config.TextColumn("Locations", width="medium"),
-            "archetype": st.column_config.TextColumn("Archetype", width="medium"),
-            "why_test": st.column_config.TextColumn("Why test", width="large"),
+            "company_description": st.column_config.TextColumn("What they do / why relevant", width=520),
             "career_url": st.column_config.LinkColumn("Careers", display_text="Open"),
-            "source_strategy": st.column_config.TextColumn("Source structure", width="large"),
-            "rating": st.column_config.TextColumn(
-                "Rating",
-                help="Type A, B, C or X and confirm with Enter or Tab.",
-                validate=r"^(Unrated|unrated|U|u|A|a|B|b|C|c|Exclude|exclude|X|x)$",
-                max_chars=7,
-                width="small",
-            ),
-            "contact_strength": st.column_config.SelectboxColumn(
-                "Contact",
-                options=["None", "Known contact", "Warm contact", "Strong referral"],
-                required=True,
-                width="medium",
-            ),
+            "rating": st.column_config.TextColumn("Rating", help="A, B, C, X/Exclude or U/Unrated"),
+            "contact_strength": st.column_config.SelectboxColumn("Contact", options=["None", "Known contact", "Warm contact", "Strong referral"], required=True),
             "notes": st.column_config.TextColumn("Your notes", width="large"),
         },
         key="company_universe_editor",
     )
 
-    if token:
-        if st.button("Save feedback to GitHub", type="primary"):
-            updated = base_ratings.set_index("canonical_company_id")
-            edited_with_ids = edited.copy()
-            edited_with_ids.insert(0, "canonical_company_id", filtered["canonical_company_id"].values)
-            edited_with_ids = edited_with_ids.set_index("canonical_company_id")
-            rating_aliases = {
-                "UNRATED": "Unrated",
-                "U": "Unrated",
-                "A": "A",
-                "B": "B",
-                "C": "C",
-                "EXCLUDE": "Exclude",
-                "X": "Exclude",
-            }
-            raw_ratings = edited_with_ids["rating"].fillna("").astype(str).str.strip()
-            normalized_ratings = raw_ratings.str.upper().map(rating_aliases)
-            invalid_ratings = normalized_ratings.isna()
-            if invalid_ratings.any():
-                invalid_values = ", ".join(sorted(raw_ratings[invalid_ratings].unique()))
-                st.error(
-                    f"Invalid rating: {invalid_values or 'blank'}. "
-                    "Use A, B, C, X/Exclude or U/Unrated."
-                )
+    if token and st.button("Save feedback to GitHub", type="primary"):
+        updated = base.set_index("canonical_company_id")
+        rows = edited.copy()
+        rows.insert(0, "canonical_company_id", filtered["canonical_company_id"].values)
+        rows = rows.set_index("canonical_company_id")
+        aliases = {"A": "A", "B": "B", "C": "C", "X": "Exclude", "EXCLUDE": "Exclude", "U": "Unrated", "UNRATED": "Unrated"}
+        normalized = rows["rating"].fillna("").astype(str).str.strip().str.upper().map(aliases)
+        if normalized.isna().any():
+            st.error("Invalid rating. Use A, B, C, X/Exclude or U/Unrated.")
+        else:
+            rows["rating"] = normalized
+            updated.loc[rows.index, ["rating", "contact_strength", "notes"]] = rows[["rating", "contact_strength", "notes"]]
+            try:
+                save_ratings(token, updated.reset_index(), ratings_sha)
+            except Exception:
+                st.error("Saving to GitHub failed. Refresh and try again.")
             else:
-                edited_with_ids["rating"] = normalized_ratings
-                updated.loc[edited_with_ids.index, ["rating", "contact_strength", "notes"]] = edited_with_ids[
-                    ["rating", "contact_strength", "notes"]
-                ]
-                try:
-                    save_ratings(token, updated.reset_index(), ratings_sha)
-                except Exception:
-                    st.error("Saving to GitHub failed. Refresh the page and try again.")
-                else:
-                    st.success("Saved directly to GitHub. Streamlit will load the new ratings automatically.")
-    else:
-        st.info(
-            "Direct GitHub saving is ready. Add the repository token once in Streamlit Secrets to enable the Save button.",
-            icon="ℹ️",
-        )
+                st.success("Saved to GitHub.")
+    elif not token:
+        st.info("Add the repository token in Streamlit Secrets to enable direct saving.")
 
 
 def pipeline_page() -> None:
-    placeholder(
-        "Pipeline",
-        "Active pursuits, stages, deadlines, next actions, and outcomes.",
-        "Define pipeline stages after the first review workflow is usable.",
-    )
+    placeholder("Pipeline", "Active pursuits, stages, deadlines, next actions, and outcomes.", "Add the application workflow after live job review is stable.")
 
 
 def ideas_page() -> None:
-    placeholder(
-        "Ideas & Projects",
-        "Self-created opportunities, experiments, collaborations, and possible projects.",
-        "Add this engine after the job learning loop is working.",
-    )
+    placeholder("Ideas & Projects", "Self-created opportunities, experiments, collaborations, and possible projects.", "Add after the job learning loop is working.")
 
 
 def sources_page() -> None:
-    placeholder(
-        "Sources / Radar",
-        "Source configuration, freshness, run history, monitoring, and discovery diagnostics.",
-        "Implement the shared Source and source-run framework with one genuine job source.",
-    )
+    render_sources()
 
 
 with st.sidebar:
@@ -331,21 +206,14 @@ with st.sidebar:
 navigation = st.navigation(
     {
         "Dashboard": [st.Page(home_page, title="Home")],
-        "Opportunities": [
-            st.Page(opportunities_page, title="Overview"),
-            st.Page(jobs_page, title="Jobs"),
-            st.Page(companies_page, title="Companies"),
-        ],
-        "Workspace": [
-            st.Page(pipeline_page, title="Pipeline"),
-            st.Page(ideas_page, title="Ideas & Projects"),
-        ],
+        "Opportunities": [st.Page(opportunities_page, title="Overview"), st.Page(jobs_page, title="Jobs"), st.Page(companies_page, title="Companies")],
+        "Workspace": [st.Page(pipeline_page, title="Pipeline"), st.Page(ideas_page, title="Ideas & Projects")],
         "System": [st.Page(sources_page, title="Sources / Radar")],
     }
 )
 
 with st.sidebar:
     st.divider()
-    st.caption("v0 foundation · Build for iteration")
+    st.caption("v0 live sourcing pilot · Build for iteration")
 
 navigation.run()

@@ -259,9 +259,9 @@ def render_jobs() -> None:
     columns = [
         "title",
         "feedback",
-        "rating",
-        "description_display",
         "comment",
+        "description_display",
+        "rating",
         "company",
         "countries",
         "cities",

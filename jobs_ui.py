@@ -66,7 +66,7 @@ def render_jobs() -> None:
             else:
                 pilot["fit_note"] = "Verified role from the Big Four pilot."
             if "status" in pilot.columns:
-                pilot["status"] = pilot["status"].replace("", "Open")
+                pilot["status"] = pilot["status"].replace({"": "Open", "New": "Open"})
             else:
                 pilot["status"] = "Open"
             pilot["review_status"] = "New"

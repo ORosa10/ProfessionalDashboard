@@ -261,7 +261,7 @@ def posting_to_job(posting: dict, page_url: str, source: pd.Series, started: str
         "relevance_score": score,
         "matched_terms": terms,
         "verification": posting.get("_verification") or "schema.org/JobPosting",
-        "status": "New",
+        "status": "Open",
     }
 
 
@@ -339,7 +339,10 @@ def merge_jobs(new_jobs: pd.DataFrame) -> pd.DataFrame:
     common = old_idx.index.intersection(new_idx.index)
     if len(common):
         new_idx.loc[common, "discovered_at"] = old_idx.loc[common, "discovered_at"]
-        new_idx.loc[common, "status"] = old_idx.loc[common, "status"]
+        previously_closed = old_idx.loc[common, "status"].eq("Closed")
+        if previously_closed.any():
+            closed_ids = previously_closed[previously_closed].index
+            new_idx.loc[closed_ids, "status"] = "Closed"
     missing = old_idx.loc[~old_idx.index.isin(new_idx.index)]
     combined = pd.concat([new_idx, missing])
     return combined.reset_index()[columns].sort_values(
@@ -356,7 +359,12 @@ def main() -> None:
     all_jobs: list[dict] = []
     runs: list[dict] = []
     for _, source in sources.iterrows():
-        jobs, run = discover_jobs(source, max_pages=args.max_pages)
+        host = urlparse(source.seed_url).netloc.lower().split(":")[0]
+        has_dedicated_adapter = any(
+            host == item or host.endswith("." + item) for item in SUCCESSFACTORS_HOSTS
+        )
+        page_limit = args.max_pages if has_dedicated_adapter else min(args.max_pages, 8)
+        jobs, run = discover_jobs(source, max_pages=page_limit)
         all_jobs.extend(jobs)
         runs.append(run)
 

@@ -16,14 +16,15 @@ The current Jobs Radar is intentionally limited to Deloitte, PwC, EY, and KPMG. 
 - Relevant families include treasury, FP&A, M&A, corporate finance, investment banking, transaction services, valuation, restructuring, public markets, asset management, private markets, portfolio analytics, risk, strategy, data and finance-focused business analysis.
 - Prefer roles asking for roughly 3-7 years. Interpret seniority within each role family rather than relying only on the title.
 - Avoid roles whose primary substance is sales, relationship management or client acquisition.
-- Do not apply hard scoring yet. Store concise evidence and preserve exploration candidates.
+- Use real feedback only for transparent review ordering. Never hard-exclude an otherwise valid role because of a low score; preserve exploration candidates.
 
 ## Source and data rules
 
 - Use official company career pages or their official ATS pages as the source of truth.
 - Store verified opportunities in `data/jobs.csv` using the existing pilot schema.
 - Normalize country/market and location. Split Nordic vacancies into Finland, Norway, Denmark, or Sweden whenever the official vacancy location allows it.
-- Deduplicate by canonical company plus official requisition ID, then by normalized official vacancy URL.
+- Preserve official requisition IDs for verification, but merge the same logical company-and-role posting advertised through multiple city/requisition URLs. Combine its locations and retain alternate official links.
+- Translate role substance to English and remove generic employer-brand, benefits, and application boilerplate. Prefer the responsibilities/tasks section over the beginning of the raw advert.
 - Preserve `discovered_at`; update `last_seen_at` when an opportunity is confirmed open.
 - Mark a role `Closed` only after its official page is unavailable or clearly closed on two consecutive monitoring attempts. Do not delete historical rows.
 - A career landing page, search-results page, or generic business page is not a vacancy. Store only individually verified live roles with a visible official job link.

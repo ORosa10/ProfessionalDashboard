@@ -2,14 +2,77 @@ import unittest
 
 from bs4 import BeautifulSoup
 
-from sourcing.big4_pilot import extract_job_postings, is_successfactors_job_url
+import pandas as pd
+
+from sourcing.big4_pilot import (
+    calibrate_jobs,
+    deduplicate_jobs,
+    extract_job_postings,
+    extract_phenom_records,
+    focus_role_description,
+    is_real_job_title,
+    is_successfactors_job_url,
+)
 
 
 class BigFourPilotTest(unittest.TestCase):
+    def test_rejects_talent_community_false_positive(self):
+        self.assertFalse(is_real_job_title("Interest in EY?"))
+        self.assertFalse(is_real_job_title("Join our talent community"))
+        self.assertTrue(is_real_job_title("Senior Consultant Corporate Finance"))
+
+    def test_focuses_description_on_role_content(self):
+        raw = (
+            "At EY, we're all in to shape your future with confidence. "
+            "Your impact You will build financial models and advise on transactions. "
+            "What we offer A global benefits programme."
+        )
+        focused = focus_role_description(raw)
+        self.assertEqual(
+            focused,
+            "Your impact You will build financial models and advise on transactions.",
+        )
+
+    def test_merges_same_role_across_locations(self):
+        jobs = pd.DataFrame([
+            {
+                "job_id": "one", "canonical_company_id": "ey", "company": "EY",
+                "title": "Senior Consultant Finance (m/f/d)", "location": "Berlin · DE",
+                "market": "Germany", "priority_locations": "Berlin", "job_url": "https://a",
+                "date_posted": "2026-08-10",
+            },
+            {
+                "job_id": "two", "canonical_company_id": "ey", "company": "EY",
+                "title": "Senior Consultant Finance (w/m/d)", "location": "Munich · DE",
+                "market": "Germany", "priority_locations": "Munich", "job_url": "https://b",
+                "date_posted": "2026-08-09",
+            },
+        ])
+        result = deduplicate_jobs(jobs)
+        self.assertEqual(len(result), 1)
+        self.assertIn("Berlin", result.iloc[0]["location"])
+        self.assertIn("Munich", result.iloc[0]["location"])
+        self.assertEqual(result.iloc[0]["duplicate_count"], 2)
+
+    def test_feedback_calibration_ranks_relevant_finance_above_junior_tax(self):
+        jobs = pd.DataFrame([
+            {"title": "Senior Consultant Corporate Finance", "description_en": "M&A valuation work"},
+            {"title": "Graduate Tax Assistant", "description_en": "Entry level tax compliance"},
+        ])
+        result = calibrate_jobs(jobs)
+        self.assertGreater(
+            result.iloc[0]["calibration_score"], result.iloc[1]["calibration_score"]
+        )
+
     def test_successfactors_detail_url_requires_numeric_vacancy_id(self):
         self.assertTrue(
             is_successfactors_job_url(
                 "https://careers.ey.com/ey/job/Berlin-Finance-Manager/123456/"
+            )
+        )
+        self.assertTrue(
+            is_successfactors_job_url(
+                "https://jobs.kpmg.de/job/Finance-Consultant/12164-de_DE/"
             )
         )
         self.assertFalse(is_successfactors_job_url("https://careers.ey.com/ey/search/"))
@@ -38,6 +101,12 @@ class BigFourPilotTest(unittest.TestCase):
             "Advising clients on transactions and valuation.",
         )
         self.assertEqual(postings[0]["_verification"], "schema.org/JobPosting microdata")
+
+    def test_extracts_server_rendered_phenom_results(self):
+        html = '<script>phApp.ddo = {"eagerLoadRefineSearch":{"data":{"totalHits":1,"jobs":[{"jobId":"42","title":"Finance Consultant"}]}}};</script>'
+        records, total = extract_phenom_records(html)
+        self.assertEqual(total, 1)
+        self.assertEqual(records[0]["jobId"], "42")
 
     def test_ats_fallback_requires_detail_url_and_visible_location(self):
         soup = BeautifulSoup(

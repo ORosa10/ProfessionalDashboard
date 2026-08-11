@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-08-09
+Updated: 2026-08-11
 
 ## Current phase
 
@@ -20,7 +20,11 @@ Foundation / v0 app shell.
 - company ratings currently capture intrinsic interest in the firm and its work; contacts and later feasibility signals remain separate prioritization layers
 - first live Jobs Inbox with company and country/market filters
 - Big Four-only sourcing pilot for Deloitte, PwC, EY, and KPMG, scheduled daily through GitHub Actions; broader rated-company monitoring remains intentionally deferred until the pilot is calibrated
-- first dedicated official-ATS adapters for EY target markets and Deloitte Germany, with verified individual vacancy URLs and parser regression tests
+- official-ATS adapters for EY target markets, Deloitte Germany, PwC Germany/UK, and KPMG Germany, with verified individual vacancy URLs and parser regression tests
+- 224 verified open Big Four roles in the current snapshot (101 EY, 12 Deloitte, 91 KPMG, 20 PwC); the scheduled full run expands PwC beyond the first validation page
+- editable job feedback with `Interested / Maybe / Pass`, recurring reason comments, and direct GitHub persistence
+- feedback-informed review ordering that remains transparent and exploratory rather than hard-excluding low-ranked roles
+- role-focused English descriptions with employer boilerplate removed, plus logical deduplication of the same role advertised across multiple cities
 - placeholder sections for the future product areas
 - dependency and deployment configuration
 
@@ -28,15 +32,15 @@ Foundation / v0 app shell.
 
 Turn the Jobs section into the first real end-to-end learning loop:
 
-1. enable the repository-scoped token in Streamlit and collect `A / B / C / Exclude` feedback;
-2. extend persistence from company ratings to Opportunities, Sources, SearchProfiles, and reviews;
-3. connect the first genuine job source or career-page monitor;
-4. ingest real opportunities into the Inbox;
-5. collect `Interested` / `Maybe` / `Pass` feedback and pass reasons.
+1. finish rating the current Big Four opportunity set;
+2. use repeated feedback themes to refine descriptions, deduplication, and review ordering;
+3. complete dedicated adapters for remaining Big Four country portals;
+4. validate closure detection before removing any stale vacancy from the open inbox;
+5. only then expand monitoring from Big Four to other rated company categories.
 
 ## Explicitly deferred
 
-- sophisticated scoring before real user feedback exists
+- sophisticated or opaque scoring; current ordering uses only transparent rules derived from real feedback
 - hard exclusion of low-scored opportunities
 - broad support for every sourcing engine
 - production analytics and automation

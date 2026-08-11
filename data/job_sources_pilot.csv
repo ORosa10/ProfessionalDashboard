@@ -1,9 +1,9 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,allowed_domains,cadence_days,enabled
 pwc-cz,pwc,PwC,Czechia,"Prague; Brno; Ostrava",https://www.pwc.com/cz/en/kariera.html,"pwc.com",1,true
-pwc-de,pwc,PwC,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://jobs.pwc.de/de/de/search-results,"jobs.pwc.de; pwc.de; pwc.com",1,true
+pwc-de,pwc,PwC,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://jobs.pwc.de/de/de/search-results?keywords=finance,"jobs.pwc.de; pwc.de; pwc.com",1,true
 pwc-at,pwc,PwC,Austria,Vienna,https://www.pwc.at/en/careers.html,"pwc.at; pwc.com",1,true
 pwc-ch,pwc,PwC,Switzerland,Zurich,https://www.pwc.ch/en/careers.html,"pwc.ch; pwc.com",1,true
-pwc-uk,pwc,PwC,United Kingdom,London,https://www.pwc.co.uk/careers.html,"pwc.co.uk; pwc.com",1,true
+pwc-uk,pwc,PwC,United Kingdom,London,https://jobs.pwc.co.uk/uk/en/search-results?keywords=finance,"jobs.pwc.co.uk; pwc.co.uk; pwc.com",1,true
 pwc-nordics,pwc,PwC,Nordics,"Stockholm; Copenhagen; Oslo; Helsinki",https://www.pwc.com/gx/en/careers.html,"pwc.com",1,true
 ey-cz,ey,EY,Czechia,Prague,https://careers.ey.com/ey/search/?q=finance&locationsearch=Czech%20Republic,"careers.ey.com",1,true
 ey-de,ey,EY,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://careers.ey.com/ey/search/?q=finance&locationsearch=Germany,"careers.ey.com",1,true
@@ -21,8 +21,8 @@ deloitte-ch,deloitte,Deloitte,Switzerland,Zurich,https://www.deloitte.com/ch/en/
 deloitte-uk,deloitte,Deloitte,United Kingdom,London,https://www.deloitte.com/uk/en/careers.html,"deloitte.com",1,true
 deloitte-nordics,deloitte,Deloitte,Nordics,"Stockholm; Copenhagen; Oslo; Helsinki",https://www.deloitte.com/global/en/careers.html,"deloitte.com",1,true
 kpmg-cz,kpmg,KPMG,Czechia,Prague,https://kpmg.com/cz/en/home/careers.html,"kpmg.com",1,true
-kpmg-de,kpmg,KPMG,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://karriere.kpmg.de/stellenboerse.html,"karriere.kpmg.de; kpmg.de; kpmg.com",1,true
+kpmg-de,kpmg,KPMG,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://jobs.kpmg.de/?currentPage=1&keyword=finance&pageSize=25,"jobs.kpmg.de; kpmg.de; kpmg.com",1,true
 kpmg-at,kpmg,KPMG,Austria,Vienna,https://kpmg.com/at/en/home/careers.html,"kpmg.com",1,true
-kpmg-ch,kpmg,KPMG,Switzerland,Zurich,https://kpmg.com/ch/en/home/careers.html,"kpmg.com",1,true
+kpmg-ch,kpmg,KPMG,Switzerland,Zurich,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,"jobs.kpmg.ch; kpmg.com",1,true
 kpmg-uk,kpmg,KPMG,United Kingdom,London,https://kpmg.com/uk/en/home/careers.html,"kpmg.com",1,true
 kpmg-nordics,kpmg,KPMG,Nordics,"Stockholm; Copenhagen; Oslo; Helsinki",https://kpmg.com/xx/en/home/careers.html,"kpmg.com",1,true

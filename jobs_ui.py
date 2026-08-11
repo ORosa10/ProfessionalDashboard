@@ -143,6 +143,10 @@ def render_jobs() -> None:
                 )
             else:
                 pilot["fit_note"] = "Verified role from the Big Four pilot."
+            if "calibration_note" in pilot.columns:
+                pilot["fit_note"] = pilot["calibration_note"].where(
+                    pilot["calibration_note"].ne(""), pilot["fit_note"]
+                )
             if "status" in pilot.columns:
                 pilot["status"] = pilot["status"].replace({"": "Open", "New": "Open"})
             else:
@@ -237,7 +241,15 @@ def render_jobs() -> None:
         & jobs["role_family"].isin(selected_roles)
         & jobs["status"].eq("Open")
     ].copy()
-    view = view.sort_values(["rating", "discovered_at"], ascending=[True, False])
+    view["_feedback_order"] = view["feedback"].map(
+        {"Unrated": 0, "Interested": 1, "Maybe": 2, "Pass": 3}
+    ).fillna(4)
+    if "calibration_score" not in view.columns:
+        view["calibration_score"] = 0
+    view = view.sort_values(
+        ["_feedback_order", "rating", "calibration_score", "discovered_at"],
+        ascending=[True, True, False, False],
+    )
 
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Open opportunities", len(view))
@@ -261,6 +273,7 @@ def render_jobs() -> None:
         "feedback",
         "comment",
         "description_display",
+        "fit_note",
         "rating",
         "company",
         "countries",
@@ -274,7 +287,7 @@ def render_jobs() -> None:
         hide_index=True,
         width="stretch",
         height=620,
-        row_height=120,
+        row_height=160,
         disabled=[column for column in columns if column not in {"feedback", "comment"}],
         key="job_feedback_editor",
         column_config={
@@ -286,6 +299,7 @@ def render_jobs() -> None:
             "description_display": st.column_config.TextColumn(
                 "What the role does (English)", width=620
             ),
+            "fit_note": st.column_config.TextColumn("Why review it", width=360),
             "comment": st.column_config.TextColumn("Your comment", width=420),
             "company": st.column_config.TextColumn("Company", width="medium"),
             "countries": st.column_config.TextColumn("Countries", width="medium"),

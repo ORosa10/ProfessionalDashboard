@@ -14,29 +14,62 @@ def render_jobs() -> None:
     st.caption("Live pilot: PwC · EY · Deloitte · KPMG across your priority markets.")
     jobs_path = DATA_DIR / "jobs.csv"
     if not jobs_path.exists():
-        st.warning("The sourcing workflow has not produced its first snapshot yet.")
-        st.caption("Once the scheduled GitHub Action runs, sourced vacancies will appear here automatically.")
+        st.warning("The sourcing workflow has not produced its first verified vacancy snapshot yet.")
         return
+
     jobs = pd.read_csv(jobs_path).fillna("")
+    if "verification" in jobs.columns:
+        jobs = jobs[jobs["verification"].eq("schema.org/JobPosting")].copy()
     if jobs.empty:
-        st.info("The latest sourcing run completed but did not retain any vacancy links.")
+        st.info(
+            "The latest run did not verify any individual vacancies yet. "
+            "Source diagnostics show which career portals need a dedicated adapter."
+        )
         return
+
     c1, c2, c3 = st.columns(3)
-    c1.metric("Open links tracked", len(jobs))
+    c1.metric("Verified vacancies", len(jobs))
     c2.metric("Companies", jobs["company"].nunique())
     c3.metric("Markets", jobs["market"].nunique())
+
     companies = sorted(jobs["company"].unique())
     markets = sorted(jobs["market"].unique())
     left, right = st.columns(2)
     selected_companies = left.multiselect("Companies", companies, default=companies)
     selected_markets = right.multiselect("Markets", markets, default=markets)
-    view = jobs[jobs["company"].isin(selected_companies) & jobs["market"].isin(selected_markets)].copy()
+    view = jobs[
+        jobs["company"].isin(selected_companies)
+        & jobs["market"].isin(selected_markets)
+    ].copy()
     view = view.sort_values(["relevance_score", "last_seen_at"], ascending=[False, False])
+
+    columns = [
+        "company",
+        "title",
+        "location",
+        "market",
+        "job_url",
+        "date_posted",
+        "relevance_score",
+        "matched_terms",
+        "last_seen_at",
+    ]
+    columns = [column for column in columns if column in view.columns]
     st.dataframe(
-        view[["company", "title", "market", "priority_locations", "relevance_score", "matched_terms", "job_url", "last_seen_at"]],
+        view[columns],
         hide_index=True,
         width="stretch",
-        column_config={"job_url": st.column_config.LinkColumn("Vacancy", display_text="Open")},
+        column_config={
+            "company": st.column_config.TextColumn("Company", width="small"),
+            "title": st.column_config.TextColumn("Role", width="large"),
+            "location": st.column_config.TextColumn("Location", width="medium"),
+            "market": st.column_config.TextColumn("Market", width="small"),
+            "job_url": st.column_config.LinkColumn("Open job", display_text="Open job", width="small"),
+            "date_posted": st.column_config.TextColumn("Posted", width="small"),
+            "relevance_score": st.column_config.NumberColumn("Relevance", width="small"),
+            "matched_terms": st.column_config.TextColumn("Matched terms", width="medium"),
+            "last_seen_at": st.column_config.TextColumn("Last seen", width="medium"),
+        },
     )
 
 
@@ -46,13 +79,30 @@ def render_sources() -> None:
     st.caption("Diagnostics for the autonomous career-page monitor.")
     source_path = DATA_DIR / "job_sources_pilot.csv"
     runs_path = DATA_DIR / "source_runs.csv"
+
     if source_path.exists():
         sources = pd.read_csv(source_path).fillna("")
         st.metric("Configured pilot sources", len(sources))
-        st.dataframe(sources[["company", "market", "priority_locations", "seed_url", "enabled"]], hide_index=True, width="stretch", column_config={"seed_url": st.column_config.LinkColumn("Career page", display_text="Open")})
+        st.dataframe(
+            sources[["company", "market", "priority_locations", "seed_url", "enabled"]],
+            hide_index=True,
+            width="stretch",
+            column_config={
+                "seed_url": st.column_config.LinkColumn("Career page", display_text="Open")
+            },
+        )
+
     if runs_path.exists():
         st.subheader("Recent source runs")
-        runs = pd.read_csv(runs_path).fillna("").tail(100).sort_values("run_at", ascending=False)
-        st.dataframe(runs, hide_index=True, width="stretch", column_config={"seed_url": st.column_config.LinkColumn("Source", display_text="Open")})
+        runs = pd.read_csv(runs_path).fillna("").tail(100)
+        runs = runs.sort_values("run_at", ascending=False)
+        st.dataframe(
+            runs,
+            hide_index=True,
+            width="stretch",
+            column_config={
+                "seed_url": st.column_config.LinkColumn("Source", display_text="Open")
+            },
+        )
     else:
         st.info("No source-run history yet. It will appear after the first workflow execution.")

@@ -2,3 +2,5 @@ streamlit>=1.40,<2
 pandas>=2.0,<4
 requests>=2.32,<3
 beautifulsoup4>=4.12,<5
+deep-translator>=1.11,<2
+langdetect>=1.0.9,<2

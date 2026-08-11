@@ -12,6 +12,8 @@ from urllib.parse import urljoin, urlparse
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+from deep_translator import GoogleTranslator
+from langdetect import LangDetectException, detect
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES_PATH = ROOT / "data" / "job_sources_pilot.csv"
@@ -64,6 +66,62 @@ def normalize(text: str) -> str:
     return re.sub(r"\s+", " ", text or "").strip()
 
 
+def description_text(value) -> str:
+    if not value:
+        return ""
+    if isinstance(value, dict):
+        value = value.get("value") or value.get("text") or ""
+    text = BeautifulSoup(str(value), "html.parser").get_text(" ", strip=True)
+    return normalize(text)[:1600]
+
+
+def translate_descriptions(jobs: pd.DataFrame) -> pd.DataFrame:
+    if jobs.empty:
+        return jobs
+    existing: dict[str, str] = {}
+    if JOBS_PATH.exists():
+        old = pd.read_csv(JOBS_PATH).fillna("")
+        if {"description", "description_en"}.issubset(old.columns):
+            existing = dict(zip(old["description"], old["description_en"]))
+
+    translator = GoogleTranslator(source="auto", target="en")
+    cache = dict(existing)
+    translated: list[str] = []
+    statuses: list[str] = []
+    for raw in jobs.get("description", pd.Series("", index=jobs.index)).fillna(""):
+        text = description_text(raw)
+        if not text:
+            translated.append("")
+            statuses.append("missing")
+            continue
+        if cache.get(text):
+            translated.append(cache[text])
+            statuses.append("cached")
+            continue
+        try:
+            language = detect(text)
+        except LangDetectException:
+            language = "unknown"
+        if language == "en":
+            english = text
+            status = "original-en"
+        else:
+            try:
+                english = normalize(translator.translate(text))
+                status = f"translated-{language}"
+            except Exception:
+                english = text
+                status = f"translation-failed-{language}"
+        cache[text] = english
+        translated.append(english)
+        statuses.append(status)
+        time.sleep(0.15)
+    result = jobs.copy()
+    result["description_en"] = translated
+    result["translation_status"] = statuses
+    return result
+
+
 def relevance(title: str) -> tuple[int, str]:
     low = title.lower()
     hits = [term for term in ROLE_TERMS if term in low]
@@ -107,6 +165,7 @@ def extract_job_postings(soup: BeautifulSoup, page_url: str = "") -> list[dict]:
     ):
         title_node = shell.find(attrs={"itemprop": "title"})
         date_node = shell.find(attrs={"itemprop": "datePosted"})
+        description_node = shell.find(attrs={"itemprop": "description"})
         title = normalize(
             (title_node.get("content") if title_node else "")
             or (title_node.get_text(" ", strip=True) if title_node else "")
@@ -131,6 +190,9 @@ def extract_job_postings(soup: BeautifulSoup, page_url: str = "") -> list[dict]:
                     or (date_node.get_text(" ", strip=True) if date_node else "")
                 ),
                 "jobLocation": locations,
+                "description": description_text(
+                    description_node.get_text(" ", strip=True) if description_node else ""
+                ),
                 "_verification": "schema.org/JobPosting microdata",
             }
         )
@@ -140,12 +202,16 @@ def extract_job_postings(soup: BeautifulSoup, page_url: str = "") -> list[dict]:
         location_node = soup.select_one(".jobLocation, .jobGeoLocation")
         location = normalize(location_node.get_text(" ", strip=True) if location_node else "")
         job_shell = soup.select_one(".jobDisplayShell, .jobDisplay")
+        description_node = soup.select_one(".jobdescription")
         if title and location and job_shell:
             postings.append(
                 {
                     "@type": "JobPosting",
                     "title": title,
                     "jobLocation": {"@type": "Place", "address": location},
+                    "description": description_text(
+                        description_node.get_text(" ", strip=True) if description_node else ""
+                    ),
                     "_verification": "official ATS vacancy detail",
                 }
             )
@@ -249,6 +315,7 @@ def posting_to_job(posting: dict, page_url: str, source: pd.Series, started: str
         "canonical_company_id": source.canonical_company_id,
         "company": source.company,
         "title": title,
+        "description": description_text(posting.get("description")),
         "market": source.market,
         "location": location,
         "priority_locations": source.priority_locations,
@@ -317,7 +384,8 @@ def discover_jobs(source: pd.Series, max_pages: int = 40) -> tuple[list[dict], d
 
 def merge_jobs(new_jobs: pd.DataFrame) -> pd.DataFrame:
     columns = [
-        "job_id", "canonical_company_id", "company", "title", "market", "location",
+        "job_id", "canonical_company_id", "company", "title", "description",
+        "description_en", "translation_status", "market", "location",
         "priority_locations", "job_url", "source_url", "source_id", "date_posted",
         "discovered_at", "last_seen_at", "relevance_score", "matched_terms",
         "verification", "status",
@@ -368,7 +436,7 @@ def main() -> None:
         all_jobs.extend(jobs)
         runs.append(run)
 
-    merged = merge_jobs(pd.DataFrame(all_jobs))
+    merged = merge_jobs(translate_descriptions(pd.DataFrame(all_jobs)))
     JOBS_PATH.parent.mkdir(parents=True, exist_ok=True)
     merged.to_csv(JOBS_PATH, index=False)
 

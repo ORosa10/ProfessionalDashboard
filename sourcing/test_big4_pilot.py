@@ -19,6 +19,7 @@ class BigFourPilotTest(unittest.TestCase):
             """
             <div itemscope itemtype="http://schema.org/JobPosting">
               <span itemprop="title">Senior Consultant Corporate Finance</span>
+              <span itemprop="description">Advising clients on transactions and valuation.</span>
               <meta itemprop="datePosted" content="2026-08-10">
               <span itemprop="jobLocation">
                 <span itemprop="address">
@@ -32,6 +33,10 @@ class BigFourPilotTest(unittest.TestCase):
         )
         postings = extract_job_postings(soup)
         self.assertEqual(postings[0]["title"], "Senior Consultant Corporate Finance")
+        self.assertEqual(
+            postings[0]["description"],
+            "Advising clients on transactions and valuation.",
+        )
         self.assertEqual(postings[0]["_verification"], "schema.org/JobPosting microdata")
 
     def test_ats_fallback_requires_detail_url_and_visible_location(self):
@@ -40,6 +45,7 @@ class BigFourPilotTest(unittest.TestCase):
             <meta property="og:title" content="Manager Finance Analytics">
             <div class="jobDisplayShell">
               <div class="jobLocation">mehrere Standorte, DE</div>
+              <div class="jobdescription">Build finance analytics solutions.</div>
             </div>
             """,
             "html.parser",
@@ -50,6 +56,7 @@ class BigFourPilotTest(unittest.TestCase):
         )
         self.assertEqual(postings[0]["_verification"], "official ATS vacancy detail")
         self.assertEqual(postings[0]["jobLocation"]["address"], "mehrere Standorte, DE")
+        self.assertEqual(postings[0]["description"], "Build finance analytics solutions.")
 
 
 if __name__ == "__main__":

@@ -1,16 +1,16 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,allowed_domains,cadence_days,enabled
 pwc-cz,pwc,PwC,Czechia,"Prague; Brno; Ostrava",https://www.pwc.com/cz/en/kariera.html,"pwc.com",1,true
-pwc-de,pwc,PwC,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://www.pwc.de/en/careers.html,"pwc.de; jobs.pwc.de; pwc.com",1,true
+pwc-de,pwc,PwC,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://jobs.pwc.de/de/de/search-results,"jobs.pwc.de; pwc.de; pwc.com",1,true
 pwc-at,pwc,PwC,Austria,Vienna,https://www.pwc.at/en/careers.html,"pwc.at; pwc.com",1,true
 pwc-ch,pwc,PwC,Switzerland,Zurich,https://www.pwc.ch/en/careers.html,"pwc.ch; pwc.com",1,true
 pwc-uk,pwc,PwC,United Kingdom,London,https://www.pwc.co.uk/careers.html,"pwc.co.uk; pwc.com",1,true
 pwc-nordics,pwc,PwC,Nordics,"Stockholm; Copenhagen; Oslo; Helsinki",https://www.pwc.com/gx/en/careers.html,"pwc.com",1,true
 ey-cz,ey,EY,Czechia,Prague,https://www.ey.com/en_cz/careers,"ey.com; careers.ey.com",1,true
-ey-de,ey,EY,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://www.ey.com/en_de/careers,"ey.com; careers.ey.com",1,true
-ey-at,ey,EY,Austria,Vienna,https://www.ey.com/en_at/careers,"ey.com; careers.ey.com",1,true
+ey-de,ey,EY,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://careers.ey.com/,"ey.com; careers.ey.com",1,true
+ey-at,ey,EY,Austria,Vienna,https://careers.ey.com/,"ey.com; careers.ey.com",1,true
 ey-ch,ey,EY,Switzerland,Zurich,https://www.ey.com/en_ch/careers,"ey.com; careers.ey.com",1,true
 ey-uk,ey,EY,United Kingdom,London,https://www.ey.com/en_uk/careers,"ey.com; careers.ey.com",1,true
-ey-nordics,ey,EY,Nordics,"Stockholm; Copenhagen; Oslo; Helsinki",https://www.ey.com/en_gl/careers,"ey.com; careers.ey.com",1,true
+ey-nordics,ey,EY,Nordics,"Stockholm; Copenhagen; Oslo; Helsinki",https://careers.ey.com/,"ey.com; careers.ey.com",1,true
 deloitte-cz,deloitte,Deloitte,Czechia,Prague,https://www.deloitte.com/cz-sk/en/careers.html,"deloitte.com; apply.deloittece.com",1,true
 deloitte-de,deloitte,Deloitte,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://www.deloitte.com/de/de/careers.html,"deloitte.com",1,true
 deloitte-at,deloitte,Deloitte,Austria,Vienna,https://www.deloitte.com/at/de/careers.html,"deloitte.com",1,true
@@ -18,7 +18,7 @@ deloitte-ch,deloitte,Deloitte,Switzerland,Zurich,https://www.deloitte.com/ch/en/
 deloitte-uk,deloitte,Deloitte,United Kingdom,London,https://www.deloitte.com/uk/en/careers.html,"deloitte.com",1,true
 deloitte-nordics,deloitte,Deloitte,Nordics,"Stockholm; Copenhagen; Oslo; Helsinki",https://www.deloitte.com/global/en/careers.html,"deloitte.com",1,true
 kpmg-cz,kpmg,KPMG,Czechia,Prague,https://kpmg.com/cz/en/home/careers.html,"kpmg.com",1,true
-kpmg-de,kpmg,KPMG,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://kpmg.com/de/en/home/careers.html,"kpmg.com",1,true
+kpmg-de,kpmg,KPMG,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://karriere.kpmg.de/stellenboerse.html,"karriere.kpmg.de; kpmg.de; kpmg.com",1,true
 kpmg-at,kpmg,KPMG,Austria,Vienna,https://kpmg.com/at/en/home/careers.html,"kpmg.com",1,true
 kpmg-ch,kpmg,KPMG,Switzerland,Zurich,https://kpmg.com/ch/en/home/careers.html,"kpmg.com",1,true
 kpmg-uk,kpmg,KPMG,United Kingdom,London,https://kpmg.com/uk/en/home/careers.html,"kpmg.com",1,true

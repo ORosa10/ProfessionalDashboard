@@ -6,7 +6,14 @@ import pandas as pd
 import streamlit as st
 
 from github_storage import github_token, load_ratings, save_ratings
-from jobs_ui import VERIFIED_JOB_TYPES, render_jobs, render_sources
+from jobs_ui import render_jobs, render_sources
+
+VERIFIED_JOB_TYPES = {
+    "schema.org/JobPosting",
+    "schema.org/JobPosting JSON-LD",
+    "schema.org/JobPosting microdata",
+    "official ATS vacancy detail",
+}
 
 st.set_page_config(
     page_title="Professional Dashboard",

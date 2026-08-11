@@ -4,6 +4,14 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 4 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "sourcing/**"
+      - "data/job_sources_pilot.csv"
+      - "requirements.txt"
+      - ".github/workflows/job-sourcing.yml"
 
 permissions:
   contents: write

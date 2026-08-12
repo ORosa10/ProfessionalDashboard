@@ -38,11 +38,24 @@ def _load_city_profiles() -> pd.DataFrame:
     return df
 
 
+def _load_salary_context() -> pd.DataFrame:
+    path = DATA_DIR / "salary_context.csv"
+    if not path.exists():
+        return pd.DataFrame()
+    df = pd.read_csv(path).fillna("")
+    for col in ["average_monthly_local", "median_monthly_local"]:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    return df
+
+
 def _money_czk(value: float) -> str:
     return f"{value:,.0f} Kč".replace(",", " ")
 
 
-def _local(value: float, currency: str) -> str:
+def _local(value: float | None, currency: str) -> str:
+    if value is None or pd.isna(value):
+        return "—"
     symbols = {"GBP": "£", "EUR": "€", "CHF": "CHF ", "SEK": "SEK ", "DKK": "DKK ", "NOK": "NOK ", "CZK": "Kč "}
     text = f"{value:,.0f}".replace(",", " ")
     return f"{symbols.get(currency, currency + ' ')}{text}" if currency != "CZK" else f"{text} Kč"
@@ -83,6 +96,8 @@ def render_cost_of_living() -> None:
         )
 
     profiles = _load_city_profiles()
+    salary_context = _load_salary_context()
+    salary_context_by_city = salary_context.set_index("city") if not salary_context.empty else pd.DataFrame()
 
     left, right = st.columns([1, 2])
     annual_savings = left.number_input(
@@ -107,6 +122,14 @@ def render_cost_of_living() -> None:
     for _, r in view.iterrows():
         city = r["city"]
         currency = r["currency"]
+        if not salary_context.empty and city in salary_context_by_city.index:
+            context_row = salary_context_by_city.loc[city]
+            average_local = context_row.get("average_monthly_local")
+            median_local = context_row.get("median_monthly_local")
+        else:
+            average_local = None
+            median_local = None
+
         rows[city] = {
             "Bydlení vč. utilities": _money_czk(r["housing_czk"]),
             "Běžný život": _money_czk(r["living_czk"]),
@@ -119,14 +142,17 @@ def render_cost_of_living() -> None:
             "Target gross / měsíc v CZK": _money_czk(r["target_gross_monthly_czk"]),
             "Target gross / měsíc lokálně": _local(r["target_gross_monthly_local"], currency),
             "Target gross / rok lokálně": _local(r["target_gross_annual_local"], currency),
+            "Průměrný gross / měsíc lokálně": _local(average_local, currency),
+            "Medián gross / měsíc lokálně": _local(median_local, currency),
         }
 
     comparison = pd.DataFrame(rows)
-    st.dataframe(comparison, width="stretch", height=min(620, 38 * (len(comparison) + 2)))
+    st.dataframe(comparison, width="stretch", height=min(700, 38 * (len(comparison) + 2)))
 
     st.caption(
         "Planning model, not a payroll calculator. Housing assumes an own room in a shared flat and includes utilities. "
-        "Net/gross conversion uses a city/country planning ratio calibrated around the relevant salary range."
+        "Net/gross conversion uses a city/country planning ratio calibrated around the relevant salary range. "
+        "Average and median salary rows use the latest reference statistics available in salary_context.csv; some countries publish only one of the two."
     )
 
     st.subheader("Test a salary")

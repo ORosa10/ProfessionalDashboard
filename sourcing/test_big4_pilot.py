@@ -5,12 +5,15 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 from sourcing.big4_pilot import (
+    _smartrecruiters_company,
+    avature_posting_from_soup,
     calibrate_jobs,
     deduplicate_jobs,
     extract_job_postings,
     extract_phenom_records,
     focus_role_description,
     is_real_job_title,
+    is_relevant_listing_title,
     is_successfactors_job_url,
 )
 
@@ -19,6 +22,7 @@ class BigFourPilotTest(unittest.TestCase):
     def test_rejects_talent_community_false_positive(self):
         self.assertFalse(is_real_job_title("Interest in EY?"))
         self.assertFalse(is_real_job_title("Join our talent community"))
+        self.assertFalse(is_real_job_title("Åpen søknad til Technology & Consulting"))
         self.assertTrue(is_real_job_title("Senior Consultant Corporate Finance"))
 
     def test_focuses_description_on_role_content(self):
@@ -126,6 +130,47 @@ class BigFourPilotTest(unittest.TestCase):
         self.assertEqual(postings[0]["_verification"], "official ATS vacancy detail")
         self.assertEqual(postings[0]["jobLocation"]["address"], "mehrere Standorte, DE")
         self.assertEqual(postings[0]["description"], "Build finance analytics solutions.")
+
+    def test_extracts_deloitte_avature_detail(self):
+        soup = BeautifulSoup(
+            """
+            <h1>Senior Consultant Corporate Finance</h1>
+            <article class="article article--details">
+              <h2>Basic information</h2>
+              <div class="article__content__view__field">
+                <span class="article__content__view__field__label">City</span>
+                <span class="article__content__view__field__value">Zurich</span>
+              </div>
+            </article>
+            <article class="article article--details">
+              <h2>Job description</h2>
+              <div class="article__content__view">
+                Advise clients on M&amp;A transactions and build valuation models.
+              </div>
+            </article>
+            """,
+            "html.parser",
+        )
+        source = pd.Series({"market": "Switzerland"})
+        posting = avature_posting_from_soup(
+            soup,
+            "https://apply.deloitte.ch/CHCareers/JobDetail/Corporate-Finance/23953",
+            source,
+        )
+        self.assertEqual(posting["identifier"]["value"], "23953")
+        self.assertEqual(posting["jobLocation"]["address"], "Zurich, Switzerland")
+        self.assertIn("valuation models", posting["description"])
+
+    def test_smartrecruiters_company_slug_and_broad_discovery(self):
+        self.assertEqual(
+            _smartrecruiters_company(
+                "https://careers.smartrecruiters.com/DeloitteNordic?oga=true"
+            ),
+            "DeloitteNordic",
+        )
+        self.assertTrue(is_relevant_listing_title("Senior Consultant M&A Finance"))
+        self.assertFalse(is_relevant_listing_title("Office Receptionist"))
+        self.assertFalse(is_relevant_listing_title("Talent Acquisition Specialist"))
 
 
 if __name__ == "__main__":

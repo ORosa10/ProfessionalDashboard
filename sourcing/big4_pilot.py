@@ -44,7 +44,9 @@ NON_JOB_TITLE_PATTERNS = (
     r"^join (our|the) talent (community|network)",
     r"^talent (community|network)",
     r"^general application",
+    r"^open application",
     r"^spontaneous application",
+    r"^åpen søknad",
 )
 
 ROLE_SECTION_STARTS = (
@@ -71,6 +73,12 @@ GENERIC_OPENING_PATTERNS = (
 )
 SUCCESSFACTORS_HOSTS = ("careers.ey.com", "jobs.deloitte.de", "jobs.kpmg.de")
 PHENOM_HOSTS = ("jobs.pwc.de", "jobs.pwc.co.uk")
+SMARTRECRUITERS_HOSTS = ("careers.smartrecruiters.com", "jobs.smartrecruiters.com")
+AVATURE_HOSTS = (
+    "apply.deloittece.com",
+    "apply.deloitte.ch",
+    "apply.deloitte.co.uk",
+)
 HEADERS = {
     "User-Agent": "ProfessionalDashboard/0.2 (+https://github.com/ORosa10/ProfessionalDashboard)"
 }
@@ -201,6 +209,19 @@ def relevance(title: str) -> tuple[int, str]:
     low = title.lower()
     hits = [term for term in ROLE_TERMS if term in low]
     return min(100, 20 + 16 * len(hits)) if hits else 10, "; ".join(hits)
+
+
+def is_relevant_listing_title(title: str) -> bool:
+    """Keep discovery broad, but do not download every unrelated ATS vacancy."""
+    low = normalize(title).lower()
+    if any(term in low for term in ("talent acquisition", "recruiter", "recruiting")):
+        return False
+    discovery_terms = ROLE_TERMS + (
+        "finance", "financial", "controller", "controlling", "cfo", "economics",
+        "commercial", "business analyst", "data analyst", "due diligence",
+        "banking", "pension", "actuarial", "performance management",
+    )
+    return is_real_job_title(title) and any(term in low for term in discovery_terms)
 
 
 def fetch(url: str) -> requests.Response:
@@ -672,6 +693,218 @@ def discover_phenom_jobs(source: pd.Series, max_pages: int = 10) -> tuple[list[d
     return list(jobs.values()), run
 
 
+def avature_posting_from_soup(
+    soup: BeautifulSoup, page_url: str, source: pd.Series
+) -> dict | None:
+    """Extract a verified vacancy from Deloitte's server-rendered Avature portals."""
+    jsonld = extract_job_postings(soup, page_url)
+    posting = dict(jsonld[0]) if jsonld else {}
+    title_node = soup.select_one("h1")
+    title = normalize(
+        str(posting.get("title") or "")
+        or (title_node.get_text(" ", strip=True) if title_node else "")
+    )
+    if not is_real_job_title(title):
+        return None
+
+    fields: dict[str, str] = {}
+    for field in soup.select(".article__content__view__field"):
+        label = field.select_one(".article__content__view__field__label")
+        value = field.select_one(".article__content__view__field__value")
+        if label and value:
+            fields[normalize(label.get_text(" ", strip=True)).lower()] = normalize(
+                value.get_text(" ", strip=True)
+            )
+
+    articles = soup.select("article.article--details")
+    description = ""
+    for article in articles:
+        heading = article.find(["h2", "h3"])
+        heading_text = normalize(heading.get_text(" ", strip=True) if heading else "").lower()
+        body = article.select_one(".article__content__view") or article
+        body_text = normalize(body.get_text(" ", strip=True))
+        if (
+            len(body_text) > len(description)
+            and "share this job" not in heading_text
+            and heading_text not in {"basic information", "general information"}
+        ):
+            description = body_text
+
+    city = fields.get("city") or fields.get("location") or ""
+    country = fields.get("country") or str(source.market)
+    location = ", ".join(dict.fromkeys(part for part in (city, country) if part))
+    identifier = re.search(r"/(\d+)(?:[/?#]|$)", page_url)
+    posting.update(
+        {
+            "@type": "JobPosting",
+            "title": title,
+            "description": description,
+            "datePosted": posting.get("datePosted") or fields.get("date published") or "",
+            "jobLocation": {"@type": "Place", "address": location},
+            "identifier": {"value": identifier.group(1) if identifier else page_url},
+            "url": page_url,
+            "_verification": "official Deloitte ATS vacancy detail",
+        }
+    )
+    return posting
+
+
+def discover_avature_jobs(
+    source: pd.Series, max_pages: int = 40, max_jobs: int = 140
+) -> tuple[list[dict], dict]:
+    started = datetime.now(timezone.utc).isoformat()
+    queue = [source.seed_url]
+    queued = set(queue)
+    visited: set[str] = set()
+    candidates: dict[str, tuple[int, str]] = {}
+    errors: list[str] = []
+
+    while queue and len(visited) < max_pages:
+        listing_url = queue.pop(0)
+        if listing_url in visited:
+            continue
+        visited.add(listing_url)
+        try:
+            response = fetch(listing_url)
+        except Exception as exc:
+            errors.append(f"{listing_url}: {type(exc).__name__}")
+            continue
+        soup = BeautifulSoup(response.text, "html.parser")
+        for anchor in soup.find_all("a", href=True):
+            href = urljoin(response.url, anchor.get("href", ""))
+            title = normalize(anchor.get_text(" ", strip=True))
+            parsed = urlparse(href)
+            if (
+                parsed.scheme in {"http", "https"}
+                and "/JobDetail/" in parsed.path
+                and allowed(href, source.allowed_domains)
+                and title.lower() not in {"apply now", ""}
+            ):
+                identifier = re.search(r"/(\d+)(?:[/?#]|$)", href)
+                key = identifier.group(1) if identifier else href
+                score, _ = relevance(title)
+                if is_relevant_listing_title(title):
+                    candidates[key] = (score, href)
+            if (
+                "/SearchJobs/" in parsed.path
+                and "jobOffset=" in parsed.query
+                and allowed(href, source.allowed_domains)
+                and href not in queued
+            ):
+                queue.append(href)
+                queued.add(href)
+        time.sleep(0.15)
+
+    jobs: dict[str, dict] = {}
+    ordered = sorted(candidates.values(), key=lambda item: (-item[0], item[1]))[:max_jobs]
+    for _, detail_url in ordered:
+        try:
+            response = fetch(detail_url)
+            posting = avature_posting_from_soup(
+                BeautifulSoup(response.text, "html.parser"), response.url, source
+            )
+            job = posting_to_job(posting, response.url, source, started) if posting else None
+            if job:
+                jobs[job["job_id"]] = job
+        except Exception as exc:
+            errors.append(f"{detail_url}: {type(exc).__name__}")
+        time.sleep(0.15)
+
+    run = {
+        "run_at": started,
+        "source_id": source.source_id,
+        "company": source.company,
+        "market": source.market,
+        "seed_url": source.seed_url,
+        "pages_checked": len(visited) + len(ordered),
+        "candidate_job_pages": len(ordered),
+        "verified_jobs": len(jobs),
+        "errors": " | ".join(errors[:5]),
+    }
+    return list(jobs.values()), run
+
+
+def _smartrecruiters_company(seed_url: str) -> str:
+    path = urlparse(seed_url).path.strip("/")
+    return path.split("/", 1)[0].split("?", 1)[0]
+
+
+def discover_smartrecruiters_jobs(
+    source: pd.Series, max_jobs: int = 140
+) -> tuple[list[dict], dict]:
+    started = datetime.now(timezone.utc).isoformat()
+    company_slug = _smartrecruiters_company(source.seed_url)
+    errors: list[str] = []
+    records: list[dict] = []
+    offset = 0
+    total = 1
+    while offset < total:
+        try:
+            response = fetch(
+                f"https://api.smartrecruiters.com/v1/companies/{company_slug}/postings"
+                f"?limit=100&offset={offset}"
+            )
+            payload = response.json()
+            batch = payload.get("content") or []
+            records.extend(batch)
+            total = int(payload.get("totalFound") or len(records))
+            if not batch:
+                break
+            offset += len(batch)
+        except Exception as exc:
+            errors.append(f"SmartRecruiters listing: {type(exc).__name__}")
+            break
+
+    candidates = [record for record in records if is_relevant_listing_title(record.get("name", ""))]
+    candidates.sort(key=lambda record: (-relevance(record.get("name", ""))[0], record.get("name", "")))
+    jobs: dict[str, dict] = {}
+    for record in candidates[:max_jobs]:
+        record_id = str(record.get("id") or "")
+        try:
+            detail = fetch(
+                f"https://api.smartrecruiters.com/v1/companies/{company_slug}/postings/{record_id}"
+            ).json()
+            sections = (detail.get("jobAd") or {}).get("sections") or {}
+            description_parts = []
+            for section_name in ("jobDescription", "qualifications"):
+                section = sections.get(section_name) or {}
+                if section.get("text"):
+                    description_parts.append(section["text"])
+            location = detail.get("location") or {}
+            posting = {
+                "@type": "JobPosting",
+                "title": detail.get("name"),
+                "description": " ".join(description_parts),
+                "datePosted": detail.get("releasedDate"),
+                "jobLocation": {
+                    "@type": "Place",
+                    "address": location.get("fullLocation") or location.get("city") or "",
+                },
+                "identifier": {"value": record_id},
+                "url": detail.get("postingUrl") or record.get("ref"),
+                "_verification": "official SmartRecruiters vacancy API",
+            }
+            job = posting_to_job(posting, posting["url"] or source.seed_url, source, started)
+            if job:
+                jobs[job["job_id"]] = job
+        except Exception as exc:
+            errors.append(f"SmartRecruiters {record_id}: {type(exc).__name__}")
+        time.sleep(0.1)
+
+    run = {
+        "run_at": started,
+        "source_id": source.source_id,
+        "company": source.company,
+        "market": source.market,
+        "seed_url": source.seed_url,
+        "pages_checked": 1 + min(len(candidates), max_jobs),
+        "candidate_job_pages": min(len(candidates), max_jobs),
+        "verified_jobs": len(jobs),
+        "errors": " | ".join(errors[:5]),
+    }
+    return list(jobs.values()), run
+
+
 def discover_successfactors_sitemap_jobs(
     source: pd.Series, max_jobs: int = 80
 ) -> tuple[list[dict], dict]:
@@ -887,9 +1120,17 @@ def merge_jobs(new_jobs: pd.DataFrame) -> pd.DataFrame:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--max-pages", type=int, default=40)
+    parser.add_argument(
+        "--source-id",
+        action="append",
+        default=[],
+        help="Run only the selected source id; may be supplied more than once.",
+    )
     args = parser.parse_args()
     sources = pd.read_csv(SOURCES_PATH).fillna("")
     sources = sources[sources["enabled"].astype(str).str.lower().eq("true")]
+    if args.source_id:
+        sources = sources[sources["source_id"].isin(args.source_id)]
     all_jobs: list[dict] = []
     runs: list[dict] = []
     for _, source in sources.iterrows():
@@ -901,6 +1142,10 @@ def main() -> None:
         page_limit = args.max_pages if has_dedicated_adapter else min(args.max_pages, 8)
         if is_phenom:
             jobs, run = discover_phenom_jobs(source, max_pages=min(args.max_pages, 10))
+        elif host in SMARTRECRUITERS_HOSTS:
+            jobs, run = discover_smartrecruiters_jobs(source, max_jobs=140)
+        elif host in AVATURE_HOSTS:
+            jobs, run = discover_avature_jobs(source, max_pages=args.max_pages, max_jobs=140)
         elif host == "jobs.kpmg.de":
             jobs, run = discover_kpmg_api_jobs(source, max_jobs=100)
         else:

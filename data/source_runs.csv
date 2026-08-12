@@ -239,30 +239,37 @@ run_at,source_id,company,market,seed_url,pages_checked,jobs_found,errors,candida
 2026-08-12T05:54:10.370118+00:00,kpmg-ch,KPMG,Switzerland,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,1,,,0.0,0.0
 2026-08-12T05:54:11.684528+00:00,kpmg-uk,KPMG,United Kingdom,https://kpmg.com/uk/en/home/careers.html,2,,,0.0,0.0
 2026-08-12T05:54:12.869614+00:00,kpmg-nordics,KPMG,Nordics,https://kpmg.com/xx/en/home/careers.html,1,,https://kpmg.com/xx/en/home/careers.html: HTTPError,0.0,0.0
-2026-08-12T14:40:17.834772+00:00,pwc-cz,PwC,Czechia,https://www.pwc.com/cz/en/kariera.html,5,,,0,0
-2026-08-12T14:40:23.605221+00:00,pwc-de,PwC,Germany,https://jobs.pwc.de/de/de/search-results?keywords=finance,108,,,98,98
-2026-08-12T14:42:40.633619+00:00,pwc-at,PwC,Austria,https://www.pwc.at/en/careers.html,8,,,0,0
-2026-08-12T14:42:49.574128+00:00,pwc-ch,PwC,Switzerland,https://www.pwc.ch/en/careers.html,1,,https://www.pwc.ch/en/careers.html: HTTPError,0,0
-2026-08-12T14:42:50.262928+00:00,pwc-uk,PwC,United Kingdom,https://jobs.pwc.co.uk/uk/en/search-results?keywords=finance,107,,,97,97
-2026-08-12T14:44:34.419863+00:00,pwc-nordics,PwC,Nordics,https://www.pwc.com/gx/en/careers.html,7,,,0,0
-2026-08-12T14:44:38.750094+00:00,ey-cz,EY,Czechia,https://careers.ey.com/ey/search/?q=finance&locationsearch=Czech%20Republic,40,,,12,11
-2026-08-12T14:45:48.526761+00:00,ey-de,EY,Germany,https://careers.ey.com/ey/search/?q=finance&locationsearch=Germany,40,,,25,25
-2026-08-12T14:46:57.802342+00:00,ey-at,EY,Austria,https://careers.ey.com/ey/search/?q=finance&locationsearch=Austria,40,,,13,13
-2026-08-12T14:48:06.657823+00:00,ey-ch,EY,Switzerland,https://careers.ey.com/ey/search/?q=finance&locationsearch=Switzerland,40,,,25,25
-2026-08-12T14:49:15.881820+00:00,ey-uk,EY,United Kingdom,https://careers.ey.com/ey/search/?q=finance&locationsearch=United%20Kingdom,40,,,25,25
-2026-08-12T14:50:24.984996+00:00,ey-se,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Sweden,40,,,5,5
-2026-08-12T14:51:33.301184+00:00,ey-dk,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Denmark,40,,,1,0
-2026-08-12T14:52:41.317496+00:00,ey-no,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Norway,40,,,1,0
-2026-08-12T14:53:48.857597+00:00,ey-fi,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Finland,40,,https://careers.ey.com/ey?locale=zh_CN: ReadTimeout,4,3
-2026-08-12T14:55:21.540149+00:00,deloitte-cz,Deloitte,Czechia,https://www.deloitte.com/cz-sk/en/careers.html,8,,,0,0
-2026-08-12T14:55:28.983955+00:00,deloitte-de,Deloitte,Germany,https://jobs.deloitte.de/search/?q=finance&locationsearch=Germany,40,,,12,12
-2026-08-12T14:56:20.086368+00:00,deloitte-at,Deloitte,Austria,https://www.deloitte.com/at/de/careers.html,8,,,0,0
-2026-08-12T14:56:27.171472+00:00,deloitte-ch,Deloitte,Switzerland,https://www.deloitte.com/ch/en/careers.html,8,,,0,0
-2026-08-12T14:56:37.942449+00:00,deloitte-uk,Deloitte,United Kingdom,https://www.deloitte.com/uk/en/careers.html,8,,,0,0
-2026-08-12T14:56:46.566817+00:00,deloitte-nordics,Deloitte,Nordics,https://www.deloitte.com/global/en/careers.html,8,,,0,0
-2026-08-12T14:56:53.637063+00:00,kpmg-cz,KPMG,Czechia,https://kpmg.com/cz/en/home/careers.html,2,,,0,0
-2026-08-12T14:56:54.817054+00:00,kpmg-de,KPMG,Germany,https://jobs.kpmg.de/?currentPage=1&keyword=finance&pageSize=25,1,,,93,93
-2026-08-12T14:57:16.414031+00:00,kpmg-at,KPMG,Austria,https://kpmg.com/at/en/home/careers.html,1,,https://kpmg.com/at/en/home/careers.html: HTTPError,0,0
-2026-08-12T14:57:17.298576+00:00,kpmg-ch,KPMG,Switzerland,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,1,,,0,0
-2026-08-12T14:57:19.066845+00:00,kpmg-uk,KPMG,United Kingdom,https://kpmg.com/uk/en/home/careers.html,2,,,0,0
-2026-08-12T14:57:20.281290+00:00,kpmg-nordics,KPMG,Nordics,https://kpmg.com/xx/en/home/careers.html,1,,https://kpmg.com/xx/en/home/careers.html: HTTPError,0,0
+2026-08-12T14:40:17.834772+00:00,pwc-cz,PwC,Czechia,https://www.pwc.com/cz/en/kariera.html,5,,,0.0,0.0
+2026-08-12T14:40:23.605221+00:00,pwc-de,PwC,Germany,https://jobs.pwc.de/de/de/search-results?keywords=finance,108,,,98.0,98.0
+2026-08-12T14:42:40.633619+00:00,pwc-at,PwC,Austria,https://www.pwc.at/en/careers.html,8,,,0.0,0.0
+2026-08-12T14:42:49.574128+00:00,pwc-ch,PwC,Switzerland,https://www.pwc.ch/en/careers.html,1,,https://www.pwc.ch/en/careers.html: HTTPError,0.0,0.0
+2026-08-12T14:42:50.262928+00:00,pwc-uk,PwC,United Kingdom,https://jobs.pwc.co.uk/uk/en/search-results?keywords=finance,107,,,97.0,97.0
+2026-08-12T14:44:34.419863+00:00,pwc-nordics,PwC,Nordics,https://www.pwc.com/gx/en/careers.html,7,,,0.0,0.0
+2026-08-12T14:44:38.750094+00:00,ey-cz,EY,Czechia,https://careers.ey.com/ey/search/?q=finance&locationsearch=Czech%20Republic,40,,,12.0,11.0
+2026-08-12T14:45:48.526761+00:00,ey-de,EY,Germany,https://careers.ey.com/ey/search/?q=finance&locationsearch=Germany,40,,,25.0,25.0
+2026-08-12T14:46:57.802342+00:00,ey-at,EY,Austria,https://careers.ey.com/ey/search/?q=finance&locationsearch=Austria,40,,,13.0,13.0
+2026-08-12T14:48:06.657823+00:00,ey-ch,EY,Switzerland,https://careers.ey.com/ey/search/?q=finance&locationsearch=Switzerland,40,,,25.0,25.0
+2026-08-12T14:49:15.881820+00:00,ey-uk,EY,United Kingdom,https://careers.ey.com/ey/search/?q=finance&locationsearch=United%20Kingdom,40,,,25.0,25.0
+2026-08-12T14:50:24.984996+00:00,ey-se,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Sweden,40,,,5.0,5.0
+2026-08-12T14:51:33.301184+00:00,ey-dk,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Denmark,40,,,1.0,0.0
+2026-08-12T14:52:41.317496+00:00,ey-no,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Norway,40,,,1.0,0.0
+2026-08-12T14:53:48.857597+00:00,ey-fi,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Finland,40,,https://careers.ey.com/ey?locale=zh_CN: ReadTimeout,4.0,3.0
+2026-08-12T14:55:21.540149+00:00,deloitte-cz,Deloitte,Czechia,https://www.deloitte.com/cz-sk/en/careers.html,8,,,0.0,0.0
+2026-08-12T14:55:28.983955+00:00,deloitte-de,Deloitte,Germany,https://jobs.deloitte.de/search/?q=finance&locationsearch=Germany,40,,,12.0,12.0
+2026-08-12T14:56:20.086368+00:00,deloitte-at,Deloitte,Austria,https://www.deloitte.com/at/de/careers.html,8,,,0.0,0.0
+2026-08-12T14:56:27.171472+00:00,deloitte-ch,Deloitte,Switzerland,https://www.deloitte.com/ch/en/careers.html,8,,,0.0,0.0
+2026-08-12T14:56:37.942449+00:00,deloitte-uk,Deloitte,United Kingdom,https://www.deloitte.com/uk/en/careers.html,8,,,0.0,0.0
+2026-08-12T14:56:46.566817+00:00,deloitte-nordics,Deloitte,Nordics,https://www.deloitte.com/global/en/careers.html,8,,,0.0,0.0
+2026-08-12T14:56:53.637063+00:00,kpmg-cz,KPMG,Czechia,https://kpmg.com/cz/en/home/careers.html,2,,,0.0,0.0
+2026-08-12T14:56:54.817054+00:00,kpmg-de,KPMG,Germany,https://jobs.kpmg.de/?currentPage=1&keyword=finance&pageSize=25,1,,,93.0,93.0
+2026-08-12T14:57:16.414031+00:00,kpmg-at,KPMG,Austria,https://kpmg.com/at/en/home/careers.html,1,,https://kpmg.com/at/en/home/careers.html: HTTPError,0.0,0.0
+2026-08-12T14:57:17.298576+00:00,kpmg-ch,KPMG,Switzerland,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,1,,,0.0,0.0
+2026-08-12T14:57:19.066845+00:00,kpmg-uk,KPMG,United Kingdom,https://kpmg.com/uk/en/home/careers.html,2,,,0.0,0.0
+2026-08-12T14:57:20.281290+00:00,kpmg-nordics,KPMG,Nordics,https://kpmg.com/xx/en/home/careers.html,1,,https://kpmg.com/xx/en/home/careers.html: HTTPError,0.0,0.0
+2026-08-12T19:08:59.841861+00:00,deloitte-cz,Deloitte,Czechia,https://apply.deloittece.com/en_US/careers/SearchJobs/?jobOffset=0&jobRecordsPerPage=10&listFilterMode=1,53,,,13.0,1.0
+2026-08-12T19:10:39.314655+00:00,deloitte-de,Deloitte,Germany,https://jobs.deloitte.de/search/?q=finance&locationsearch=Germany,40,,,12.0,12.0
+2026-08-12T19:11:08.632660+00:00,deloitte-at,Deloitte,Austria,https://careers.smartrecruiters.com/DeloitteAT/deloitte-jobs,24,,,23.0,23.0
+2026-08-12T19:11:15.935639+00:00,deloitte-ch,Deloitte,Switzerland,https://apply.deloitte.ch/CHCareers/SearchJobs/,66,,,35.0,35.0
+2026-08-12T19:12:18.711567+00:00,deloitte-uk,Deloitte,United Kingdom,https://apply.deloitte.co.uk/UKCareers/SearchJobs/,180,,,140.0,140.0
+2026-08-12T19:15:11.202002+00:00,deloitte-nordics,Deloitte,Nordics,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,25,,,24.0,24.0
+2026-08-12T19:17:34.609223+00:00,deloitte-nordics,Deloitte,Nordics,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,24,,,23,23

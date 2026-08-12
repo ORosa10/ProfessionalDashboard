@@ -1,0 +1,13 @@
+city,country,currency,fx_czk,housing_czk,living_czk,transport_czk,prague_trips_czk,mandatory_extra_czk,benchmark_gross_annual_local,notes
+Prague,Czechia,CZK,1.0000,0,20000,1000,0,0,984000,"Current benchmark: housing and household utilities assumed free"
+London,United Kingdom,GBP,28.34,27000,25500,5500,8000,0,59000,"Own room in shared flat; modest lifestyle; regular low-cost Prague trips"
+Munich,Germany,EUR,24.26,20000,19000,1800,5000,0,66000,"Own room in shared flat; modest lifestyle"
+Frankfurt,Germany,EUR,24.26,16000,18000,1500,6000,0,64000,"Own room in shared flat; modest lifestyle"
+Berlin,Germany,EUR,24.26,16000,18000,1500,4000,0,64000,"Own room in shared flat; modest lifestyle"
+Hamburg,Germany,EUR,24.26,16000,18500,2000,6000,0,65000,"Own room in shared flat; modest lifestyle"
+Vienna,Austria,EUR,24.26,14000,18000,1300,2500,0,52000,"Own room in shared flat; modest lifestyle; cheap Prague access"
+Zurich,Switzerland,CHF,25.97,39000,30000,2500,7000,11000,72500,"Own room in shared flat; mandatory health insurance shown separately"
+Stockholm,Sweden,SEK,2.33,14000,18500,2500,8000,0,565000,"Own room in shared flat; modest lifestyle"
+Copenhagen,Denmark,DKK,3.25,29000,23000,2500,7000,0,590000,"Own room in shared flat; modest lifestyle"
+Oslo,Norway,NOK,2.08,23000,18000,2500,9000,0,690000,"Own room in shared flat; modest lifestyle"
+Helsinki,Finland,EUR,24.26,13500,16500,1600,8000,0,54000,"Own room in shared flat; modest lifestyle"

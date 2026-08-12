@@ -27,6 +27,8 @@ Foundation / v0 app shell.
 - targeting is split into `GENERAL_TARGETING.md` for cross-sector principles and `CONSULTING_TARGETING.md` for evidence from the first Big Four cohort; future Private Markets, Banking, Corporate and other cohorts keep separate hypotheses that can refine, but not silently overwrite, the general profile
 - role-focused English descriptions with employer boilerplate removed, plus logical deduplication of the same role advertised across multiple cities
 - separate PE/private-markets cohort: 21 A-rated sources checked, 25 verified candidates retained, and a diverse 20-role follow-up calibration shortlist available as its own Jobs review set
+- separate consulting expansion staging for the ten A-rated consulting firms outside Big Four, with canonical sources, source status and an initial verified candidate set kept away from the live review cohorts until curated
+- `Add Opportunity` intake under Opportunities: a user can paste an external job link, review the extracted role/company/theme, add the reason it is attractive, and save both the opportunity and company to GitHub as a positive targeting example awaiting semantic review
 - placeholder sections for the future product areas
 - dependency and deployment configuration
 

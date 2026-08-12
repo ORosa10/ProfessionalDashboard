@@ -1,0 +1,11 @@
+canonical_company_id,company,checked_at,result,notes
+bain,Bain & Company,2026-08-12,needs_adapter,"Official portal mapped; exact target-region experienced roles need a dedicated pass rather than search-index assumptions."
+roland-berger,Roland Berger,2026-08-12,roles_found,"Two current experienced roles retained; one strong restructuring role and one exploratory London transaction role."
+oliver-wyman,Oliver Wyman,2026-08-12,needs_adapter,"Current Marsh/Oliver Wyman portal mapped; dedicated ATS extraction needed for reliable individual vacancy coverage."
+alvarez-marsal,Alvarez & Marsal,2026-08-12,roles_found,"Several strong current roles in restructuring, corporate finance, modelling, FDD, CDD and PE performance improvement; office duplicates consolidated."
+alixpartners,AlixPartners,2026-08-12,roles_found,"Current DACH turnaround and restructuring experienced-hire role retained; old careers hostname corrected."
+fti-consulting,FTI Consulting,2026-08-12,no_suitable_role,"No suitable current mid-level role retained in this first pass; tax-heavy and director-level results excluded."
+lek-consulting,L.E.K. Consulting,2026-08-12,needs_adapter,"Official careers portal mapped; exact current target-region roles require a dedicated vacancy extraction pass."
+horvath,Horváth,2026-08-12,needs_adapter,"Official SuccessFactors portal mapped; finance and performance roles require structured extraction."
+zeb-consulting,zeb consulting,2026-08-12,roles_found,"Two current bank-steering and treasury-adjacent role families retained, with German-language and specialization cautions."
+capco,Capco,2026-08-12,needs_adapter,"Official global job search mapped; capital-markets and treasury roles require a dedicated portal adapter."

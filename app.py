@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from add_opportunity_ui import render_add_opportunity
 from cost_of_living_ui import render_cost_of_living
 from github_storage import RATING_COLUMNS, github_token, load_ratings, save_ratings
 from jobs_ui import render_jobs, render_sources
@@ -94,6 +95,10 @@ def opportunities_page() -> None:
 
 def jobs_page() -> None:
     render_jobs()
+
+
+def add_opportunity_page() -> None:
+    render_add_opportunity()
 
 
 def cost_of_living_page() -> None:
@@ -261,6 +266,7 @@ navigation = st.navigation(
         "Opportunities": [
             st.Page(opportunities_page, title="Overview"),
             st.Page(jobs_page, title="Jobs"),
+            st.Page(add_opportunity_page, title="Add Opportunity"),
             st.Page(companies_page, title="Companies"),
             st.Page(cost_of_living_page, title="Cost of Living"),
         ],

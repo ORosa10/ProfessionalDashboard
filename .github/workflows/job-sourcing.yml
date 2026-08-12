@@ -9,6 +9,7 @@ on:
       - main
     paths:
       - "sourcing/**"
+      - "personal_fit.py"
       - "data/job_sources_pilot.csv"
       - "requirements.txt"
       - ".github/workflows/job-sourcing.yml"
@@ -33,8 +34,8 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Test Big Four adapters
         run: python -m unittest sourcing.test_big4_pilot
-      - name: Check Big Four career pages
-        run: python -m sourcing.big4_pilot --max-pages 40
+      - name: Check career pages with personal-fit sourcing
+        run: python -m sourcing.persona_sourcing --max-pages 40
       - name: Persist sourcing results
         run: |
           git config user.name "professional-dashboard-bot"

@@ -39,7 +39,7 @@ PERSONA_DISCOVERY_TERMS = (
 
 
 def _apply_personal_fit_ranking() -> None:
-    path = big4_pilot.JOBS_PATH
+    path = big4_pilot.ACTIVE_JOBS_OUTPUT_PATH
     if not path.exists() or path.stat().st_size == 0:
         return
 

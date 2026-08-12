@@ -48,6 +48,7 @@ def personal_fit_signals(row: pd.Series) -> dict[str, object]:
     user's Interested/Maybe/Pass feedback remains the stronger learning signal.
     """
     text = _text(row)
+    title = str(row.get("title", "")).lower()
     score = 50
     positives: list[str] = []
     concerns: list[str] = []
@@ -66,6 +67,12 @@ def personal_fit_signals(row: pd.Series) -> dict[str, object]:
     if _has_any(text, ["financial modelling", "financial modeling", "analytics", "data analysis", "quantitative"]):
         positives.append("analytical/modelling fit")
         score += 7
+    if _has_any(title, ["senior consultant", "financial due diligence", "finance transformation", "strategy & execution"]):
+        positives.append("seniority/topic resembles early positive feedback")
+        score += 5
+    if _has_any(title, ["controller", "controlling"]):
+        positives.append("controlling remains a viable exploration lane")
+        score += 3
 
     # Soft positives: useful but intentionally small.
     if _has_any(text, ["fx", "foreign exchange", "interest rate", "irs", "commodity", "capital markets", "financial markets"]):
@@ -94,6 +101,18 @@ def personal_fit_signals(row: pd.Series) -> dict[str, object]:
     if _has_any(text, ["compliance", "regulatory reporting", "regulatory compliance", "aml", "kyc", "financial crime"]):
         concerns.append("regulatory/compliance-heavy content")
         score -= 18
+    if _has_any(text, ["corporate tax", "international tax", "tax compliance", "tax reporting", "tax technology"]):
+        concerns.append("tax-heavy content; early feedback is consistently negative")
+        score -= 14
+    if _has_any(text, ["human resources", "talent acquisition", "recruiting", "internal services", "reward leader"]):
+        concerns.append("HR/internal-services content; weak fit in early feedback")
+        score -= 14
+    if _has_any(text, ["sap s/4hana", "sap finance", "sap fi/co", "dynamics 365 finance"]):
+        concerns.append("platform-specific experience may be missing")
+        score -= 6
+    if _has_any(text, ["pure accounting", "financial accounting", "statutory accounting"]):
+        concerns.append("accounting-heavy rather than analytical finance")
+        score -= 4
     if _has_any(text, ["business development", "sales target", "origination", "new business generation", "revenue target"]):
         concerns.append("meaningful sales/business-development component")
         score -= 8
@@ -105,6 +124,12 @@ def personal_fit_signals(row: pd.Series) -> dict[str, object]:
         score -= 8
     if _has_any(text, ["intern", "graduate programme", "graduate program", "entry level", "working student", "werkstudent"]):
         concerns.append("likely too junior")
+        score -= 18
+    if _has_any(title, ["assistant director", "associate director"]):
+        concerns.append("likely above target seniority; topic may still be relevant")
+        score -= 14
+    elif _has_any(title, ["senior manager", "director", "head of "]):
+        concerns.append("likely well above target seniority")
         score -= 18
 
     language = _language_flag(text)

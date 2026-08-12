@@ -1,5 +1,5 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,allowed_domains,cadence_days,enabled
-pwc-cz,pwc,PwC,Czechia,"Prague; Brno; Ostrava",https://www.pwc.com/cz/en/kariera.html,"pwc.com",1,true
+pwc-cz,pwc,PwC,Czechia,"Prague; Brno; Ostrava",https://jobs-cee.pwc.com/cz/cz/search-results?keywords=finance,"jobs-cee.pwc.com; pwc.wd3.myworkdayjobs.com",1,true
 pwc-de,pwc,PwC,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://jobs.pwc.de/de/de/search-results?keywords=finance,"jobs.pwc.de; pwc.de; pwc.com",1,true
 pwc-at,pwc,PwC,Austria,Vienna,https://www.pwc.at/en/careers.html,"pwc.at; pwc.com",1,true
 pwc-ch,pwc,PwC,Switzerland,Zurich,https://www.pwc.ch/en/careers.html,"pwc.ch; pwc.com",1,true

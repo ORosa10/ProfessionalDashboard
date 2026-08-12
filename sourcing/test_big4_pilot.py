@@ -1,4 +1,6 @@
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from bs4 import BeautifulSoup
 
@@ -15,6 +17,8 @@ from sourcing.big4_pilot import (
     is_real_job_title,
     is_relevant_listing_title,
     is_successfactors_job_url,
+    merge_jobs,
+    stable_job_id,
 )
 
 
@@ -171,6 +175,40 @@ class BigFourPilotTest(unittest.TestCase):
         self.assertTrue(is_relevant_listing_title("Senior Consultant M&A Finance"))
         self.assertFalse(is_relevant_listing_title("Office Receptionist"))
         self.assertFalse(is_relevant_listing_title("Talent Acquisition Specialist"))
+
+    def test_stable_id_matches_posting_identity(self):
+        source = pd.Series({"canonical_company_id": "pwc"})
+        self.assertEqual(stable_job_id(source, "REQ-42"), stable_job_id(source, "REQ-42"))
+        self.assertNotEqual(stable_job_id(source, "REQ-42"), stable_job_id(source, "REQ-43"))
+
+    def test_merge_can_build_on_separate_staging_snapshot(self):
+        columns = [
+            "job_id", "canonical_company_id", "company", "title", "description",
+            "description_en", "translation_status", "market", "location",
+            "priority_locations", "job_url", "source_url", "source_id", "date_posted",
+            "discovered_at", "last_seen_at", "relevance_score", "matched_terms",
+            "verification", "status", "alternate_job_urls", "duplicate_count",
+            "calibration_score", "calibration_note",
+        ]
+        with TemporaryDirectory() as temp_dir:
+            staging = Path(temp_dir) / "jobs_staging.csv"
+            old = pd.DataFrame(
+                [{
+                    "job_id": "staged-one", "canonical_company_id": "pwc", "company": "PwC",
+                    "title": "Senior Consultant Finance", "job_url": "https://example/one",
+                    "verification": "official ATS vacancy detail", "status": "Open",
+                }]
+            ).reindex(columns=columns, fill_value="")
+            old.to_csv(staging, index=False)
+            new = pd.DataFrame(
+                [{
+                    "job_id": "staged-two", "canonical_company_id": "kpmg", "company": "KPMG",
+                    "title": "Manager Treasury", "job_url": "https://example/two",
+                    "verification": "official ATS vacancy detail", "status": "Open",
+                }]
+            )
+            merged = merge_jobs(new, base_path=staging)
+            self.assertEqual(set(merged["job_id"]), {"staged-one", "staged-two"})
 
 
 if __name__ == "__main__":

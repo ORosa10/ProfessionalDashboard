@@ -20,6 +20,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCES_PATH = ROOT / "data" / "job_sources_pilot.csv"
 JOBS_PATH = ROOT / "data" / "jobs.csv"
 RUNS_PATH = ROOT / "data" / "source_runs.csv"
+STAGING_JOBS_PATH = ROOT / "data" / "jobs_staging.csv"
+STAGING_RUNS_PATH = ROOT / "data" / "source_runs_staging.csv"
+ACTIVE_JOBS_OUTPUT_PATH = JOBS_PATH
 FEEDBACK_PATH = ROOT / "data" / "job_feedback.csv"
 
 ROLE_TERMS = (
@@ -72,7 +75,7 @@ GENERIC_OPENING_PATTERNS = (
     r"^at kpmg[, ].{0,900}?(?=(?:your impact|the opportunity|your role|what you(?:'ll| will) do|responsibilities)\b)",
 )
 SUCCESSFACTORS_HOSTS = ("careers.ey.com", "jobs.deloitte.de", "jobs.kpmg.de")
-PHENOM_HOSTS = ("jobs.pwc.de", "jobs.pwc.co.uk")
+PHENOM_HOSTS = ("jobs.pwc.de", "jobs.pwc.co.uk", "jobs-cee.pwc.com")
 SMARTRECRUITERS_HOSTS = ("careers.smartrecruiters.com", "jobs.smartrecruiters.com")
 AVATURE_HOSTS = (
     "apply.deloittece.com",
@@ -454,6 +457,55 @@ def posting_to_job(posting: dict, page_url: str, source: pd.Series, started: str
     }
 
 
+def cached_jobs_for_source(source: pd.Series) -> tuple[dict[str, dict], dict[str, dict]]:
+    """Return recent verified details by stable id and URL for incremental runs.
+
+    Mondays deliberately bypass this cache so long-lived vacancies are fully
+    refreshed at least weekly. Listings are still checked on every run, so new
+    and removed requisition IDs are detected daily.
+    """
+    cache_path = ACTIVE_JOBS_OUTPUT_PATH if ACTIVE_JOBS_OUTPUT_PATH.exists() else JOBS_PATH
+    if datetime.now(timezone.utc).weekday() == 0 or not cache_path.exists():
+        return {}, {}
+    old = pd.read_csv(cache_path).fillna("")
+    if old.empty or "source_id" not in old.columns:
+        return {}, {}
+    old = old[old["source_id"].eq(str(source.source_id))]
+    by_id: dict[str, dict] = {}
+    by_url: dict[str, dict] = {}
+    for _, row in old.iterrows():
+        value = row.to_dict()
+        job_id = str(value.get("job_id") or "")
+        if job_id:
+            by_id[job_id] = value
+        urls = [value.get("job_url", "")]
+        urls.extend(str(value.get("alternate_job_urls") or "").split(";"))
+        for url in urls:
+            url = normalize(str(url))
+            if url:
+                by_url[url] = value
+    return by_id, by_url
+
+
+def stable_job_id(source: pd.Series, external_id: str) -> str:
+    return hashlib.sha1(
+        f"{source.canonical_company_id}|{external_id}".encode("utf-8")
+    ).hexdigest()[:16]
+
+
+def reuse_cached_job(value: dict, source: pd.Series, started: str) -> dict:
+    job = dict(value)
+    job.update(
+        {
+            "source_id": source.source_id,
+            "source_url": source.seed_url,
+            "last_seen_at": started,
+            "status": "Open",
+        }
+    )
+    return job
+
+
 def normalized_role_title(title: str) -> str:
     value = normalize(title).lower()
     value = re.sub(r"\((?:m|w|f|d)(?:\s*/\s*(?:m|w|f|d)){1,4}\)", "", value)
@@ -650,12 +702,18 @@ def discover_phenom_jobs(source: pd.Series, max_pages: int = 10) -> tuple[list[d
 
     jobs: dict[str, dict] = {}
     candidate_pages = 0
+    _, cached_by_url = cached_jobs_for_source(source)
     for record_id, record in records.items():
         detail_url = urlunparse(
             parsed_seed._replace(
                 path=f"{detail_prefix}/job/{record_id}", query="", fragment=""
             )
         )
+        if detail_url in cached_by_url:
+            cached = reuse_cached_job(cached_by_url[detail_url], source, started)
+            jobs[cached["job_id"]] = cached
+            candidate_pages += 1
+            continue
         try:
             response = fetch(detail_url)
             postings = extract_job_postings(BeautifulSoup(response.text, "html.parser"), response.url)
@@ -796,8 +854,18 @@ def discover_avature_jobs(
         time.sleep(0.15)
 
     jobs: dict[str, dict] = {}
-    ordered = sorted(candidates.values(), key=lambda item: (-item[0], item[1]))[:max_jobs]
-    for _, detail_url in ordered:
+    cached_by_id, cached_by_url = cached_jobs_for_source(source)
+    ordered = sorted(
+        candidates.items(), key=lambda item: (-item[1][0], item[1][1])
+    )[:max_jobs]
+    for candidate_id, (_, detail_url) in ordered:
+        cached = cached_by_id.get(stable_job_id(source, candidate_id)) or cached_by_url.get(
+            detail_url
+        )
+        if cached:
+            refreshed = reuse_cached_job(cached, source, started)
+            jobs[refreshed["job_id"]] = refreshed
+            continue
         try:
             response = fetch(detail_url)
             posting = avature_posting_from_soup(
@@ -858,8 +926,14 @@ def discover_smartrecruiters_jobs(
     candidates = [record for record in records if is_relevant_listing_title(record.get("name", ""))]
     candidates.sort(key=lambda record: (-relevance(record.get("name", ""))[0], record.get("name", "")))
     jobs: dict[str, dict] = {}
+    cached_by_id, _ = cached_jobs_for_source(source)
     for record in candidates[:max_jobs]:
         record_id = str(record.get("id") or "")
+        cached = cached_by_id.get(stable_job_id(source, record_id))
+        if cached:
+            refreshed = reuse_cached_job(cached, source, started)
+            jobs[refreshed["job_id"]] = refreshed
+            continue
         try:
             detail = fetch(
                 f"https://api.smartrecruiters.com/v1/companies/{company_slug}/postings/{record_id}"
@@ -1030,7 +1104,14 @@ def discover_kpmg_api_jobs(source: pd.Series, max_jobs: int = 100) -> tuple[list
         records = []
         errors.append(f"KPMG public jobs API: {type(exc).__name__}")
 
+    cached_by_id, _ = cached_jobs_for_source(source)
     for record in records:
+        record_id = str(record.get("jobId") or "")
+        cached = cached_by_id.get(stable_job_id(source, record_id))
+        if cached:
+            refreshed = reuse_cached_job(cached, source, started)
+            jobs[refreshed["job_id"]] = refreshed
+            continue
         locations = []
         for address in record.get("addresses") or []:
             if isinstance(address, dict):
@@ -1074,7 +1155,7 @@ def discover_kpmg_api_jobs(source: pd.Series, max_jobs: int = 100) -> tuple[list
     return list(jobs.values()), run
 
 
-def merge_jobs(new_jobs: pd.DataFrame) -> pd.DataFrame:
+def merge_jobs(new_jobs: pd.DataFrame, base_path: Path | None = None) -> pd.DataFrame:
     columns = [
         "job_id", "canonical_company_id", "company", "title", "description",
         "description_en", "translation_status", "market", "location",
@@ -1083,7 +1164,8 @@ def merge_jobs(new_jobs: pd.DataFrame) -> pd.DataFrame:
         "verification", "status", "alternate_job_urls", "duplicate_count",
         "calibration_score", "calibration_note",
     ]
-    old = pd.read_csv(JOBS_PATH).fillna("") if JOBS_PATH.exists() else pd.DataFrame()
+    base_path = base_path or JOBS_PATH
+    old = pd.read_csv(base_path).fillna("") if base_path.exists() else pd.DataFrame()
     if "verification" not in old.columns:
         old = pd.DataFrame(columns=columns)
     else:
@@ -1118,8 +1200,14 @@ def merge_jobs(new_jobs: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
+    global ACTIVE_JOBS_OUTPUT_PATH
     parser = argparse.ArgumentParser()
     parser.add_argument("--max-pages", type=int, default=40)
+    parser.add_argument(
+        "--staging",
+        action="store_true",
+        help="Write a reviewable staging snapshot without changing the live app dataset.",
+    )
     parser.add_argument(
         "--source-id",
         action="append",
@@ -1127,6 +1215,9 @@ def main() -> None:
         help="Run only the selected source id; may be supplied more than once.",
     )
     args = parser.parse_args()
+    output_jobs_path = STAGING_JOBS_PATH if args.staging else JOBS_PATH
+    output_runs_path = STAGING_RUNS_PATH if args.staging else RUNS_PATH
+    ACTIVE_JOBS_OUTPUT_PATH = output_jobs_path
     sources = pd.read_csv(SOURCES_PATH).fillna("")
     sources = sources[sources["enabled"].astype(str).str.lower().eq("true")]
     if args.source_id:
@@ -1154,17 +1245,20 @@ def main() -> None:
         runs.append(run)
 
     discovered = deduplicate_jobs(pd.DataFrame(all_jobs))
-    merged = merge_jobs(translate_descriptions(discovered))
-    JOBS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    merged.to_csv(JOBS_PATH, index=False)
+    base_jobs_path = output_jobs_path if output_jobs_path.exists() else JOBS_PATH
+    merged = merge_jobs(translate_descriptions(discovered), base_path=base_jobs_path)
+    output_jobs_path.parent.mkdir(parents=True, exist_ok=True)
+    merged.to_csv(output_jobs_path, index=False)
 
     run_df = pd.DataFrame(runs)
-    if RUNS_PATH.exists():
-        history = pd.read_csv(RUNS_PATH).fillna("")
+    base_runs_path = output_runs_path if output_runs_path.exists() else RUNS_PATH
+    if base_runs_path.exists():
+        history = pd.read_csv(base_runs_path).fillna("")
         run_df = pd.concat([history, run_df], ignore_index=True).tail(2000)
-    run_df.to_csv(RUNS_PATH, index=False)
+    run_df.to_csv(output_runs_path, index=False)
     print(
-        f"Checked {len(sources)} sources; stored {len(merged)} verified jobs; "
+        f"Checked {len(sources)} sources; stored {len(merged)} verified jobs "
+        f"in {'staging' if args.staging else 'live'}; "
         f"verified {len(all_jobs)} postings this run."
     )
 

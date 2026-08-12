@@ -17,6 +17,8 @@ VERIFIED_JOB_TYPES = {
     "schema.org/JobPosting JSON-LD",
     "schema.org/JobPosting microdata",
     "official ATS vacancy detail",
+    "official Deloitte ATS vacancy detail",
+    "official SmartRecruiters vacancy API",
 }
 FEEDBACK_PATH = "data/job_feedback.csv"
 FEEDBACK_API_URL = (

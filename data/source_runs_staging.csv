@@ -280,4 +280,31 @@ run_at,source_id,company,market,seed_url,pages_checked,jobs_found,errors,candida
 2026-08-12T19:51:15.241216+00:00,kpmg-at,KPMG,Austria,https://bewerbung.kpmg.at/go/Alle-Stellen/9402055/,25,,,24.0,24.0
 2026-08-12T19:53:54.396834+00:00,kpmg-uk,KPMG,United Kingdom,https://www.kpmgcareers.co.uk/search/vacancies/?intakeType=Experienced,26,,,16.0,16.0
 2026-08-12T20:00:07.478511+00:00,kpmg-nordics,KPMG,Nordics,https://cdn.jobylon.com/jobs/companies/1532/embed/v2/?page_size=100,6,,,5.0,5.0
-2026-08-12T20:02:15.845528+00:00,kpmg-ch,KPMG,Switzerland,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,1,,,19,19
+2026-08-12T20:02:15.845528+00:00,kpmg-ch,KPMG,Switzerland,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,1,,,19.0,19.0
+2026-08-12T20:03:59.109680+00:00,pwc-cz,PwC,Czechia,https://jobs-cee.pwc.com/cz/cz/search-results?keywords=finance,76,,,69,69
+2026-08-12T20:04:07.982931+00:00,pwc-de,PwC,Germany,https://jobs.pwc.de/de/de/search-results?keywords=finance,108,,,98,98
+2026-08-12T20:04:20.494075+00:00,pwc-at,PwC,Austria,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,9,,,3,3
+2026-08-12T20:04:30.035530+00:00,pwc-ch,PwC,Switzerland,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,21,,,14,13
+2026-08-12T20:04:50.773717+00:00,pwc-uk,PwC,United Kingdom,https://jobs.pwc.co.uk/uk/en/search-results?keywords=finance,108,,,98,97
+2026-08-12T20:05:05.649253+00:00,pwc-nordics,PwC,Nordics,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,9,,,3,3
+2026-08-12T20:05:15.795076+00:00,ey-cz,EY,Czechia,https://careers.ey.com/ey/search/?q=finance&locationsearch=Czech%20Republic,40,,,12,11
+2026-08-12T20:06:23.234150+00:00,ey-de,EY,Germany,https://careers.ey.com/ey/search/?q=finance&locationsearch=Germany,40,,,25,25
+2026-08-12T20:07:29.318502+00:00,ey-at,EY,Austria,https://careers.ey.com/ey/search/?q=finance&locationsearch=Austria,40,,,13,13
+2026-08-12T20:08:35.105361+00:00,ey-ch,EY,Switzerland,https://careers.ey.com/ey/search/?q=finance&locationsearch=Switzerland,40,,,25,25
+2026-08-12T20:09:44.611293+00:00,ey-uk,EY,United Kingdom,https://careers.ey.com/ey/search/?q=finance&locationsearch=United%20Kingdom,40,,,25,25
+2026-08-12T20:11:02.497639+00:00,ey-se,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Sweden,40,,,5,5
+2026-08-12T20:12:20.178205+00:00,ey-dk,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Denmark,40,,,1,0
+2026-08-12T20:13:34.400743+00:00,ey-no,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Norway,40,,,1,0
+2026-08-12T20:14:45.470449+00:00,ey-fi,EY,Nordics,https://careers.ey.com/ey/search/?q=finance&locationsearch=Finland,40,,,4,3
+2026-08-12T20:15:52.046658+00:00,deloitte-cz,Deloitte,Czechia,https://apply.deloittece.com/en_US/careers/SearchJobs/?jobOffset=0&jobRecordsPerPage=10&listFilterMode=1,53,,,13,1
+2026-08-12T20:17:42.309642+00:00,deloitte-de,Deloitte,Germany,https://jobs.deloitte.de/search/?q=finance&locationsearch=Germany,40,,,12,12
+2026-08-12T20:18:31.973836+00:00,deloitte-at,Deloitte,Austria,https://careers.smartrecruiters.com/DeloitteAT/deloitte-jobs,24,,,23,23
+2026-08-12T20:18:33.732723+00:00,deloitte-ch,Deloitte,Switzerland,https://apply.deloitte.ch/CHCareers/SearchJobs/,66,,,35,35
+2026-08-12T20:19:18.467339+00:00,deloitte-uk,Deloitte,United Kingdom,https://apply.deloitte.co.uk/UKCareers/SearchJobs/,180,,,140,138
+2026-08-12T20:20:30.528461+00:00,deloitte-nordics,Deloitte,Nordics,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,24,,,23,23
+2026-08-12T20:20:31.189906+00:00,kpmg-cz,KPMG,Czechia,https://kpmg.com/cz/en/home/careers.html,2,,,0,0
+2026-08-12T20:20:32.537633+00:00,kpmg-de,KPMG,Germany,https://jobs.kpmg.de/?currentPage=1&keyword=finance&pageSize=25,1,,,93,93
+2026-08-12T20:20:36.160060+00:00,kpmg-at,KPMG,Austria,https://bewerbung.kpmg.at/go/Alle-Stellen/9402055/,25,,,24,24
+2026-08-12T20:21:16.823791+00:00,kpmg-ch,KPMG,Switzerland,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,1,,,19,19
+2026-08-12T20:21:18.211075+00:00,kpmg-uk,KPMG,United Kingdom,https://www.kpmgcareers.co.uk/search/vacancies/?intakeType=Experienced,84,,,51,51
+2026-08-12T20:22:27.168452+00:00,kpmg-nordics,KPMG,Nordics,https://cdn.jobylon.com/jobs/companies/1532/embed/v2/?page_size=100,6,,,5,5

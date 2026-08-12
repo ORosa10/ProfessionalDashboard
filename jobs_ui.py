@@ -12,7 +12,8 @@ import streamlit as st
 from personal_fit import build_personal_fit_summary
 
 DATA_DIR = Path(__file__).parent / "data"
-TARGETING_PATH = Path(__file__).parent / "JOB_TARGETING.md"
+GENERAL_TARGETING_PATH = Path(__file__).parent / "GENERAL_TARGETING.md"
+CONSULTING_TARGETING_PATH = Path(__file__).parent / "CONSULTING_TARGETING.md"
 VERIFIED_JOB_TYPES = {
     "schema.org/JobPosting",
     "schema.org/JobPosting JSON-LD",
@@ -125,15 +126,25 @@ def render_jobs() -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title("Jobs")
     st.caption("Verified individual vacancies from official employer career portals.")
-    if TARGETING_PATH.exists():
+    if GENERAL_TARGETING_PATH.exists():
         with st.expander(
-            "Review the targeting hypothesis derived from your first 50 ratings",
-            expanded=True,
+            "General targeting principles (cross-sector)",
+            expanded=False,
         ):
-            st.markdown(TARGETING_PATH.read_text(encoding="utf-8"))
+            st.markdown(GENERAL_TARGETING_PATH.read_text(encoding="utf-8"))
             st.caption(
-                "This is a transparent working hypothesis, not a hard scoring model. "
-                "Review it and send corrections in the project chat before it becomes the next sourcing profile."
+                "General principles are updated only when a signal belongs to the personal baseline "
+                "or repeats across multiple employer sectors."
+            )
+    if CONSULTING_TARGETING_PATH.exists():
+        with st.expander(
+            "Consulting sector hypothesis — first 50 Big Four ratings",
+            expanded=False,
+        ):
+            st.markdown(CONSULTING_TARGETING_PATH.read_text(encoding="utf-8"))
+            st.caption(
+                "This is the first sector-specific learning hypothesis. Review it in the project chat; "
+                "Private Markets and later sectors will retain their own hypotheses."
             )
     frames: list[pd.DataFrame] = []
     staging_path = DATA_DIR / "jobs_staging.csv"

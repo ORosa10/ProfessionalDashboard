@@ -5,6 +5,8 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from salary_context_ui import render_salary_context
+
 DATA_DIR = Path(__file__).parent / "data"
 BASE_TARGET_SAVINGS_CZK = 500_000
 SAVINGS_LEVELS = [250_000, 500_000, 750_000, 1_000_000]
@@ -163,6 +165,8 @@ def render_cost_of_living() -> None:
         st.warning("Salary viability: Below benchmark")
     else:
         st.error("Salary viability: Well below benchmark")
+
+    render_salary_context(city, row["currency"], annual_gross_local)
 
     st.subheader(f"Savings ladder — {city}")
     ladder_rows = []

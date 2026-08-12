@@ -61,6 +61,13 @@ def _local(value: float | None, currency: str) -> str:
     return f"{symbols.get(currency, currency + ' ')}{text}" if currency != "CZK" else f"{text} Kč"
 
 
+def _gap_pct(target: float, reference: float | None) -> str:
+    if reference is None or pd.isna(reference) or float(reference) <= 0:
+        return "—"
+    gap = (float(target) / float(reference) - 1) * 100
+    return f"{gap:+.0f}%"
+
+
 def _add_target_columns(view: pd.DataFrame, annual_savings: float) -> pd.DataFrame:
     view = view.copy()
     monthly_savings = annual_savings / 12
@@ -130,6 +137,7 @@ def render_cost_of_living() -> None:
             average_local = None
             median_local = None
 
+        target_local = r["target_gross_monthly_local"]
         rows[city] = {
             "Bydlení vč. utilities": _money_czk(r["housing_czk"]),
             "Běžný život": _money_czk(r["living_czk"]),
@@ -140,19 +148,21 @@ def render_cost_of_living() -> None:
             "Cíl úspor": _money_czk(monthly_savings),
             "Potřebný net income": _money_czk(r["required_net_czk"]),
             "Target gross / měsíc v CZK": _money_czk(r["target_gross_monthly_czk"]),
-            "Target gross / měsíc lokálně": _local(r["target_gross_monthly_local"], currency),
+            "Target gross / měsíc lokálně": _local(target_local, currency),
             "Target gross / rok lokálně": _local(r["target_gross_annual_local"], currency),
             "Průměrný gross / měsíc lokálně": _local(average_local, currency),
+            "Target vs průměr": _gap_pct(target_local, average_local),
             "Medián gross / měsíc lokálně": _local(median_local, currency),
+            "Target vs medián": _gap_pct(target_local, median_local),
         }
 
     comparison = pd.DataFrame(rows)
-    st.dataframe(comparison, width="stretch", height=min(700, 38 * (len(comparison) + 2)))
+    st.dataframe(comparison, width="stretch", height=min(760, 38 * (len(comparison) + 2)))
 
     st.caption(
         "Planning model, not a payroll calculator. Housing assumes an own room in a shared flat and includes utilities. "
         "Net/gross conversion uses a city/country planning ratio calibrated around the relevant salary range. "
-        "Average and median salary rows use the latest reference statistics available in salary_context.csv; some countries publish only one of the two."
+        "Average and median salary rows use the latest reference statistics available in salary_context.csv; target gaps show how far the required monthly gross is above (+) or below (-) those references."
     )
 
     st.subheader("Test a salary")

@@ -9,6 +9,8 @@ import pandas as pd
 import requests
 import streamlit as st
 
+from personal_fit import build_personal_fit_summary
+
 DATA_DIR = Path(__file__).parent / "data"
 VERIFIED_JOB_TYPES = {
     "schema.org/JobPosting",
@@ -207,6 +209,8 @@ def render_jobs() -> None:
         if required not in jobs.columns:
             jobs[required] = default
 
+    jobs["personal_fit_summary"] = jobs.apply(build_personal_fit_summary, axis=1)
+
     countries = sorted(
         {
             country.strip()
@@ -266,12 +270,14 @@ def render_jobs() -> None:
 
     st.caption(
         "Choose Interested, Maybe or Pass directly in the table. Add a comment when the reason "
-        "will help calibrate future sourcing, then save the changes to GitHub."
+        "will help calibrate future sourcing, then save the changes to GitHub. Personal fit is a reasoning summary, "
+        "not a numeric score: it keeps CV fit, preferences, constraints and salary viability conceptually separate."
     )
     columns = [
         "title",
         "feedback",
         "comment",
+        "personal_fit_summary",
         "description_display",
         "fit_note",
         "rating",
@@ -287,7 +293,7 @@ def render_jobs() -> None:
         hide_index=True,
         width="stretch",
         height=620,
-        row_height=160,
+        row_height=180,
         disabled=[column for column in columns if column not in {"feedback", "comment"}],
         key="job_feedback_editor",
         column_config={
@@ -296,10 +302,11 @@ def render_jobs() -> None:
                 "Your rating", options=FEEDBACK_OPTIONS, required=True, width="small"
             ),
             "rating": st.column_config.TextColumn("Company rating", width="small"),
+            "personal_fit_summary": st.column_config.TextColumn("Personal fit reasoning", width=620),
             "description_display": st.column_config.TextColumn(
                 "What the role does (English)", width=620
             ),
-            "fit_note": st.column_config.TextColumn("Why review it", width=360),
+            "fit_note": st.column_config.TextColumn("Why sourced", width=320),
             "comment": st.column_config.TextColumn("Your comment", width=420),
             "company": st.column_config.TextColumn("Company", width="medium"),
             "countries": st.column_config.TextColumn("Countries", width="medium"),

@@ -51,6 +51,7 @@ def _apply_personal_fit_ranking() -> None:
     fit_constraints: list[str] = []
     fit_summaries: list[str] = []
     priority_scores: list[float] = []
+    original_calibration: list[float] = []
 
     for _, row in jobs.iterrows():
         signals = personal_fit_signals(row)
@@ -66,16 +67,22 @@ def _apply_personal_fit_ranking() -> None:
         fit_constraints.append("Yes" if signals["has_hard_constraint"] else "No")
         fit_summaries.append(build_personal_fit_summary(row))
         priority_scores.append(round(priority, 1))
+        original_calibration.append(calibration)
 
     jobs["personal_fit_score"] = fit_scores
     jobs["personal_fit_constraint"] = fit_constraints
     jobs["personal_fit_summary"] = fit_summaries
+    jobs["base_calibration_score"] = original_calibration
     jobs["sourcing_priority_score"] = priority_scores
 
-    # Red flags do not remove a job. They only move it down the review queue.
+    # jobs_ui currently orders new jobs using calibration_score. Feed the combined
+    # sourcing priority into that existing ordering field so personal fit affects what
+    # the user sees first without turning any signal into a hard exclusion.
+    jobs["calibration_score"] = jobs["sourcing_priority_score"]
+
     sort_cols = [
         col
-        for col in ["sourcing_priority_score", "personal_fit_score", "calibration_score", "last_seen_at"]
+        for col in ["sourcing_priority_score", "personal_fit_score", "last_seen_at"]
         if col in jobs.columns
     ]
     jobs = jobs.sort_values(sort_cols, ascending=[False] * len(sort_cols))

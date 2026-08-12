@@ -125,7 +125,8 @@ def render_jobs() -> None:
     st.title("Jobs")
     st.caption("Verified individual vacancies from the official Big Four career portals.")
     frames: list[pd.DataFrame] = []
-    pilot_path = DATA_DIR / "jobs.csv"
+    staging_path = DATA_DIR / "jobs_staging.csv"
+    pilot_path = staging_path if staging_path.exists() else DATA_DIR / "jobs.csv"
     if pilot_path.exists():
         pilot = pd.read_csv(pilot_path).fillna("")
         if "verification" in pilot.columns:
@@ -212,6 +213,29 @@ def render_jobs() -> None:
     jobs["review_status"] = jobs["feedback"].apply(
         lambda value: "New" if value == "Unrated" else "Reviewed"
     )
+    batch_path = DATA_DIR / "job_calibration_batch.csv"
+    if batch_path.exists():
+        batch = pd.read_csv(batch_path).fillna("").drop_duplicates("opportunity_id")
+        jobs = jobs.merge(
+            batch[[
+                "opportunity_id", "display_order", "cohort", "theme",
+                "seniority_band", "selection_reason",
+            ]],
+            on="opportunity_id",
+            how="left",
+        )
+        for column in ["cohort", "theme", "seniority_band", "selection_reason"]:
+            jobs[column] = jobs[column].fillna("")
+        jobs["review_set"] = jobs["cohort"].fillna("").apply(
+            lambda value: "Calibration shortlist" if value else "Backlog"
+        )
+    else:
+        jobs["display_order"] = ""
+        jobs["cohort"] = ""
+        jobs["theme"] = ""
+        jobs["seniority_band"] = ""
+        jobs["selection_reason"] = ""
+        jobs["review_set"] = "Backlog"
     for required, default in {
         "countries": "",
         "cities": "",
@@ -235,6 +259,17 @@ def render_jobs() -> None:
         )
     else:
         jobs["salary_location_context"] = "No city-specific salary benchmark yet"
+
+    review_scope = st.radio(
+        "Review set",
+        ["Calibration shortlist (50)", "All opportunities", "Backlog only"],
+        horizontal=True,
+        help="The shortlist is a diverse learning sample. All sourced roles remain available.",
+    )
+    if review_scope == "Calibration shortlist (50)":
+        jobs = jobs[jobs["review_set"].eq("Calibration shortlist")].copy()
+    elif review_scope == "Backlog only":
+        jobs = jobs[jobs["review_set"].eq("Backlog")].copy()
 
     countries = sorted(
         {
@@ -276,8 +311,8 @@ def render_jobs() -> None:
     if "calibration_score" not in view.columns:
         view["calibration_score"] = 0
     view = view.sort_values(
-        ["_feedback_order", "rating", "calibration_score", "discovered_at"],
-        ascending=[True, True, False, False],
+        ["_feedback_order", "display_order", "rating", "calibration_score", "discovered_at"],
+        ascending=[True, True, True, False, False],
     )
 
     c1, c2, c3, c4 = st.columns(4)
@@ -289,6 +324,8 @@ def render_jobs() -> None:
     )
     c4.metric("Selected countries", len(selected_countries))
     st.caption(
+        "Calibration shortlist contains 30 likely-fit roles, 12 boundary cases and 8 exploration cases. "
+        "It is a learning sample, not a hard recommendation. Switch to All opportunities to see the full backlog. "
         "Pilot scope: Deloitte, PwC, EY and KPMG only. Multi-location opportunities appear under "
         "every listed country; Nordic vacancies are split by country when the official location allows it."
     )
@@ -302,6 +339,9 @@ def render_jobs() -> None:
         "title",
         "feedback",
         "comment",
+        "review_set",
+        "cohort",
+        "theme",
         "personal_fit_summary",
         "salary_location_context",
         "description_display",
@@ -328,6 +368,9 @@ def render_jobs() -> None:
                 "Your rating", options=FEEDBACK_OPTIONS, required=True, width="small"
             ),
             "rating": st.column_config.TextColumn("Company rating", width="small"),
+            "review_set": st.column_config.TextColumn("Review set", width="small"),
+            "cohort": st.column_config.TextColumn("Calibration cohort", width="small"),
+            "theme": st.column_config.TextColumn("Role theme", width="medium"),
             "personal_fit_summary": st.column_config.TextColumn("Personal fit reasoning", width=620),
             "salary_location_context": st.column_config.TextColumn(
                 "Salary target for location", width=320

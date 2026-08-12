@@ -23,6 +23,7 @@ from sourcing.big4_pilot import (
     _workday_target_location_ids,
     extract_jobylon_records,
 )
+from sourcing.build_calibration_batch import classify_seniority, title_key
 
 
 class BigFourPilotTest(unittest.TestCase):
@@ -246,6 +247,14 @@ class BigFourPilotTest(unittest.TestCase):
         records = extract_jobylon_records(source)
         self.assertEqual(records[0]["id"], "370097")
         self.assertIn("Finance Transformation", records[0]["title"])
+
+    def test_calibration_seniority_and_city_deduplication(self):
+        self.assertEqual(classify_seniority("Internship – Data Analytics"), "Junior / entry")
+        self.assertEqual(classify_seniority("(Senior) Manager Valuation"), "Senior leadership")
+        self.assertEqual(
+            title_key("Strategy Consultant – Stockholm"),
+            title_key("Strategy Consultant – Malmö"),
+        )
 
 
 if __name__ == "__main__":

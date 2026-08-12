@@ -1,0 +1,51 @@
+batch_id,display_order,opportunity_id,cohort,theme,seniority_band,selection_reason
+big4-calibration-01,1,22836df63a60c592,Likely fit,Transactions / M&A,Core professional,Plausible match to test
+big4-calibration-01,2,8c7e11141d0ea659,Likely fit,Treasury / Risk / Markets,Manager,Plausible match to test
+big4-calibration-01,3,ddfd51fe56b55700,Likely fit,Transactions / M&A,Core professional,Plausible match to test
+big4-calibration-01,4,c7d70f2bc7382b9d,Likely fit,Finance transformation,Manager,Plausible match to test
+big4-calibration-01,5,983e7becfc2ca0c1,Likely fit,FP&A / Controlling,Unclear / other,Plausible match to test
+big4-calibration-01,6,c461cecb95a684b3,Likely fit,Treasury / Risk / Markets,Core professional,Plausible match to test
+big4-calibration-01,7,a9bc61385de465f1,Likely fit,Transactions / M&A,Core professional,Plausible match to test
+big4-calibration-01,8,9cd49ed4b393b33a,Likely fit,Transactions / M&A,Manager,Plausible match to test
+big4-calibration-01,9,220910415a95b693,Likely fit,FP&A / Controlling,Core professional,Plausible match to test
+big4-calibration-01,10,92896630df905f6c,Likely fit,ERP / Finance technology,Manager,Plausible match to test
+big4-calibration-01,11,760427d4e3115d8d,Likely fit,Data / Analytics,Manager,Plausible match to test
+big4-calibration-01,12,a5968948844a3299,Likely fit,Strategy / Consulting,Core professional,Plausible match to test
+big4-calibration-01,13,5fd2735ee65334b9,Likely fit,FP&A / Controlling,Unclear / other,Plausible match to test
+big4-calibration-01,14,fa6782aa02e138ab,Likely fit,Data / Analytics,Manager,Plausible match to test
+big4-calibration-01,15,170ac68966f401c8,Likely fit,Transactions / M&A,Core professional,Plausible match to test
+big4-calibration-01,16,64b28c7a7fd9c143,Likely fit,Finance transformation,Core professional,Plausible match to test
+big4-calibration-01,17,525e350eeea4fc13,Likely fit,ERP / Finance technology,Unclear / other,Plausible match to test
+big4-calibration-01,18,9c37fc2a8f2c8906,Likely fit,Treasury / Risk / Markets,Core professional,Plausible match to test
+big4-calibration-01,19,778c8d1fbf02e17d,Likely fit,Transactions / M&A,Unclear / other,Plausible match to test
+big4-calibration-01,20,6140af979301d2a8,Likely fit,Transactions / M&A,Core professional,Plausible match to test
+big4-calibration-01,21,69e1109d97a43883,Likely fit,Strategy / Consulting,Core professional,Plausible match to test
+big4-calibration-01,22,b22e06180fa12703,Likely fit,ERP / Finance technology,Core professional,Plausible match to test
+big4-calibration-01,23,a296b1178dedb9b1,Likely fit,Finance transformation,Manager,Plausible match to test
+big4-calibration-01,24,b1c1b759dc949048,Likely fit,Transactions / M&A,Manager,Plausible match to test
+big4-calibration-01,25,f00b47820ddd61c2,Likely fit,Treasury / Risk / Markets,Core professional,Plausible match to test
+big4-calibration-01,26,64a50fa2305dc42c,Likely fit,ERP / Finance technology,Core professional,Plausible match to test
+big4-calibration-01,27,a71d5f69aaf9171a,Likely fit,Other finance,Manager,Plausible match to test
+big4-calibration-01,28,79b5b5f8e1631097,Likely fit,Strategy / Consulting,Core professional,Plausible match to test
+big4-calibration-01,29,4a34d53c6b40edb7,Likely fit,Other finance,Core professional,Plausible match to test
+big4-calibration-01,30,6930a5088541e692,Likely fit,FP&A / Controlling,Core professional,Plausible match to test
+big4-calibration-01,31,1c4db8307a6c1d72,Boundary,Tax / Compliance,Senior leadership,Boundary case to clarify preferences
+big4-calibration-01,32,fd9eb0626d33f098,Boundary,Accounting / Reporting,Junior / entry,Boundary case to clarify preferences
+big4-calibration-01,33,a06f6ef644f3f473,Boundary,Data / Analytics,Senior leadership,Boundary case to clarify preferences
+big4-calibration-01,34,56fa3822e4c3ae8c,Boundary,Accounting / Reporting,Junior / entry,Boundary case to clarify preferences
+big4-calibration-01,35,5461b1666fc6b4c3,Boundary,Tax / Compliance,Senior leadership,Boundary case to clarify preferences
+big4-calibration-01,36,519c5e698bd13f3c,Boundary,FP&A / Controlling,Core professional,Boundary case to clarify preferences
+big4-calibration-01,37,07614743c517bfa3,Boundary,Accounting / Reporting,Junior / entry,Boundary case to clarify preferences
+big4-calibration-01,38,35c84f630c193159,Boundary,Other finance,Unclear / other,Boundary case to clarify preferences
+big4-calibration-01,39,0ee98a4f04c3f3f8,Boundary,Tax / Compliance,Core professional,Boundary case to clarify preferences
+big4-calibration-01,40,532b1c86b4b38532,Boundary,Finance transformation,Senior leadership,Boundary case to clarify preferences
+big4-calibration-01,41,d5e0048154575bb8,Boundary,Strategy / Consulting,Senior leadership,Boundary case to clarify preferences
+big4-calibration-01,42,13651ab95b40b3b5,Boundary,Accounting / Reporting,Junior / entry,Boundary case to clarify preferences
+big4-calibration-01,43,af85284120a2db74,Exploration,Finance transformation,Core professional,Exploration case to avoid overfitting
+big4-calibration-01,44,6835350ca5c2a448,Exploration,Data / Analytics,Core professional,Exploration case to avoid overfitting
+big4-calibration-01,45,d2ae6d5917085c0a,Exploration,Tax / Compliance,Manager,Exploration case to avoid overfitting
+big4-calibration-01,46,e6c61e3f48960fe4,Exploration,Strategy / Consulting,Unclear / other,Exploration case to avoid overfitting
+big4-calibration-01,47,2f051fa784b02477,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
+big4-calibration-01,48,f13d28ce8b279ad0,Exploration,Treasury / Risk / Markets,Core professional,Exploration case to avoid overfitting
+big4-calibration-01,49,4136be0484b98c2c,Exploration,Data / Analytics,Core professional,Exploration case to avoid overfitting
+big4-calibration-01,50,d916cffeaf61efb6,Exploration,Data / Analytics,Manager,Exploration case to avoid overfitting

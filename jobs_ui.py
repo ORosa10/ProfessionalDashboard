@@ -228,6 +228,38 @@ def render_jobs() -> None:
         pe["review_status"] = "New"
         frames.append(pe)
 
+    consulting_path = DATA_DIR / "consulting_research_candidates.csv"
+    if consulting_path.exists():
+        consulting = pd.read_csv(consulting_path).fillna("")
+        consulting = consulting[consulting["status"].eq("Open")].copy()
+        consulting = consulting.rename(
+            columns={
+                "candidate_id": "opportunity_id",
+                "city": "cities",
+                "country": "countries",
+                "official_url": "source_url",
+                "role_summary_en": "description_display",
+                "experience_signal": "seniority",
+                "checked_at": "discovered_at",
+            }
+        )
+        consulting["job_url"] = consulting["source_url"]
+        consulting["role_family"] = "Consulting"
+        consulting["fit_note"] = consulting.apply(
+            lambda row: " | ".join(
+                value
+                for value in [
+                    f"Initial bucket: {row.get('initial_bucket', '')}",
+                    f"Experience: {row.get('seniority', '')}",
+                    f"Language: {row.get('language_signal', '')}",
+                ]
+                if value.split(": ", 1)[-1]
+            ),
+            axis=1,
+        )
+        consulting["review_status"] = "New"
+        frames.append(consulting)
+
     if not frames:
         st.warning("The sourcing workflow has not produced its first verified vacancy snapshot yet.")
         return
@@ -281,6 +313,14 @@ def render_jobs() -> None:
         pe_batch["seniority_band"] = ""
         pe_batch["review_set"] = "PE calibration"
         review_maps.append(pe_batch)
+    consulting_batch_path = DATA_DIR / "consulting_calibration_shortlist.csv"
+    if consulting_batch_path.exists():
+        consulting_batch = pd.read_csv(consulting_batch_path).fillna("").rename(
+            columns={"candidate_id": "opportunity_id"}
+        )
+        consulting_batch["seniority_band"] = ""
+        consulting_batch["review_set"] = "Consulting calibration"
+        review_maps.append(consulting_batch)
     if review_maps:
         review_map = pd.concat(review_maps, ignore_index=True, sort=False)
         review_map = review_map.drop_duplicates("opportunity_id", keep="last")
@@ -295,8 +335,10 @@ def render_jobs() -> None:
         for column in ["cohort", "theme", "seniority_band", "selection_reason"]:
             jobs[column] = jobs[column].fillna("")
         jobs["review_set"] = jobs["review_set"].fillna("").replace("", "Backlog")
-        pe_rows = jobs["review_set"].eq("PE calibration") & jobs["theme"].ne("")
-        jobs.loc[pe_rows, "role_family"] = jobs.loc[pe_rows, "theme"]
+        themed_rows = jobs["review_set"].isin(
+            ["PE calibration", "Consulting calibration"]
+        ) & jobs["theme"].ne("")
+        jobs.loc[themed_rows, "role_family"] = jobs.loc[themed_rows, "theme"]
     else:
         jobs["display_order"] = ""
         jobs["cohort"] = ""
@@ -333,6 +375,7 @@ def render_jobs() -> None:
         [
             "Big Four calibration (50)",
             "PE calibration (20)",
+            "Consulting calibration (20)",
             "All opportunities",
             "Backlog only",
         ],
@@ -343,6 +386,8 @@ def render_jobs() -> None:
         jobs = jobs[jobs["review_set"].eq("Big Four calibration")].copy()
     elif review_scope == "PE calibration (20)":
         jobs = jobs[jobs["review_set"].eq("PE calibration")].copy()
+    elif review_scope == "Consulting calibration (20)":
+        jobs = jobs[jobs["review_set"].eq("Consulting calibration")].copy()
     elif review_scope == "Backlog only":
         jobs = jobs[jobs["review_set"].eq("Backlog")].copy()
 
@@ -401,7 +446,8 @@ def render_jobs() -> None:
     st.caption(
         "The Big Four shortlist contains 30 likely-fit roles, 12 boundary cases and 8 exploration cases. "
         "The PE shortlist contains 20 roles selected from 25 verified candidates across 21 checked A-rated firms. "
-        "Both are learning samples, not hard recommendations. Switch to All opportunities to see every retained role."
+        "The consulting shortlist contains 20 roles selected from 35 verified candidates across nine firms. "
+        "All three are learning samples, not hard recommendations. Switch to All opportunities to see every retained role."
     )
 
     st.caption(

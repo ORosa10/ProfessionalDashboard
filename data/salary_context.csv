@@ -1,0 +1,13 @@
+city,scope,average_monthly_local,median_monthly_local,p10_monthly_local,p25_monthly_local,p75_monthly_local,p80_monthly_local,p90_monthly_local,p99_monthly_local,source_label
+Prague,Czechia,52283,45523,,,,,,,CZSO Q4 2025
+London,United Kingdom,,3253,,,,,6417,,ONS ASHE 2025
+Munich,Germany,5370,4506,2819,,,6667,8393,18259,Destatis 2025
+Frankfurt,Germany,5370,4506,2819,,,6667,8393,18259,Destatis 2025
+Berlin,Germany,5370,4506,2819,,,6667,8393,18259,Destatis 2025
+Hamburg,Germany,5370,4506,2819,,,6667,8393,18259,Destatis 2025
+Vienna,Austria,,4640,,,,,,,Statistics Austria 2024 full-time full-year
+Zurich,Switzerland,,7024,,,,,,,Swiss FSO ESS 2024
+Stockholm,Sweden,42900,38300,28000,32000,48000,,61700,,SCB 2025
+Copenhagen,Denmark,51675,,,,,,,,Statistics Denmark 2024
+Oslo,Norway,62070,55800,,,,,,,Statistics Norway 2025
+Helsinki,Finland,4070,3615,2483,,,,,6119,,Statistics Finland 2024

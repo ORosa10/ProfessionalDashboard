@@ -79,6 +79,7 @@ SUCCESSFACTORS_HOSTS = ("careers.ey.com", "jobs.deloitte.de", "jobs.kpmg.de")
 SUCCESSFACTORS_SITEMAP_HOSTS = ("bewerbung.kpmg.at",)
 PHENOM_HOSTS = ("jobs.pwc.de", "jobs.pwc.co.uk", "jobs-cee.pwc.com")
 WORKDAY_HOSTS = ("pwc.wd3.myworkdayjobs.com",)
+JOBYLON_HOSTS = ("cdn.jobylon.com",)
 SMARTRECRUITERS_HOSTS = ("careers.smartrecruiters.com", "jobs.smartrecruiters.com")
 AVATURE_HOSTS = (
     "apply.deloittece.com",
@@ -1001,6 +1002,89 @@ def _workday_config(seed_url: str) -> tuple[str, str, str]:
     return tenant, site, api_root
 
 
+def extract_jobylon_records(html_text: str) -> list[dict]:
+    records: list[dict] = []
+    pattern = r"\{\s*id:\s*'(\d+)'(?P<body>.*?)(?=\s*\},\s*(?:\{\s*id:|\]))"
+    for match in re.finditer(pattern, html_text, re.S):
+        body = match.group("body")
+
+        def field(name: str) -> str:
+            value = re.search(rf"\b{name}:\s*'((?:\\.|[^'])*)'", body, re.S)
+            if not value:
+                return ""
+            raw = value.group(1)
+            try:
+                return json.loads(f'"{raw}"')
+            except json.JSONDecodeError:
+                return raw
+
+        records.append(
+            {
+                "id": match.group(1),
+                "url": field("url"),
+                "title": field("title"),
+                "locations_text": field("locations_text"),
+                "published_date": field("published_date"),
+            }
+        )
+    return records
+
+
+def discover_jobylon_jobs(source: pd.Series, max_jobs: int = 120) -> tuple[list[dict], dict]:
+    started = datetime.now(timezone.utc).isoformat()
+    errors: list[str] = []
+    try:
+        response = fetch(source.seed_url)
+        records = extract_jobylon_records(response.text)
+    except Exception as exc:
+        records = []
+        errors.append(f"Jobylon listing: {type(exc).__name__}")
+
+    candidates = [record for record in records if is_relevant_listing_title(record["title"])]
+    candidates.sort(key=lambda record: (-relevance(record["title"])[0], record["title"]))
+    jobs: dict[str, dict] = {}
+    cached_by_id, cached_by_url = cached_jobs_for_source(source)
+    for record in candidates[:max_jobs]:
+        record_id = record["id"]
+        detail_url = urljoin("https://emp.jobylon.com", record["url"])
+        cached = cached_by_id.get(stable_job_id(source, record_id)) or cached_by_url.get(detail_url)
+        if cached:
+            refreshed = reuse_cached_job(cached, source, started)
+            jobs[refreshed["job_id"]] = refreshed
+            continue
+        try:
+            detail_response = fetch(detail_url)
+            postings = extract_job_postings(
+                BeautifulSoup(detail_response.text, "html.parser"), detail_response.url
+            )
+            for posting in postings:
+                posting.setdefault("identifier", {"value": record_id})
+                posting.setdefault("url", detail_response.url)
+                if not posting.get("jobLocation"):
+                    posting["jobLocation"] = {
+                        "@type": "Place", "address": record["locations_text"]
+                    }
+                job = posting_to_job(posting, detail_response.url, source, started)
+                if job:
+                    jobs[job["job_id"]] = job
+        except Exception as exc:
+            errors.append(f"Jobylon {record_id}: {type(exc).__name__}")
+        time.sleep(0.08)
+
+    run = {
+        "run_at": started,
+        "source_id": source.source_id,
+        "company": source.company,
+        "market": source.market,
+        "seed_url": source.seed_url,
+        "pages_checked": 1 + min(len(candidates), max_jobs),
+        "candidate_job_pages": min(len(candidates), max_jobs),
+        "verified_jobs": len(jobs),
+        "errors": " | ".join(errors[:5]),
+    }
+    return list(jobs.values()), run
+
+
 def _workday_location_values(payload: dict) -> list[dict]:
     values: list[dict] = []
 
@@ -1240,6 +1324,66 @@ def discover_kpmg_uk_jobs(
         "pages_checked": pages_checked + len(ranked),
         "candidate_job_pages": len(ranked),
         "verified_jobs": len(jobs),
+        "errors": " | ".join(errors[:5]),
+    }
+    return list(jobs.values()), run
+
+
+def discover_kpmg_ch_jobs(source: pd.Series, max_jobs: int = 120) -> tuple[list[dict], dict]:
+    started = datetime.now(timezone.utc).isoformat()
+    errors: list[str] = []
+    api_url = "https://ohws.prospective.ch/public/v1/medium/1693/jobs"
+    try:
+        response = requests.get(
+            api_url, params={"lang": "en", "offset": 0, "limit": 96}, headers=HEADERS, timeout=30
+        )
+        response.raise_for_status()
+        records = response.json().get("jobs") or []
+    except Exception as exc:
+        records = []
+        errors.append(f"KPMG Switzerland API: {type(exc).__name__}")
+
+    candidates = [record for record in records if is_relevant_listing_title(record.get("title", ""))]
+    candidates.sort(key=lambda record: (-relevance(record.get("title", ""))[0], record.get("title", "")))
+    jobs: dict[str, dict] = {}
+    cached_by_id, _ = cached_jobs_for_source(source)
+    for record in candidates[:max_jobs]:
+        record_id = str(record.get("id") or record.get("hk_id") or "")
+        cached = cached_by_id.get(stable_job_id(source, record_id))
+        if cached:
+            refreshed = reuse_cached_job(cached, source, started)
+            jobs[refreshed["job_id"]] = refreshed
+            continue
+        szas = record.get("szas") or {}
+        attributes = record.get("attributes") or {}
+        description = " ".join(
+            str(value)
+            for value in (
+                szas.get("sza_tasks"), szas.get("sza_requirements"),
+                (attributes.get("60") or [""])[0],
+                f"Language requirements: {szas.get('sza_language_requirements', '')}",
+            )
+            if value
+        )
+        location = szas.get("sza_location.city") or szas.get("sza_location.2.city") or "Switzerland"
+        posting = {
+            "@type": "JobPosting",
+            "title": record.get("title"),
+            "description": description,
+            "datePosted": record.get("start_date") or record.get("last_modification_timestamp"),
+            "jobLocation": {"@type": "Place", "address": f"{location}, Switzerland"},
+            "identifier": {"value": record_id},
+            "url": (record.get("links") or {}).get("directlink") or source.seed_url,
+            "_verification": "official KPMG Switzerland vacancy API",
+        }
+        job = posting_to_job(posting, posting["url"], source, started)
+        if job:
+            jobs[job["job_id"]] = job
+
+    run = {
+        "run_at": started, "source_id": source.source_id, "company": source.company,
+        "market": source.market, "seed_url": source.seed_url, "pages_checked": 1,
+        "candidate_job_pages": len(candidates), "verified_jobs": len(jobs),
         "errors": " | ".join(errors[:5]),
     }
     return list(jobs.values()), run
@@ -1507,10 +1651,14 @@ def main() -> None:
             jobs, run = discover_phenom_jobs(source, max_pages=min(args.max_pages, 10))
         elif host in WORKDAY_HOSTS:
             jobs, run = discover_workday_jobs(source, max_pages=min(args.max_pages, 20))
+        elif host in JOBYLON_HOSTS:
+            jobs, run = discover_jobylon_jobs(source)
         elif host in SUCCESSFACTORS_SITEMAP_HOSTS:
             jobs, run = discover_successfactors_sitemap_jobs(source, max_jobs=100)
         elif host == "www.kpmgcareers.co.uk":
             jobs, run = discover_kpmg_uk_jobs(source, max_pages=args.max_pages)
+        elif host == "jobs.kpmg.ch":
+            jobs, run = discover_kpmg_ch_jobs(source)
         elif host in SMARTRECRUITERS_HOSTS:
             jobs, run = discover_smartrecruiters_jobs(source, max_jobs=140)
         elif host in AVATURE_HOSTS:

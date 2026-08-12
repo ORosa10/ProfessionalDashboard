@@ -21,6 +21,7 @@ VERIFIED_JOB_TYPES = {
     "official SmartRecruiters vacancy API",
     "official Workday vacancy API",
     "official KPMG UK vacancy detail",
+    "official KPMG Switzerland vacancy API",
 }
 FEEDBACK_PATH = "data/job_feedback.csv"
 FEEDBACK_API_URL = (

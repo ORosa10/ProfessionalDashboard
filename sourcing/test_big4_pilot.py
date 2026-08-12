@@ -21,6 +21,7 @@ from sourcing.big4_pilot import (
     stable_job_id,
     _workday_config,
     _workday_target_location_ids,
+    extract_jobylon_records,
 )
 
 
@@ -235,6 +236,16 @@ class BigFourPilotTest(unittest.TestCase):
         }
         source = pd.Series({"priority_locations": "Vienna"})
         self.assertEqual(_workday_target_location_ids(payload, source), ["vienna-id"])
+
+    def test_extracts_jobylon_embedded_records(self):
+        source = """[
+            { id: '370097', url: '/jobs/370097-finance/',
+              title: 'Manager \\u2013 Finance Transformation',
+              locations_text: 'Stockholm', published_date: 'July 3, 2026' },
+        ]"""
+        records = extract_jobylon_records(source)
+        self.assertEqual(records[0]["id"], "370097")
+        self.assertIn("Finance Transformation", records[0]["title"])
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from cost_of_living_ui import render_cost_of_living
 from github_storage import github_token, load_ratings, save_ratings
 from jobs_ui import render_jobs, render_sources
 
@@ -93,6 +94,10 @@ def opportunities_page() -> None:
 
 def jobs_page() -> None:
     render_jobs()
+
+
+def cost_of_living_page() -> None:
+    render_cost_of_living()
 
 
 def _load_company_universe() -> pd.DataFrame:
@@ -228,7 +233,12 @@ with st.sidebar:
 navigation = st.navigation(
     {
         "Dashboard": [st.Page(home_page, title="Home")],
-        "Opportunities": [st.Page(opportunities_page, title="Overview"), st.Page(jobs_page, title="Jobs"), st.Page(companies_page, title="Companies")],
+        "Opportunities": [
+            st.Page(opportunities_page, title="Overview"),
+            st.Page(jobs_page, title="Jobs"),
+            st.Page(companies_page, title="Companies"),
+            st.Page(cost_of_living_page, title="Cost of Living"),
+        ],
         "Workspace": [st.Page(pipeline_page, title="Pipeline"), st.Page(ideas_page, title="Ideas & Projects")],
         "System": [st.Page(sources_page, title="Sources / Radar")],
     }

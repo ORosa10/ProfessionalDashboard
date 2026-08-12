@@ -6,6 +6,7 @@ import html
 import json
 import re
 import time
+import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import parse_qsl, unquote, urlencode, urljoin, urlparse, urlunparse
@@ -75,7 +76,9 @@ GENERIC_OPENING_PATTERNS = (
     r"^at kpmg[, ].{0,900}?(?=(?:your impact|the opportunity|your role|what you(?:'ll| will) do|responsibilities)\b)",
 )
 SUCCESSFACTORS_HOSTS = ("careers.ey.com", "jobs.deloitte.de", "jobs.kpmg.de")
+SUCCESSFACTORS_SITEMAP_HOSTS = ("bewerbung.kpmg.at",)
 PHENOM_HOSTS = ("jobs.pwc.de", "jobs.pwc.co.uk", "jobs-cee.pwc.com")
+WORKDAY_HOSTS = ("pwc.wd3.myworkdayjobs.com",)
 SMARTRECRUITERS_HOSTS = ("careers.smartrecruiters.com", "jobs.smartrecruiters.com")
 AVATURE_HOSTS = (
     "apply.deloittece.com",
@@ -110,6 +113,11 @@ def allowed(url: str, domains: str) -> bool:
 
 def normalize(text: str) -> str:
     return re.sub(r"\s+", " ", text or "").strip()
+
+
+def searchable(text: str) -> str:
+    value = unicodedata.normalize("NFKD", str(text or ""))
+    return normalize("".join(char for char in value if not unicodedata.combining(char)).lower())
 
 
 def description_text(value) -> str:
@@ -979,6 +987,264 @@ def discover_smartrecruiters_jobs(
     return list(jobs.values()), run
 
 
+def _workday_config(seed_url: str) -> tuple[str, str, str]:
+    parsed = urlparse(seed_url)
+    tenant = parsed.netloc.split(".", 1)[0]
+    path_parts = [part for part in parsed.path.split("/") if part]
+    site = next(
+        (part for part in reversed(path_parts) if not re.fullmatch(r"[a-z]{2}-[A-Z]{2}", part)),
+        "",
+    )
+    if not tenant or not site:
+        raise ValueError("Workday tenant or career site is missing")
+    api_root = f"{parsed.scheme}://{parsed.netloc}/wday/cxs/{tenant}/{site}"
+    return tenant, site, api_root
+
+
+def _workday_location_values(payload: dict) -> list[dict]:
+    values: list[dict] = []
+
+    def visit(value) -> None:
+        if isinstance(value, list):
+            for item in value:
+                visit(item)
+            return
+        if not isinstance(value, dict):
+            return
+        if value.get("facetParameter") == "locations":
+            visit(value.get("values") or [])
+            return
+        if value.get("id") and value.get("descriptor"):
+            values.append(value)
+        visit(value.get("values") or [])
+        visit(value.get("facets") or [])
+
+    visit(payload.get("facets") or [])
+    return values
+
+
+def _workday_target_location_ids(payload: dict, source: pd.Series) -> list[str]:
+    targets = [searchable(value) for value in str(source.priority_locations).split(";") if value.strip()]
+    matches: list[str] = []
+    for value in _workday_location_values(payload):
+        descriptor = searchable(value.get("descriptor"))
+        if any(target in descriptor or descriptor in target for target in targets):
+            matches.append(str(value["id"]))
+    return list(dict.fromkeys(matches))
+
+
+def discover_workday_jobs(
+    source: pd.Series, max_pages: int = 20, max_jobs: int = 140
+) -> tuple[list[dict], dict]:
+    """Read verified vacancies from Workday's public career-site API."""
+    started = datetime.now(timezone.utc).isoformat()
+    errors: list[str] = []
+    records: dict[str, dict] = {}
+    pages_checked = 0
+    try:
+        _, _, api_root = _workday_config(source.seed_url)
+        facet_response = requests.post(
+            f"{api_root}/jobs",
+            headers={**HEADERS, "Content-Type": "application/json"},
+            json={"appliedFacets": {}, "limit": 20, "offset": 0, "searchText": ""},
+            timeout=30,
+        )
+        facet_response.raise_for_status()
+        facet_payload = facet_response.json()
+        location_ids = _workday_target_location_ids(facet_payload, source)
+        if not location_ids:
+            raise ValueError("Target Workday locations were not found")
+
+        search_terms = ("finance", "treasury", "transaction", "investment", "risk", "analytics")
+        for search_text in search_terms:
+            offset = 0
+            for _ in range(max_pages):
+                response = requests.post(
+                    f"{api_root}/jobs",
+                    headers={**HEADERS, "Content-Type": "application/json"},
+                    json={
+                        "appliedFacets": {"locations": location_ids},
+                        "limit": 20,
+                        "offset": offset,
+                        "searchText": search_text,
+                    },
+                    timeout=30,
+                )
+                response.raise_for_status()
+                payload = response.json()
+                batch = payload.get("jobPostings") or []
+                pages_checked += 1
+                for record in batch:
+                    external_path = normalize(str(record.get("externalPath") or ""))
+                    title = normalize(str(record.get("title") or ""))
+                    if external_path and is_relevant_listing_title(title):
+                        records[external_path] = record
+                offset += len(batch)
+                if not batch or offset >= int(payload.get("total") or 0):
+                    break
+                time.sleep(0.08)
+    except Exception as exc:
+        errors.append(f"Workday listing: {type(exc).__name__}: {exc}")
+        api_root = ""
+
+    ranked = sorted(
+        records.items(), key=lambda item: (-relevance(item[1].get("title", ""))[0], item[0])
+    )[:max_jobs]
+    jobs: dict[str, dict] = {}
+    cached_by_id, cached_by_url = cached_jobs_for_source(source)
+    for external_path, record in ranked:
+        record_id = external_path.rstrip("/").rsplit("/", 1)[-1]
+        cached = cached_by_id.get(stable_job_id(source, record_id))
+        if cached:
+            refreshed = reuse_cached_job(cached, source, started)
+            jobs[refreshed["job_id"]] = refreshed
+            continue
+        try:
+            detail_response = fetch(f"{api_root}{external_path}")
+            info = detail_response.json().get("jobPostingInfo") or {}
+            record_id = normalize(str(info.get("jobReqId") or info.get("id") or record_id))
+            public_url = normalize(str(info.get("externalUrl") or ""))
+            cached = cached_by_id.get(stable_job_id(source, record_id)) or cached_by_url.get(public_url)
+            if cached:
+                refreshed = reuse_cached_job(cached, source, started)
+                jobs[refreshed["job_id"]] = refreshed
+                continue
+            country = info.get("country") or {}
+            country_text = country.get("descriptor") if isinstance(country, dict) else country
+            location = normalize(
+                str(info.get("location") or info.get("jobRequisitionLocation") or country_text or "")
+            )
+            posting = {
+                "@type": "JobPosting",
+                "title": info.get("title") or record.get("title"),
+                "description": info.get("jobDescription") or "",
+                "datePosted": info.get("postedOn") or info.get("startDate") or "",
+                "jobLocation": {"@type": "Place", "address": location},
+                "identifier": {"value": record_id},
+                "url": public_url or urljoin(source.seed_url, external_path),
+                "_verification": "official Workday vacancy API",
+            }
+            job = posting_to_job(posting, posting["url"], source, started)
+            if job:
+                jobs[job["job_id"]] = job
+        except Exception as exc:
+            errors.append(f"Workday {record_id}: {type(exc).__name__}")
+        time.sleep(0.08)
+
+    run = {
+        "run_at": started,
+        "source_id": source.source_id,
+        "company": source.company,
+        "market": source.market,
+        "seed_url": source.seed_url,
+        "pages_checked": pages_checked + len(ranked),
+        "candidate_job_pages": len(ranked),
+        "verified_jobs": len(jobs),
+        "errors": " | ".join(errors[:5]),
+    }
+    return list(jobs.values()), run
+
+
+def discover_kpmg_uk_jobs(
+    source: pd.Series, max_pages: int = 40, max_jobs: int = 140
+) -> tuple[list[dict], dict]:
+    """Read KPMG UK's server-rendered experienced-hire vacancy portal."""
+    started = datetime.now(timezone.utc).isoformat()
+    errors: list[str] = []
+    candidates: dict[str, tuple[int, str, str]] = {}
+    pages_checked = 0
+    page_count = 1
+
+    page = 1
+    while page <= min(page_count, max_pages):
+        listing_url = source.seed_url
+        parsed = urlparse(listing_url)
+        query = dict(parse_qsl(parsed.query))
+        query.update({"intakeType": "Experienced", "page": str(page)})
+        listing_url = urlunparse(parsed._replace(query=urlencode(query)))
+        try:
+            response = fetch(listing_url)
+            soup = BeautifulSoup(response.text, "html.parser")
+            pages_checked += 1
+        except Exception as exc:
+            errors.append(f"KPMG UK page {page}: {type(exc).__name__}")
+            page += 1
+            continue
+
+        pagination = [
+            int(match.group(1))
+            for anchor in soup.select('a[href*="page="]')
+            if (match := re.search(r"[?&]page=(\d+)", anchor.get("href", "")))
+        ]
+        if pagination:
+            page_count = min(max(pagination), max_pages)
+
+        for card in soup.select(".vacancy-result"):
+            title_node = card.select_one("h3")
+            link = card.select_one('a[href*="/Vacancies/"]')
+            title = normalize(title_node.get_text(" ", strip=True) if title_node else "")
+            if not link or not is_relevant_listing_title(title):
+                continue
+            detail_url = urljoin(response.url, link.get("href", ""))
+            identifier = re.search(r"/(\d+)(?:[/?#]|$)", detail_url)
+            if not identifier:
+                continue
+            score, _ = relevance(title)
+            candidates[identifier.group(1)] = (score, title, detail_url)
+        time.sleep(0.1)
+        page += 1
+
+    jobs: dict[str, dict] = {}
+    cached_by_id, cached_by_url = cached_jobs_for_source(source)
+    ranked = sorted(candidates.items(), key=lambda item: (-item[1][0], item[1][1]))[:max_jobs]
+    for record_id, (_, listing_title, detail_url) in ranked:
+        cached = cached_by_id.get(stable_job_id(source, record_id)) or cached_by_url.get(detail_url)
+        if cached:
+            refreshed = reuse_cached_job(cached, source, started)
+            jobs[refreshed["job_id"]] = refreshed
+            continue
+        try:
+            response = fetch(detail_url)
+            soup = BeautifulSoup(response.text, "html.parser")
+            title_node = soup.select_one("h1")
+            description_node = soup.select_one(".job-description")
+            location_node = soup.select_one(".vacancy-location")
+            if not location_node:
+                label = soup.find(string=re.compile(r"^\s*Location:\s*", re.I))
+                location_node = label.parent if label else None
+            title = normalize(title_node.get_text(" ", strip=True) if title_node else listing_title)
+            location = normalize(location_node.get_text(" ", strip=True) if location_node else "")
+            location = re.sub(r"^Location:\s*", "", location, flags=re.I)
+            posting = {
+                "@type": "JobPosting",
+                "title": title,
+                "description": description_node.get_text(" ", strip=True) if description_node else "",
+                "jobLocation": {"@type": "Place", "address": location or "United Kingdom"},
+                "identifier": {"value": record_id},
+                "url": response.url,
+                "_verification": "official KPMG UK vacancy detail",
+            }
+            job = posting_to_job(posting, response.url, source, started)
+            if job:
+                jobs[job["job_id"]] = job
+        except Exception as exc:
+            errors.append(f"KPMG UK {record_id}: {type(exc).__name__}")
+        time.sleep(0.1)
+
+    run = {
+        "run_at": started,
+        "source_id": source.source_id,
+        "company": source.company,
+        "market": source.market,
+        "seed_url": source.seed_url,
+        "pages_checked": pages_checked + len(ranked),
+        "candidate_job_pages": len(ranked),
+        "verified_jobs": len(jobs),
+        "errors": " | ".join(errors[:5]),
+    }
+    return list(jobs.values()), run
+
+
 def discover_successfactors_sitemap_jobs(
     source: pd.Series, max_jobs: int = 80
 ) -> tuple[list[dict], dict]:
@@ -1009,7 +1275,13 @@ def discover_successfactors_sitemap_jobs(
     candidates.sort(key=lambda item: (-item[0], item[1]))
 
     candidate_pages = 0
+    _, cached_by_url = cached_jobs_for_source(source)
     for _, url in candidates[:max_jobs]:
+        if url in cached_by_url:
+            cached = reuse_cached_job(cached_by_url[url], source, started)
+            jobs[cached["job_id"]] = cached
+            candidate_pages += 1
+            continue
         try:
             response = fetch(url)
             postings = extract_job_postings(BeautifulSoup(response.text, "html.parser"), response.url)
@@ -1233,6 +1505,12 @@ def main() -> None:
         page_limit = args.max_pages if has_dedicated_adapter else min(args.max_pages, 8)
         if is_phenom:
             jobs, run = discover_phenom_jobs(source, max_pages=min(args.max_pages, 10))
+        elif host in WORKDAY_HOSTS:
+            jobs, run = discover_workday_jobs(source, max_pages=min(args.max_pages, 20))
+        elif host in SUCCESSFACTORS_SITEMAP_HOSTS:
+            jobs, run = discover_successfactors_sitemap_jobs(source, max_jobs=100)
+        elif host == "www.kpmgcareers.co.uk":
+            jobs, run = discover_kpmg_uk_jobs(source, max_pages=args.max_pages)
         elif host in SMARTRECRUITERS_HOSTS:
             jobs, run = discover_smartrecruiters_jobs(source, max_jobs=140)
         elif host in AVATURE_HOSTS:

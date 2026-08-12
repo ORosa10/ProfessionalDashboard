@@ -273,4 +273,9 @@ run_at,source_id,company,market,seed_url,pages_checked,jobs_found,errors,candida
 2026-08-12T19:12:18.711567+00:00,deloitte-uk,Deloitte,United Kingdom,https://apply.deloitte.co.uk/UKCareers/SearchJobs/,180,,,140.0,140.0
 2026-08-12T19:15:11.202002+00:00,deloitte-nordics,Deloitte,Nordics,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,25,,,24.0,24.0
 2026-08-12T19:17:34.609223+00:00,deloitte-nordics,Deloitte,Nordics,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,24,,,23.0,23.0
-2026-08-12T19:43:53.692974+00:00,pwc-cz,PwC,Czechia,https://jobs-cee.pwc.com/cz/cz/search-results?keywords=finance,73,,,65,65
+2026-08-12T19:43:53.692974+00:00,pwc-cz,PwC,Czechia,https://jobs-cee.pwc.com/cz/cz/search-results?keywords=finance,73,,,65.0,65.0
+2026-08-12T19:49:23.713944+00:00,pwc-at,PwC,Austria,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,9,,,3.0,3.0
+2026-08-12T19:49:56.633336+00:00,pwc-ch,PwC,Switzerland,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,21,,,14.0,13.0
+2026-08-12T19:50:22.205949+00:00,pwc-nordics,PwC,Nordics,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,9,,,3.0,3.0
+2026-08-12T19:51:15.241216+00:00,kpmg-at,KPMG,Austria,https://bewerbung.kpmg.at/go/Alle-Stellen/9402055/,25,,,24.0,24.0
+2026-08-12T19:53:54.396834+00:00,kpmg-uk,KPMG,United Kingdom,https://www.kpmgcareers.co.uk/search/vacancies/?intakeType=Experienced,26,,,16,16

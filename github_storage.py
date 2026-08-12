@@ -13,6 +13,15 @@ REPOSITORY = "ProfessionalDashboard"
 BRANCH = "main"
 RATINGS_PATH = "data/company_ratings.csv"
 API_URL = f"https://api.github.com/repos/{OWNER}/{REPOSITORY}/contents/{RATINGS_PATH}"
+RATING_COLUMNS = [
+    "canonical_company_id",
+    "rating",
+    "familiarity",
+    "contact_strength",
+    "relationship_type",
+    "reference_notes",
+    "notes",
+]
 
 
 def github_token() -> str | None:
@@ -34,13 +43,12 @@ def _headers(token: str) -> dict[str, str]:
 def load_ratings(token: str) -> tuple[pd.DataFrame, str | None]:
     response = requests.get(API_URL, headers=_headers(token), params={"ref": BRANCH}, timeout=20)
     if response.status_code == 404:
-        return pd.DataFrame(
-            columns=["canonical_company_id", "rating", "contact_strength", "notes"]
-        ), None
+        return pd.DataFrame(columns=RATING_COLUMNS), None
     response.raise_for_status()
     payload = response.json()
     content = base64.b64decode(payload["content"]).decode("utf-8-sig")
-    return pd.read_csv(StringIO(content)).fillna(""), payload["sha"]
+    ratings = pd.read_csv(StringIO(content)).fillna("")
+    return ratings.reindex(columns=RATING_COLUMNS, fill_value=""), payload["sha"]
 
 
 def save_ratings(token: str, ratings: pd.DataFrame, sha: str | None) -> None:

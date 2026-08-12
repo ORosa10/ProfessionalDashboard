@@ -19,6 +19,8 @@ from sourcing.big4_pilot import (
     is_successfactors_job_url,
     merge_jobs,
     stable_job_id,
+    _workday_config,
+    _workday_target_location_ids,
 )
 
 
@@ -209,6 +211,30 @@ class BigFourPilotTest(unittest.TestCase):
             )
             merged = merge_jobs(new, base_path=staging)
             self.assertEqual(set(merged["job_id"]), {"staged-one", "staged-two"})
+
+    def test_workday_configuration_and_location_selection(self):
+        _, site, api_root = _workday_config(
+            "https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers"
+        )
+        self.assertEqual(site, "Global_Experienced_Careers")
+        self.assertTrue(api_root.endswith("/wday/cxs/pwc/Global_Experienced_Careers"))
+        payload = {
+            "facets": [{
+                "facetParameter": "locationMainGroup",
+                "values": [{
+                    "descriptor": "Austria",
+                    "values": [{
+                        "facetParameter": "locations",
+                        "values": [
+                            {"id": "vienna-id", "descriptor": "Vienna"},
+                            {"id": "graz-id", "descriptor": "Graz"},
+                        ],
+                    }],
+                }],
+            }]
+        }
+        source = pd.Series({"priority_locations": "Vienna"})
+        self.assertEqual(_workday_target_location_ids(payload, source), ["vienna-id"])
 
 
 if __name__ == "__main__":

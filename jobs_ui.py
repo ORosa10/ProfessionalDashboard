@@ -19,6 +19,8 @@ VERIFIED_JOB_TYPES = {
     "official ATS vacancy detail",
     "official Deloitte ATS vacancy detail",
     "official SmartRecruiters vacancy API",
+    "official Workday vacancy API",
+    "official KPMG UK vacancy detail",
 }
 FEEDBACK_PATH = "data/job_feedback.csv"
 FEEDBACK_API_URL = (
@@ -105,6 +107,18 @@ def _country_from_market_and_location(market: str, location: str) -> str:
     return "; ".join(matches) if matches else "Nordics"
 
 
+def _salary_context(location: str, benchmarks: pd.DataFrame) -> str:
+    normalized = str(location).lower()
+    for _, row in benchmarks.iterrows():
+        city = str(row.get("city", ""))
+        if city and city.lower() in normalized:
+            target = pd.to_numeric(row.get("benchmark_gross_annual_local", ""), errors="coerce")
+            currency = str(row.get("currency", ""))
+            if pd.notna(target):
+                return f"{city}: target about {float(target):,.0f} {currency} gross/year"
+    return "No city-specific salary benchmark yet"
+
+
 def render_jobs() -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title("Jobs")
@@ -162,7 +176,7 @@ def render_jobs() -> None:
         st.warning("The sourcing workflow has not produced its first verified vacancy snapshot yet.")
         return
     jobs = pd.concat(frames, ignore_index=True, sort=False).fillna("")
-    jobs = jobs.drop_duplicates("source_url", keep="last")
+    jobs = jobs.drop_duplicates("opportunity_id", keep="last")
     if jobs.empty:
         st.info(
             "The latest run did not verify any individual vacancies yet. "
@@ -212,6 +226,14 @@ def render_jobs() -> None:
             jobs[required] = default
 
     jobs["personal_fit_summary"] = jobs.apply(build_personal_fit_summary, axis=1)
+    cost_path = DATA_DIR / "cost_of_living.csv"
+    if cost_path.exists():
+        benchmarks = pd.read_csv(cost_path).fillna("")
+        jobs["salary_location_context"] = jobs["cities"].apply(
+            lambda value: _salary_context(value, benchmarks)
+        )
+    else:
+        jobs["salary_location_context"] = "No city-specific salary benchmark yet"
 
     countries = sorted(
         {
@@ -280,6 +302,7 @@ def render_jobs() -> None:
         "feedback",
         "comment",
         "personal_fit_summary",
+        "salary_location_context",
         "description_display",
         "fit_note",
         "rating",
@@ -305,6 +328,9 @@ def render_jobs() -> None:
             ),
             "rating": st.column_config.TextColumn("Company rating", width="small"),
             "personal_fit_summary": st.column_config.TextColumn("Personal fit reasoning", width=620),
+            "salary_location_context": st.column_config.TextColumn(
+                "Salary target for location", width=320
+            ),
             "description_display": st.column_config.TextColumn(
                 "What the role does (English)", width=620
             ),

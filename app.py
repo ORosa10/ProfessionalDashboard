@@ -6,7 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from cost_of_living_ui import render_cost_of_living
-from github_storage import github_token, load_ratings, save_ratings
+from github_storage import RATING_COLUMNS, github_token, load_ratings, save_ratings
 from jobs_ui import render_jobs, render_sources
 
 VERIFIED_JOB_TYPES = {
@@ -140,22 +140,26 @@ def companies_page() -> None:
         try:
             saved_ratings, ratings_sha = load_ratings(token)
         except Exception:
-            saved_ratings = pd.DataFrame(columns=["canonical_company_id", "rating", "contact_strength", "notes"])
+            saved_ratings = pd.DataFrame(columns=RATING_COLUMNS)
             st.warning("GitHub ratings could not be loaded. Showing the base universe.")
     else:
-        saved_ratings = pd.DataFrame(columns=["canonical_company_id", "rating", "contact_strength", "notes"])
+        saved_ratings = pd.DataFrame(columns=RATING_COLUMNS)
 
     base = universe[["canonical_company_id"]].copy()
     if saved_ratings.empty:
         base["rating"] = universe.get("rating", "Unrated")
+        base["familiarity"] = "Unknown"
         base["contact_strength"] = "None"
+        base["relationship_type"] = "None"
+        base["reference_notes"] = ""
         base["notes"] = universe.get("notes", "")
     else:
-        if "contact_strength" not in saved_ratings.columns:
-            saved_ratings["contact_strength"] = "None"
         base = base.merge(saved_ratings, on="canonical_company_id", how="left")
         base["rating"] = base["rating"].replace("", pd.NA).fillna("Unrated")
+        base["familiarity"] = base["familiarity"].replace("", pd.NA).fillna("Unknown")
         base["contact_strength"] = base["contact_strength"].replace("", pd.NA).fillna("None")
+        base["relationship_type"] = base["relationship_type"].replace("", pd.NA).fillna("None")
+        base["reference_notes"] = base["reference_notes"].fillna("")
         base["notes"] = base["notes"].fillna("")
     universe = universe.drop(columns=[c for c in ["rating", "notes"] if c in universe.columns]).merge(base, on="canonical_company_id", how="left")
     universe["company_description"] = universe["archetype"].astype(str).str.strip() + "\n" + universe["why_test"].astype(str).str.strip()
@@ -167,13 +171,19 @@ def companies_page() -> None:
     selected_categories = right.multiselect("Filter company categories", categories, default=categories)
     filtered = universe[universe["region"].isin(selected_regions) & universe["company_category"].isin(selected_categories)].copy()
 
-    m1, m2, m3, m4 = st.columns(4)
+    m1, m2, m3, m4, m5, m6 = st.columns(6)
     m1.metric("Company Universe", len(universe))
     m2.metric("A priority", int((universe["rating"] == "A").sum()))
     m3.metric("B priority", int((universe["rating"] == "B").sum()))
-    m4.metric("Excluded", int((universe["rating"] == "Exclude").sum()))
+    m4.metric("Known well", int(universe["familiarity"].isin(["Know well", "Worked with"]).sum()))
+    m5.metric("Warm contacts", int(universe["contact_strength"].isin(["Warm contact", "Strong referral"]).sum()))
+    m6.metric("Excluded", int((universe["rating"] == "Exclude").sum()))
 
-    columns = ["company", "rating", "company_description", "contact_strength", "notes", "company_category", "region", "locations", "career_url"]
+    columns = [
+        "company", "rating", "company_description", "familiarity", "contact_strength",
+        "relationship_type", "reference_notes", "notes", "company_category", "region",
+        "locations", "career_url",
+    ]
     edited = st.data_editor(
         filtered[columns],
         hide_index=True,
@@ -186,8 +196,19 @@ def companies_page() -> None:
             "company_description": st.column_config.TextColumn("What they do / why relevant", width=520),
             "career_url": st.column_config.LinkColumn("Careers", display_text="Open"),
             "rating": st.column_config.TextColumn("Rating", help="A, B, C, X/Exclude or U/Unrated"),
+            "familiarity": st.column_config.SelectboxColumn(
+                "How well you know them",
+                options=["Unknown", "Know of", "Know reasonably", "Know well", "Worked with"],
+                required=True,
+            ),
             "contact_strength": st.column_config.SelectboxColumn("Contact", options=["None", "Known contact", "Warm contact", "Strong referral"], required=True),
-            "notes": st.column_config.TextColumn("Your notes", width="large"),
+            "relationship_type": st.column_config.SelectboxColumn(
+                "Relationship",
+                options=["None", "Former employer", "Former client", "Alumni network", "Personal / professional network"],
+                required=True,
+            ),
+            "reference_notes": st.column_config.TextColumn("References / who you know", width="large"),
+            "notes": st.column_config.TextColumn("Preference notes", width="large"),
         },
         key="company_universe_editor",
     )
@@ -203,7 +224,11 @@ def companies_page() -> None:
             st.error("Invalid rating. Use A, B, C, X/Exclude or U/Unrated.")
         else:
             rows["rating"] = normalized
-            updated.loc[rows.index, ["rating", "contact_strength", "notes"]] = rows[["rating", "contact_strength", "notes"]]
+            editable = [
+                "rating", "familiarity", "contact_strength", "relationship_type",
+                "reference_notes", "notes",
+            ]
+            updated.loc[rows.index, editable] = rows[editable]
             try:
                 save_ratings(token, updated.reset_index(), ratings_sha)
             except Exception:

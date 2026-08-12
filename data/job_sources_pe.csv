@@ -1,0 +1,22 @@
+source_id,canonical_company_id,company,market,priority_locations,seed_url,adapter,cadence_days,enabled
+partners-group-global,partners-group,Partners Group,Multi-region,"Zug; Zurich; London; Munich; Frankfurt",https://jobs.partnersgroup.com/,successfactors,1,true
+advent-global,advent-international,Advent International,Multi-region,"Frankfurt; London; Munich",https://www.adventinternational.com/careers/,generic,1,true
+cinven-global,cinven,Cinven,Multi-region,"Frankfurt; London",https://cinven.pinpointhq.com/,generic,1,true
+bc-partners-global,bc-partners,BC Partners,Multi-region,"Hamburg; London",https://www.bcpartners.com/careers/,generic,1,true
+triton-global,triton,Triton Partners,Multi-region,"Frankfurt; Stockholm; London; Copenhagen; Oslo; Helsinki",https://tritonpartners.wd3.myworkdayjobs.com/en-GB/External,workday,1,true
+ardian-global,ardian,Ardian,Multi-region,"Frankfurt; Zurich; London; Munich",https://ardian.wd103.myworkdayjobs.com/ArdianCareers,workday,1,true
+tpg-global,tpg,TPG,Multi-region,"London; Frankfurt; Munich",https://job-boards.greenhouse.io/tpgcareers,greenhouse,1,true
+bain-capital-global,bain-capital,Bain Capital,Multi-region,"Munich; London; Frankfurt",https://baincapital.wd1.myworkdayjobs.com/External_Public,workday,1,true
+ares-global,ares,Ares Management,Multi-region,"Frankfurt; London; Munich",https://aresmgmt.wd1.myworkdayjobs.com/en-US/External,workday,1,true
+icg-global,icg,Intermediate Capital Group,Multi-region,"Frankfurt; London",https://icg.wd3.myworkdayjobs.com/en-US/external_careers,workday,1,true
+pai-global,pai-partners,PAI Partners,Multi-region,"Munich; London; Frankfurt",https://www.paipartners.com/careers/,generic,1,true
+waterland-global,waterland,Waterland Private Equity,Multi-region,"Munich; Hamburg; Copenhagen; Oslo; London",https://www.waterlandpe.com/careers/,generic,1,true
+nordic-capital-global,nordic-capital,Nordic Capital,Multi-region,"Stockholm; Copenhagen; Oslo; Helsinki; London; Frankfurt",https://career.nordiccapital.com/jobs,teamtailor,1,true
+altor-global,altor,Altor,Multi-region,"Stockholm; Oslo; Copenhagen; Zurich",https://careers.altor.com/,teamtailor,1,true
+axcel-global,axcel,Axcel,Multi-region,"Copenhagen; Stockholm",https://axcel.dk/career/,generic,1,true
+fsn-capital-global,fsn-capital,FSN Capital,Multi-region,"Oslo; Stockholm; Copenhagen; Munich",https://www.fsncapital.com/careers,generic,1,true
+summa-equity-global,summa-equity,Summa Equity,Multi-region,"Stockholm; Oslo; Munich",https://summaequity.com/career/,generic,1,true
+dbag-global,dbag,Deutsche Beteiligungs AG,Germany,Frankfurt,https://dbag.careers.hibob.com/jobs,generic,1,true
+mutares-global,mutares,Mutares,Multi-region,"Munich; Frankfurt; Vienna; London; Stockholm; Copenhagen; Oslo; Helsinki",https://career.mutares.com/jobs,teamtailor,1,true
+capvis-global,capvis,Capvis,Multi-region,"Zurich; Frankfurt",https://www.capvis.com/careers/,generic,1,true
+ufenau-global,ufenau,Ufenau Capital Partners,Multi-region,"Zurich; Munich; London",https://ufenau-capital-partners.jobs.personio.com/,personio,1,true

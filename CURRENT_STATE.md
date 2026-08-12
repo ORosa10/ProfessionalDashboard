@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-08-11
+Updated: 2026-08-12
 
 ## Current phase
 
@@ -25,6 +25,7 @@ Foundation / v0 app shell.
 - editable job feedback with `Interested / Maybe / Pass`, recurring reason comments, and direct GitHub persistence
 - feedback-informed review ordering that remains transparent and exploratory rather than hard-excluding low-ranked roles
 - role-focused English descriptions with employer boilerplate removed, plus logical deduplication of the same role advertised across multiple cities
+- separate, non-live PE/private-markets staging: 21 A-rated sources checked, 25 verified candidates retained, and a diverse 20-role follow-up calibration shortlist prepared without changing the current Big Four review page
 - placeholder sections for the future product areas
 - dependency and deployment configuration
 
@@ -36,7 +37,7 @@ Turn the Jobs section into the first real end-to-end learning loop:
 2. use repeated feedback themes to refine descriptions, deduplication, and review ordering;
 3. complete dedicated adapters for remaining Big Four country portals;
 4. validate closure detection before removing any stale vacancy from the open inbox;
-5. only then expand monitoring from Big Four to other rated company categories.
+5. keep PE research and adapter development in a separate staging dataset while Big Four feedback is collected, then publish only a curated PE calibration shortlist rather than the full raw result set.
 
 The next product layer is defined but not yet implemented: separate company `IntrinsicInterest`, `Familiarity`, and `AccessStrength` signals, plus versioned country/city economics that estimate minimum viable compensation and add a recoverable `Financially viable / Below threshold / Unknown` opportunity filter.
 

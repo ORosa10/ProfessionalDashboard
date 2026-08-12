@@ -354,15 +354,16 @@ def render_jobs() -> None:
         "source_url",
     ]
     editor_view = view.set_index("opportunity_id")[columns]
-    edited = st.data_editor(
-        editor_view,
-        hide_index=True,
-        width="stretch",
-        height=620,
-        row_height=180,
-        disabled=[column for column in columns if column not in {"feedback", "comment"}],
-        key="job_feedback_editor",
-        column_config={
+    with st.form("job_feedback_form", clear_on_submit=False):
+        edited = st.data_editor(
+            editor_view,
+            hide_index=True,
+            width="stretch",
+            height=620,
+            row_height=180,
+            disabled=[column for column in columns if column not in {"feedback", "comment"}],
+            key="job_feedback_editor",
+            column_config={
             "title": st.column_config.TextColumn("Opportunity", width="large"),
             "feedback": st.column_config.SelectboxColumn(
                 "Your rating", options=FEEDBACK_OPTIONS, required=True, width="small"
@@ -385,9 +386,14 @@ def render_jobs() -> None:
             "cities": st.column_config.TextColumn("Cities", width="medium"),
             "role_family": st.column_config.TextColumn("Role family", width="medium"),
             "source_url": st.column_config.LinkColumn("Official job", display_text="Open", width="small"),
-        },
-    )
-    if token and st.button("Save job feedback to GitHub", type="primary"):
+            },
+        )
+        save_feedback = st.form_submit_button(
+            "Save job feedback to GitHub",
+            type="primary",
+            disabled=not bool(token),
+        )
+    if token and save_feedback:
         updates = edited[["feedback", "comment"]].reset_index()
         updates["updated_at"] = datetime.now(timezone.utc).isoformat()
         existing = feedback_data.set_index("opportunity_id")

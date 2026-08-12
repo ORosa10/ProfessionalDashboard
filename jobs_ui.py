@@ -12,6 +12,7 @@ import streamlit as st
 from personal_fit import build_personal_fit_summary
 
 DATA_DIR = Path(__file__).parent / "data"
+TARGETING_PATH = Path(__file__).parent / "JOB_TARGETING.md"
 VERIFIED_JOB_TYPES = {
     "schema.org/JobPosting",
     "schema.org/JobPosting JSON-LD",
@@ -123,7 +124,17 @@ def _salary_context(location: str, benchmarks: pd.DataFrame) -> str:
 def render_jobs() -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title("Jobs")
-    st.caption("Verified individual vacancies from the official Big Four career portals.")
+    st.caption("Verified individual vacancies from official employer career portals.")
+    if TARGETING_PATH.exists():
+        with st.expander(
+            "Review the targeting hypothesis derived from your first 50 ratings",
+            expanded=True,
+        ):
+            st.markdown(TARGETING_PATH.read_text(encoding="utf-8"))
+            st.caption(
+                "This is a transparent working hypothesis, not a hard scoring model. "
+                "Review it and send corrections in the project chat before it becomes the next sourcing profile."
+            )
     frames: list[pd.DataFrame] = []
     staging_path = DATA_DIR / "jobs_staging.csv"
     pilot_path = staging_path if staging_path.exists() else DATA_DIR / "jobs.csv"
@@ -174,6 +185,38 @@ def render_jobs() -> None:
             pilot["review_status"] = "New"
             frames.append(pilot)
 
+    pe_path = DATA_DIR / "pe_research_candidates.csv"
+    if pe_path.exists():
+        pe = pd.read_csv(pe_path).fillna("")
+        pe = pe[pe["status"].eq("Open")].copy()
+        pe = pe.rename(
+            columns={
+                "candidate_id": "opportunity_id",
+                "city": "cities",
+                "country": "countries",
+                "official_url": "source_url",
+                "role_summary_en": "description_display",
+                "experience_signal": "seniority",
+                "checked_at": "discovered_at",
+            }
+        )
+        pe["job_url"] = pe["source_url"]
+        pe["role_family"] = "Private markets"
+        pe["fit_note"] = pe.apply(
+            lambda row: " | ".join(
+                value
+                for value in [
+                    f"Initial bucket: {row.get('initial_bucket', '')}",
+                    f"Experience: {row.get('seniority', '')}",
+                    f"Language: {row.get('language_signal', '')}",
+                ]
+                if value.split(": ", 1)[-1]
+            ),
+            axis=1,
+        )
+        pe["review_status"] = "New"
+        frames.append(pe)
+
     if not frames:
         st.warning("The sourcing workflow has not produced its first verified vacancy snapshot yet.")
         return
@@ -213,22 +256,36 @@ def render_jobs() -> None:
     jobs["review_status"] = jobs["feedback"].apply(
         lambda value: "New" if value == "Unrated" else "Reviewed"
     )
+    review_maps: list[pd.DataFrame] = []
     batch_path = DATA_DIR / "job_calibration_batch.csv"
     if batch_path.exists():
         batch = pd.read_csv(batch_path).fillna("").drop_duplicates("opportunity_id")
+        batch["review_set"] = "Big Four calibration"
+        review_maps.append(batch)
+    pe_batch_path = DATA_DIR / "pe_calibration_shortlist.csv"
+    if pe_batch_path.exists():
+        pe_batch = pd.read_csv(pe_batch_path).fillna("").rename(
+            columns={"candidate_id": "opportunity_id"}
+        )
+        pe_batch["seniority_band"] = ""
+        pe_batch["review_set"] = "PE calibration"
+        review_maps.append(pe_batch)
+    if review_maps:
+        review_map = pd.concat(review_maps, ignore_index=True, sort=False)
+        review_map = review_map.drop_duplicates("opportunity_id", keep="last")
         jobs = jobs.merge(
-            batch[[
+            review_map[[
                 "opportunity_id", "display_order", "cohort", "theme",
-                "seniority_band", "selection_reason",
+                "seniority_band", "selection_reason", "review_set",
             ]],
             on="opportunity_id",
             how="left",
         )
         for column in ["cohort", "theme", "seniority_band", "selection_reason"]:
             jobs[column] = jobs[column].fillna("")
-        jobs["review_set"] = jobs["cohort"].fillna("").apply(
-            lambda value: "Calibration shortlist" if value else "Backlog"
-        )
+        jobs["review_set"] = jobs["review_set"].fillna("").replace("", "Backlog")
+        pe_rows = jobs["review_set"].eq("PE calibration") & jobs["theme"].ne("")
+        jobs.loc[pe_rows, "role_family"] = jobs.loc[pe_rows, "theme"]
     else:
         jobs["display_order"] = ""
         jobs["cohort"] = ""
@@ -262,12 +319,19 @@ def render_jobs() -> None:
 
     review_scope = st.radio(
         "Review set",
-        ["Calibration shortlist (50)", "All opportunities", "Backlog only"],
+        [
+            "Big Four calibration (50)",
+            "PE calibration (20)",
+            "All opportunities",
+            "Backlog only",
+        ],
         horizontal=True,
-        help="The shortlist is a diverse learning sample. All sourced roles remain available.",
+        help="Each shortlist is a diverse learning sample. All sourced roles remain available.",
     )
-    if review_scope == "Calibration shortlist (50)":
-        jobs = jobs[jobs["review_set"].eq("Calibration shortlist")].copy()
+    if review_scope == "Big Four calibration (50)":
+        jobs = jobs[jobs["review_set"].eq("Big Four calibration")].copy()
+    elif review_scope == "PE calibration (20)":
+        jobs = jobs[jobs["review_set"].eq("PE calibration")].copy()
     elif review_scope == "Backlog only":
         jobs = jobs[jobs["review_set"].eq("Backlog")].copy()
 
@@ -324,10 +388,9 @@ def render_jobs() -> None:
     )
     c4.metric("Selected countries", len(selected_countries))
     st.caption(
-        "Calibration shortlist contains 30 likely-fit roles, 12 boundary cases and 8 exploration cases. "
-        "It is a learning sample, not a hard recommendation. Switch to All opportunities to see the full backlog. "
-        "Pilot scope: Deloitte, PwC, EY and KPMG only. Multi-location opportunities appear under "
-        "every listed country; Nordic vacancies are split by country when the official location allows it."
+        "The Big Four shortlist contains 30 likely-fit roles, 12 boundary cases and 8 exploration cases. "
+        "The PE shortlist contains 20 roles selected from 25 verified candidates across 21 checked A-rated firms. "
+        "Both are learning samples, not hard recommendations. Switch to All opportunities to see every retained role."
     )
 
     st.caption(

@@ -22,10 +22,11 @@ Foundation / v0 app shell.
 - Big Four-only sourcing pilot for Deloitte, PwC, EY, and KPMG, scheduled daily through GitHub Actions; broader rated-company monitoring remains intentionally deferred until the pilot is calibrated
 - official-ATS adapters for EY target markets, Deloitte Germany, PwC Germany/UK, and KPMG Germany, with verified individual vacancy URLs and parser regression tests
 - 410 verified open Big Four roles in the current snapshot (102 EY, 12 Deloitte, 91 KPMG, 205 PwC), with PwC pagination fixed and every role carrying an English description
-- editable job feedback with `Interested / Maybe / Pass`, recurring reason comments, and direct GitHub persistence
+- editable job feedback with `Interested / Maybe / Pass`, recurring reason comments, and direct GitHub persistence; the first 50-role Big Four cohort is fully reviewed (14 Interested, 10 Maybe, 26 Pass, with 50 comments)
 - feedback-informed review ordering that remains transparent and exploratory rather than hard-excluding low-ranked roles
+- `JOB_TARGETING.md` v0.1 turns the first cohort into a reviewable sourcing hypothesis: transactions/M&A, treasury, analytical FP&A and finance-linked strategy/data are prioritized, while tax, audit, pure IT, ERP implementation and non-financial risk are downranked
 - role-focused English descriptions with employer boilerplate removed, plus logical deduplication of the same role advertised across multiple cities
-- separate, non-live PE/private-markets staging: 21 A-rated sources checked, 25 verified candidates retained, and a diverse 20-role follow-up calibration shortlist prepared without changing the current Big Four review page
+- separate PE/private-markets cohort: 21 A-rated sources checked, 25 verified candidates retained, and a diverse 20-role follow-up calibration shortlist available as its own Jobs review set
 - placeholder sections for the future product areas
 - dependency and deployment configuration
 

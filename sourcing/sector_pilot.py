@@ -28,6 +28,7 @@ from sourcing.pe_pilot import (
     EXCLUDED_ROLE_TERMS,
     _source_with_domain,
     discover_greenhouse,
+    discover_personio,
     target_location,
 )
 
@@ -53,6 +54,8 @@ def discover_source(source: pd.Series, max_pages: int) -> tuple[list[dict], dict
     adapter = str(source.get("adapter") or "generic").lower()
     if adapter == "greenhouse":
         return discover_greenhouse(source)
+    if adapter == "personio":
+        return discover_personio(source)
     if adapter == "workday":
         return common.discover_workday_jobs(source, max_pages=min(max_pages, 15))
     if adapter == "successfactors":

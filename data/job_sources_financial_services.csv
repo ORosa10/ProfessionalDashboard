@@ -1,6 +1,6 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,adapter,cadence_days,enabled
 deutsche-bank-global,deutsche-bank,Deutsche Bank,Multi-region,Frankfurt; Berlin; London; Zurich,https://db.wd3.myworkdayjobs.com/DBWebsite,workday,1,True
-commerzbank-global,commerzbank,Commerzbank,Multi-region,Frankfurt; Berlin; Hamburg; London,https://www.commerzbank.de/group/careers/,generic,1,True
+commerzbank-global,commerzbank,Commerzbank,Multi-region,Frankfurt; Berlin; Hamburg; London,https://jobs.commerzbank.com/index.php?ac=search_result,generic,1,True
 dz-bank-global,dz-bank,DZ BANK,Multi-region,Frankfurt; Germany,https://career012.successfactors.eu/career?company=DZBank,successfactors,1,True
 kfw-global,kfw,KfW Group,Multi-region,Frankfurt; Berlin; Bonn; Cologne,https://www.kfw.de/About-KfW/Career/,generic,1,True
 helaba-global,helaba,Helaba,Multi-region,Frankfurt; London,https://www.helaba.com/int/career/,generic,1,True
@@ -10,17 +10,17 @@ ing-global,ing,ING Group,Multi-region,Frankfurt; Vienna; Zurich; Nordics; London
 unicredit-global,unicredit,UniCredit,Multi-region,Munich; Vienna; Prague coverage; London,https://careers.unicredit.eu/,generic,1,True
 eex-global,eex,EEX Group,Multi-region,Leipzig; Berlin; London; Paris,https://www.eex-group.com/en/career,generic,1,True
 bawag-global,bawag,BAWAG Group,Multi-region,Vienna,https://jobs.bawaggroup.at,successfactors,1,True
-oekb-global,oekb,OeKB Group,Multi-region,Vienna,https://www.oekb.at/en/oekb-group/career.html,generic,1,True
+oekb-global,oekb,OeKB Group,Multi-region,Vienna,https://www.oekb.at/jobs-und-karriere.html,generic,1,True
 vienna-insurance-group-global,vienna-insurance-group,Vienna Insurance Group,Multi-region,Vienna; Prague; CEE,https://group.vig/career/,generic,1,True
 uniqa-global,uniqa,UNIQA Insurance Group,Multi-region,Vienna; Prague; CEE,https://careers.uniqagroup.com/,successfactors,1,True
 julius-baer-global,julius-baer,Julius Baer,Multi-region,Zurich; London,https://juliusbaer.wd3.myworkdayjobs.com/External,workday,1,True
 pictet-global,pictet,Pictet Group,Multi-region,Geneva; Zurich; London,https://career5.successfactors.eu/career?company=banquepict,successfactors,1,True
 lombard-odier-global,lombard-odier,Lombard Odier,Multi-region,Geneva; Zurich; London,https://lombardodier.wd3.myworkdayjobs.com/Lombard_Odier_Careers,workday,1,True
-zurich-insurance-global,zurich-insurance,Zurich Insurance Group,Multi-region,Zurich; London; European offices,https://www.zurich.com/careers,generic,1,True
+zurich-insurance-global,zurich-insurance,Zurich Insurance Group,Multi-region,Zurich; London; European offices,https://www.careers.zurich.com/,generic,1,True
 swiss-life-global,swiss-life,Swiss Life Group,Multi-region,Zurich; Frankfurt; Munich; London,https://swisslife.wd3.myworkdayjobs.com/Swiss_Life_International_Division_Career_Site,workday,1,True
 zkb-global,zkb,Zürcher Kantonalbank,Multi-region,Zurich,https://www.zkb.ch/en/home/career.html,generic,1,True
 swedbank-global,swedbank,Swedbank,Multi-region,Stockholm; Tallinn; Riga; Vilnius,https://jobs.swedbank.com/,generic,1,True
-handelsbanken-global,handelsbanken,Handelsbanken,Multi-region,Stockholm; Copenhagen; Oslo; Helsinki; London,https://www.handelsbanken.com/en/about-the-group/career,generic,1,True
+handelsbanken-global,handelsbanken,Handelsbanken,Multi-region,Stockholm; Copenhagen; Oslo; Helsinki; London,https://www.handelsbanken.com/en/careers/vacancies,generic,1,True
 dnb-global,dnb,DNB Group,Multi-region,Oslo; Stockholm; London,https://careers.smartrecruiters.com/DNB1,smartrecruiters,1,True
 op-financial-global,op-financial,OP Financial Group,Multi-region,Helsinki; Finland,https://www.op-careers.fi/,generic,1,True
 sampo-global,sampo,Sampo Group,Multi-region,Helsinki; Stockholm; Copenhagen,https://www.sampo.com/careers/,generic,1,True
@@ -28,7 +28,7 @@ storebrand-global,storebrand,Storebrand,Multi-region,Oslo; Stockholm,https://sto
 hsbc-global,hsbc,HSBC Holdings,Multi-region,London; Frankfurt; Zurich,https://www.hsbc.com/careers,generic,1,True
 barclays-global,barclays,Barclays,Multi-region,London; Frankfurt,https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays,workday,1,True
 lloyds-banking-group-global,lloyds-banking-group,Lloyds Banking Group,Multi-region,London; Edinburgh; Bristol,https://lbg.wd3.myworkdayjobs.com/LBG_Careers,workday,1,True
-natwest-global,natwest,NatWest Group,Multi-region,London; Edinburgh,https://jobs.natwestgroup.com/,generic,1,True
+natwest-global,natwest,NatWest Group,Multi-region,London; Edinburgh,https://jobs.natwestgroup.com/search/jobs,generic,1,True
 standard-chartered-global,standard-chartered,Standard Chartered,Multi-region,London; Frankfurt,https://jobs.standardchartered.com/,successfactors,1,True
 lseg-global,lseg,London Stock Exchange Group,Multi-region,London; Prague; European offices,https://lseg.wd3.myworkdayjobs.com/Careers,workday,1,True
 aviva-global,aviva,Aviva,Multi-region,London; European offices,https://aviva.wd1.myworkdayjobs.com/External,workday,1,True

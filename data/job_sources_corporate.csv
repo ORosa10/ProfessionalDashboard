@@ -1,54 +1,54 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,adapter,cadence_days,enabled
-rwe-global,rwe,RWE,Multi-region,Essen; Hamburg; Berlin; London,https://www.rwe.com/en/rwe-careers-portal/,generic,1,True
+rwe-global,rwe,RWE,Multi-region,Essen; Hamburg; Berlin; London,https://jobs.rwe.com/,successfactors,1,True
 eon-global,eon,E.ON,Multi-region,Essen; Munich; Berlin; Hamburg; London,https://careers.eon.com/,generic,1,True
 enbw-global,enbw,EnBW,Multi-region,Karlsruhe; Stuttgart; Hamburg,https://karriere.enbw.com/,generic,1,True
-uniper-global,uniper,Uniper,Multi-region,Dusseldorf; Berlin; London,https://jobs.uniper.energy/,generic,1,True
-vattenfall-global,vattenfall,Vattenfall,Multi-region,Berlin; Hamburg; Stockholm; London,https://careers.vattenfall.com/,generic,1,True
-statkraft-global,statkraft,Statkraft,Multi-region,Oslo; Dusseldorf; London,https://www.statkraft.com/careers/,generic,1,True
-fortum-global,fortum,Fortum,Multi-region,Espoo; Stockholm; Oslo,https://www.fortum.com/about-us/careers,generic,1,True
-neste-global,neste,Neste,Multi-region,Espoo; Rotterdam; European offices,https://www.neste.com/careers,generic,1,True
+uniper-global,uniper,Uniper,Multi-region,Dusseldorf; Berlin; London,https://career5.successfactors.eu/career?company=UniperProd,successfactors,1,True
+vattenfall-global,vattenfall,Vattenfall,Multi-region,Berlin; Hamburg; Stockholm; London,https://careers.smartrecruiters.com/vattenfall,smartrecruiters,1,True
+statkraft-global,statkraft,Statkraft,Multi-region,Oslo; Dusseldorf; London,https://careers.smartrecruiters.com/statkraft1,smartrecruiters,1,True
+fortum-global,fortum,Fortum,Multi-region,Espoo; Stockholm; Oslo,https://jobs.fortum.com/,successfactors,1,True
+neste-global,neste,Neste,Multi-region,Espoo; Rotterdam; European offices,https://jobs.neste.com/,successfactors,1,True
 mol-global,mol,MOL Group,Multi-region,Budapest; Prague and CEE; European offices,https://molgroup.info/en/careers,generic,1,True
-shell-global,shell,Shell,Multi-region,London; Hamburg; Rotterdam; European offices,https://www.shell.com/careers.html,generic,1,True
-bp-global,bp,bp,Multi-region,London; Bochum; Hamburg; European offices,https://www.bp.com/en/global/corporate/careers.html,generic,1,True
-trafigura-global,trafigura,Trafigura,Multi-region,Geneva; London; European offices,https://www.trafigura.com/careers/,generic,1,True
-vitol-global,vitol,Vitol,Multi-region,Geneva; London,https://www.vitol.com/careers/,generic,1,True
+shell-global,shell,Shell,Multi-region,London; Hamburg; Rotterdam; European offices,https://shell.wd3.myworkdayjobs.com/ShellCareers,workday,1,True
+bp-global,bp,bp,Multi-region,London; Bochum; Hamburg; European offices,https://bpinternational.wd3.myworkdayjobs.com/bpCareers,workday,1,True
+trafigura-global,trafigura,Trafigura,Multi-region,Geneva; London; European offices,https://trafigura.wd3.myworkdayjobs.com/TrafiguraCareerSite,workday,1,True
+vitol-global,vitol,Vitol,Multi-region,Geneva; London,https://careers.smartrecruiters.com/Vitol,smartrecruiters,1,True
 glencore-global,glencore,Glencore,Multi-region,Baar; London; European offices,https://www.glencore.com/careers,generic,1,True
-volkswagen-global,volkswagen,Volkswagen Group,Multi-region,Wolfsburg; Berlin; Munich; Hamburg,https://www.volkswagen-group.com/en/careers-16009,generic,1,True
+volkswagen-global,volkswagen,Volkswagen Group,Multi-region,Wolfsburg; Berlin; Munich; Hamburg,https://career5.successfactors.eu/careers?company=VWAGLPPROD10,successfactors,1,True
 bmw-global,bmw,BMW Group,Multi-region,Munich; Berlin,https://www.bmwgroup.jobs/,generic,1,True
 mercedes-benz-global,mercedes-benz,Mercedes-Benz Group,Multi-region,Stuttgart; Berlin; Hamburg,https://jobs.mercedes-benz.com/,generic,1,True
 porsche-global,porsche,Porsche AG,Multi-region,Stuttgart; Leipzig; Berlin,https://jobs.porsche.com/,generic,1,True
-bosch-global,bosch,Bosch,Multi-region,Stuttgart; Munich; Berlin; Hamburg,https://www.bosch.com/careers/,generic,1,True
-basf-global,basf,BASF,Multi-region,Ludwigshafen; Berlin; Hamburg,https://www.basf.com/global/en/careers,generic,1,True
+bosch-global,bosch,Bosch,Multi-region,Stuttgart; Munich; Berlin; Hamburg,https://careers.smartrecruiters.com/BoschGroup,smartrecruiters,1,True
+basf-global,basf,BASF,Multi-region,Ludwigshafen; Berlin; Hamburg,https://career5.successfactors.eu/career?company=C0000159936P,successfactors,1,True
 bayer-global,bayer,Bayer,Multi-region,Leverkusen; Berlin,https://career.bayer.com/,generic,1,True
 henkel-global,henkel,Henkel,Multi-region,Dusseldorf; Hamburg,https://www.henkel.com/careers,generic,1,True
-continental-global,continental,Continental,Multi-region,Hanover; Frankfurt; Berlin,https://jobs.continental.com/,generic,1,True
+continental-global,continental,Continental,Multi-region,Hanover; Frankfurt; Berlin,https://careers.smartrecruiters.com/Continental,smartrecruiters,1,True
 infineon-global,infineon,Infineon,Multi-region,Munich; Dresden; Villach,https://www.infineon.com/cms/en/careers/,generic,1,True
-airbus-global,airbus,Airbus,Multi-region,Munich; Hamburg; London; European offices,https://www.airbus.com/en/careers,generic,1,True
-abb-global,abb,ABB,Multi-region,Zurich; Baden; Mannheim; European offices,https://careers.abb/global/en,generic,1,True
-sap-global,sap,SAP,Multi-region,Walldorf; Berlin; Munich; Hamburg; Zurich,https://jobs.sap.com/,generic,1,True
-dhl-global,dhl,DHL Group,Multi-region,Bonn; Frankfurt; Berlin; Hamburg; Prague,https://careers.dhl.com/,generic,1,True
-nestle-global,nestle,Nestlé,Multi-region,Vevey; Lausanne; Zurich; European offices,https://www.nestle.com/jobs,generic,1,True
-novartis-global,novartis,Novartis,Multi-region,Basel; Zurich; European offices,https://www.novartis.com/careers/career-search,generic,1,True
-roche-global,roche,Roche,Multi-region,Basel; Zurich; European offices,https://careers.roche.com/global/en,generic,1,True
-sandoz-global,sandoz,Sandoz,Multi-region,Basel; Munich; European offices,https://www.sandoz.com/careers,generic,1,True
+airbus-global,airbus,Airbus,Multi-region,Munich; Hamburg; London; European offices,https://ag.wd3.myworkdayjobs.com/Airbus,workday,1,True
+abb-global,abb,ABB,Multi-region,Zurich; Baden; Mannheim; European offices,https://careers.abb/global/en/search-results,phenom,1,True
+sap-global,sap,SAP,Multi-region,Walldorf; Berlin; Munich; Hamburg; Zurich,https://jobs.sap.com/,successfactors,1,True
+dhl-global,dhl,DHL Group,Multi-region,Bonn; Frankfurt; Berlin; Hamburg; Prague,https://careers.dhl.com/global/en/search-results,phenom,1,True
+nestle-global,nestle,Nestlé,Multi-region,Vevey; Lausanne; Zurich; European offices,https://career2.successfactors.eu/careers?company=nestleHRprdBX,successfactors,1,True
+novartis-global,novartis,Novartis,Multi-region,Basel; Zurich; European offices,https://novartis.wd3.myworkdayjobs.com/Novartis_Careers,workday,1,True
+roche-global,roche,Roche,Multi-region,Basel; Zurich; European offices,https://roche.wd3.myworkdayjobs.com/roche-ext,workday,1,True
+sandoz-global,sandoz,Sandoz,Multi-region,Basel; Munich; European offices,https://sandoz.wd103.myworkdayjobs.com/Sandoz_Careers,workday,1,True
 holcim-global,holcim,Holcim,Multi-region,Zug; Zurich; European offices,https://www.holcim.com/careers,generic,1,True
-novo-nordisk-global,novo-nordisk,Novo Nordisk,Multi-region,Copenhagen; Zurich; European offices,https://www.novonordisk.com/careers.html,generic,1,True
-maersk-global,maersk,A.P. Moller - Maersk,Multi-region,Copenhagen; Hamburg; London,https://www.maersk.com/careers,generic,1,True
-carlsberg-global,carlsberg,Carlsberg Group,Multi-region,Copenhagen; European offices,https://www.carlsberggroup.com/careers/,generic,1,True
-volvo-group-global,volvo-group,Volvo Group,Multi-region,Gothenburg; Stockholm; European offices,https://www.volvogroup.com/en/careers.html,generic,1,True
+novo-nordisk-global,novo-nordisk,Novo Nordisk,Multi-region,Copenhagen; Zurich; European offices,https://career2.successfactors.eu/careers?company=novonordisk,successfactors,1,True
+maersk-global,maersk,A.P. Moller - Maersk,Multi-region,Copenhagen; Hamburg; London,https://maersk.wd3.myworkdayjobs.com/Maersk_Careers,workday,1,True
+carlsberg-global,carlsberg,Carlsberg Group,Multi-region,Copenhagen; European offices,https://career2.successfactors.eu/career?company=carlsbergg,successfactors,1,True
+volvo-group-global,volvo-group,Volvo Group,Multi-region,Gothenburg; Stockholm; European offices,https://jobs.volvogroup.com/,successfactors,1,True
 ericsson-global,ericsson,Ericsson,Multi-region,Stockholm; Helsinki; European offices,https://www.ericsson.com/en/careers,generic,1,True
 nokia-global,nokia,Nokia,Multi-region,Espoo; Stockholm; Munich; European offices,https://www.nokia.com/about-us/careers/,generic,1,True
-kone-global,kone,KONE,Multi-region,Espoo; European offices,https://www.kone.com/en/careers/,generic,1,True
-wartsila-global,wartsila,Wärtsilä,Multi-region,Helsinki; Hamburg; European offices,https://www.wartsila.com/careers,generic,1,True
-unilever-global,unilever,Unilever,Multi-region,London; Hamburg; European offices,https://careers.unilever.com/,generic,1,True
-astrazeneca-global,astrazeneca,AstraZeneca,Multi-region,London; Cambridge; Gothenburg,https://careers.astrazeneca.com/,generic,1,True
-gsk-global,gsk,GSK,Multi-region,London; European offices,https://jobs.gsk.com/,generic,1,True
-diageo-global,diageo,Diageo,Multi-region,London; Copenhagen coverage; European offices,https://www.diageo.com/en/careers,generic,1,True
+kone-global,kone,KONE,Multi-region,Espoo; European offices,https://kone.wd3.myworkdayjobs.com/Careers,workday,1,True
+wartsila-global,wartsila,Wärtsilä,Multi-region,Helsinki; Hamburg; European offices,https://career2.successfactors.eu/career?company=Wartsila,successfactors,1,True
+unilever-global,unilever,Unilever,Multi-region,London; Hamburg; European offices,https://unilever.wd3.myworkdayjobs.com/Unilever_Experienced_Professionals,workday,1,True
+astrazeneca-global,astrazeneca,AstraZeneca,Multi-region,London; Cambridge; Gothenburg,https://astrazeneca.wd3.myworkdayjobs.com/Careers,workday,1,True
+gsk-global,gsk,GSK,Multi-region,London; European offices,https://gsk.wd5.myworkdayjobs.com/GSKCareers,workday,1,True
+diageo-global,diageo,Diageo,Multi-region,London; Copenhagen coverage; European offices,https://diageo.wd3.myworkdayjobs.com/Diageo_Careers,workday,1,True
 bae-systems-global,bae-systems,BAE Systems,Multi-region,London; UK sites; European offices,https://jobsearch.baesystems.com/,generic,1,True
-rolls-royce-global,rolls-royce,Rolls-Royce,Multi-region,London; Derby; Bristol; European offices,https://careers.rolls-royce.com/,generic,1,True
+rolls-royce-global,rolls-royce,Rolls-Royce,Multi-region,London; Derby; Bristol; European offices,https://rollsroyce.wd3.myworkdayjobs.com/professional,workday,1,True
 national-grid-global,national-grid,National Grid,Multi-region,London; UK; European interconnector operations,https://jobs.nationalgrid.com/,generic,1,True
-reckitt-global,reckitt,Reckitt,Multi-region,London; European offices,https://careers.reckitt.com/,generic,1,True
+reckitt-global,reckitt,Reckitt,Multi-region,London; European offices,https://career2.successfactors.eu/careers?company=reckittb01,successfactors,1,True
 capgemini-global,capgemini,Capgemini,Multi-region,Prague; Germany; Vienna; Zurich; Nordics; London,https://www.capgemini.com/careers/,generic,1,True
 ibm-global,ibm,IBM,Multi-region,Prague; Germany; Vienna; Zurich; Nordics; London,https://www.ibm.com/careers/search,generic,1,True
 infosys-global,infosys,Infosys,Multi-region,Prague; Germany; Switzerland; Nordics; London,https://career.infosys.com/,generic,1,True
-wipro-global,wipro,Wipro,Multi-region,Prague; Germany; Switzerland; Nordics; London,https://careers.wipro.com/,generic,1,True
+wipro-global,wipro,Wipro,Multi-region,Prague; Germany; Switzerland; Nordics; London,https://careers.wipro.com/,successfactors,1,True

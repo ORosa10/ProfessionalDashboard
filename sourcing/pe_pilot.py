@@ -44,6 +44,56 @@ EXCLUDED_ROLE_TERMS = (
     "legal counsel", "executive assistant", "personal assistant",
 )
 
+# PE_TARGETING.md v0.1 (2026-08-13, first 20-role calibration). Never a hard
+# exclude -- these only nudge calibration_score/calibration_note in
+# apply_pe_hypothesis() below, same "downrank, don't delete" principle as the
+# rest of the pipeline.
+PE_PRIORITY_TERMS = ("investment analyst", "analyst, private equity", "investment team analyst")
+PE_SECONDARY_PRIORITY_TERMS = ("treasury", "fund finance", "cfo")
+PE_DOWNRANK_TERMS = {
+    "real estate": ("PE hypothesis: Real Estate downranked (3/3 Pass in first calibration)", 20),
+    "investor relations": ("PE hypothesis: Investor Relations downranked (explicit Pass)", 20),
+    "digital infrastructure": ("PE hypothesis: Digital Infrastructure downranked", 12),
+}
+PE_LEGAL_TAX_TERMS = ("counsel", "lawyer", " tax ")
+
+
+def apply_pe_hypothesis(jobs: pd.DataFrame) -> pd.DataFrame:
+    """Nudge review order per PE_TARGETING.md without deleting any candidate.
+
+    Downranked lanes stay visible, just lower in review order; the priority
+    lanes (Investment Analyst first, Treasury/Fund Finance/CFO second) get
+    boosted. calibration_note explains why so it's clear during review.
+    """
+    if jobs.empty or "title" not in jobs.columns:
+        return jobs
+    jobs = jobs.copy()
+    for idx, row in jobs.iterrows():
+        text = f" {common.searchable(str(row.get('title', '')))} "
+        notes: list[str] = []
+        delta = 0
+        if any(term in text for term in PE_PRIORITY_TERMS):
+            delta += 20
+            notes.append("PE hypothesis: matches top-priority Investment Analyst lane")
+        elif any(term in text for term in PE_SECONDARY_PRIORITY_TERMS):
+            delta += 12
+            notes.append("PE hypothesis: matches Treasury/Fund Finance/CFO priority lane")
+        for term, (note, penalty) in PE_DOWNRANK_TERMS.items():
+            if term in text:
+                delta -= penalty
+                notes.append(note)
+        if any(term in text for term in PE_LEGAL_TAX_TERMS):
+            delta -= 15
+            notes.append("PE hypothesis: legal/tax specialism, not the target finance lane")
+        if not notes:
+            continue
+        current_score = pd.to_numeric(row.get("calibration_score", ""), errors="coerce")
+        current_score = 50 if pd.isna(current_score) else current_score
+        jobs.at[idx, "calibration_score"] = max(0, min(100, current_score + delta))
+        existing_note = str(row.get("calibration_note", "") or "")
+        jobs.at[idx, "calibration_note"] = " | ".join(n for n in [existing_note, *notes] if n)
+    return jobs
+
 
 def relevant_pe_title(title: str) -> bool:
     value = common.searchable(title)
@@ -227,6 +277,10 @@ def main() -> None:
         discovered = common.deduplicate_jobs(discovered)
     translated = common.translate_descriptions(discovered)
     merged = common.merge_jobs(translated, base_path=JOBS_PATH)
+    merged = apply_pe_hypothesis(merged).sort_values(
+        ["calibration_score", "relevance_score", "last_seen_at"],
+        ascending=[False, False, False],
+    )
     JOBS_PATH.parent.mkdir(parents=True, exist_ok=True)
     merged.to_csv(JOBS_PATH, index=False)
 

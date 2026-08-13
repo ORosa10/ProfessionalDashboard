@@ -11,6 +11,7 @@ from github_storage import RATING_COLUMNS, github_token, load_ratings, save_rati
 from jobs_ui import render_jobs, render_sources
 
 COMPANY_TARGETING_PATH = Path(__file__).parent / "COMPANY_TARGETING.md"
+GENERAL_COMPANY_TARGETING_PATH = Path(__file__).parent / "GENERAL_COMPANY_TARGETING.md"
 COMPANY_SECTORS = [
     "Consulting",
     "Corporate",
@@ -281,6 +282,10 @@ def companies_page() -> None:
         "Per-sector rationale for which new companies the scheduled discovery task "
         "(Mon/Thu) proposes, inferred from your ratings and notes above."
     )
+    if GENERAL_COMPANY_TARGETING_PATH.exists():
+        with st.expander("General company targeting principles (cross-sector)"):
+            st.markdown(GENERAL_COMPANY_TARGETING_PATH.read_text(encoding="utf-8"))
+
     sections = _load_company_targeting_sections()
     for sector in COMPANY_SECTORS:
         with st.expander(f"{sector} — sourcing hypothesis"):

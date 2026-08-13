@@ -1,12 +1,13 @@
 name: PE initial-calibration sourcing
 
-# Keeps refreshing a pool of Private Equity / private-markets candidates for
-# a *not-yet-calibrated* sector. Deliberately runs at smaller scale
-# (--max-pages 15 vs. 40 for the calibrated Big Four / Consulting pilots) so
-# the candidate pool grows slowly while calibration is still in progress.
-# Results stay in their own staging branch/files -- nothing here ever
-# appears in a review queue automatically; a calibration shortlist is built
-# from this pool only when explicitly requested.
+# Keeps refreshing a full pool of Private Equity / private-markets candidates
+# for a *not-yet-calibrated* sector -- same fetch depth as the Big Four /
+# Consulting pilots (--max-pages 40), bounded only to the ~22 specific firms
+# listed in data/job_sources_pe.csv (not an open-ended web crawl). Results
+# stay in their own staging branch/files -- nothing here ever appears in a
+# review queue automatically. A separate "diverse shortlist" layer (not yet
+# built) will draw a reviewable sample from this pool, the same way
+# build_calibration_batch.py did for Big Four.
 
 on:
   workflow_dispatch:
@@ -40,8 +41,8 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Check PE career pages (initial-calibration scale)
-        run: python -m sourcing.pe_pilot --max-pages 15
+      - name: Check PE career pages
+        run: python -m sourcing.pe_pilot --max-pages 40
       - name: Persist sourcing results to the staging branch
         run: |
           git config user.name "professional-dashboard-bot"

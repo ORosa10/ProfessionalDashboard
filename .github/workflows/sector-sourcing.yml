@@ -1,0 +1,95 @@
+name: Sector expansion sourcing
+
+# Daily sourcing for every remaining rated sector (Corporate, Banking &
+# Financial Services, Holding & Conglomerate, Investment Banking, Public
+# Markets & Asset Management, Specialist & Boutique Funds, and the original
+# uncategorized "core" universe). Big Four, Consulting-expansion and PE keep
+# their own dedicated workflows; this one covers everything else so adding
+# a sector doesn't mean adding a near-duplicate workflow file each time --
+# just a new matrix entry below.
+#
+# Each sector writes to its own staging branch/files and never touches
+# main automatically, same pattern as every other sourcing pipeline here.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 5 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "sourcing/sector_pilot.py"
+      - "sourcing/big4_pilot.py"
+      - "sourcing/pe_pilot.py"
+      - "data/job_sources_corporate.csv"
+      - "data/job_sources_financial_services.csv"
+      - "data/job_sources_holdings.csv"
+      - "data/job_sources_investment_banking.csv"
+      - "data/job_sources_public_markets.csv"
+      - "data/job_sources_specialist_funds.csv"
+      - "data/job_sources_core.csv"
+      - "requirements.txt"
+      - ".github/workflows/sector-sourcing.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sector-sourcing
+  cancel-in-progress: false
+
+jobs:
+  source-sector-jobs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        sector:
+          - name: corporate
+            sources: data/job_sources_corporate.csv
+          - name: financial-services
+            sources: data/job_sources_financial_services.csv
+          - name: holdings
+            sources: data/job_sources_holdings.csv
+          - name: investment-banking
+            sources: data/job_sources_investment_banking.csv
+          - name: public-markets
+            sources: data/job_sources_public_markets.csv
+          - name: specialist-funds
+            sources: data/job_sources_specialist_funds.csv
+          - name: core
+            sources: data/job_sources_core.csv
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Check ${{ matrix.sector.name }} career pages
+        run: |
+          python -m sourcing.sector_pilot \
+            --sources ${{ matrix.sector.sources }} \
+            --jobs-out data/jobs_${{ matrix.sector.name }}_staging.csv \
+            --runs-out data/source_runs_${{ matrix.sector.name }}_staging.csv \
+            --max-pages 40
+      - name: Persist ${{ matrix.sector.name }} results to its own staging branch
+        run: |
+          git config user.name "professional-dashboard-bot"
+          git config user.email "professional-dashboard-bot@users.noreply.github.com"
+          git add data/jobs_${{ matrix.sector.name }}_staging.csv data/source_runs_${{ matrix.sector.name }}_staging.csv
+          if git diff --cached --quiet; then
+            echo "No sourcing changes for ${{ matrix.sector.name }}"
+            exit 0
+          fi
+          git commit -m "Refresh sourced ${{ matrix.sector.name }} jobs"
+          for attempt in 1 2 3; do
+            if git push --force origin HEAD:refs/heads/${{ matrix.sector.name }}-sourcing-staging; then
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          echo "Could not push sourcing results to ${{ matrix.sector.name }}-sourcing-staging after three attempts"
+          exit 1

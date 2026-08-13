@@ -1,11 +1,36 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,adapter,cadence_days,enabled
-bain-global,bain,Bain & Company,Multi-region,"Munich; Berlin; Frankfurt; Vienna; Zurich; Stockholm; Copenhagen; Oslo; Helsinki; London",https://www.bain.com/careers/find-a-role/,generic,1,true
-roland-berger-global,roland-berger,Roland Berger,Multi-region,"Prague; Munich; Berlin; Frankfurt; Hamburg; Vienna; Zurich; Stockholm; London",https://www.rolandberger.com/en/Join/All-Jobs/,smartrecruiters,1,true
-oliver-wyman-global,oliver-wyman,Oliver Wyman,Multi-region,"Munich; Berlin; Frankfurt; Hamburg; Zurich; Stockholm; Copenhagen; London",https://careers.marsh.com/global/en/oliver-wyman,phenom,1,true
-alvarez-marsal-global,alvarez-marsal,Alvarez & Marsal,Multi-region,"Munich; Frankfurt; Hamburg; Dusseldorf; Zurich; Stockholm; London",https://careers.alvarezandmarsal.com/,selectminds,1,true
-alixpartners-global,alixpartners,AlixPartners,Multi-region,"Munich; Dusseldorf; Zurich; London",https://job-boards.greenhouse.io/alixpartners,greenhouse,1,true
-fti-consulting-global,fti-consulting,FTI Consulting,Multi-region,"Frankfurt; Munich; Zurich; London",https://fticonsult.referrals.selectminds.com/,selectminds,1,true
-lek-global,lek-consulting,L.E.K. Consulting,Multi-region,"Munich; London; Nordics",https://www.lek.com/careers,generic,1,true
-horvath-global,horvath,Horváth,Multi-region,"Munich; Berlin; Frankfurt; Hamburg; Vienna; Zurich",https://horvath.wd3.myworkdayjobs.com/en-US/Horvath_Careers,workday,1,true
-zeb-global,zeb-consulting,zeb consulting,Multi-region,"Berlin; Frankfurt; Hamburg; Munich; Vienna; Zurich; Stockholm; Copenhagen; Oslo; London",https://career.zeb-consulting.com/jobs/,successfactors,1,true
-capco-global,capco,Capco,Multi-region,"Prague; Brno; Berlin; Dusseldorf; Frankfurt; Munich; Vienna; Zurich; London",https://job-boards.greenhouse.io/capco,greenhouse,1,true
+bain-global,bain,Bain & Company,Multi-region,Munich; Berlin; Frankfurt; Vienna; Zurich; Stockholm; Copenhagen; Oslo; Helsinki; London,https://www.bain.com/careers/find-a-role/,generic,1,True
+roland-berger-global,roland-berger,Roland Berger,Multi-region,Prague; Munich; Berlin; Frankfurt; Hamburg; Vienna; Zurich; Stockholm; London,https://www.rolandberger.com/en/Join/All-Jobs/,smartrecruiters,1,True
+oliver-wyman-global,oliver-wyman,Oliver Wyman,Multi-region,Munich; Berlin; Frankfurt; Hamburg; Zurich; Stockholm; Copenhagen; London,https://careers.marsh.com/global/en/oliver-wyman,phenom,1,True
+alvarez-marsal-global,alvarez-marsal,Alvarez & Marsal,Multi-region,Munich; Frankfurt; Hamburg; Dusseldorf; Zurich; Stockholm; London,https://careers.alvarezandmarsal.com/,selectminds,1,True
+alixpartners-global,alixpartners,AlixPartners,Multi-region,Munich; Dusseldorf; Zurich; London,https://job-boards.greenhouse.io/alixpartners,greenhouse,1,True
+fti-consulting-global,fti-consulting,FTI Consulting,Multi-region,Frankfurt; Munich; Zurich; London,https://fticonsult.referrals.selectminds.com/,selectminds,1,True
+lek-global,lek-consulting,L.E.K. Consulting,Multi-region,Munich; London; Nordics,https://www.lek.com/careers,generic,1,True
+horvath-global,horvath,Horváth,Multi-region,Munich; Berlin; Frankfurt; Hamburg; Vienna; Zurich,https://horvath.wd3.myworkdayjobs.com/en-US/Horvath_Careers,workday,1,True
+zeb-global,zeb-consulting,zeb consulting,Multi-region,Berlin; Frankfurt; Hamburg; Munich; Vienna; Zurich; Stockholm; Copenhagen; Oslo; London,https://career.zeb-consulting.com/jobs/,successfactors,1,True
+capco-global,capco,Capco,Multi-region,Prague; Brno; Berlin; Dusseldorf; Frankfurt; Munich; Vienna; Zurich; London,https://job-boards.greenhouse.io/capco,greenhouse,1,True
+grant-thornton-global,grant-thornton,Grant Thornton,Multi-region,Prague; Germany; Vienna; Zurich; Nordics; London,https://www.grantthornton.global/en/careers/,generic,1,True
+bdo-global,bdo,BDO,Multi-region,Prague; Germany; Vienna; Zurich; Nordics; London,https://www.bdo.global/en-gb/careers,generic,1,True
+forvis-mazars-global,forvis-mazars,Forvis Mazars,Multi-region,Prague; Germany; Vienna; Zurich; Nordics; London,https://www.forvismazars.com/group/en/join-us,generic,1,True
+rsm-global,rsm,RSM,Multi-region,Prague; Germany; Vienna; Zurich; Nordics; London,https://www.rsm.global/careers,generic,1,True
+protiviti-global,protiviti,Protiviti,Multi-region,Frankfurt; Munich; Zurich; London,https://www.protiviti.com/gl-en/careers,generic,1,True
+sia-partners-global,sia-partners,Sia Partners,Multi-region,Frankfurt; Munich; Zurich; Amsterdam; Nordics; London,https://www.sia-partners.com/en/careers,generic,1,True
+pa-consulting-global,pa-consulting,PA Consulting,Multi-region,Stockholm; Copenhagen; Oslo; London; European projects,https://www.paconsulting.com/careers,generic,1,True
+capgemini-invent-global,capgemini-invent,Capgemini Invent,Multi-region,Prague; Germany; Vienna; Zurich; Nordics; London,https://www.capgemini.com/careers/,generic,1,True
+ibm-consulting-global,ibm-consulting,IBM Consulting,Multi-region,Prague; Germany; Vienna; Zurich; Nordics; London,https://www.ibm.com/careers/search,generic,1,True
+cgi-global,cgi,CGI,Multi-region,Prague; Germany; Nordics; London,https://www.cgi.com/en/careers,generic,1,True
+infosys-consulting-global,infosys-consulting,Infosys Consulting,Multi-region,Germany; Switzerland; Nordics; London,https://career.infosys.com/,generic,1,True
+tcs-consulting-global,tcs-consulting,Tata Consultancy Services,Multi-region,Prague; Germany; Switzerland; Nordics; London,https://www.tcs.com/careers,generic,1,True
+cognizant-global,cognizant,Cognizant,Multi-region,Prague; Germany; Switzerland; Nordics; London,https://careers.cognizant.com/global-en/,generic,1,True
+occ-strategy-global,occ-strategy,OC&C Strategy Consultants,Multi-region,Munich; Hamburg; London,https://www.occstrategy.com/en/careers/,generic,1,True
+implement-consulting-global,implement-consulting,Implement Consulting Group,Multi-region,Copenhagen; Stockholm; Oslo; Zurich; Munich; Hamburg,https://implementconsultinggroup.com/career,generic,1,True
+valcon-global,valcon,Valcon,Multi-region,Copenhagen; Stockholm; Oslo; London; European offices,https://valcon.com/careers/,generic,1,True
+baringa-global,baringa,Baringa,Multi-region,Berlin; Munich; London; Nordics coverage,https://www.baringa.com/en/careers/,generic,1,True
+newton-europe-global,newton-europe,Newton Europe,Multi-region,London; Oxfordshire; UK projects,https://www.newtoneurope.com/careers/,generic,1,True
+porsche-consulting-global,porsche-consulting,Porsche Consulting,Multi-region,Stuttgart; Munich; Hamburg; Berlin; Zurich; London,https://www.porsche-consulting.com/careers/,generic,1,True
+d-fine-global,d-fine,d-fine,Multi-region,Frankfurt; Munich; Berlin; Hamburg; Zurich; London,https://www.d-fine.com/en/career/,generic,1,True
+zuehlke-global,zuehlke,Zühlke,Multi-region,Munich; Hamburg; Frankfurt; Zurich; Vienna; London,https://www.zuehlke.com/en/careers,generic,1,True
+synpulse-global,synpulse,Synpulse,Multi-region,Frankfurt; Zurich; London; Nordics coverage,https://www.synpulse.com/en/careers,generic,1,True
+nera-global,nera,NERA Economic Consulting,Multi-region,Berlin; Frankfurt; London,https://careers.marshmclennan.com/global/en/nera,generic,1,True
+compass-lexecon-global,compass-lexecon,Compass Lexecon,Multi-region,Berlin; London; European offices,https://www.compasslexecon.com/careers/,generic,1,True
+charles-river-associates-global,charles-river-associates,Charles River Associates,Multi-region,Munich; London; European offices,https://www.crai.com/careers/,generic,1,True

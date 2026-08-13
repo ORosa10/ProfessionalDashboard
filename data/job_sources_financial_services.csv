@@ -1,0 +1,36 @@
+source_id,canonical_company_id,company,market,priority_locations,seed_url,adapter,cadence_days,enabled
+deutsche-bank-global,deutsche-bank,Deutsche Bank,Multi-region,Frankfurt; Berlin; London; Zurich,https://careers.db.com/,generic,1,True
+commerzbank-global,commerzbank,Commerzbank,Multi-region,Frankfurt; Berlin; Hamburg; London,https://www.commerzbank.de/group/careers/,generic,1,True
+dz-bank-global,dz-bank,DZ BANK,Multi-region,Frankfurt; Germany,https://karriere.dzbank.de/,generic,1,True
+kfw-global,kfw,KfW Group,Multi-region,Frankfurt; Berlin; Bonn; Cologne,https://www.kfw.de/About-KfW/Career/,generic,1,True
+helaba-global,helaba,Helaba,Multi-region,Frankfurt; London,https://www.helaba.com/int/career/,generic,1,True
+lbbw-global,lbbw,LBBW,Multi-region,Stuttgart; Frankfurt; Munich; London,https://www.lbbw.de/career,generic,1,True
+bayernlb-global,bayernlb,BayernLB,Multi-region,Munich; London,https://www.bayernlb.com/internet/en/blb/resp/career/career.jsp,generic,1,True
+ing-global,ing,ING Group,Multi-region,Frankfurt; Vienna; Zurich; Nordics; London,https://careers.ing.com/,generic,1,True
+unicredit-global,unicredit,UniCredit,Multi-region,Munich; Vienna; Prague coverage; London,https://careers.unicredit.eu/,generic,1,True
+eex-global,eex,EEX Group,Multi-region,Leipzig; Berlin; London; Paris,https://www.eex-group.com/en/career,generic,1,True
+bawag-global,bawag,BAWAG Group,Multi-region,Vienna,https://www.bawaggroup.com/BAWAGGROUP/Career,generic,1,True
+oekb-global,oekb,OeKB Group,Multi-region,Vienna,https://www.oekb.at/en/oekb-group/career.html,generic,1,True
+vienna-insurance-group-global,vienna-insurance-group,Vienna Insurance Group,Multi-region,Vienna; Prague; CEE,https://group.vig/career/,generic,1,True
+uniqa-global,uniqa,UNIQA Insurance Group,Multi-region,Vienna; Prague; CEE,https://www.uniqagroup.com/gruppe/versicherung/uniqa-group/career.en.html,generic,1,True
+julius-baer-global,julius-baer,Julius Baer,Multi-region,Zurich; London,https://www.juliusbaer.com/international/en/careers/,generic,1,True
+pictet-global,pictet,Pictet Group,Multi-region,Geneva; Zurich; London,https://www.group.pictet/careers,generic,1,True
+lombard-odier-global,lombard-odier,Lombard Odier,Multi-region,Geneva; Zurich; London,https://careers.lombardodier.com/,generic,1,True
+zurich-insurance-global,zurich-insurance,Zurich Insurance Group,Multi-region,Zurich; London; European offices,https://www.zurich.com/careers,generic,1,True
+swiss-life-global,swiss-life,Swiss Life Group,Multi-region,Zurich; Frankfurt; Munich; London,https://www.swisslife.com/en/home/career.html,generic,1,True
+zkb-global,zkb,Zürcher Kantonalbank,Multi-region,Zurich,https://www.zkb.ch/en/home/career.html,generic,1,True
+swedbank-global,swedbank,Swedbank,Multi-region,Stockholm; Tallinn; Riga; Vilnius,https://jobs.swedbank.com/,generic,1,True
+handelsbanken-global,handelsbanken,Handelsbanken,Multi-region,Stockholm; Copenhagen; Oslo; Helsinki; London,https://www.handelsbanken.com/en/about-the-group/career,generic,1,True
+dnb-global,dnb,DNB Group,Multi-region,Oslo; Stockholm; London,https://www.dnb.no/en/about-us/careers,generic,1,True
+op-financial-global,op-financial,OP Financial Group,Multi-region,Helsinki; Finland,https://www.op-careers.fi/,generic,1,True
+sampo-global,sampo,Sampo Group,Multi-region,Helsinki; Stockholm; Copenhagen,https://www.sampo.com/careers/,generic,1,True
+storebrand-global,storebrand,Storebrand,Multi-region,Oslo; Stockholm,https://www.storebrand.com/sam/no/asset-management/careers,generic,1,True
+hsbc-global,hsbc,HSBC Holdings,Multi-region,London; Frankfurt; Zurich,https://www.hsbc.com/careers,generic,1,True
+barclays-global,barclays,Barclays,Multi-region,London; Frankfurt,https://search.jobs.barclays/,generic,1,True
+lloyds-banking-group-global,lloyds-banking-group,Lloyds Banking Group,Multi-region,London; Edinburgh; Bristol,https://www.lloydsbankinggroup.com/careers.html,generic,1,True
+natwest-global,natwest,NatWest Group,Multi-region,London; Edinburgh,https://jobs.natwestgroup.com/,generic,1,True
+standard-chartered-global,standard-chartered,Standard Chartered,Multi-region,London; Frankfurt,https://www.sc.com/en/global-careers/,generic,1,True
+lseg-global,lseg,London Stock Exchange Group,Multi-region,London; Prague; European offices,https://www.lseg.com/en/careers,generic,1,True
+aviva-global,aviva,Aviva,Multi-region,London; European offices,https://careers.aviva.co.uk/,generic,1,True
+legal-general-global,legal-general,Legal & General,Multi-region,London; European offices,https://careers.legalandgeneral.com/,generic,1,True
+marsh-mclennan-global,marsh-mclennan,Marsh McLennan,Multi-region,Prague; Germany; Zurich; Nordics; London,https://careers.marshmclennan.com/global/en,generic,1,True

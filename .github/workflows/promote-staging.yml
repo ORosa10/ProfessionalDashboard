@@ -1,0 +1,65 @@
+name: Promote staged jobs
+
+# Deliberately manual only. Daily sourcing writes to the sourcing-staging
+# branch and never touches main, so it never disturbs an in-progress
+# Streamlit review session or triggers a Streamlit Community Cloud redeploy.
+# Running this workflow is the one explicit action that copies the current
+# sourcing-staging snapshot into main (and therefore into the live Jobs
+# review queue), and it is the only sourcing-related step that redeploys the
+# app. Trigger it yourself from the GitHub Actions tab, from the "Promote
+# new jobs" button in the Sources / Radar page of the app, or by asking
+# Claude to run it.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: promote-staging
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Pull latest staging snapshot
+        run: |
+          git fetch origin sourcing-staging
+          git show origin/sourcing-staging:data/jobs_staging.csv > data/jobs_staging.csv
+          git show origin/sourcing-staging:data/source_runs_staging.csv > data/source_runs_staging.csv
+      - name: Promote staging to live
+        run: python -m sourcing.promote_staging
+      - name: Commit promoted data to main
+        run: |
+          git config user.name "professional-dashboard-bot"
+          git config user.email "professional-dashboard-bot@users.noreply.github.com"
+          git add data/jobs.csv data/source_runs.csv
+          if git diff --cached --quiet; then
+            echo "Nothing new to promote"
+            exit 0
+          fi
+          git commit -m "Promote sourced jobs to live"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort
+              echo "Promoted data conflicts with newer main"
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          echo "Could not push promoted data after three attempts"
+          exit 1

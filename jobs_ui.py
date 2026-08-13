@@ -31,6 +31,14 @@ FEEDBACK_API_URL = (
     + FEEDBACK_PATH
 )
 FEEDBACK_OPTIONS = ["Unrated", "Interested", "Maybe", "Pass"]
+STAGING_BRANCH = "sourcing-staging"
+STAGING_JOBS_API_URL = (
+    "https://api.github.com/repos/ORosa10/ProfessionalDashboard/contents/data/jobs_staging.csv"
+)
+PROMOTE_WORKFLOW_API_URL = (
+    "https://api.github.com/repos/ORosa10/ProfessionalDashboard/actions/"
+    "workflows/promote-staging.yml/dispatches"
+)
 
 
 def _github_token() -> str | None:
@@ -47,6 +55,40 @@ def _github_headers(token: str) -> dict[str, str]:
         "Authorization": f"Bearer {token}",
         "X-GitHub-Api-Version": "2022-11-28",
     }
+
+
+def _load_staging_summary(token: str | None) -> tuple[int, int] | None:
+    """Roles and companies waiting on the sourcing-staging branch, or None if unavailable.
+
+    These roles are not yet in data/jobs.csv, so they never appear in the
+    Jobs review queue until someone explicitly promotes them.
+    """
+    if not token:
+        return None
+    response = requests.get(
+        STAGING_JOBS_API_URL,
+        headers=_github_headers(token),
+        params={"ref": STAGING_BRANCH},
+        timeout=20,
+    )
+    if response.status_code != 200:
+        return None
+    content = base64.b64decode(response.json()["content"]).decode("utf-8-sig")
+    staged = pd.read_csv(StringIO(content)).fillna("")
+    if staged.empty:
+        return (0, 0)
+    companies = staged["company"].nunique() if "company" in staged.columns else 0
+    return (len(staged), companies)
+
+
+def _dispatch_promote_workflow(token: str) -> bool:
+    response = requests.post(
+        PROMOTE_WORKFLOW_API_URL,
+        headers=_github_headers(token),
+        json={"ref": "main"},
+        timeout=20,
+    )
+    return response.status_code == 204
 
 
 def _load_job_feedback(token: str | None) -> tuple[pd.DataFrame, str | None]:
@@ -147,8 +189,11 @@ def render_jobs() -> None:
                 "Private Markets and later sectors will retain their own hypotheses."
             )
     frames: list[pd.DataFrame] = []
-    staging_path = DATA_DIR / "jobs_staging.csv"
-    pilot_path = staging_path if staging_path.exists() else DATA_DIR / "jobs.csv"
+    # Always read the live, promoted snapshot. Newly sourced roles land in
+    # jobs_staging.csv on the sourcing-staging branch first and only appear
+    # here once explicitly promoted (see render_sources), so a background
+    # sourcing run never changes what's in front of you mid-review.
+    pilot_path = DATA_DIR / "jobs.csv"
     if pilot_path.exists():
         pilot = pd.read_csv(pilot_path).fillna("")
         if "verification" in pilot.columns:
@@ -534,6 +579,38 @@ def render_sources() -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title("Sources / Radar")
     st.caption("Diagnostics for the autonomous career-page monitor.")
+
+    st.subheader("Pending sourcing results")
+    token = _github_token()
+    staging_summary = _load_staging_summary(token)
+    if staging_summary is None:
+        st.caption(
+            "No sourcing-staging snapshot found yet, or the configured GitHub token "
+            "cannot read the sourcing-staging branch."
+        )
+    else:
+        pending_count, pending_companies = staging_summary
+        st.metric("New roles waiting to promote", pending_count)
+        if pending_count:
+            st.caption(
+                f"Across {pending_companies} companies. Not yet visible in the Jobs "
+                "review queue — promote them to add them to data/jobs.csv."
+            )
+            if token and st.button("Promote new jobs to live review queue"):
+                if _dispatch_promote_workflow(token):
+                    st.success(
+                        "Promotion triggered. It runs in the background; refresh this "
+                        "page in a minute or two once the workflow finishes and "
+                        "Streamlit redeploys."
+                    )
+                else:
+                    st.error(
+                        "Could not trigger the promote workflow. Check that the GitHub "
+                        "token has 'Actions: read and write' permission."
+                    )
+        else:
+            st.caption("Nothing new since the last promotion.")
+
     source_path = DATA_DIR / "job_sources_pilot.csv"
     runs_path = DATA_DIR / "source_runs.csv"
 

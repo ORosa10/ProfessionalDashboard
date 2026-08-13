@@ -36,27 +36,26 @@ jobs:
         run: python -m unittest sourcing.test_big4_pilot
       - name: Check career pages with personal-fit sourcing
         run: python -m sourcing.persona_sourcing --max-pages 40 --staging
-      - name: Persist sourcing results
+      - name: Persist sourcing results to the staging branch
         run: |
           git config user.name "professional-dashboard-bot"
           git config user.email "professional-dashboard-bot@users.noreply.github.com"
           git add data/jobs_staging.csv data/source_runs_staging.csv
           if git diff --cached --quiet; then
             echo "No sourcing changes"
-          else
-            git commit -m "Refresh sourced jobs"
-            for attempt in 1 2 3; do
-              git fetch origin main
-              if ! git rebase origin/main; then
-                git rebase --abort
-                echo "Generated sourcing files conflict with newer main"
-                exit 1
-              fi
-              if git push origin HEAD:main; then
-                exit 0
-              fi
-              sleep $((attempt * 5))
-            done
-            echo "Could not push sourcing results after three attempts"
-            exit 1
+            exit 0
           fi
+          git commit -m "Refresh sourced jobs"
+          # This branch never touches main, so it never triggers a Streamlit
+          # Community Cloud redeploy. It is always reset to "current main plus
+          # today's staging snapshot" so it cannot accumulate merge conflicts.
+          # New results only reach main (and the live Jobs review queue) via
+          # the separate, manually-triggered "Promote staged jobs" workflow.
+          for attempt in 1 2 3; do
+            if git push --force origin HEAD:refs/heads/sourcing-staging; then
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          echo "Could not push sourcing results to sourcing-staging after three attempts"
+          exit 1

@@ -1,0 +1,63 @@
+name: Consulting expansion sourcing
+
+# Continues sourcing for the Consulting sector beyond Big Four, using the
+# lanes/exclusions the Big Four calibration already established
+# (CONSULTING_TARGETING.md). Results are kept in a completely separate
+# staging branch/queue from Big Four -- never mixed, never touching main
+# automatically. Promotion into any review queue is a separate, explicit
+# step (see promote-staging.yml for the pattern; a consulting-specific
+# promote step can be added once you're ready to review this cohort).
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "37 4 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "sourcing/consulting_pilot.py"
+      - "sourcing/big4_pilot.py"
+      - "sourcing/pe_pilot.py"
+      - "data/job_sources_consulting.csv"
+      - "requirements.txt"
+      - ".github/workflows/consulting-sourcing.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: consulting-sourcing
+  cancel-in-progress: false
+
+jobs:
+  source-consulting-jobs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Check consulting-expansion career pages
+        run: python -m sourcing.consulting_pilot --max-pages 40
+      - name: Persist sourcing results to the staging branch
+        run: |
+          git config user.name "professional-dashboard-bot"
+          git config user.email "professional-dashboard-bot@users.noreply.github.com"
+          git add data/jobs_consulting_staging.csv data/source_runs_consulting_staging.csv
+          if git diff --cached --quiet; then
+            echo "No sourcing changes"
+            exit 0
+          fi
+          git commit -m "Refresh sourced consulting-expansion jobs"
+          for attempt in 1 2 3; do
+            if git push --force origin HEAD:refs/heads/consulting-sourcing-staging; then
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          echo "Could not push sourcing results to consulting-sourcing-staging after three attempts"
+          exit 1

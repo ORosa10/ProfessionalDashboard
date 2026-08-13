@@ -10,6 +10,38 @@ from cost_of_living_ui import render_cost_of_living
 from github_storage import RATING_COLUMNS, github_token, load_ratings, save_ratings
 from jobs_ui import render_jobs, render_sources
 
+COMPANY_TARGETING_PATH = Path(__file__).parent / "COMPANY_TARGETING.md"
+COMPANY_SECTORS = [
+    "Consulting",
+    "Corporate",
+    "Banking & Financial Services",
+    "Holding & Conglomerate",
+    "Private Equity & Asset Management",
+    "Investment Banking",
+    "Public Markets & Asset Management",
+    "Specialist & Boutique Funds",
+]
+
+
+def _load_company_targeting_sections() -> dict[str, str]:
+    """Split COMPANY_TARGETING.md into {sector: markdown body} by '## ' headings."""
+    if not COMPANY_TARGETING_PATH.exists():
+        return {}
+    sections: dict[str, str] = {}
+    current: str | None = None
+    body: list[str] = []
+    for line in COMPANY_TARGETING_PATH.read_text(encoding="utf-8").splitlines():
+        if line.startswith("## "):
+            if current is not None:
+                sections[current] = "\n".join(body).strip()
+            current = line[3:].strip()
+            body = []
+        elif current is not None:
+            body.append(line)
+    if current is not None:
+        sections[current] = "\n".join(body).strip()
+    return sections
+
 VERIFIED_JOB_TYPES = {
     "schema.org/JobPosting",
     "schema.org/JobPosting JSON-LD",
@@ -242,6 +274,17 @@ def companies_page() -> None:
                 st.success("Saved to GitHub.")
     elif not token:
         st.info("Add the repository token in Streamlit Secrets to enable direct saving.")
+
+    st.divider()
+    st.subheader("Company sourcing hypothesis")
+    st.caption(
+        "Per-sector rationale for which new companies the scheduled discovery task "
+        "(Mon/Thu) proposes, inferred from your ratings and notes above."
+    )
+    sections = _load_company_targeting_sections()
+    for sector in COMPANY_SECTORS:
+        with st.expander(f"{sector} — sourcing hypothesis"):
+            st.markdown(sections.get(sector, "_Not yet generated._"))
 
 
 def pipeline_page() -> None:

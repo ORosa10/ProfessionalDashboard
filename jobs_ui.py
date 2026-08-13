@@ -14,6 +14,7 @@ from personal_fit import build_personal_fit_summary
 DATA_DIR = Path(__file__).parent / "data"
 GENERAL_TARGETING_PATH = Path(__file__).parent / "GENERAL_TARGETING.md"
 CONSULTING_TARGETING_PATH = Path(__file__).parent / "CONSULTING_TARGETING.md"
+PE_TARGETING_PATH = Path(__file__).parent / "PE_TARGETING.md"
 VERIFIED_JOB_TYPES = {
     "schema.org/JobPosting",
     "schema.org/JobPosting JSON-LD",
@@ -187,6 +188,16 @@ def render_jobs() -> None:
             st.caption(
                 "This is the first sector-specific learning hypothesis. Review it in the project chat; "
                 "Private Markets and later sectors will retain their own hypotheses."
+            )
+    if PE_TARGETING_PATH.exists():
+        with st.expander(
+            "PE sector hypothesis — first 20 calibration ratings",
+            expanded=False,
+        ):
+            st.markdown(PE_TARGETING_PATH.read_text(encoding="utf-8"))
+            st.caption(
+                "Sector-specific hypothesis for Private Equity, kept separate from Consulting's. "
+                "Update it in the project chat as more roles are rated."
             )
     frames: list[pd.DataFrame] = []
     # Always read the live, promoted snapshot. Newly sourced roles land in

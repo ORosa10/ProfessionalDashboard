@@ -10,17 +10,22 @@ This hypothesis applies primarily to **Private Equity / private-markets employer
 - **2 Interested / 8 Maybe / 10 Pass.** Every role has a written comment.
 - This is a much weaker hit rate than Consulting's first batch (14/10/26 out of 50). Two structural issues, not just role-content mismatch, explain most of the Pass/Maybe: seniority framing and a coverage gap in the role type actually wanted (see below).
 
+## ⚠️ Critical sourcing gap: classic PE Investment Analyst roles (flagged 2026-08-13)
+
+**This is the single most important open issue in PE sourcing right now.** "Investment Analyst" — a junior role embedded on the direct-investment team, doing deal sourcing/screening, LBO and financial modeling, and portfolio-company analysis — is the single most common, default entry/junior role type that exists across PE firms in general. It is not a niche lane; it is close to *the* standard way into the industry at this seniority.
+
+This first 20-role calibration batch essentially did not cover it. Instead it skewed toward fund operations/finance/reporting roles (fund controller, fund launch/wind-down, IFRS reporting integration, group finance reporting) and toward Associate/Senior Associate/Manager-titled investment roles that were either too senior or required more experience than you currently have (~2 years). Not a single role in this batch was a straightforward, junior, direct-investment-team Investment Analyst position.
+
+- This reads as a **sourcing-coverage gap, not a personal-fit rejection** — the keyword matching already includes "investment" and "analyst" (`sourcing/pe_pilot.py`'s `PE_ROLE_TERMS`), so the shortage is about which firms/postings were actually live and sampled at the time, not a term-matching bug.
+- **Every future PE sourcing and calibration pass must deliberately search for and weight in "Investment Analyst," "Analyst, Private Equity," "Investment Team Analyst" or equivalent direct-investment-team titles**, clearly distinct from fund-operations/finance-function roles. Until this lane has real coverage and real feedback, the PE hypothesis should be treated as incomplete on its most important role type.
+
 ## PE lanes to prioritize
 
 1. **Treasury / Fund Finance / CFO agenda**
    - 2 Interested from 2 direct examples (Treasury Manager at ICG; a Fund Finance / Secondaries & Primaries Analyst at Ardian read as "kinda treasury").
-   - This is the strongest confirmed lane so far: treasury, fund finance, CFO-adjacent work, at accessible (non-VP/Manager) seniority.
+   - This is the strongest *confirmed* lane so far: treasury, fund finance, CFO-adjacent work, at accessible (non-VP/Manager) seniority.
    - Explicitly *not* about being close to the investment/deal team — it's the finance-function-inside-a-PE-firm angle, same instinct as the Consulting hypothesis's Treasury lane.
-
-2. **Classic PE Investment Analyst roles — under-covered, needs deliberate sourcing (flagged 2026-08-13)**
-   - This batch skewed heavily toward fund operations/finance/reporting roles (fund controller, fund launch/wind-down, IFRS reporting integration, group finance reporting) and toward Associate/Senior Associate/Manager-titled investment roles that were too senior or required more experience than you have (~2 years) — not toward genuine junior **Investment Analyst** roles on a direct-investment team (deal sourcing, LBO/financial modeling, portfolio company analysis).
-   - This looks like a sourcing-coverage gap rather than a personal-fit rejection: the underlying keyword matching already includes "investment" and "analyst" (`sourcing/pe_pilot.py`'s `PE_ROLE_TERMS`), so the shortage is about which firms/postings were live and sampled, not a term-matching bug.
-   - Next sourcing/calibration pass should deliberately look for and weight in "Investment Analyst," "Analyst, Private Equity," "Investment Team Analyst" or equivalent titles at the direct-investment-team level, distinct from fund-operations/finance-function roles.
+   - Important caveat: this is currently the strongest signal only because it's the lane with the most examples in this batch — it should not be read as stronger than classic Investment Analyst roles, which simply have zero data points yet (see gap above).
 
 ## PE lanes to downrank
 
@@ -38,8 +43,8 @@ This hypothesis applies primarily to **Private Equity / private-markets employer
 
 ## What the next PE search should emphasize
 
-- Treasury, fund finance and CFO-adjacent roles inside PE firms, at Analyst/junior-Associate level.
-- Genuine **Investment Analyst** roles on direct-investment teams — deal analysis, financial modeling, portfolio monitoring — explicitly distinct from fund-operations/reporting roles. This is the clearest gap to close before the next calibration round.
-- Roles stating roughly 1-3 years of required experience rather than 3-5+.
-- Continue excluding Real Estate, Investor Relations and Digital Infrastructure as standalone verticals.
-- One more lower-seniority Credit/Risk example would help resolve whether that lane is genuinely unattractive or just consistently over-leveled so far.
+1. **Genuine "Investment Analyst" roles on direct-investment teams — deal analysis, financial modeling, portfolio monitoring — explicitly distinct from fund-operations/reporting roles. This is the top priority and the clearest gap to close before the next calibration round** (see the flagged gap above).
+2. Treasury, fund finance and CFO-adjacent roles inside PE firms, at Analyst/junior-Associate level.
+3. Roles stating roughly 1-3 years of required experience rather than 3-5+.
+4. Continue excluding Real Estate, Investor Relations and Digital Infrastructure as standalone verticals.
+5. One more lower-seniority Credit/Risk example would help resolve whether that lane is genuinely unattractive or just consistently over-leveled so far.

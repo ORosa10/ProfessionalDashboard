@@ -110,13 +110,20 @@ def due_for_check(source: pd.Series, runs_path: Path) -> bool:
     run. A brand-new source with no prior entry in runs_path always returns
     True, so it still gets its first, initial-database-building check
     immediately rather than waiting out its cadence.
+
+    A source whose MOST RECENT run recorded an error (e.g. a missing
+    GEMINI_API_KEY secret, a timeout, a transient site outage) is also always
+    due again, regardless of cadence -- we never actually managed to check
+    it, so it shouldn't have to wait out a 7-30 day cooldown as if it had.
     """
     cadence_days = pd.to_numeric(source.get("cadence_days", 1), errors="coerce")
     cadence_days = 1 if pd.isna(cadence_days) else max(1, int(cadence_days))
     if not runs_path.exists():
         return True
     try:
-        runs = pd.read_csv(runs_path, usecols=lambda c: c in ("source_id", "run_at")).fillna("")
+        runs = pd.read_csv(
+            runs_path, usecols=lambda c: c in ("source_id", "run_at", "errors")
+        ).fillna("")
     except Exception:
         return True
     if "source_id" not in runs.columns or "run_at" not in runs.columns:
@@ -124,8 +131,14 @@ def due_for_check(source: pd.Series, runs_path: Path) -> bool:
     matches = runs[runs["source_id"] == source.source_id]
     if matches.empty:
         return True
-    last_run = pd.to_datetime(matches["run_at"], errors="coerce", utc=True).max()
+    matches = matches.assign(
+        _run_at=pd.to_datetime(matches["run_at"], errors="coerce", utc=True)
+    ).sort_values("_run_at")
+    last_run_row = matches.iloc[-1]
+    last_run = last_run_row["_run_at"]
     if pd.isna(last_run):
+        return True
+    if str(last_run_row.get("errors", "")).strip():
         return True
     age_days = (pd.Timestamp.now(tz="UTC") - last_run).total_seconds() / 86400
     return age_days >= cadence_days

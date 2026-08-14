@@ -68,6 +68,14 @@ def discover_source(source: pd.Series, max_pages: int) -> tuple[list[dict], dict
         return common.discover_smartrecruiters_jobs(source, max_jobs=160)
     if adapter == "phenom":
         return common.discover_phenom_jobs(source, max_pages=min(max_pages, 10))
+    if adapter == "llm":
+        # Headless-render + Gemini-extract fallback for companies confirmed to
+        # run on a career platform none of the adapters above support (or a
+        # fully custom JS-rendered site). See sourcing/llm_fallback.py for why
+        # this doesn't touch the user's Claude/Cowork usage or cost anything.
+        from sourcing.llm_fallback import discover_jobs_llm
+
+        return discover_jobs_llm(source)
     # "generic" and any unrecognized/not-yet-built adapter name: fall back to
     # the generic schema.org/JobPosting scan of the company's own career
     # page. This is what almost every new-sector row uses today.
@@ -84,6 +92,8 @@ def run(sources_path: Path, jobs_path: Path, runs_path: Path, max_pages: int, so
     all_jobs: list[dict] = []
     runs: list[dict] = []
     for _, source in sources.iterrows():
+        if not common.due_for_check(source, runs_path):
+            continue
         jobs, run_info = discover_source(source, max_pages)
         all_jobs.extend(jobs)
         runs.append(run_info)

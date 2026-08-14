@@ -263,6 +263,8 @@ def main() -> None:
     all_jobs: list[dict] = []
     runs: list[dict] = []
     for _, source in sources.iterrows():
+        if not common.due_for_check(source, RUNS_PATH):
+            continue
         jobs, run = discover_source(source, args.max_pages)
         all_jobs.extend(jobs)
         runs.append(run)

@@ -1,16 +1,16 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,adapter,cadence_days,enabled
-goldman-sachs-global,goldman-sachs,Goldman Sachs,Multi-region,"London, Frankfurt, Zurich",https://www.goldmansachs.com/careers/,generic,1,True
-morgan-stanley-global,morgan-stanley,Morgan Stanley,Multi-region,"London, Frankfurt, Zurich",https://www.morganstanley.com/people-opportunities,generic,1,True
-jpmorgan-chase-global,jpmorgan-chase,JPMorgan Chase,Multi-region,"London, Frankfurt, Zurich",https://careers.jpmorgan.com/global/en/home,generic,1,True
-citigroup-global,citigroup,Citi,Multi-region,"London, Frankfurt, Zurich",https://jobs.citi.com/,generic,1,True
-bank-of-america-global,bank-of-america,Bank of America,Multi-region,"London, Frankfurt, Zurich",https://careers.bankofamerica.com/en-us,generic,1,True
-lazard-global,lazard,Lazard,Multi-region,"London, Frankfurt, Zurich",https://www.lazard.com/careers/,generic,1,True
-rothschild-co-global,rothschild-co,Rothschild & Co,Multi-region,"London, Frankfurt, Munich, Zurich",https://www.rothschildandco.com/en/careers/,generic,1,True
-evercore-global,evercore,Evercore,Multi-region,"London, Frankfurt",https://www.evercore.com/careers/,generic,1,True
-jefferies-global,jefferies,Jefferies,Multi-region,"London, Frankfurt",https://www.jefferies.com/careers/,generic,1,True
-houlihan-lokey-global,houlihan-lokey,Houlihan Lokey,Multi-region,"London, Frankfurt, Munich, Zurich",https://hl.com/careers/,generic,1,True
-moelis-global,moelis,Moelis & Company,Multi-region,"London, Frankfurt",https://www.moelis.com/careers/,generic,1,True
-pjt-partners-global,pjt-partners,PJT Partners,Multi-region,London,https://pjtpartners.com/careers,generic,1,True
-perella-weinberg-global,perella-weinberg,Perella Weinberg Partners,Multi-region,London,https://pwpartners.com/careers/,generic,1,True
-nomura-global,nomura,Nomura,Multi-region,"London, Frankfurt",https://www.nomura.com/careers/,generic,1,True
-wood-company-global,wood-company,WOOD & Company,Multi-region,"Prague, London, Warsaw",https://wood.cz/kariera/,generic,1,True
+goldman-sachs-global,goldman-sachs,Goldman Sachs,Multi-region,"London, Frankfurt, Zurich",https://www.goldmansachs.com/careers/,generic,7,True
+morgan-stanley-global,morgan-stanley,Morgan Stanley,Multi-region,"London, Frankfurt, Zurich",https://www.morganstanley.com/people-opportunities,generic,7,True
+jpmorgan-chase-global,jpmorgan-chase,JPMorgan Chase,Multi-region,"London, Frankfurt, Zurich",https://careers.jpmorgan.com/global/en/home,generic,7,True
+citigroup-global,citigroup,Citi,Multi-region,"London, Frankfurt, Zurich",https://jobs.citi.com/,generic,7,True
+bank-of-america-global,bank-of-america,Bank of America,Multi-region,"London, Frankfurt, Zurich",https://careers.bankofamerica.com/en-us,generic,7,True
+lazard-global,lazard,Lazard,Multi-region,"London, Frankfurt, Zurich",https://www.lazard.com/careers/,generic,7,True
+rothschild-co-global,rothschild-co,Rothschild & Co,Multi-region,"London, Frankfurt, Munich, Zurich",https://www.rothschildandco.com/en/careers/,generic,7,True
+evercore-global,evercore,Evercore,Multi-region,"London, Frankfurt",https://www.evercore.com/careers/,generic,7,True
+jefferies-global,jefferies,Jefferies,Multi-region,"London, Frankfurt",https://www.jefferies.com/careers/,generic,7,True
+houlihan-lokey-global,houlihan-lokey,Houlihan Lokey,Multi-region,"London, Frankfurt, Munich, Zurich",https://hl.com/careers/,generic,14,True
+moelis-global,moelis,Moelis & Company,Multi-region,"London, Frankfurt",https://www.moelis.com/careers/,generic,14,True
+pjt-partners-global,pjt-partners,PJT Partners,Multi-region,London,https://pjtpartners.com/careers,generic,14,True
+perella-weinberg-global,perella-weinberg,Perella Weinberg Partners,Multi-region,London,https://pwpartners.com/careers/,generic,14,True
+nomura-global,nomura,Nomura,Multi-region,"London, Frankfurt",https://www.nomura.com/careers/,generic,14,True
+wood-company-global,wood-company,WOOD & Company,Multi-region,"Prague, London, Warsaw",https://wood.cz/kariera/,generic,30,True

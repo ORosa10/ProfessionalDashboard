@@ -103,6 +103,34 @@ MARKET_LOCATION_TERMS = {
 }
 
 
+def due_for_check(source: pd.Series, runs_path: Path) -> bool:
+    """Respect each source's rating-based cadence (data/job_sources_*.csv's
+    cadence_days column: A=7d, B=14d, C=30d -- set by scripts/build_sector_sources.py)
+    instead of re-checking every company's career page on every single daily
+    run. A brand-new source with no prior entry in runs_path always returns
+    True, so it still gets its first, initial-database-building check
+    immediately rather than waiting out its cadence.
+    """
+    cadence_days = pd.to_numeric(source.get("cadence_days", 1), errors="coerce")
+    cadence_days = 1 if pd.isna(cadence_days) else max(1, int(cadence_days))
+    if not runs_path.exists():
+        return True
+    try:
+        runs = pd.read_csv(runs_path, usecols=lambda c: c in ("source_id", "run_at")).fillna("")
+    except Exception:
+        return True
+    if "source_id" not in runs.columns or "run_at" not in runs.columns:
+        return True
+    matches = runs[runs["source_id"] == source.source_id]
+    if matches.empty:
+        return True
+    last_run = pd.to_datetime(matches["run_at"], errors="coerce", utc=True).max()
+    if pd.isna(last_run):
+        return True
+    age_days = (pd.Timestamp.now(tz="UTC") - last_run).total_seconds() / 86400
+    return age_days >= cadence_days
+
+
 def allowed(url: str, domains: str) -> bool:
     host = urlparse(url).netloc.lower().split(":")[0]
     return any(

@@ -21,6 +21,13 @@ DATA = ROOT / "data"
 RATINGS = pd.read_csv(DATA / "company_ratings.csv").fillna("")
 RATING_BY_ID = dict(zip(RATINGS["canonical_company_id"], RATINGS["rating"]))
 
+# How often a company's career page actually gets re-checked once it's past
+# its first (always-run) check -- A-rated companies weekly, B biweekly, C
+# monthly, so we're not hammering low-priority companies' pages daily just
+# because a high-priority sector shares the workflow. Enforced by
+# sourcing/big4_pilot.py's due_for_check(), not by this script.
+CADENCE_DAYS_BY_RATING = {"A": 7, "B": 14, "C": 30}
+
 ALREADY_SOURCED: set[str] = set()
 for existing in ("job_sources_pilot.csv", "job_sources_pe.csv", "job_sources_consulting.csv"):
     path = DATA / existing
@@ -63,7 +70,7 @@ def build_rows(universe_file: str, category: str | None) -> pd.DataFrame:
         "priority_locations": df["locations"],
         "seed_url": df["career_url"],
         "adapter": "generic",
-        "cadence_days": 1,
+        "cadence_days": df["rating"].map(CADENCE_DAYS_BY_RATING).fillna(14).astype(int),
         "enabled": True,
     })
     return rows.drop_duplicates(subset="canonical_company_id")

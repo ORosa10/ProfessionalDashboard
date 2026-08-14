@@ -1,9 +1,9 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,adapter,cadence_days,enabled
-csg-global,csg,Czechoslovak Group,Multi-region,Prague; Czech Republic; European portfolio,https://czechoslovakgroup.com/en/career,generic,1,True
-cpi-property-group-global,cpi-property-group,CPI Property Group,Multi-region,Prague; Berlin; Vienna; CEE,https://www.cpipg.com/careers,generic,1,True
-investor-ab-global,investor-ab,Investor AB,Multi-region,Stockholm; Nordic portfolio,https://www.investorab.com/career/,generic,1,True
-industrivarden-global,industrivarden,Industrivärden,Multi-region,Stockholm; Nordic portfolio,https://www.industrivarden.se/en-gb/career/,generic,1,True
-kinnevik-global,kinnevik,Kinnevik,Multi-region,Stockholm; London; European portfolio,https://www.kinnevik.com/careers,generic,1,True
-exor-global,exor,Exor,Multi-region,Amsterdam; London; European portfolio,https://www.exor.com/pages/exor/careers,generic,1,True
-porsche-se-global,porsche-se,Porsche Automobil Holding,Multi-region,Stuttgart; European portfolio,https://www.porsche-se.com/en/company/career,generic,1,True
-ap-moller-holding-global,ap-moller-holding,A.P. Moller Holding,Multi-region,Copenhagen; global portfolio,https://apmoller.com/careers/,generic,1,True
+csg-global,csg,Czechoslovak Group,Multi-region,Prague; Czech Republic; European portfolio,https://czechoslovakgroup.com/en/career,llm,14,True
+cpi-property-group-global,cpi-property-group,CPI Property Group,Multi-region,Prague; Berlin; Vienna; CEE,https://www.cpipg.com/careers,llm,30,True
+investor-ab-global,investor-ab,Investor AB,Multi-region,Stockholm; Nordic portfolio,https://www.investorab.com/career/,llm,7,True
+industrivarden-global,industrivarden,Industrivärden,Multi-region,Stockholm; Nordic portfolio,https://www.industrivarden.se/en-gb/career/,llm,7,True
+kinnevik-global,kinnevik,Kinnevik,Multi-region,Stockholm; London; European portfolio,https://www.kinnevik.com/careers,llm,14,True
+exor-global,exor,Exor,Multi-region,Amsterdam; London; European portfolio,https://www.exor.com/pages/exor/careers,llm,7,True
+porsche-se-global,porsche-se,Porsche Automobil Holding,Multi-region,Stuttgart; European portfolio,https://www.porsche-se.com/en/company/career,llm,7,True
+ap-moller-holding-global,ap-moller-holding,A.P. Moller Holding,Multi-region,Copenhagen; global portfolio,https://apmoller.com/careers/,llm,7,True

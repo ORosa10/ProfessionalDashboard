@@ -1,0 +1,4 @@
+# Only installed by sourcing workflows that use the "llm" adapter
+# (sourcing/llm_fallback.py), never by Streamlit Cloud -- keeps the live app's
+# own requirements.txt light and avoids installing a browser binary there.
+playwright>=1.40,<2

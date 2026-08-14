@@ -1,14 +1,14 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,adapter,cadence_days,enabled
-citadel-global,citadel,Citadel,Multi-region,London,https://www.citadel.com/careers/,generic,1,True
-millennium-management-global,millennium-management,Millennium Management,Multi-region,London,https://www.mlp.com/careers/,generic,1,True
-point72-global,point72,Point72,Multi-region,London,https://careers.point72.com/,generic,1,True
-marshall-wace-global,marshall-wace,Marshall Wace,Multi-region,London,https://www.mwam.com/careers/,generic,1,True
-brevan-howard-global,brevan-howard,Brevan Howard,Multi-region,London,https://www.brevanhoward.com/careers/,generic,1,True
-qube-rt-global,qube-rt,Qube Research & Technologies,Multi-region,London,https://www.qube-rt.com/careers/,generic,1,True
-winton-global,winton,Winton,Multi-region,London,https://www.winton.com/careers,generic,1,True
-aqr-global,aqr,AQR Capital Management,Multi-region,London,https://www.aqr.com/About-Us/Careers,generic,1,True
-two-sigma-global,two-sigma,Two Sigma,Multi-region,London,https://www.twosigma.com/careers/,generic,1,True
-de-shaw-global,de-shaw,D. E. Shaw,Multi-region,London,https://www.deshaw.com/careers,generic,1,True
-rsj-global,rsj,RSJ,Multi-region,Prague,https://www.rsj.com/cz/investments/kariera.html,generic,1,True
-conseq-global,conseq,Conseq Investment Management,Multi-region,Prague,https://www.conseq.cz/kariera,generic,1,True
-pale-fire-capital-global,pale-fire-capital,Pale Fire Capital,Multi-region,Prague,https://palefirecapital.com/,generic,1,True
+citadel-global,citadel,Citadel,Multi-region,London,https://www.citadel.com/careers/,generic,14,True
+millennium-management-global,millennium-management,Millennium Management,Multi-region,London,https://www.mlp.com/careers/,generic,14,True
+point72-global,point72,Point72,Multi-region,London,https://careers.point72.com/,generic,14,True
+marshall-wace-global,marshall-wace,Marshall Wace,Multi-region,London,https://www.mwam.com/careers/,generic,14,True
+brevan-howard-global,brevan-howard,Brevan Howard,Multi-region,London,https://www.brevanhoward.com/careers/,generic,14,True
+qube-rt-global,qube-rt,Qube Research & Technologies,Multi-region,London,https://www.qube-rt.com/careers/,generic,14,True
+winton-global,winton,Winton,Multi-region,London,https://www.winton.com/careers,generic,14,True
+aqr-global,aqr,AQR Capital Management,Multi-region,London,https://www.aqr.com/About-Us/Careers,generic,7,True
+two-sigma-global,two-sigma,Two Sigma,Multi-region,London,https://www.twosigma.com/careers/,generic,7,True
+de-shaw-global,de-shaw,D. E. Shaw,Multi-region,London,https://www.deshaw.com/careers,generic,7,True
+rsj-global,rsj,RSJ,Multi-region,Prague,https://www.rsj.com/cz/investments/kariera.html,generic,30,True
+conseq-global,conseq,Conseq Investment Management,Multi-region,Prague,https://www.conseq.cz/kariera,generic,30,True
+pale-fire-capital-global,pale-fire-capital,Pale Fire Capital,Multi-region,Prague,https://palefirecapital.com/,generic,30,True

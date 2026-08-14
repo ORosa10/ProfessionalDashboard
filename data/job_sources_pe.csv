@@ -1,47 +1,47 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,adapter,cadence_days,enabled
-partners-group-global,partners-group,Partners Group,Multi-region,Zug; Zurich; London; Munich; Frankfurt,https://jobs.partnersgroup.com/,successfactors,1,True
-advent-global,advent-international,Advent International,Multi-region,Frankfurt; London; Munich,https://www.adventinternational.com/careers/,generic,1,True
-cinven-global,cinven,Cinven,Multi-region,Frankfurt; London,https://cinven.pinpointhq.com/,generic,1,True
-bc-partners-global,bc-partners,BC Partners,Multi-region,Hamburg; London,https://www.bcpartners.com/careers/,generic,1,True
-triton-global,triton,Triton Partners,Multi-region,Frankfurt; Stockholm; London; Copenhagen; Oslo; Helsinki,https://tritonpartners.wd3.myworkdayjobs.com/en-GB/External,workday,1,True
-ardian-global,ardian,Ardian,Multi-region,Frankfurt; Zurich; London; Munich,https://ardian.wd103.myworkdayjobs.com/ArdianCareers,workday,1,True
-tpg-global,tpg,TPG,Multi-region,London; Frankfurt; Munich,https://job-boards.greenhouse.io/tpgcareers,greenhouse,1,True
-bain-capital-global,bain-capital,Bain Capital,Multi-region,Munich; London; Frankfurt,https://baincapital.wd1.myworkdayjobs.com/External_Public,workday,1,True
-ares-global,ares,Ares Management,Multi-region,Frankfurt; London; Munich,https://aresmgmt.wd1.myworkdayjobs.com/en-US/External,workday,1,True
-icg-global,icg,Intermediate Capital Group,Multi-region,Frankfurt; London,https://icg.wd3.myworkdayjobs.com/en-US/external_careers,workday,1,True
-pai-global,pai-partners,PAI Partners,Multi-region,Munich; London; Frankfurt,https://www.paipartners.com/careers/,generic,1,True
-waterland-global,waterland,Waterland Private Equity,Multi-region,Munich; Hamburg; Copenhagen; Oslo; London,https://www.waterlandpe.com/careers/,generic,1,True
-nordic-capital-global,nordic-capital,Nordic Capital,Multi-region,Stockholm; Copenhagen; Oslo; Helsinki; London; Frankfurt,https://career.nordiccapital.com/jobs,teamtailor,1,True
-altor-global,altor,Altor,Multi-region,Stockholm; Oslo; Copenhagen; Zurich,https://careers.altor.com/,teamtailor,1,True
-axcel-global,axcel,Axcel,Multi-region,Copenhagen; Stockholm,https://axcel.dk/career/,generic,1,True
-fsn-capital-global,fsn-capital,FSN Capital,Multi-region,Oslo; Stockholm; Copenhagen; Munich,https://www.fsncapital.com/careers,generic,1,True
-summa-equity-global,summa-equity,Summa Equity,Multi-region,Stockholm; Oslo; Munich,https://summaequity.com/career/,generic,1,True
-dbag-global,dbag,Deutsche Beteiligungs AG,Germany,Frankfurt,https://dbag.careers.hibob.com/jobs,generic,1,True
-mutares-global,mutares,Mutares,Multi-region,Munich; Frankfurt; Vienna; London; Stockholm; Copenhagen; Oslo; Helsinki,https://career.mutares.com/jobs,teamtailor,1,True
-capvis-global,capvis,Capvis,Multi-region,Zurich; Frankfurt,https://www.capvis.com/careers/,generic,1,True
-ufenau-global,ufenau,Ufenau Capital Partners,Multi-region,Zurich; Munich; London,https://ufenau-capital-partners.jobs.personio.com/,personio,1,True
-apollo-global,apollo,Apollo Global Management,Multi-region,Frankfurt; London; European offices,https://www.apollo.com/careers,generic,1,True
-kkr-global,kkr,KKR,Multi-region,Frankfurt; London; European offices,https://www.kkr.com/careers,generic,1,True
-carlyle-global,carlyle,Carlyle,Multi-region,London; European offices,https://www.carlyle.com/careers,generic,1,True
-blackstone-global,blackstone,Blackstone,Multi-region,Frankfurt; London; European offices,https://www.blackstone.com/careers/,generic,1,True
-cvc-global,cvc,CVC,Multi-region,Frankfurt; London; Stockholm; European offices,https://www.cvc.com/careers/,generic,1,True
-eqt-global,eqt,EQT,Multi-region,Munich; Zurich; Stockholm; Copenhagen; London,https://eqtgroup.com/careers,generic,1,True
-permira-global,permira,Permira,Multi-region,Frankfurt; London; European offices,https://www.permira.com/careers/,generic,1,True
-bridgepoint-global,bridgepoint,Bridgepoint Group,Multi-region,Frankfurt; Stockholm; London,https://www.bridgepoint.eu/careers,generic,1,True
-hg-global,hg,Hg,Multi-region,Munich; London,https://hgcapital.com/careers,generic,1,True
-brookfield-global,brookfield,Brookfield Asset Management,Multi-region,Frankfurt; London; European offices,https://www.brookfield.com/careers,generic,1,True
-macquarie-global,macquarie,Macquarie Group,Multi-region,Frankfurt; Zurich; London; European offices,https://www.macquarie.com/careers.html,generic,1,True
-antin-global,antin,Antin Infrastructure Partners,Multi-region,London; European offices,https://www.antin-ip.com/careers,generic,1,True
-eurazeo-global,eurazeo,Eurazeo,Multi-region,Berlin; Frankfurt coverage; London; European offices,https://www.eurazeo.com/en/group/careers,generic,1,True
-verdane-global,verdane,Verdane,Multi-region,Oslo; Stockholm; Copenhagen; Helsinki; Berlin; London,https://verdane.com/careers/,generic,1,True
-enterprise-investors-global,enterprise-investors,Enterprise Investors,Multi-region,Warsaw; Prague and CEE coverage,https://www.ei.com.pl/en/career/,generic,1,True
-mid-europa-global,mid-europa,MidEuropa,Multi-region,London; Warsaw; Prague and CEE coverage,https://mideuropa.com/careers/,generic,1,True
-innova-capital-global,innova-capital,Innova Capital,Multi-region,Warsaw; Prague and CEE coverage,https://innovacap.com/career/,generic,1,True
-fidelity-international-global,fidelity-international,Fidelity International,Multi-region,Frankfurt; Zurich; London,https://careers.fidelityinternational.com/,generic,1,True
-invesco-global,invesco,Invesco,Multi-region,Frankfurt; Zurich; London,https://careers.invesco.com/,generic,1,True
-vanguard-global,vanguard,Vanguard,Multi-region,Frankfurt; London; European offices,https://www.vanguardjobs.com/,generic,1,True
-mg-global,mg,M&G,Multi-region,London; European offices,https://www.mandg.com/careers,generic,1,True
-man-group-global,man-group,Man Group,Multi-region,London; European offices,https://www.man.com/careers,generic,1,True
-janus-henderson-global,janus-henderson,Janus Henderson,Multi-region,London; Frankfurt; European offices,https://www.janushenderson.com/corporate/careers/,generic,1,True
-baillie-gifford-global,baillie-gifford,Baillie Gifford,Multi-region,Edinburgh; London,https://www.bailliegifford.com/en/uk/individual-investors/careers/,generic,1,True
-abrdn-global,abrdn,abrdn,Multi-region,Edinburgh; London; European offices,https://www.abrdn.com/en/corporate/careers,generic,1,True
+partners-group-global,partners-group,Partners Group,Multi-region,Zug; Zurich; London; Munich; Frankfurt,https://jobs.partnersgroup.com/,successfactors,7,True
+advent-global,advent-international,Advent International,Multi-region,Frankfurt; London; Munich,https://www.adventinternational.com/careers/,generic,7,True
+cinven-global,cinven,Cinven,Multi-region,Frankfurt; London,https://cinven.pinpointhq.com/,generic,7,True
+bc-partners-global,bc-partners,BC Partners,Multi-region,Hamburg; London,https://www.bcpartners.com/careers/,generic,7,True
+triton-global,triton,Triton Partners,Multi-region,Frankfurt; Stockholm; London; Copenhagen; Oslo; Helsinki,https://tritonpartners.wd3.myworkdayjobs.com/en-GB/External,workday,7,True
+ardian-global,ardian,Ardian,Multi-region,Frankfurt; Zurich; London; Munich,https://ardian.wd103.myworkdayjobs.com/ArdianCareers,workday,7,True
+tpg-global,tpg,TPG,Multi-region,London; Frankfurt; Munich,https://job-boards.greenhouse.io/tpgcareers,greenhouse,7,True
+bain-capital-global,bain-capital,Bain Capital,Multi-region,Munich; London; Frankfurt,https://baincapital.wd1.myworkdayjobs.com/External_Public,workday,7,True
+ares-global,ares,Ares Management,Multi-region,Frankfurt; London; Munich,https://aresmgmt.wd1.myworkdayjobs.com/en-US/External,workday,7,True
+icg-global,icg,Intermediate Capital Group,Multi-region,Frankfurt; London,https://icg.wd3.myworkdayjobs.com/en-US/external_careers,workday,7,True
+pai-global,pai-partners,PAI Partners,Multi-region,Munich; London; Frankfurt,https://www.paipartners.com/careers/,generic,7,True
+waterland-global,waterland,Waterland Private Equity,Multi-region,Munich; Hamburg; Copenhagen; Oslo; London,https://www.waterlandpe.com/careers/,generic,7,True
+nordic-capital-global,nordic-capital,Nordic Capital,Multi-region,Stockholm; Copenhagen; Oslo; Helsinki; London; Frankfurt,https://career.nordiccapital.com/jobs,teamtailor,7,True
+altor-global,altor,Altor,Multi-region,Stockholm; Oslo; Copenhagen; Zurich,https://careers.altor.com/,teamtailor,7,True
+axcel-global,axcel,Axcel,Multi-region,Copenhagen; Stockholm,https://axcel.dk/career/,generic,7,True
+fsn-capital-global,fsn-capital,FSN Capital,Multi-region,Oslo; Stockholm; Copenhagen; Munich,https://www.fsncapital.com/careers,generic,7,True
+summa-equity-global,summa-equity,Summa Equity,Multi-region,Stockholm; Oslo; Munich,https://summaequity.com/career/,generic,7,True
+dbag-global,dbag,Deutsche Beteiligungs AG,Germany,Frankfurt,https://dbag.careers.hibob.com/jobs,generic,7,True
+mutares-global,mutares,Mutares,Multi-region,Munich; Frankfurt; Vienna; London; Stockholm; Copenhagen; Oslo; Helsinki,https://career.mutares.com/jobs,teamtailor,7,True
+capvis-global,capvis,Capvis,Multi-region,Zurich; Frankfurt,https://www.capvis.com/careers/,generic,7,True
+ufenau-global,ufenau,Ufenau Capital Partners,Multi-region,Zurich; Munich; London,https://ufenau-capital-partners.jobs.personio.com/,personio,7,True
+apollo-global,apollo,Apollo Global Management,Multi-region,Frankfurt; London; European offices,https://www.apollo.com/careers,generic,14,True
+kkr-global,kkr,KKR,Multi-region,Frankfurt; London; European offices,https://www.kkr.com/careers,generic,14,True
+carlyle-global,carlyle,Carlyle,Multi-region,London; European offices,https://www.carlyle.com/careers,generic,14,True
+blackstone-global,blackstone,Blackstone,Multi-region,Frankfurt; London; European offices,https://www.blackstone.com/careers/,generic,14,True
+cvc-global,cvc,CVC,Multi-region,Frankfurt; London; Stockholm; European offices,https://www.cvc.com/careers/,generic,14,True
+eqt-global,eqt,EQT,Multi-region,Munich; Zurich; Stockholm; Copenhagen; London,https://eqtgroup.com/careers,generic,14,True
+permira-global,permira,Permira,Multi-region,Frankfurt; London; European offices,https://www.permira.com/careers/,generic,14,True
+bridgepoint-global,bridgepoint,Bridgepoint Group,Multi-region,Frankfurt; Stockholm; London,https://www.bridgepoint.eu/careers,generic,14,True
+hg-global,hg,Hg,Multi-region,Munich; London,https://hgcapital.com/careers,generic,14,True
+brookfield-global,brookfield,Brookfield Asset Management,Multi-region,Frankfurt; London; European offices,https://www.brookfield.com/careers,generic,14,True
+macquarie-global,macquarie,Macquarie Group,Multi-region,Frankfurt; Zurich; London; European offices,https://www.macquarie.com/careers.html,generic,14,True
+antin-global,antin,Antin Infrastructure Partners,Multi-region,London; European offices,https://www.antin-ip.com/careers,generic,14,True
+eurazeo-global,eurazeo,Eurazeo,Multi-region,Berlin; Frankfurt coverage; London; European offices,https://www.eurazeo.com/en/group/careers,generic,14,True
+verdane-global,verdane,Verdane,Multi-region,Oslo; Stockholm; Copenhagen; Helsinki; Berlin; London,https://verdane.com/careers/,generic,30,True
+enterprise-investors-global,enterprise-investors,Enterprise Investors,Multi-region,Warsaw; Prague and CEE coverage,https://www.ei.com.pl/en/career/,generic,14,True
+mid-europa-global,mid-europa,MidEuropa,Multi-region,London; Warsaw; Prague and CEE coverage,https://mideuropa.com/careers/,generic,14,True
+innova-capital-global,innova-capital,Innova Capital,Multi-region,Warsaw; Prague and CEE coverage,https://innovacap.com/career/,generic,14,True
+fidelity-international-global,fidelity-international,Fidelity International,Multi-region,Frankfurt; Zurich; London,https://careers.fidelityinternational.com/,generic,7,True
+invesco-global,invesco,Invesco,Multi-region,Frankfurt; Zurich; London,https://careers.invesco.com/,generic,7,True
+vanguard-global,vanguard,Vanguard,Multi-region,Frankfurt; London; European offices,https://www.vanguardjobs.com/,generic,7,True
+mg-global,mg,M&G,Multi-region,London; European offices,https://www.mandg.com/careers,generic,7,True
+man-group-global,man-group,Man Group,Multi-region,London; European offices,https://www.man.com/careers,generic,7,True
+janus-henderson-global,janus-henderson,Janus Henderson,Multi-region,London; Frankfurt; European offices,https://www.janushenderson.com/corporate/careers/,generic,7,True
+baillie-gifford-global,baillie-gifford,Baillie Gifford,Multi-region,Edinburgh; London,https://www.bailliegifford.com/en/uk/individual-investors/careers/,generic,14,True
+abrdn-global,abrdn,abrdn,Multi-region,Edinburgh; London; European offices,https://www.abrdn.com/en/corporate/careers,generic,14,True

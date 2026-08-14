@@ -1,28 +1,28 @@
 source_id,canonical_company_id,company,market,priority_locations,seed_url,allowed_domains,cadence_days,enabled
-pwc-cz,pwc,PwC,Czechia,"Prague; Brno; Ostrava",https://jobs-cee.pwc.com/cz/cz/search-results?keywords=finance,"jobs-cee.pwc.com; pwc.wd3.myworkdayjobs.com",1,true
-pwc-de,pwc,PwC,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://jobs.pwc.de/de/de/search-results?keywords=finance,"jobs.pwc.de; pwc.de; pwc.com",1,true
-pwc-at,pwc,PwC,Austria,Vienna,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,"pwc.wd3.myworkdayjobs.com",1,true
-pwc-ch,pwc,PwC,Switzerland,Zurich,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,"pwc.wd3.myworkdayjobs.com",1,true
-pwc-uk,pwc,PwC,United Kingdom,London,https://jobs.pwc.co.uk/uk/en/search-results?keywords=finance,"jobs.pwc.co.uk; pwc.co.uk; pwc.com",1,true
-pwc-nordics,pwc,PwC,Nordics,"Stockholm; Copenhagen; Oslo; Helsinki",https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,"pwc.wd3.myworkdayjobs.com",1,true
-ey-cz,ey,EY,Czechia,Prague,https://careers.ey.com/ey/search/?q=finance&locationsearch=Czech%20Republic,"careers.ey.com",1,true
-ey-de,ey,EY,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://careers.ey.com/ey/search/?q=finance&locationsearch=Germany,"careers.ey.com",1,true
-ey-at,ey,EY,Austria,Vienna,https://careers.ey.com/ey/search/?q=finance&locationsearch=Austria,"careers.ey.com",1,true
-ey-ch,ey,EY,Switzerland,Zurich,https://careers.ey.com/ey/search/?q=finance&locationsearch=Switzerland,"careers.ey.com",1,true
-ey-uk,ey,EY,United Kingdom,London,https://careers.ey.com/ey/search/?q=finance&locationsearch=United%20Kingdom,"careers.ey.com",1,true
-ey-se,ey,EY,Nordics,Stockholm,https://careers.ey.com/ey/search/?q=finance&locationsearch=Sweden,"careers.ey.com",1,true
-ey-dk,ey,EY,Nordics,Copenhagen,https://careers.ey.com/ey/search/?q=finance&locationsearch=Denmark,"careers.ey.com",1,true
-ey-no,ey,EY,Nordics,Oslo,https://careers.ey.com/ey/search/?q=finance&locationsearch=Norway,"careers.ey.com",1,true
-ey-fi,ey,EY,Nordics,Helsinki,https://careers.ey.com/ey/search/?q=finance&locationsearch=Finland,"careers.ey.com",1,true
-deloitte-cz,deloitte,Deloitte,Czechia,Prague,https://apply.deloittece.com/en_US/careers/SearchJobs/?jobOffset=0&jobRecordsPerPage=10&listFilterMode=1,"apply.deloittece.com",1,true
-deloitte-de,deloitte,Deloitte,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://jobs.deloitte.de/search/?q=finance&locationsearch=Germany,"jobs.deloitte.de",1,true
-deloitte-at,deloitte,Deloitte,Austria,Vienna,https://careers.smartrecruiters.com/DeloitteAT/deloitte-jobs,"careers.smartrecruiters.com; jobs.smartrecruiters.com; api.smartrecruiters.com",1,true
-deloitte-ch,deloitte,Deloitte,Switzerland,Zurich,https://apply.deloitte.ch/CHCareers/SearchJobs/,"apply.deloitte.ch",1,true
-deloitte-uk,deloitte,Deloitte,United Kingdom,London,https://apply.deloitte.co.uk/UKCareers/SearchJobs/,"apply.deloitte.co.uk",1,true
-deloitte-nordics,deloitte,Deloitte,Nordics,"Stockholm; Copenhagen; Oslo; Helsinki",https://careers.smartrecruiters.com/DeloitteNordic?oga=true,"careers.smartrecruiters.com; jobs.smartrecruiters.com; api.smartrecruiters.com",1,true
-kpmg-cz,kpmg,KPMG,Czechia,Prague,https://kpmg.com/cz/en/home/careers.html,"kpmg.com",1,true
-kpmg-de,kpmg,KPMG,Germany,"Munich; Berlin; Frankfurt; Hamburg",https://jobs.kpmg.de/?currentPage=1&keyword=finance&pageSize=25,"jobs.kpmg.de; kpmg.de; kpmg.com",1,true
-kpmg-at,kpmg,KPMG,Austria,Vienna,https://bewerbung.kpmg.at/go/Alle-Stellen/9402055/,"bewerbung.kpmg.at",1,true
-kpmg-ch,kpmg,KPMG,Switzerland,Zurich,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,"jobs.kpmg.ch; kpmg.com",1,true
-kpmg-uk,kpmg,KPMG,United Kingdom,London,https://www.kpmgcareers.co.uk/search/vacancies/?intakeType=Experienced,"kpmgcareers.co.uk; www.kpmgcareers.co.uk",1,true
-kpmg-nordics,kpmg,KPMG,Nordics,"Stockholm; Copenhagen; Oslo; Helsinki",https://cdn.jobylon.com/jobs/companies/1532/embed/v2/?page_size=100,"cdn.jobylon.com; emp.jobylon.com",1,true
+pwc-cz,pwc,PwC,Czechia,Prague; Brno; Ostrava,https://jobs-cee.pwc.com/cz/cz/search-results?keywords=finance,jobs-cee.pwc.com; pwc.wd3.myworkdayjobs.com,7,True
+pwc-de,pwc,PwC,Germany,Munich; Berlin; Frankfurt; Hamburg,https://jobs.pwc.de/de/de/search-results?keywords=finance,jobs.pwc.de; pwc.de; pwc.com,7,True
+pwc-at,pwc,PwC,Austria,Vienna,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,pwc.wd3.myworkdayjobs.com,7,True
+pwc-ch,pwc,PwC,Switzerland,Zurich,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,pwc.wd3.myworkdayjobs.com,7,True
+pwc-uk,pwc,PwC,United Kingdom,London,https://jobs.pwc.co.uk/uk/en/search-results?keywords=finance,jobs.pwc.co.uk; pwc.co.uk; pwc.com,7,True
+pwc-nordics,pwc,PwC,Nordics,Stockholm; Copenhagen; Oslo; Helsinki,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,pwc.wd3.myworkdayjobs.com,7,True
+ey-cz,ey,EY,Czechia,Prague,https://careers.ey.com/ey/search/?q=finance&locationsearch=Czech%20Republic,careers.ey.com,7,True
+ey-de,ey,EY,Germany,Munich; Berlin; Frankfurt; Hamburg,https://careers.ey.com/ey/search/?q=finance&locationsearch=Germany,careers.ey.com,7,True
+ey-at,ey,EY,Austria,Vienna,https://careers.ey.com/ey/search/?q=finance&locationsearch=Austria,careers.ey.com,7,True
+ey-ch,ey,EY,Switzerland,Zurich,https://careers.ey.com/ey/search/?q=finance&locationsearch=Switzerland,careers.ey.com,7,True
+ey-uk,ey,EY,United Kingdom,London,https://careers.ey.com/ey/search/?q=finance&locationsearch=United%20Kingdom,careers.ey.com,7,True
+ey-se,ey,EY,Nordics,Stockholm,https://careers.ey.com/ey/search/?q=finance&locationsearch=Sweden,careers.ey.com,7,True
+ey-dk,ey,EY,Nordics,Copenhagen,https://careers.ey.com/ey/search/?q=finance&locationsearch=Denmark,careers.ey.com,7,True
+ey-no,ey,EY,Nordics,Oslo,https://careers.ey.com/ey/search/?q=finance&locationsearch=Norway,careers.ey.com,7,True
+ey-fi,ey,EY,Nordics,Helsinki,https://careers.ey.com/ey/search/?q=finance&locationsearch=Finland,careers.ey.com,7,True
+deloitte-cz,deloitte,Deloitte,Czechia,Prague,https://apply.deloittece.com/en_US/careers/SearchJobs/?jobOffset=0&jobRecordsPerPage=10&listFilterMode=1,apply.deloittece.com,7,True
+deloitte-de,deloitte,Deloitte,Germany,Munich; Berlin; Frankfurt; Hamburg,https://jobs.deloitte.de/search/?q=finance&locationsearch=Germany,jobs.deloitte.de,7,True
+deloitte-at,deloitte,Deloitte,Austria,Vienna,https://careers.smartrecruiters.com/DeloitteAT/deloitte-jobs,careers.smartrecruiters.com; jobs.smartrecruiters.com; api.smartrecruiters.com,7,True
+deloitte-ch,deloitte,Deloitte,Switzerland,Zurich,https://apply.deloitte.ch/CHCareers/SearchJobs/,apply.deloitte.ch,7,True
+deloitte-uk,deloitte,Deloitte,United Kingdom,London,https://apply.deloitte.co.uk/UKCareers/SearchJobs/,apply.deloitte.co.uk,7,True
+deloitte-nordics,deloitte,Deloitte,Nordics,Stockholm; Copenhagen; Oslo; Helsinki,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,careers.smartrecruiters.com; jobs.smartrecruiters.com; api.smartrecruiters.com,7,True
+kpmg-cz,kpmg,KPMG,Czechia,Prague,https://kpmg.com/cz/en/home/careers.html,kpmg.com,7,True
+kpmg-de,kpmg,KPMG,Germany,Munich; Berlin; Frankfurt; Hamburg,https://jobs.kpmg.de/?currentPage=1&keyword=finance&pageSize=25,jobs.kpmg.de; kpmg.de; kpmg.com,7,True
+kpmg-at,kpmg,KPMG,Austria,Vienna,https://bewerbung.kpmg.at/go/Alle-Stellen/9402055/,bewerbung.kpmg.at,7,True
+kpmg-ch,kpmg,KPMG,Switzerland,Zurich,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,jobs.kpmg.ch; kpmg.com,7,True
+kpmg-uk,kpmg,KPMG,United Kingdom,London,https://www.kpmgcareers.co.uk/search/vacancies/?intakeType=Experienced,kpmgcareers.co.uk; www.kpmgcareers.co.uk,7,True
+kpmg-nordics,kpmg,KPMG,Nordics,Stockholm; Copenhagen; Oslo; Helsinki,https://cdn.jobylon.com/jobs/companies/1532/embed/v2/?page_size=100,cdn.jobylon.com; emp.jobylon.com,7,True

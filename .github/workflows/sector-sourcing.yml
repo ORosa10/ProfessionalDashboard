@@ -22,6 +22,8 @@ on:
       - "sourcing/sector_pilot.py"
       - "sourcing/big4_pilot.py"
       - "sourcing/pe_pilot.py"
+      - "sourcing/llm_fallback.py"
+      - "sourcing/requirements.txt"
       - "data/job_sources_corporate.csv"
       - "data/job_sources_financial_services.csv"
       - "data/job_sources_holdings.csv"
@@ -67,8 +69,12 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - run: pip install -r requirements.txt
+      - run: pip install -r requirements.txt -r sourcing/requirements.txt
+      - name: Install headless Chromium for the LLM fallback adapter
+        run: playwright install --with-deps chromium
       - name: Check ${{ matrix.sector.name }} career pages
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           python -m sourcing.sector_pilot \
             --sources ${{ matrix.sector.sources }} \

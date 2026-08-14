@@ -25,7 +25,24 @@ from datetime import datetime, timezone
 import requests
 
 GEMINI_MODEL = "gemini-2.5-flash"
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+# Google migrated the free-tier REST surface from the old
+# v1beta/models/{model}:generateContent endpoint to the Interactions API
+# sometime after this codebase's original 2025 knowledge cutoff -- the old
+# endpoint now 404s. Confirmed against ai.google.dev/gemini-api/docs on
+# 2026-08-14. Key goes in a header now, never in the URL/query string.
+GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/interactions"
+JOB_ITEMS_SCHEMA = {
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "title": {"type": "string"},
+            "location": {"type": "string"},
+            "url": {"type": "string"},
+        },
+        "required": ["title"],
+    },
+}
 
 EXTRACTION_PROMPT = """You are looking at the rendered text content of a company's careers/jobs page.
 Extract every individual job opening that is plausibly relevant to finance, investment, treasury,
@@ -71,6 +88,22 @@ def _render_page(url: str, timeout_ms: int = 25000) -> tuple[str, list[str]]:
     return text[:15000], links
 
 
+def _extract_interaction_text(payload: dict) -> str:
+    """Pull the model's text out of an Interactions API response, tolerating
+    either the documented `output_text` convenience field or having to walk
+    `steps[].content[]` ourselves if that field isn't present.
+    """
+    output_text = payload.get("output_text")
+    if isinstance(output_text, str) and output_text.strip():
+        return output_text
+    chunks: list[str] = []
+    for step in payload.get("steps", []) or []:
+        for block in step.get("content", []) or []:
+            if isinstance(block, dict) and block.get("type") == "text":
+                chunks.append(str(block.get("text", "")))
+    return "".join(chunks)
+
+
 def _call_gemini(page_url: str, page_text: str) -> list[dict]:
     api_key = os.environ.get("GEMINI_API_KEY", "")
     if not api_key:
@@ -78,27 +111,30 @@ def _call_gemini(page_url: str, page_text: str) -> list[dict]:
     prompt = EXTRACTION_PROMPT.format(page_url=page_url, page_text=page_text)
     try:
         response = requests.post(
-            f"{GEMINI_URL}?key={api_key}",
+            GEMINI_URL,
+            headers={
+                # Interactions API takes the key as a header, not a URL query
+                # param -- so it can never end up embedded in a request-URL
+                # string inside an exception message, log line, or CSV cell.
+                "x-goog-api-key": api_key,
+                "Content-Type": "application/json",
+            },
             json={
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {"temperature": 0, "responseMimeType": "application/json"},
+                "model": GEMINI_MODEL,
+                "input": prompt,
+                "response_format": {
+                    "type": "text",
+                    "mime_type": "application/json",
+                    "schema": JOB_ITEMS_SCHEMA,
+                },
             },
             timeout=60,
         )
         response.raise_for_status()
     except requests.exceptions.RequestException as exc:
-        # requests' exception message embeds the full request URL --
-        # including "?key=<GEMINI_API_KEY>". That string was ending up in
-        # source_runs_*.csv's errors column and getting committed, which
-        # GitHub's push protection correctly blocked (GH013: GCP API Key
-        # Bound to a Service Account) on 2026-08-14. Never let the raw key
-        # reach a log line, CSV cell, or commit again.
-        raise RuntimeError(
-            f"Gemini request failed: {type(exc).__name__}: "
-            f"{str(exc).replace(api_key, '***')}"
-        ) from None
+        raise RuntimeError(f"Gemini request failed: {type(exc).__name__}: {exc}") from None
     payload = response.json()
-    text = payload["candidates"][0]["content"]["parts"][0]["text"]
+    text = _extract_interaction_text(payload)
     try:
         items = json.loads(text)
     except json.JSONDecodeError:

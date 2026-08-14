@@ -24,12 +24,19 @@ from datetime import datetime, timezone
 
 import requests
 
-GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_MODEL = "gemini-3.6-flash"
 # Google migrated the free-tier REST surface from the old
 # v1beta/models/{model}:generateContent endpoint to the Interactions API
-# sometime after this codebase's original 2025 knowledge cutoff -- the old
-# endpoint now 404s. Confirmed against ai.google.dev/gemini-api/docs on
-# 2026-08-14. Key goes in a header now, never in the URL/query string.
+# sometime after this codebase's original 2025 knowledge cutoff. Confirmed
+# against ai.google.dev/gemini-api/docs/quickstart on 2026-08-14 (the
+# endpoint, header, and body shape below are quoted verbatim from that
+# page's own curl example -- fetched twice independently, identical both
+# times). The endpoint itself is real (GET on /v1beta/models/* returns 403
+# "needs auth", not 404 "no such path"), but the run-#9 attempt still 404'd
+# because it kept the old "gemini-2.5-flash" model id -- the quickstart's
+# own example model, gemini-3.6-flash, is what's actually wired up under
+# Interactions today. Key goes in a header now, never in the URL/query
+# string, so it can't leak into an exception message either.
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/interactions"
 JOB_ITEMS_SCHEMA = {
     "type": "array",

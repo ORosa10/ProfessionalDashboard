@@ -76,15 +76,27 @@ def _call_gemini(page_url: str, page_text: str) -> list[dict]:
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not set")
     prompt = EXTRACTION_PROMPT.format(page_url=page_url, page_text=page_text)
-    response = requests.post(
-        f"{GEMINI_URL}?key={api_key}",
-        json={
-            "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": 0, "responseMimeType": "application/json"},
-        },
-        timeout=60,
-    )
-    response.raise_for_status()
+    try:
+        response = requests.post(
+            f"{GEMINI_URL}?key={api_key}",
+            json={
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"temperature": 0, "responseMimeType": "application/json"},
+            },
+            timeout=60,
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException as exc:
+        # requests' exception message embeds the full request URL --
+        # including "?key=<GEMINI_API_KEY>". That string was ending up in
+        # source_runs_*.csv's errors column and getting committed, which
+        # GitHub's push protection correctly blocked (GH013: GCP API Key
+        # Bound to a Service Account) on 2026-08-14. Never let the raw key
+        # reach a log line, CSV cell, or commit again.
+        raise RuntimeError(
+            f"Gemini request failed: {type(exc).__name__}: "
+            f"{str(exc).replace(api_key, '***')}"
+        ) from None
     payload = response.json()
     text = payload["candidates"][0]["content"]["parts"][0]["text"]
     try:

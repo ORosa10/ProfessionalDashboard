@@ -20,9 +20,18 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from datetime import datetime, timezone
 
 import requests
+
+# Free-tier Gemini rate limit -- run #10 (2026-08-15 05:xx) 404-free but every
+# single call came back "429 Too Many Requests" because sector_pilot.py's
+# generic 0.15s inter-source pause is nowhere near enough headroom for a
+# free-tier RPM cap. Space calls out and retry-with-backoff on a 429 instead
+# of just recording the failure and moving on.
+_MIN_SECONDS_BETWEEN_CALLS = 4.0
+_last_call_at = 0.0
 
 GEMINI_MODEL = "gemini-3.6-flash"
 # Google migrated the free-tier REST surface from the old
@@ -111,35 +120,64 @@ def _extract_interaction_text(payload: dict) -> str:
     return "".join(chunks)
 
 
-def _call_gemini(page_url: str, page_text: str) -> list[dict]:
+def _call_gemini(page_url: str, page_text: str, max_retries: int = 3) -> list[dict]:
     api_key = os.environ.get("GEMINI_API_KEY", "")
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not set")
     prompt = EXTRACTION_PROMPT.format(page_url=page_url, page_text=page_text)
-    try:
-        response = requests.post(
-            GEMINI_URL,
-            headers={
-                # Interactions API takes the key as a header, not a URL query
-                # param -- so it can never end up embedded in a request-URL
-                # string inside an exception message, log line, or CSV cell.
-                "x-goog-api-key": api_key,
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": GEMINI_MODEL,
-                "input": prompt,
-                "response_format": {
-                    "type": "text",
-                    "mime_type": "application/json",
-                    "schema": JOB_ITEMS_SCHEMA,
+
+    global _last_call_at
+    last_exc: Exception | None = None
+    for attempt in range(max_retries):
+        wait = _MIN_SECONDS_BETWEEN_CALLS - (time.monotonic() - _last_call_at)
+        if wait > 0:
+            time.sleep(wait)
+        try:
+            response = requests.post(
+                GEMINI_URL,
+                headers={
+                    # Interactions API takes the key as a header, not a URL
+                    # query param -- so it can never end up embedded in a
+                    # request-URL string inside an exception message, log
+                    # line, or CSV cell.
+                    "x-goog-api-key": api_key,
+                    "Content-Type": "application/json",
                 },
-            },
-            timeout=60,
+                json={
+                    "model": GEMINI_MODEL,
+                    "input": prompt,
+                    "response_format": {
+                        "type": "text",
+                        "mime_type": "application/json",
+                        "schema": JOB_ITEMS_SCHEMA,
+                    },
+                },
+                timeout=60,
+            )
+            _last_call_at = time.monotonic()
+            if response.status_code == 429 and attempt < max_retries - 1:
+                # Exponential backoff (4s, 8s, 16s...) rather than failing
+                # the source outright on the first free-tier rate-limit hit
+                # -- run #10 (2026-08-15) 429'd on every single llm-adapter
+                # source because there was no backoff at all.
+                time.sleep(_MIN_SECONDS_BETWEEN_CALLS * (2 ** attempt))
+                continue
+            response.raise_for_status()
+            break
+        except requests.exceptions.RequestException as exc:
+            _last_call_at = time.monotonic()
+            last_exc = exc
+            if isinstance(exc, requests.exceptions.HTTPError) and (
+                exc.response is not None and exc.response.status_code == 429
+            ) and attempt < max_retries - 1:
+                time.sleep(_MIN_SECONDS_BETWEEN_CALLS * (2 ** attempt))
+                continue
+            raise RuntimeError(f"Gemini request failed: {type(exc).__name__}: {exc}") from None
+    else:
+        raise RuntimeError(
+            f"Gemini request failed after {max_retries} attempts: "
+            f"{type(last_exc).__name__}: {last_exc}"
         )
-        response.raise_for_status()
-    except requests.exceptions.RequestException as exc:
-        raise RuntimeError(f"Gemini request failed: {type(exc).__name__}: {exc}") from None
     payload = response.json()
     text = _extract_interaction_text(payload)
     try:

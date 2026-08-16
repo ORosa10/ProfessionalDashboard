@@ -143,6 +143,44 @@ def _save_job_feedback(
     )
     response.raise_for_status()
 
+def _company_category_map(company_ids: "pd.Series") -> "pd.Series":
+    """Map each job's canonical_company_id to its Company Universe category
+    (the same 8 labels as the Companies page). This is the only categorisation
+    dimension for jobs -- there is no separate role-family sub-division."""
+    frames: list[pd.DataFrame] = []
+    base = pd.read_csv(DATA_DIR / "company_universe.csv").fillna("")
+    if "company_category" in base.columns:
+        frames.append(base[["canonical_company_id", "company_category"]])
+    categories_path = DATA_DIR / "company_categories.csv"
+    if categories_path.exists():
+        frames.append(pd.read_csv(categories_path).fillna("")[["canonical_company_id", "company_category"]])
+    for wave_path in sorted(DATA_DIR.glob("company_universe_wave*.csv")):
+        wave = pd.read_csv(wave_path).fillna("")
+        if "company_category" in wave.columns:
+            frames.append(wave[["canonical_company_id", "company_category"]])
+    combined = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(
+        columns=["canonical_company_id", "company_category"]
+    )
+    base_map = combined.drop_duplicates("canonical_company_id", keep="last").set_index(
+        "canonical_company_id"
+    )["company_category"]
+    overrides_path = DATA_DIR / "company_category_overrides.csv"
+    if overrides_path.exists():
+        overrides = (
+            pd.read_csv(overrides_path)
+            .fillna("")
+            .drop_duplicates("canonical_company_id", keep="last")
+            .set_index("canonical_company_id")["company_category"]
+        )
+        mapped = company_ids.map(overrides)
+        mapped = mapped.where(mapped.notna() & mapped.ne(""), company_ids.map(base_map))
+    else:
+        mapped = company_ids.map(base_map)
+    return mapped.fillna("").replace(
+        {"Private Equity & Asset Management": "Private Equity & Private Markets"}
+    )
+
+
 
 def _country_from_market_and_location(market: str, location: str) -> str:
     if market != "Nordics":
@@ -216,20 +254,19 @@ def render_jobs() -> None:
     # Sector job snapshots, matching the Company Universe's own category
     # labels (Filter company categories on the Companies page) so a sector
     # here means the same thing it does there. "Big Four" (jobs.csv) is the
-    # original pilot and still gets its own generic role_family label.
     # There used to be a "Core" bucket here for company_universe.csv's
     # companies, back when that file had no company_category column -- it
     # was never a real Company Universe category, just a catch-all for
     # companies that hadn't been classified yet. Backfilled 2026-08-16 and
     # folded into the real sectors below instead.
     SECTOR_JOB_FILES = [
-        ("jobs.csv", "Other relevant finance", "Verified role from the Big Four pilot."),
-        ("jobs_corporate_staging.csv", "Corporate", "Verified role from the Corporate sector pilot."),
-        ("jobs_financial-services_staging.csv", "Banking & Financial Services", "Verified role from the Banking & Financial Services sector pilot."),
-        ("jobs_public-markets_staging.csv", "Public Markets & Asset Management", "Verified role from the Public Markets & Asset Management sector pilot."),
-        ("jobs_specialist-funds_staging.csv", "Specialist & Boutique Funds", "Verified role from the Specialist & Boutique Funds sector pilot."),
+        ("jobs.csv", "Verified role from the Big Four pilot."),
+        ("jobs_corporate_staging.csv", "Verified role from the Corporate sector pilot."),
+        ("jobs_financial-services_staging.csv", "Verified role from the Banking & Financial Services sector pilot."),
+        ("jobs_public-markets_staging.csv", "Verified role from the Public Markets & Asset Management sector pilot."),
+        ("jobs_specialist-funds_staging.csv", "Verified role from the Specialist & Boutique Funds sector pilot."),
     ]
-    for filename, role_family_label, default_fit_note in SECTOR_JOB_FILES:
+    for filename, default_fit_note in SECTOR_JOB_FILES:
         pilot_path = DATA_DIR / filename
         if not pilot_path.exists():
             continue
@@ -251,7 +288,6 @@ def render_jobs() -> None:
             lambda row: _country_from_market_and_location(row["countries"], row["cities"]),
             axis=1,
         )
-        pilot["role_family"] = role_family_label
         pilot["seniority"] = ""
         if "description_en" in pilot.columns:
             pilot["description_display"] = pilot["description_en"].where(
@@ -294,7 +330,6 @@ def render_jobs() -> None:
             }
         )
         pe["job_url"] = pe["source_url"]
-        pe["role_family"] = "Private markets"
         pe["fit_note"] = pe.apply(
             lambda row: " | ".join(
                 value
@@ -326,7 +361,6 @@ def render_jobs() -> None:
             }
         )
         consulting["job_url"] = consulting["source_url"]
-        consulting["role_family"] = "Consulting"
         consulting["fit_note"] = consulting.apply(
             lambda row: " | ".join(
                 value
@@ -361,6 +395,18 @@ def render_jobs() -> None:
     else:
         jobs["rating"] = "Unrated"
     jobs["rating"] = jobs["rating"].replace("", "Unrated")
+    # Company category (same 8 labels as the Companies page) is the only
+    # categorisation dimension for jobs. Every job must belong to a company
+    # that has a category; drop any that don't so the inbox never shows a
+    # company-less / category-less role.
+    jobs["company_category"] = _company_category_map(jobs["canonical_company_id"])
+    jobs = jobs[
+        jobs["canonical_company_id"].astype(str).str.strip().ne("")
+        & jobs["company_category"].astype(str).str.strip().ne("")
+    ].copy()
+    if jobs.empty:
+        st.info("No jobs are attached to a categorised company yet.")
+        return
     token = _github_token()
     try:
         feedback_data, feedback_sha = _load_job_feedback(token)
@@ -406,9 +452,7 @@ def render_jobs() -> None:
     # New sector calibration shortlists (built from the automated sector
     # pilots' own sourced jobs, not a separate manual-research pass like PE/
     # Consulting originally were). Deliberately NOT added to `themed_rows`
-    # below -- role_family stays the clean sector name (matches the Company
-    # Universe's "Filter company categories"), it never gets overwritten by
-    # the theme sub-classification the way PE/Consulting calibration rows do.
+    # below -- jobs are categorised solely by their company's category.
     SECTOR_CALIBRATION_FILES = [
         ("corporate_calibration_shortlist.csv", "Corporate calibration"),
         ("financial_services_calibration_shortlist.csv", "Banking & Financial Services calibration"),
@@ -436,10 +480,6 @@ def render_jobs() -> None:
         for column in ["cohort", "theme", "seniority_band", "selection_reason"]:
             jobs[column] = jobs[column].fillna("")
         jobs["review_set"] = jobs["review_set"].fillna("").replace("", "Backlog")
-        themed_rows = jobs["review_set"].isin(
-            ["PE calibration", "Consulting calibration"]
-        ) & jobs["theme"].ne("")
-        jobs.loc[themed_rows, "role_family"] = jobs.loc[themed_rows, "theme"]
     else:
         jobs["display_order"] = ""
         jobs["cohort"] = ""
@@ -450,7 +490,6 @@ def render_jobs() -> None:
     for required, default in {
         "countries": "",
         "cities": "",
-        "role_family": "Other relevant finance",
         "seniority": "",
         "fit_note": "",
         "description_display": "",
@@ -510,7 +549,7 @@ def render_jobs() -> None:
         }
     )
     ratings = [rating for rating in ["A", "B", "C", "Unrated"] if rating in set(jobs["rating"])]
-    roles = sorted(value for value in jobs["role_family"].unique() if value)
+    company_categories = sorted(value for value in jobs["company_category"].unique() if value)
     available_feedback = [
         value for value in FEEDBACK_OPTIONS if value in set(jobs["feedback"])
     ]
@@ -520,7 +559,7 @@ def render_jobs() -> None:
     selected_feedback = f3.multiselect(
         "Your job rating", available_feedback, default=available_feedback
     )
-    selected_roles = f4.multiselect("Role family", roles, default=roles)
+    selected_categories = f4.multiselect("Company category", company_categories, default=company_categories)
     selected_country_set = set(selected_countries)
     country_match = jobs["countries"].apply(
         lambda value: bool(
@@ -532,7 +571,7 @@ def render_jobs() -> None:
         country_match
         & jobs["rating"].isin(selected_ratings)
         & jobs["feedback"].isin(selected_feedback)
-        & jobs["role_family"].isin(selected_roles)
+        & jobs["company_category"].isin(selected_categories)
         & jobs["status"].eq("Open")
     ].copy()
     view["_feedback_order"] = view["feedback"].map(
@@ -580,7 +619,7 @@ def render_jobs() -> None:
         "company",
         "countries",
         "cities",
-        "role_family",
+        "company_category",
         "source_url",
     ]
     editor_view = view.set_index("opportunity_id")[columns]
@@ -614,7 +653,7 @@ def render_jobs() -> None:
             "company": st.column_config.TextColumn("Company", width="medium"),
             "countries": st.column_config.TextColumn("Countries", width="medium"),
             "cities": st.column_config.TextColumn("Cities", width="medium"),
-            "role_family": st.column_config.TextColumn("Role family", width="medium"),
+            "company_category": st.column_config.TextColumn("Company category", width="medium"),
             "source_url": st.column_config.LinkColumn("Official job", display_text="Open", width="small"),
             },
         )

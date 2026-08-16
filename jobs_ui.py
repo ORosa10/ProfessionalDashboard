@@ -92,25 +92,34 @@ def _dispatch_promote_workflow(token: str) -> bool:
     return response.status_code == 204
 
 
+def _local_job_feedback(columns: list[str]) -> pd.DataFrame:
+    local = DATA_DIR / "job_feedback.csv"
+    if local.exists():
+        return pd.read_csv(local).fillna("").reindex(columns=columns)
+    return pd.DataFrame(columns=columns)
+
+
 def _load_job_feedback(token: str | None) -> tuple[pd.DataFrame, str | None]:
     columns = ["opportunity_id", "feedback", "comment", "updated_at"]
     if token:
-        response = requests.get(
-            FEEDBACK_API_URL,
-            headers=_github_headers(token),
-            params={"ref": "main"},
-            timeout=20,
-        )
-        if response.status_code == 404:
-            return pd.DataFrame(columns=columns), None
-        response.raise_for_status()
-        payload = response.json()
-        content = base64.b64decode(payload["content"]).decode("utf-8-sig")
-        return pd.read_csv(StringIO(content)).fillna("").reindex(columns=columns), payload["sha"]
-    local = DATA_DIR / "job_feedback.csv"
-    if local.exists():
-        return pd.read_csv(local).fillna("").reindex(columns=columns), None
-    return pd.DataFrame(columns=columns), None
+        try:
+            response = requests.get(
+                FEEDBACK_API_URL,
+                headers=_github_headers(token),
+                params={"ref": "main"},
+                timeout=20,
+            )
+            if response.status_code == 404:
+                return _local_job_feedback(columns), None
+            response.raise_for_status()
+            payload = response.json()
+            content = base64.b64decode(payload["content"]).decode("utf-8-sig")
+            return pd.read_csv(StringIO(content)).fillna("").reindex(columns=columns), payload["sha"]
+        except requests.RequestException:
+            # Token present but GitHub read failed: fall back to the bundled CSV
+            # so historical job feedback/comments still show instead of nothing.
+            return _local_job_feedback(columns), None
+    return _local_job_feedback(columns), None
 
 
 def _save_job_feedback(

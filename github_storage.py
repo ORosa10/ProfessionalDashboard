@@ -42,15 +42,32 @@ def _headers(token: str) -> dict[str, str]:
     }
 
 
-def load_ratings(token: str) -> tuple[pd.DataFrame, str | None]:
-    response = requests.get(API_URL, headers=_headers(token), params={"ref": BRANCH}, timeout=20)
-    if response.status_code == 404:
-        return pd.DataFrame(columns=RATING_COLUMNS), None
-    response.raise_for_status()
-    payload = response.json()
-    content = base64.b64decode(payload["content"]).decode("utf-8-sig")
-    ratings = pd.read_csv(StringIO(content)).fillna("")
-    return ratings.reindex(columns=RATING_COLUMNS, fill_value=""), payload["sha"]
+def _local_ratings() -> pd.DataFrame:
+    """Read the repo-bundled ratings CSV so historical ratings show even when
+    GitHub is unreachable or no token is configured."""
+    local_path = Path(__file__).parent / RATINGS_PATH
+    if local_path.exists():
+        ratings = pd.read_csv(local_path).fillna("")
+        return ratings.reindex(columns=RATING_COLUMNS, fill_value="")
+    return pd.DataFrame(columns=RATING_COLUMNS)
+
+
+def load_ratings(token: str | None) -> tuple[pd.DataFrame, str | None]:
+    if token:
+        try:
+            response = requests.get(API_URL, headers=_headers(token), params={"ref": BRANCH}, timeout=20)
+            if response.status_code == 404:
+                return _local_ratings(), None
+            response.raise_for_status()
+            payload = response.json()
+            content = base64.b64decode(payload["content"]).decode("utf-8-sig")
+            ratings = pd.read_csv(StringIO(content)).fillna("")
+            return ratings.reindex(columns=RATING_COLUMNS, fill_value=""), payload["sha"]
+        except requests.RequestException:
+            # Token present but GitHub read failed (expired/insufficient perms/etc.):
+            # fall back to the bundled CSV instead of showing everything Unrated.
+            return _local_ratings(), None
+    return _local_ratings(), None
 
 
 def save_ratings(token: str, ratings: pd.DataFrame, sha: str | None) -> None:

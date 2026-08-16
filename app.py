@@ -184,14 +184,13 @@ def companies_page() -> None:
     universe = _load_company_universe()
     token = github_token()
     ratings_sha = None
-    if token:
-        try:
-            saved_ratings, ratings_sha = load_ratings(token)
-        except Exception:
-            saved_ratings = pd.DataFrame(columns=RATING_COLUMNS)
-            st.warning("GitHub ratings could not be loaded. Showing the base universe.")
-    else:
+    # load_ratings falls back to the repo-bundled company_ratings.csv when there
+    # is no token or the GitHub read fails, so historical ratings show either way.
+    try:
+        saved_ratings, ratings_sha = load_ratings(token)
+    except Exception:
         saved_ratings = pd.DataFrame(columns=RATING_COLUMNS)
+        st.warning("Ratings could not be loaded. Showing the base universe.")
 
     base = universe[["canonical_company_id"]].copy()
     if saved_ratings.empty:

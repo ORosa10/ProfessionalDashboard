@@ -13,11 +13,12 @@ from jobs_ui import render_jobs, render_sources
 COMPANY_TARGETING_PATH = Path(__file__).parent / "COMPANY_TARGETING.md"
 GENERAL_COMPANY_TARGETING_PATH = Path(__file__).parent / "GENERAL_COMPANY_TARGETING.md"
 COMPANY_SECTORS = [
+    "Big Four",
     "Consulting",
     "Corporate",
     "Banking & Financial Services",
     "Holding & Conglomerate",
-    "Private Equity & Asset Management",
+    "Private Equity & Private Markets",
     "Investment Banking",
     "Public Markets & Asset Management",
     "Specialist & Boutique Funds",

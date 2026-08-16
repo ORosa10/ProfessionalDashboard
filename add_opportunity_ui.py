@@ -22,11 +22,14 @@ DATA_DIR = Path(__file__).parent / "data"
 SUBMISSIONS_PATH = "data/user_submitted_opportunities.csv"
 COMPANIES_PATH = "data/user_submitted_companies.csv"
 SUBMISSION_COLUMNS = [
-    "submission_id", "submitted_at", "job_url", "title", "company",
-    "canonical_company_id", "company_category", "location", "country",
-    "topic", "role_summary_en", "user_comment", "feedback",
-    "calibration_signal", "targeting_scope", "review_status", "source_domain",
+    "submission_id", "submitted_at", "linkedin_url", "company_url", "job_url",
+    "title", "company", "canonical_company_id", "company_category", "location",
+    "country", "topic", "role_summary_en", "company_profile", "role_profile",
+    "salary_research", "user_comment", "feedback", "calibration_signal",
+    "targeting_scope", "review_status", "source_domain",
 ]
+
+FEEDBACK_OPTIONS = ["Unrated", "Interested", "Maybe", "Pass"]
 COMPANY_COLUMNS = [
     "canonical_company_id", "company", "company_category", "source_domain",
     "first_submitted_at", "latest_job_url", "review_status",
@@ -224,144 +227,156 @@ def render_add_opportunity() -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title("Add Opportunity")
     st.caption(
-        "Paste a job you already like. It will be saved with its company and used as a positive example for the relevant targeting hypothesis."
+        "Paste a LinkedIn link and/or the company's own job page (one is enough). "
+        "It is saved for enrichment -- Claude then builds the company and role profile "
+        "and a salary read; you just rate it afterwards."
     )
-    with st.expander("How this improves sourcing"):
+    with st.expander("How this works"):
         st.write(
-            "The link is assigned to a company, sector and job theme. It becomes evidence for future searches, but it does not automatically become a hard rule or exclude exploratory roles."
+            "The app does not read the page itself (LinkedIn and many career sites are "
+            "login-gated). It stores your link(s); an assistant run then fills in the "
+            "company profile, role profile and a market salary read, assigns the company "
+            "category, and marks it ready for your rating. Your rating becomes a positive "
+            "(or negative) example for the relevant targeting hypothesis -- it never becomes "
+            "a hard rule or excludes exploratory roles."
         )
 
-    url = st.text_input(
-        "Job link",
-        placeholder="https://www.linkedin.com/jobs/view/...  or  https://company.com/careers/job/...",
+    linkedin_url = st.text_input(
+        "LinkedIn link (optional)",
+        placeholder="https://www.linkedin.com/jobs/view/...",
     )
-    st.caption(
-        "Company career pages usually load automatically. For LinkedIn and other "
-        "login-gated sites, use **Add manually** and type the title and company yourself."
+    company_url = st.text_input(
+        "Company job page link (optional)",
+        placeholder="https://company.com/careers/job/...",
     )
-    load_col, manual_col = st.columns(2)
-
-    def _blank_draft(link: str) -> dict[str, str]:
-        return {
-            "job_url": link.strip(), "title": "", "company": "", "location": "",
-            "description": "", "source_domain": urlparse(link.strip()).hostname or "",
-        }
-
-    if load_col.button(
-        "Load job from link",
-        disabled=not url,
-        help="Tries to read the job automatically. Works for most company career pages.",
-    ):
-        try:
-            st.session_state["submitted_job_draft"] = extract_job_page(url)
-        except Exception as exc:
-            st.session_state["submitted_job_draft"] = _blank_draft(url)
-            st.warning(f"The page could not be read automatically. Fill in the fields below by hand. ({exc})")
-    if manual_col.button(
-        "Add manually",
-        disabled=not url,
-        help="Skip auto-read and type the details yourself. Use this for LinkedIn and other login-gated sites.",
-    ):
-        st.session_state["submitted_job_draft"] = _blank_draft(url)
-
-    draft = st.session_state.get("submitted_job_draft")
-    if draft:
-        inferred_topic = infer_topic(draft.get("title", ""), draft.get("description", ""))
-        with st.form("add_opportunity_form"):
-            left, right = st.columns(2)
-            title = left.text_input("Role title", value=draft.get("title", ""))
-            company = right.text_input("Company", value=draft.get("company", ""))
-            location = left.text_input("Location", value=draft.get("location", ""))
-            country = right.text_input("Country")
-            topic = st.selectbox("Theme", TOPICS, index=TOPICS.index(inferred_topic))
-            role_summary = st.text_area(
-                "What the role does (English)", value=draft.get("description", ""), height=180
-            )
-            comment = st.text_area(
-                "Why this role is interesting to you",
-                placeholder="Optional, but especially useful when the reason is not obvious from the job description.",
-            )
-            submitted = st.form_submit_button("Save opportunity and company", type="primary")
-
-        if submitted:
-            if not title.strip() or not company.strip():
-                st.error("Role title and company are required.")
+    comment = st.text_area(
+        "Why this role is interesting to you (optional)",
+        placeholder="Especially useful when the reason is not obvious from the job description.",
+    )
+    has_link = bool(linkedin_url.strip() or company_url.strip())
+    if st.button("Save for enrichment", type="primary", disabled=not has_link):
+        token = github_token()
+        if not token:
+            st.error("GitHub saving is not configured for this app.")
+        else:
+            primary_url = company_url.strip() or linkedin_url.strip()
+            # Best-effort read of a company career page only (never LinkedIn) to
+            # pre-fill a few fields; enrichment fills the rest either way.
+            draft: dict[str, str] = {
+                "title": "", "company": "", "location": "", "description": "",
+                "source_domain": urlparse(primary_url).hostname or "",
+            }
+            if company_url.strip():
+                try:
+                    draft.update(extract_job_page(company_url.strip()))
+                except Exception:
+                    pass
+            if draft.get("company", "").strip():
+                canonical_id, canonical_company, category = _company_context(
+                    draft["company"].strip(), draft.get("source_domain", "")
+                )
             else:
-                token = github_token()
-                if not token:
-                    st.error("GitHub saving is not configured for this app.")
-                else:
-                    canonical_id, canonical_company, category = _company_context(
-                        company.strip(), draft.get("source_domain", "")
-                    )
-                    now = datetime.now(timezone.utc).isoformat()
-                    identifier = hashlib.sha256(draft["job_url"].encode("utf-8")).hexdigest()[:16]
-                    opportunities, opp_sha = load_csv_file(token, SUBMISSIONS_PATH, SUBMISSION_COLUMNS)
-                    row = {
-                        "submission_id": identifier,
-                        "submitted_at": now,
-                        "job_url": draft["job_url"],
-                        "title": title.strip(),
-                        "company": canonical_company,
-                        "canonical_company_id": canonical_id,
-                        "company_category": category,
-                        "location": location.strip(),
-                        "country": country.strip(),
-                        "topic": topic,
-                        "role_summary_en": role_summary.strip(),
-                        "user_comment": comment.strip(),
-                        "feedback": "Interested",
-                        "calibration_signal": "User-supplied positive example",
-                        "targeting_scope": category if category != "Unclassified" else "General",
-                        "review_status": "Needs targeting review",
-                        "source_domain": draft.get("source_domain", ""),
-                    }
-                    opportunities = pd.concat([opportunities, pd.DataFrame([row])], ignore_index=True)
-                    opportunities = opportunities.drop_duplicates("submission_id", keep="last")
-                    companies, company_sha = load_csv_file(token, COMPANIES_PATH, COMPANY_COLUMNS)
-                    company_row = {
-                        "canonical_company_id": canonical_id,
-                        "company": canonical_company,
-                        "company_category": category,
-                        "source_domain": draft.get("source_domain", ""),
-                        "first_submitted_at": now,
-                        "latest_job_url": draft["job_url"],
-                        "review_status": "Known universe company" if category != "Unclassified" else "Needs company review",
-                    }
-                    existing = companies[companies["canonical_company_id"] == canonical_id]
-                    if not existing.empty:
-                        company_row["first_submitted_at"] = existing.iloc[0]["first_submitted_at"] or now
-                    companies = pd.concat([companies, pd.DataFrame([company_row])], ignore_index=True)
-                    companies = companies.drop_duplicates("canonical_company_id", keep="last")
-                    try:
-                        save_csv_file(token, COMPANIES_PATH, companies, company_sha, "Save submitted opportunity company")
-                        save_csv_file(token, SUBMISSIONS_PATH, opportunities, opp_sha, "Save user-submitted opportunity")
-                    except Exception:
-                        st.error("Saving failed. Refresh the page and try again.")
-                    else:
-                        st.success("Saved. This role is now a positive targeting example and awaits semantic review.")
-                        st.session_state.pop("submitted_job_draft", None)
+                # No company scraped (e.g. LinkedIn-only): leave blank for enrichment.
+                canonical_id, canonical_company, category = "", "", ""
+            now = datetime.now(timezone.utc).isoformat()
+            identifier = hashlib.sha256(primary_url.encode("utf-8")).hexdigest()[:16]
+            opportunities, opp_sha = load_csv_file(token, SUBMISSIONS_PATH, SUBMISSION_COLUMNS)
+            row = {col: "" for col in SUBMISSION_COLUMNS}
+            row.update({
+                "submission_id": identifier,
+                "submitted_at": now,
+                "linkedin_url": linkedin_url.strip(),
+                "company_url": company_url.strip(),
+                "job_url": primary_url,
+                "title": draft.get("title", ""),
+                "company": canonical_company if canonical_company else draft.get("company", ""),
+                "canonical_company_id": canonical_id,
+                "company_category": category if category != "Unclassified" else "",
+                "location": draft.get("location", ""),
+                "role_summary_en": draft.get("description", ""),
+                "user_comment": comment.strip(),
+                "feedback": "Unrated",
+                "calibration_signal": "",
+                "targeting_scope": category if category != "Unclassified" else "General",
+                "review_status": "Needs enrichment",
+                "source_domain": draft.get("source_domain", ""),
+            })
+            opportunities = pd.concat([opportunities, pd.DataFrame([row])], ignore_index=True)
+            opportunities = opportunities.drop_duplicates("submission_id", keep="last")
+            try:
+                save_csv_file(token, SUBMISSIONS_PATH, opportunities, opp_sha, "Save opportunity for enrichment")
+            except Exception:
+                st.error("Saving failed. Refresh the page and try again.")
+            else:
+                st.success(
+                    "Saved. Claude will enrich it with the company/role profile and a "
+                    "salary read, then it is ready for you to rate below."
+                )
 
+    st.divider()
     token = github_token()
     try:
-        saved, _ = load_csv_file(token, SUBMISSIONS_PATH, SUBMISSION_COLUMNS)
+        saved, saved_sha = load_csv_file(token, SUBMISSIONS_PATH, SUBMISSION_COLUMNS)
     except Exception:
-        saved = pd.DataFrame(columns=SUBMISSION_COLUMNS)
-    if not saved.empty:
-        st.subheader("Submitted opportunities")
-        view = saved.sort_values("submitted_at", ascending=False)[
-            ["title", "company", "topic", "location", "user_comment", "review_status", "job_url"]
-        ]
-        st.dataframe(
-            view,
+        saved, saved_sha = pd.DataFrame(columns=SUBMISSION_COLUMNS), None
+    if saved.empty:
+        st.info("No opportunities yet. Paste a link above to add your first one.")
+        return
+
+    st.subheader("Your opportunities")
+    st.caption(
+        "Rate each one (Interested / Maybe / Pass) once it has been enriched. "
+        "Ratings feed the relevant targeting hypothesis."
+    )
+    saved = saved.sort_values("submitted_at", ascending=False).reset_index(drop=True)
+    display_cols = [
+        "title", "company", "company_category", "review_status", "feedback",
+        "company_profile", "role_profile", "salary_research", "user_comment", "job_url",
+    ]
+    editor = saved.set_index("submission_id")[display_cols]
+    with st.form("rate_opportunities_form"):
+        edited = st.data_editor(
+            editor,
             hide_index=True,
             width="stretch",
+            height=520,
+            disabled=[c for c in display_cols if c not in {"feedback", "user_comment"}],
             column_config={
-                "title": "Role",
-                "company": "Company",
-                "topic": "Theme",
-                "user_comment": "Why you like it",
-                "review_status": "Targeting status",
-                "job_url": st.column_config.LinkColumn("Link", display_text="Open"),
+                "title": st.column_config.TextColumn("Role", width="medium"),
+                "company": st.column_config.TextColumn("Company", width="small"),
+                "company_category": st.column_config.TextColumn("Category", width="small"),
+                "review_status": st.column_config.TextColumn("Status", width="small"),
+                "feedback": st.column_config.SelectboxColumn(
+                    "Your rating", options=FEEDBACK_OPTIONS, required=True, width="small"
+                ),
+                "company_profile": st.column_config.TextColumn("Company profile", width="large"),
+                "role_profile": st.column_config.TextColumn("Role profile", width="large"),
+                "salary_research": st.column_config.TextColumn("Salary read", width="large"),
+                "user_comment": st.column_config.TextColumn("Your comment", width="medium"),
+                "job_url": st.column_config.LinkColumn("Link", display_text="Open", width="small"),
             },
+            key="submitted_opportunity_editor",
         )
+        save_ratings = st.form_submit_button("Save my ratings", type="primary")
+    if save_ratings:
+        if not token:
+            st.error("GitHub saving is not configured for this app.")
+        else:
+            updated = saved.set_index("submission_id")
+            updated.loc[edited.index, "feedback"] = edited["feedback"]
+            updated.loc[edited.index, "user_comment"] = edited["user_comment"]
+            rated = updated["feedback"].isin(["Interested", "Maybe", "Pass"])
+            updated.loc[rated, "calibration_signal"] = updated.loc[rated, "feedback"].map(
+                {"Interested": "User-supplied positive example",
+                 "Maybe": "User-supplied borderline example",
+                 "Pass": "User-supplied negative example"}
+            )
+            try:
+                save_csv_file(
+                    token, SUBMISSIONS_PATH, updated.reset_index(), saved_sha,
+                    "Update opportunity ratings",
+                )
+            except Exception:
+                st.error("Saving failed. Refresh the page and try again.")
+            else:
+                st.success("Ratings saved.")

@@ -141,6 +141,16 @@ def cost_of_living_page() -> None:
 def _load_company_universe() -> pd.DataFrame:
     universe = pd.read_csv(DATA_DIR / "company_universe.csv").fillna("")
     categories = pd.read_csv(DATA_DIR / "company_categories.csv").fillna("")
+    # The base universe may carry its own inline company_category column. Fold it
+    # into the categories table (lowest precedence) and drop it from the frame so
+    # it can't collide with company_categories.csv during the merge below, which
+    # would otherwise produce company_category_x/_y and crash the Companies page.
+    if "company_category" in universe.columns:
+        categories = pd.concat(
+            [universe[["canonical_company_id", "company_category"]], categories],
+            ignore_index=True,
+        )
+        universe = universe.drop(columns=["company_category"])
     for wave_path in sorted(DATA_DIR.glob("company_universe_wave*.csv")):
         wave = pd.read_csv(wave_path).fillna("")
         if "company_category" in wave.columns:

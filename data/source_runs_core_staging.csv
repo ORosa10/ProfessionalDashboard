@@ -1,0 +1,33 @@
+run_at,source_id,company,market,seed_url,pages_checked,candidate_job_pages,verified_jobs,errors
+2026-08-16T05:45:12.878876+00:00,cez-group-global,ČEZ Group,Multi-region,https://www.kdejinde.cz/,1,0,0,
+2026-08-16T05:45:15.543141+00:00,ppf-group-global,PPF Group,Multi-region,https://www.ppf.eu/en/careers,7,0,0,
+2026-08-16T05:45:20.741073+00:00,kkcg-global,KKCG,Multi-region,https://kkcg.com/en/careers,6,0,0,
+2026-08-16T05:45:25.530510+00:00,jt-finance-group-global,J&T Finance Group,Multi-region,https://www.jtfg.com/,1,0,0,
+2026-08-16T05:45:27.340524+00:00,erste-group-global,Erste Group,Multi-region,https://www.erstegroup.com/en/career,11,0,0,
+2026-08-16T05:45:33.694001+00:00,allianz-group-global,Allianz Group,Multi-region,https://careers.allianz.com/global/en,30,0,0,
+2026-08-16T05:45:54.112147+00:00,munich-re-global,Munich Re Group,Multi-region,https://careers.munichre.com/en/munichre,30,4,4,
+2026-08-16T05:46:10.908140+00:00,siemens-global,Siemens,Multi-region,https://www.siemens.com/de-de/company/jobs/,17,0,0,
+2026-08-16T05:46:20.610259+00:00,deutsche-boerse-global,Deutsche Börse Group,Multi-region,https://careers.deutsche-boerse.com/,30,14,14,
+2026-08-16T05:46:56.132546+00:00,dws-global,DWS Group,Multi-region,https://www.dws.com/en-us/about-us/careers/,1,0,0,
+2026-08-16T05:46:57.010838+00:00,omv-global,OMV Group,Multi-region,https://careers.omv.com/?locale=en_US,30,13,13,
+2026-08-16T05:47:28.122589+00:00,rbi-global,Raiffeisen Bank International,Multi-region,https://jobs.rbinternational.com/,30,15,15,
+2026-08-16T05:47:51.877735+00:00,ubs-global,UBS Group,Multi-region,https://www.ubs.com/global/en/careers/search-jobs.html,30,0,0,
+2026-08-16T05:48:06.970345+00:00,swiss-re-global,Swiss Re,Multi-region,https://www.swissre.com/careers/jobSearch.html,30,0,0,
+2026-08-16T05:48:40.358670+00:00,six-group-global,SIX Group,Multi-region,https://www.six-group.com/en/careers.html,30,0,0,
+2026-08-16T05:49:11.931051+00:00,vontobel-global,Vontobel,Multi-region,https://www.vontobel.com/de-ch/ueber-vontobel/karriere/offene-stellen/,30,27,27,
+2026-08-16T05:49:55.086667+00:00,nordea-global,Nordea,Multi-region,https://www.nordea.com/en/careers,30,0,0,
+2026-08-16T05:50:17.788886+00:00,seb-global,SEB Group,Multi-region,https://sebgroup.com/career,22,0,0,
+2026-08-16T05:50:34.785396+00:00,danske-bank-global,Danske Bank,Multi-region,https://danskebank.com/careers,22,0,0,https://danskebank.com/careers/professionals: ReadTimeout | https://danskebank.com/careers/flexible-work: ReadTimeout
+2026-08-16T05:51:45.301429+00:00,orsted-global,Ørsted,Multi-region,https://orsted.com/en/careers/vacancies-list,1,0,0,https://orsted.com/en/careers/vacancies-list: HTTPError
+2026-08-16T05:51:45.917890+00:00,equinor-global,Equinor,Multi-region,https://www.equinor.com/careers,30,0,0,
+2026-08-16T05:53:27.891419+00:00,nbim-global,Norges Bank Investment Management,Multi-region,https://www.nbim.no/en/about-us/career/vacancies/,30,0,0,
+2026-08-16T05:53:46.261623+00:00,ebrd-global,European Bank for Reconstruction and Development,Multi-region,https://jobs.ebrd.com/,30,6,6,
+2026-08-16T05:54:18.373115+00:00,blackrock-global,BlackRock,Multi-region,https://careers.blackrock.com/,30,0,0,
+2026-08-16T05:54:43.009560+00:00,schroders-global,Schroders,Multi-region,https://www.schroders.com/en/global/individual/careers/,28,0,0,
+2026-08-16T05:55:09.653662+00:00,mckinsey-global,McKinsey & Company,Multi-region,https://www.mckinsey.com/careers/search-jobs,1,0,0,https://www.mckinsey.com/careers/search-jobs: ReadTimeout
+2026-08-16T05:55:34.960076+00:00,bcg-global,Boston Consulting Group,Multi-region,https://careers.bcg.com/global/en/search-results,30,0,0,
+2026-08-16T05:56:00.708777+00:00,kearney-global,Kearney,Multi-region,https://www.kearney.com/careers,10,0,0,
+2026-08-16T05:56:08.679702+00:00,arthur-d-little-global,Arthur D. Little,Multi-region,https://careers.adlittle.com/,1,0,0,https://careers.adlittle.com/: ConnectTimeout
+2026-08-16T05:56:59.136326+00:00,bearingpoint-global,BearingPoint,Multi-region,https://www.bearingpoint.com/en/careers/,30,0,0,
+2026-08-16T05:57:31.092352+00:00,accenture-global,Accenture,Multi-region,https://www.accenture.com/us-en/careers/jobsearch,30,0,0,
+2026-08-16T05:57:46.406538+00:00,simon-kucher-global,Simon-Kucher,Multi-region,https://www.simon-kucher.com/en/careers,30,0,0,

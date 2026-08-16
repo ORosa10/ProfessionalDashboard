@@ -1,0 +1,11 @@
+batch_id,display_order,opportunity_id,cohort,theme,seniority_band,selection_reason
+core-calibration-01,1,ee9d02a83b800927,Boundary,Transactions / M&A,Junior / entry,Boundary case to clarify preferences
+core-calibration-01,2,ed5335aa30fad741,Boundary,Other finance,Core professional,Boundary case to clarify preferences
+core-calibration-01,3,9e4039584def5681,Exploration,FP&A / Controlling,Unclear / other,Exploration case to avoid overfitting
+core-calibration-01,4,cc24b95b223e577d,Exploration,Data / Analytics,Unclear / other,Exploration case to avoid overfitting
+core-calibration-01,5,170544615262c3da,Exploration,Transactions / M&A,Core professional,Exploration case to avoid overfitting
+core-calibration-01,6,a73d5bd77e62f237,Exploration,Treasury / Risk / Markets,Unclear / other,Exploration case to avoid overfitting
+core-calibration-01,7,e11b7704eeb66b68,Exploration,Other finance,Manager,Exploration case to avoid overfitting
+core-calibration-01,8,5e2040eb825a9778,Exploration,FP&A / Controlling,Unclear / other,Exploration case to avoid overfitting
+core-calibration-01,9,0e4bb134165c978d,Exploration,Data / Analytics,Core professional,Exploration case to avoid overfitting
+core-calibration-01,10,0333757f9781ac1d,Exploration,Treasury / Risk / Markets,Core professional,Exploration case to avoid overfitting

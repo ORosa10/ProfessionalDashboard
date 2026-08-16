@@ -204,53 +204,68 @@ def render_jobs() -> None:
     # jobs_staging.csv on the sourcing-staging branch first and only appear
     # here once explicitly promoted (see render_sources), so a background
     # sourcing run never changes what's in front of you mid-review.
-    pilot_path = DATA_DIR / "jobs.csv"
-    if pilot_path.exists():
+    # Sector job snapshots, matching the Company Universe's own category
+    # labels (Filter company categories on the Companies page) so a sector
+    # here means the same thing it does there. "Big Four" (jobs.csv) is the
+    # original pilot and still gets its own generic role_family label;
+    # "Core" is the pre-sector-split leftover universe, not one of the
+    # official Company Universe categories.
+    SECTOR_JOB_FILES = [
+        ("jobs.csv", "Other relevant finance", "Verified role from the Big Four pilot."),
+        ("jobs_corporate_staging.csv", "Corporate", "Verified role from the Corporate sector pilot."),
+        ("jobs_financial-services_staging.csv", "Banking & Financial Services", "Verified role from the Banking & Financial Services sector pilot."),
+        ("jobs_public-markets_staging.csv", "Public Markets & Asset Management", "Verified role from the Public Markets & Asset Management sector pilot."),
+        ("jobs_specialist-funds_staging.csv", "Specialist & Boutique Funds", "Verified role from the Specialist & Boutique Funds sector pilot."),
+        ("jobs_core_staging.csv", "Core", "Verified role from the Core sector pilot."),
+    ]
+    for filename, role_family_label, default_fit_note in SECTOR_JOB_FILES:
+        pilot_path = DATA_DIR / filename
+        if not pilot_path.exists():
+            continue
         pilot = pd.read_csv(pilot_path).fillna("")
         if "verification" in pilot.columns:
             pilot = pilot[pilot["verification"].isin(VERIFIED_JOB_TYPES)].copy()
-        if not pilot.empty:
-            pilot = pilot.rename(
-                columns={
-                    "job_id": "opportunity_id",
-                    "market": "countries",
-                    "location": "cities",
-                }
+        if pilot.empty:
+            continue
+        pilot = pilot.rename(
+            columns={
+                "job_id": "opportunity_id",
+                "market": "countries",
+                "location": "cities",
+            }
+        )
+        if "job_url" in pilot.columns:
+            pilot["source_url"] = pilot["job_url"]
+        pilot["countries"] = pilot.apply(
+            lambda row: _country_from_market_and_location(row["countries"], row["cities"]),
+            axis=1,
+        )
+        pilot["role_family"] = role_family_label
+        pilot["seniority"] = ""
+        if "description_en" in pilot.columns:
+            pilot["description_display"] = pilot["description_en"].where(
+                pilot["description_en"].ne(""), pilot.get("description", "")
             )
-            if "job_url" in pilot.columns:
-                pilot["source_url"] = pilot["job_url"]
-            pilot["countries"] = pilot.apply(
-                lambda row: _country_from_market_and_location(row["countries"], row["cities"]),
-                axis=1,
+        elif "description" in pilot.columns:
+            pilot["description_display"] = pilot["description"]
+        else:
+            pilot["description_display"] = ""
+        if "matched_terms" in pilot.columns:
+            pilot["fit_note"] = pilot["matched_terms"].apply(
+                lambda value: f"Matched role terms: {value}" if value else default_fit_note
             )
-            pilot["role_family"] = "Other relevant finance"
-            pilot["seniority"] = ""
-            if "description_en" in pilot.columns:
-                pilot["description_display"] = pilot["description_en"].where(
-                    pilot["description_en"].ne(""), pilot.get("description", "")
-                )
-            elif "description" in pilot.columns:
-                pilot["description_display"] = pilot["description"]
-            else:
-                pilot["description_display"] = ""
-            if "matched_terms" in pilot.columns:
-                pilot["fit_note"] = pilot["matched_terms"].apply(
-                    lambda value: f"Matched role terms: {value}"
-                    if value
-                    else "Verified role from the Big Four pilot."
-                )
-            else:
-                pilot["fit_note"] = "Verified role from the Big Four pilot."
-            if "calibration_note" in pilot.columns:
-                pilot["fit_note"] = pilot["calibration_note"].where(
-                    pilot["calibration_note"].ne(""), pilot["fit_note"]
-                )
-            if "status" in pilot.columns:
-                pilot["status"] = pilot["status"].replace({"": "Open", "New": "Open"})
-            else:
-                pilot["status"] = "Open"
-            pilot["review_status"] = "New"
-            frames.append(pilot)
+        else:
+            pilot["fit_note"] = default_fit_note
+        if "calibration_note" in pilot.columns:
+            pilot["fit_note"] = pilot["calibration_note"].where(
+                pilot["calibration_note"].ne(""), pilot["fit_note"]
+            )
+        if "status" in pilot.columns:
+            pilot["status"] = pilot["status"].replace({"": "Open", "New": "Open"})
+        else:
+            pilot["status"] = "Open"
+        pilot["review_status"] = "New"
+        frames.append(pilot)
 
     pe_path = DATA_DIR / "pe_research_candidates.csv"
     if pe_path.exists():
@@ -377,6 +392,26 @@ def render_jobs() -> None:
         consulting_batch["seniority_band"] = ""
         consulting_batch["review_set"] = "Consulting calibration"
         review_maps.append(consulting_batch)
+    # New sector calibration shortlists (built from the automated sector
+    # pilots' own sourced jobs, not a separate manual-research pass like PE/
+    # Consulting originally were). Deliberately NOT added to `themed_rows`
+    # below -- role_family stays the clean sector name (matches the Company
+    # Universe's "Filter company categories"), it never gets overwritten by
+    # the theme sub-classification the way PE/Consulting calibration rows do.
+    SECTOR_CALIBRATION_FILES = [
+        ("corporate_calibration_shortlist.csv", "Corporate calibration"),
+        ("financial_services_calibration_shortlist.csv", "Banking & Financial Services calibration"),
+        ("public_markets_calibration_shortlist.csv", "Public Markets & Asset Management calibration"),
+        ("specialist_funds_calibration_shortlist.csv", "Specialist & Boutique Funds calibration"),
+        ("core_calibration_shortlist.csv", "Core calibration"),
+    ]
+    for filename, review_set_label in SECTOR_CALIBRATION_FILES:
+        batch_file = DATA_DIR / filename
+        if not batch_file.exists():
+            continue
+        sector_batch = pd.read_csv(batch_file).fillna("")
+        sector_batch["review_set"] = review_set_label
+        review_maps.append(sector_batch)
     if review_maps:
         review_map = pd.concat(review_maps, ignore_index=True, sort=False)
         review_map = review_map.drop_duplicates("opportunity_id", keep="last")
@@ -432,18 +467,29 @@ def render_jobs() -> None:
             "Big Four calibration (50)",
             "PE calibration (20)",
             "Consulting calibration (20)",
+            "Corporate calibration (20)",
+            "Banking & Financial Services calibration (20)",
+            "Public Markets & Asset Management calibration (9)",
+            "Specialist & Boutique Funds calibration (6)",
+            "Core calibration (10)",
             "All opportunities",
             "Backlog only",
         ],
         horizontal=True,
         help="Each shortlist is a diverse learning sample. All sourced roles remain available.",
     )
-    if review_scope == "Big Four calibration (50)":
-        jobs = jobs[jobs["review_set"].eq("Big Four calibration")].copy()
-    elif review_scope == "PE calibration (20)":
-        jobs = jobs[jobs["review_set"].eq("PE calibration")].copy()
-    elif review_scope == "Consulting calibration (20)":
-        jobs = jobs[jobs["review_set"].eq("Consulting calibration")].copy()
+    REVIEW_SCOPE_TO_SET = {
+        "Big Four calibration (50)": "Big Four calibration",
+        "PE calibration (20)": "PE calibration",
+        "Consulting calibration (20)": "Consulting calibration",
+        "Corporate calibration (20)": "Corporate calibration",
+        "Banking & Financial Services calibration (20)": "Banking & Financial Services calibration",
+        "Public Markets & Asset Management calibration (9)": "Public Markets & Asset Management calibration",
+        "Specialist & Boutique Funds calibration (6)": "Specialist & Boutique Funds calibration",
+        "Core calibration (10)": "Core calibration",
+    }
+    if review_scope in REVIEW_SCOPE_TO_SET:
+        jobs = jobs[jobs["review_set"].eq(REVIEW_SCOPE_TO_SET[review_scope])].copy()
     elif review_scope == "Backlog only":
         jobs = jobs[jobs["review_set"].eq("Backlog")].copy()
 

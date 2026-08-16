@@ -1,0 +1,7 @@
+batch_id,display_order,opportunity_id,cohort,theme,seniority_band,selection_reason
+specialist-funds-calibration-01,1,f23741cb46f88345,Boundary,FP&A / Controlling,Senior leadership,Boundary case to clarify preferences
+specialist-funds-calibration-01,2,ac84cac2e7f8fc42,Exploration,Other finance,Unclear / other,Exploration case to avoid overfitting
+specialist-funds-calibration-01,3,5d6dce8d59477606,Exploration,Data / Analytics,Core professional,Exploration case to avoid overfitting
+specialist-funds-calibration-01,4,2ad2797ed6024cd8,Exploration,Treasury / Risk / Markets,Core professional,Exploration case to avoid overfitting
+specialist-funds-calibration-01,5,bfa8854b8825582f,Exploration,FP&A / Controlling,Core professional,Exploration case to avoid overfitting
+specialist-funds-calibration-01,6,812149e4788e1607,Exploration,Other finance,Core professional,Exploration case to avoid overfitting

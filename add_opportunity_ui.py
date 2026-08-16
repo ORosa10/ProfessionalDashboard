@@ -231,16 +231,38 @@ def render_add_opportunity() -> None:
             "The link is assigned to a company, sector and job theme. It becomes evidence for future searches, but it does not automatically become a hard rule or exclude exploratory roles."
         )
 
-    url = st.text_input("Job link", placeholder="https://company.com/careers/job/...")
-    if st.button("Load job from link", disabled=not url):
+    url = st.text_input(
+        "Job link",
+        placeholder="https://www.linkedin.com/jobs/view/...  or  https://company.com/careers/job/...",
+    )
+    st.caption(
+        "Company career pages usually load automatically. For LinkedIn and other "
+        "login-gated sites, use **Add manually** and type the title and company yourself."
+    )
+    load_col, manual_col = st.columns(2)
+
+    def _blank_draft(link: str) -> dict[str, str]:
+        return {
+            "job_url": link.strip(), "title": "", "company": "", "location": "",
+            "description": "", "source_domain": urlparse(link.strip()).hostname or "",
+        }
+
+    if load_col.button(
+        "Load job from link",
+        disabled=not url,
+        help="Tries to read the job automatically. Works for most company career pages.",
+    ):
         try:
             st.session_state["submitted_job_draft"] = extract_job_page(url)
         except Exception as exc:
-            st.session_state["submitted_job_draft"] = {
-                "job_url": url.strip(), "title": "", "company": "", "location": "",
-                "description": "", "source_domain": urlparse(url.strip()).hostname or "",
-            }
-            st.warning(f"The page could not be read automatically. Fill in the fields below. ({exc})")
+            st.session_state["submitted_job_draft"] = _blank_draft(url)
+            st.warning(f"The page could not be read automatically. Fill in the fields below by hand. ({exc})")
+    if manual_col.button(
+        "Add manually",
+        disabled=not url,
+        help="Skip auto-read and type the details yourself. Use this for LinkedIn and other login-gated sites.",
+    ):
+        st.session_state["submitted_job_draft"] = _blank_draft(url)
 
     draft = st.session_state.get("submitted_job_draft")
     if draft:

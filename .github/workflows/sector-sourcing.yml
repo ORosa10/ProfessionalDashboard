@@ -30,7 +30,6 @@ on:
       - "data/job_sources_investment_banking.csv"
       - "data/job_sources_public_markets.csv"
       - "data/job_sources_specialist_funds.csv"
-      - "data/job_sources_core.csv"
       - "requirements.txt"
       - ".github/workflows/sector-sourcing.yml"
 
@@ -61,8 +60,6 @@ jobs:
             sources: data/job_sources_public_markets.csv
           - name: specialist-funds
             sources: data/job_sources_specialist_funds.csv
-          - name: core
-            sources: data/job_sources_core.csv
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

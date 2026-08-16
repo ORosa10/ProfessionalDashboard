@@ -41,16 +41,28 @@ COLUMNS = [
 
 # (universe file, company_category filter or None for "take everything",
 #  output filename or None to append into an existing file)
+#
+# company_universe.csv is the original, pre-sector-split universe file --
+# it now has a company_category column (backfilled 2026-08-16) so its
+# companies route into the SAME sector files as everything else, instead of
+# a separate "core" catch-all bucket. That "core" bucket existed only
+# because this file used to lack company_category; there is no such sector
+# in the Company Universe's own category list, so it should never come back.
 JOBS = [
     ("company_universe_wave2_consulting.csv", "Consulting", "job_sources_consulting.csv"),
+    ("company_universe.csv", "Consulting", "job_sources_consulting.csv"),
     ("company_universe_wave2_investment.csv", "Private Equity & Asset Management", "job_sources_pe.csv"),
+    ("company_universe.csv", "Private Equity & Private Markets", "job_sources_pe.csv"),
     ("company_universe_wave2_corporate.csv", "Corporate", "job_sources_corporate.csv"),
+    ("company_universe.csv", "Corporate", "job_sources_corporate.csv"),
     ("company_universe_wave2_financial_services.csv", "Banking & Financial Services", "job_sources_financial_services.csv"),
+    ("company_universe.csv", "Banking & Financial Services", "job_sources_financial_services.csv"),
     ("company_universe_wave2_holdings.csv", "Holding & Conglomerate", "job_sources_holdings.csv"),
+    ("company_universe.csv", "Holding & Conglomerate", "job_sources_holdings.csv"),
     ("company_universe_wave3_investment.csv", "Investment Banking", "job_sources_investment_banking.csv"),
     ("company_universe_wave3_investment.csv", "Public Markets & Asset Management", "job_sources_public_markets.csv"),
+    ("company_universe.csv", "Public Markets & Asset Management", "job_sources_public_markets.csv"),
     ("company_universe_wave3_investment.csv", "Specialist & Boutique Funds", "job_sources_specialist_funds.csv"),
-    ("company_universe.csv", None, "job_sources_core.csv"),
 ]
 
 

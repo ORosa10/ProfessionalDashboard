@@ -207,16 +207,18 @@ def render_jobs() -> None:
     # Sector job snapshots, matching the Company Universe's own category
     # labels (Filter company categories on the Companies page) so a sector
     # here means the same thing it does there. "Big Four" (jobs.csv) is the
-    # original pilot and still gets its own generic role_family label;
-    # "Core" is the pre-sector-split leftover universe, not one of the
-    # official Company Universe categories.
+    # original pilot and still gets its own generic role_family label.
+    # There used to be a "Core" bucket here for company_universe.csv's
+    # companies, back when that file had no company_category column -- it
+    # was never a real Company Universe category, just a catch-all for
+    # companies that hadn't been classified yet. Backfilled 2026-08-16 and
+    # folded into the real sectors below instead.
     SECTOR_JOB_FILES = [
         ("jobs.csv", "Other relevant finance", "Verified role from the Big Four pilot."),
         ("jobs_corporate_staging.csv", "Corporate", "Verified role from the Corporate sector pilot."),
         ("jobs_financial-services_staging.csv", "Banking & Financial Services", "Verified role from the Banking & Financial Services sector pilot."),
         ("jobs_public-markets_staging.csv", "Public Markets & Asset Management", "Verified role from the Public Markets & Asset Management sector pilot."),
         ("jobs_specialist-funds_staging.csv", "Specialist & Boutique Funds", "Verified role from the Specialist & Boutique Funds sector pilot."),
-        ("jobs_core_staging.csv", "Core", "Verified role from the Core sector pilot."),
     ]
     for filename, role_family_label, default_fit_note in SECTOR_JOB_FILES:
         pilot_path = DATA_DIR / filename
@@ -403,7 +405,6 @@ def render_jobs() -> None:
         ("financial_services_calibration_shortlist.csv", "Banking & Financial Services calibration"),
         ("public_markets_calibration_shortlist.csv", "Public Markets & Asset Management calibration"),
         ("specialist_funds_calibration_shortlist.csv", "Specialist & Boutique Funds calibration"),
-        ("core_calibration_shortlist.csv", "Core calibration"),
     ]
     for filename, review_set_label in SECTOR_CALIBRATION_FILES:
         batch_file = DATA_DIR / filename
@@ -469,9 +470,8 @@ def render_jobs() -> None:
             "Consulting calibration (20)",
             "Corporate calibration (20)",
             "Banking & Financial Services calibration (20)",
-            "Public Markets & Asset Management calibration (9)",
+            "Public Markets & Asset Management calibration (12)",
             "Specialist & Boutique Funds calibration (6)",
-            "Core calibration (10)",
             "All opportunities",
             "Backlog only",
         ],
@@ -484,9 +484,8 @@ def render_jobs() -> None:
         "Consulting calibration (20)": "Consulting calibration",
         "Corporate calibration (20)": "Corporate calibration",
         "Banking & Financial Services calibration (20)": "Banking & Financial Services calibration",
-        "Public Markets & Asset Management calibration (9)": "Public Markets & Asset Management calibration",
+        "Public Markets & Asset Management calibration (12)": "Public Markets & Asset Management calibration",
         "Specialist & Boutique Funds calibration (6)": "Specialist & Boutique Funds calibration",
-        "Core calibration (10)": "Core calibration",
     }
     if review_scope in REVIEW_SCOPE_TO_SET:
         jobs = jobs[jobs["review_set"].eq(REVIEW_SCOPE_TO_SET[review_scope])].copy()

@@ -1,10 +1,13 @@
 batch_id,display_order,opportunity_id,cohort,theme,seniority_band,selection_reason
-public-markets-calibration-01,1,bb10a6e1aa286e3a,Boundary,Other finance,Manager,Boundary case to clarify preferences
+public-markets-calibration-01,1,ed5335aa30fad741,Boundary,Other finance,Core professional,Boundary case to clarify preferences
 public-markets-calibration-01,2,55ead527861c7f05,Boundary,Tax / Compliance,Unclear / other,Boundary case to clarify preferences
-public-markets-calibration-01,3,14ed853f26f4a643,Exploration,Treasury / Risk / Markets,Core professional,Exploration case to avoid overfitting
-public-markets-calibration-01,4,8f23c2b4e4e0eaa1,Exploration,Other finance,Senior leadership,Exploration case to avoid overfitting
-public-markets-calibration-01,5,1cdcb0d384f9e803,Exploration,Tax / Compliance,Unclear / other,Exploration case to avoid overfitting
-public-markets-calibration-01,6,b83e1e0d129d1ed0,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
-public-markets-calibration-01,7,0d4426503fea9aba,Exploration,Other finance,Unclear / other,Exploration case to avoid overfitting
-public-markets-calibration-01,8,8ce1fa815ca4dc87,Exploration,Other finance,Senior leadership,Exploration case to avoid overfitting
-public-markets-calibration-01,9,b83a720341b30c7d,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
+public-markets-calibration-01,3,14ed853f26f4a643,Boundary,Treasury / Risk / Markets,Core professional,Boundary case to clarify preferences
+public-markets-calibration-01,4,bb10a6e1aa286e3a,Exploration,Other finance,Manager,Exploration case to avoid overfitting
+public-markets-calibration-01,5,a73d5bd77e62f237,Exploration,Treasury / Risk / Markets,Unclear / other,Exploration case to avoid overfitting
+public-markets-calibration-01,6,1cdcb0d384f9e803,Exploration,Tax / Compliance,Unclear / other,Exploration case to avoid overfitting
+public-markets-calibration-01,7,b83e1e0d129d1ed0,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
+public-markets-calibration-01,8,8f23c2b4e4e0eaa1,Exploration,Other finance,Senior leadership,Exploration case to avoid overfitting
+public-markets-calibration-01,9,e11b7704eeb66b68,Exploration,Other finance,Manager,Exploration case to avoid overfitting
+public-markets-calibration-01,10,0d4426503fea9aba,Exploration,Other finance,Unclear / other,Exploration case to avoid overfitting
+public-markets-calibration-01,11,8ce1fa815ca4dc87,Exploration,Other finance,Senior leadership,Exploration case to avoid overfitting
+public-markets-calibration-01,12,b83a720341b30c7d,Exploration,Other finance,Core professional,Exploration case to avoid overfitting

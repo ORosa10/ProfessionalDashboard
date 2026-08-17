@@ -1,0 +1,98 @@
+{
+  "_comment": "Calibration scoring rules for calibrate_jobs(). Learnable from feedback; base score 50, clamped 0-100. Reorders review priority only - never a hard exclude.",
+  "updated": "2026-08-17 (externalised from code; seed = original hardcoded rules)",
+  "positive_rules": {
+    "transactions / M&A": {
+      "terms": [
+        "transaction",
+        "m&a",
+        "merger",
+        "acquisition"
+      ],
+      "weight": 10
+    },
+    "corporate finance / valuation": {
+      "terms": [
+        "corporate finance",
+        "valuation",
+        "financial model"
+      ],
+      "weight": 10
+    },
+    "treasury / FP&A": {
+      "terms": [
+        "treasury",
+        "fp&a",
+        "financial planning",
+        "controlling"
+      ],
+      "weight": 10
+    },
+    "finance transformation / analytics": {
+      "terms": [
+        "finance transformation",
+        "finance analytics",
+        "data analy"
+      ],
+      "weight": 10
+    }
+  },
+  "caution_rules": {
+    "junior or graduate level": {
+      "terms": [
+        "intern",
+        "graduate",
+        "entry level",
+        "berufseinstieg",
+        "assistant"
+      ],
+      "weight": -14
+    },
+    "likely above target seniority": {
+      "terms": [
+        "director",
+        "partner",
+        "senior manager",
+        "head of "
+      ],
+      "weight": -9
+    },
+    "tax-heavy": {
+      "terms": [
+        " tax ",
+        "taxation"
+      ],
+      "weight": -9
+    },
+    "SAP-heavy": {
+      "terms": [
+        " sap "
+      ],
+      "weight": -9
+    },
+    "accounting / audit-heavy": {
+      "terms": [
+        "accounting",
+        "audit",
+        "assurance",
+        "wirtschaftsprüfung"
+      ],
+      "weight": -9
+    },
+    "internal HR/services": {
+      "terms": [
+        "human resources",
+        "recruit",
+        "internal services"
+      ],
+      "weight": -9
+    },
+    "forensics / compliance-heavy": {
+      "terms": [
+        "forensic",
+        "compliance"
+      ],
+      "weight": -9
+    }
+  }
+}

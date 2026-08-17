@@ -617,11 +617,50 @@ def deduplicate_jobs(jobs: pd.DataFrame) -> pd.DataFrame:
     )
 
 
+CALIBRATION_RULES_PATH = ROOT / "data" / "calibration_rules.json"
+
+_DEFAULT_CALIBRATION_RULES = {
+    "positive_rules": {
+        "transactions / M&A": {"terms": ["transaction", "m&a", "merger", "acquisition"], "weight": 10},
+        "corporate finance / valuation": {"terms": ["corporate finance", "valuation", "financial model"], "weight": 10},
+        "treasury / FP&A": {"terms": ["treasury", "fp&a", "financial planning", "controlling"], "weight": 10},
+        "finance transformation / analytics": {"terms": ["finance transformation", "finance analytics", "data analy"], "weight": 10},
+    },
+    "caution_rules": {
+        "junior or graduate level": {"terms": ["intern", "graduate", "entry level", "berufseinstieg", "assistant"], "weight": -14},
+        "likely above target seniority": {"terms": ["director", "partner", "senior manager", "head of "], "weight": -9},
+        "tax-heavy": {"terms": [" tax ", "taxation"], "weight": -9},
+        "SAP-heavy": {"terms": [" sap "], "weight": -9},
+        "accounting / audit-heavy": {"terms": ["accounting", "audit", "assurance", "wirtschaftspr\u00fcfung"], "weight": -9},
+        "internal HR/services": {"terms": ["human resources", "recruit", "internal services"], "weight": -9},
+        "forensics / compliance-heavy": {"terms": ["forensic", "compliance"], "weight": -9},
+    },
+}
+
+
+def _load_calibration_rules() -> dict:
+    """Load the learnable calibration scoring rules from data/calibration_rules.json,
+    falling back to the built-in defaults if the file is missing or malformed. The
+    calibration loop updates that JSON from feedback so scoring can learn without a
+    code change; scoring only reorders review priority and never hard-excludes."""
+    try:
+        with open(CALIBRATION_RULES_PATH, encoding="utf-8") as handle:
+            data = json.load(handle)
+        if isinstance(data.get("positive_rules"), dict) and isinstance(data.get("caution_rules"), dict):
+            return data
+    except (FileNotFoundError, json.JSONDecodeError, OSError, AttributeError):
+        pass
+    return _DEFAULT_CALIBRATION_RULES
+
+
 def calibrate_jobs(jobs: pd.DataFrame) -> pd.DataFrame:
     """Apply transparent, feedback-derived review ordering without hard exclusions."""
     if jobs.empty:
         return jobs
     result = jobs.copy()
+    rules = _load_calibration_rules()
+    positive_rules = rules["positive_rules"]
+    caution_rules = rules["caution_rules"]
     scores: list[int] = []
     notes: list[str] = []
     for row in result.itertuples():
@@ -629,30 +668,15 @@ def calibrate_jobs(jobs: pd.DataFrame) -> pd.DataFrame:
         score = 50
         positive: list[str] = []
         caution: list[str] = []
-        positive_rules = {
-            "transactions / M&A": ("transaction", "m&a", "merger", "acquisition"),
-            "corporate finance / valuation": ("corporate finance", "valuation", "financial model"),
-            "treasury / FP&A": ("treasury", "fp&a", "financial planning", "controlling"),
-            "finance transformation / analytics": ("finance transformation", "finance analytics", "data analy"),
-        }
-        caution_rules = {
-            "junior or graduate level": ("intern", "graduate", "entry level", "berufseinstieg", "assistant"),
-            "likely above target seniority": ("director", "partner", "senior manager", "head of "),
-            "tax-heavy": (" tax ", "taxation"),
-            "SAP-heavy": (" sap ",),
-            "accounting / audit-heavy": ("accounting", "audit", "assurance", "wirtschaftsprüfung"),
-            "internal HR/services": ("human resources", "recruit", "internal services"),
-            "forensics / compliance-heavy": ("forensic", "compliance"),
-        }
         padded = f" {text} "
-        for label, terms in positive_rules.items():
-            if any(term in padded for term in terms):
+        for label, rule in positive_rules.items():
+            if any(term in padded for term in rule.get("terms", [])):
                 positive.append(label)
-                score += 10
-        for label, terms in caution_rules.items():
-            if any(term in padded for term in terms):
+                score += int(rule.get("weight", 10))
+        for label, rule in caution_rules.items():
+            if any(term in padded for term in rule.get("terms", [])):
                 caution.append(label)
-                score -= 14 if label == "junior or graduate level" else 9
+                score += int(rule.get("weight", -9))
         if re.search(r"\b(?:senior consultant|consultant|analyst|associate|specialist)\b", text):
             positive.append("plausible level; verify responsibilities")
             score += 5

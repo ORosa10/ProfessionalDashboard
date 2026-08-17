@@ -80,8 +80,10 @@ GitHub Actions (sourcing): sector-sourcing, ..., + `remote-sourcing` (D, denně 
 Pozn.: všechny commitují přes jeden fine-grained GitHub PAT uložený v promptu tasku (lokálně)
 i ve Streamlit secrets (pro ukládání z appky). NEREVOKOVAT bez náhrady na obou místech.
 
-## Další plánované streamy (zatím nespecifikováno)
-- Možná **F = expert cally / advisory & NED** (placené hovory, GLG/Third Bridge apod.) - k dobrainstormování.
+## Rozsah dashboardu (rozhodnuto 2026-08-17)
+Dashboard stojí na 5 pilířích: **A discovery firem, B ručně vkládané opportunity, C kalibrace+shortlisty,
+D Remote, E Projekty/Interim.** Zatím se DÁL NEROZŠIŘUJE. F (expert cally / advisory & NED) zamítnuto -
+nedostatečná seniorita zatím. Práce se soustředí na dotažení a doladění těchto pěti.
 
 ## Poznámky / další možné kroky
 - B2 automatiku potvrdit na reálném ratingu (ohodnotit 1 z 6 čekajících pozic).

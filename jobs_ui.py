@@ -553,6 +553,23 @@ def render_jobs() -> None:
             jobs[required] = default
 
     jobs["personal_fit_summary"] = jobs.apply(build_personal_fit_summary, axis=1)
+    # Semantic fit is the PRIMARY signal (per product vision): Claude-generated
+    # reasoning per role in data/semantic_fit.csv overrides the coarse keyword
+    # summary wherever present. The keyword calibration_score is only a coarse
+    # pre-filter / tie-breaker, not the headline fit.
+    jobs["fit_verdict"] = ""
+    _sem_path = DATA_DIR / "semantic_fit.csv"
+    if _sem_path.exists():
+        _sem = pd.read_csv(_sem_path).fillna("")
+        if not _sem.empty and "opportunity_id" in _sem.columns:
+            _sem = _sem.drop_duplicates("opportunity_id", keep="last").set_index("opportunity_id")
+            if "fit" in _sem.columns:
+                jobs["fit_verdict"] = jobs["opportunity_id"].map(_sem["fit"]).fillna("")
+            if "reasoning" in _sem.columns:
+                _reason = jobs["opportunity_id"].map(_sem["reasoning"]).fillna("")
+                jobs["personal_fit_summary"] = _reason.where(
+                    _reason.str.strip().ne(""), jobs["personal_fit_summary"]
+                )
     cost_path = DATA_DIR / "cost_of_living.csv"
     if cost_path.exists():
         benchmarks = pd.read_csv(cost_path).fillna("")
@@ -631,9 +648,13 @@ def render_jobs() -> None:
     ).fillna(4)
     if "calibration_score" not in view.columns:
         view["calibration_score"] = 0
+    _fit_rank = {"strong": 0, "moderate": 1, "partial": 1, "weak": 2}
+    view["_fit_order"] = view["fit_verdict"].astype(str).str.lower().map(
+        lambda v: next((r for k, r in _fit_rank.items() if k in v), 3)
+    )
     view = view.sort_values(
-        ["_feedback_order", "display_order", "rating", "calibration_score", "discovered_at"],
-        ascending=[True, True, True, False, False],
+        ["_feedback_order", "_fit_order", "display_order", "rating", "calibration_score", "discovered_at"],
+        ascending=[True, True, True, True, False, False],
     )
 
     c1, c2, c3, c4 = st.columns(4)
@@ -663,6 +684,7 @@ def render_jobs() -> None:
         "review_set",
         "cohort",
         "theme",
+        "fit_verdict",
         "personal_fit_summary",
         "salary_location_context",
         "description_display",
@@ -693,7 +715,8 @@ def render_jobs() -> None:
             "review_set": st.column_config.TextColumn("Review set", width="small"),
             "cohort": st.column_config.TextColumn("Calibration cohort", width="small"),
             "theme": st.column_config.TextColumn("Role theme", width="medium"),
-            "personal_fit_summary": st.column_config.TextColumn("Personal fit reasoning", width=620),
+            "fit_verdict": st.column_config.TextColumn("Fit", width="small"),
+            "personal_fit_summary": st.column_config.TextColumn("Personal fit (semantic)", width=620),
             "salary_location_context": st.column_config.TextColumn(
                 "Salary target for location", width=320
             ),

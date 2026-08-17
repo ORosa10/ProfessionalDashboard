@@ -1,6 +1,6 @@
 {
   "_comment": "Calibration scoring rules for calibrate_jobs(). Learnable from feedback; base score 50, clamped 0-100. Reorders review priority only - never a hard exclude.",
-  "updated": "2026-08-17 - run from 128 job ratings + 1 submitted opportunity (Evotec, Interested); 0 thesis-feedback entries. Strengthened treasury (+12) and added a markets/derivatives/FX positive (+12, was previously unscored); deepened compliance/forensics downrank (-12); added real-estate caution (-9). M&A/corp-finance/analytics positives left unchanged (their Pass rate looks driven by seniority/tax/compliance, already captured).",
+  "updated": "2026-08-17 - Consulting-20 calibration: +restructuring/working-capital positive; +wealth-mgmt/private-banking and org-performance/operational cautions.",
   "positive_rules": {
     "transactions / M&A": {
       "terms": [
@@ -48,6 +48,14 @@
         "commodit"
       ],
       "weight": 12
+    },
+    "restructuring / working capital": {
+      "terms": [
+        "restructuring",
+        "working capital",
+        "turnaround"
+      ],
+      "weight": 10
     }
   },
   "caution_rules": {
@@ -111,6 +119,21 @@
       "terms": [
         "real estate",
         "immobilien"
+      ],
+      "weight": -9
+    },
+    "wealth management / private banking": {
+      "terms": [
+        "wealth management",
+        "private banking"
+      ],
+      "weight": -9
+    },
+    "operational / org performance": {
+      "terms": [
+        "organisational performance",
+        "organizational performance",
+        "operational excellence"
       ],
       "weight": -9
     }

@@ -64,3 +64,17 @@ These are downranking rules, not permanent deletion rules. Exploration remains a
 - Deal analytics and finance-linked data roles.
 - Selective financial-services strategy where the work is analytical rather than sales-led or purely regulatory.
 
+
+## Consulting expansion — 20-role calibration (2026-08-17)
+
+First full review of the Consulting-expansion shortlist (20 roles across Oliver Wyman, Alvarez & Marsal, Horváth, AlixPartners, FTI, Roland Berger, zeb, Capco, L.E.K.): **11 Interested / 6 Maybe / 3 Pass**.
+
+**Confirmed positive lanes (Interested).** Corporate finance, M&A / transactions, restructuring, financial modelling, **treasury** (the anchor — Horváth's Corporate Treasury role was the clearest "great fit in line with my experience"), FP&A / planning-&-reporting *when treasury-slanted rather than accounting-heavy*, working capital management, CFO strategy & organization, financial risk / FRM (explicitly valued), and post-deal / PE-performance advisory. Preferred level is **Senior Consultant / (Senior) Associate** — he positions himself at the senior end and repeatedly noted the roles likely need senior experience.
+
+**Cautions (Maybe — right area, real reservation).** VP+ seniority (too senior); regulation-heavy work (bank steering — "not much experience with regulation"); **real estate** asset management ("if not real estate then fine"); unclear or non-finance sector focus (e.g. "Mobility"); and generic transformation not clearly matching his finance experience. Also flagged: roles badged "Finance & Risk" that may not actually draw on treasury, and practices that aren't really opportunity/investment *evaluation*.
+
+**Clear negatives (Pass).** Operational / organisational-performance work ("too operational"); **wealth management / private banking** ("not into private banking and wealth management"); and **technical / IT / data-&-AI** roles ("too technical and IT").
+
+**Strong-fit consulting firms for him.** Horváth (treasury / CFO / FP&A / working capital) and Alvarez & Marsal (corporate finance / modelling / PE performance) are the clearest matches; FTI and AlixPartners (restructuring, M&A, capital advisory) also land well.
+
+**Encoded into calibration_rules.json (2026-08-17):** added restructuring / working capital as a positive; added wealth-management / private-banking and organisational-performance / operational as cautions. (Real estate and compliance/IT already downranked from earlier rounds.) Reorder only, never hard-exclude.

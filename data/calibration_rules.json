@@ -1,6 +1,6 @@
 {
   "_comment": "Calibration scoring rules for calibrate_jobs(). Learnable from feedback; base score 50, clamped 0-100. Reorders review priority only - never a hard exclude.",
-  "updated": "2026-08-17 - Consulting-20 calibration: +restructuring/working-capital positive; +wealth-mgmt/private-banking and org-performance/operational cautions.",
+  "updated": "2026-08-17 - Corporate-20 calibration (2 Int/5 Maybe/12 Pass): added pure IT/data-engineering caution (strongest repeated reject); reaffirmed tax/accounting/junior/senior downranks.",
   "positive_rules": {
     "transactions / M&A": {
       "terms": [
@@ -136,6 +136,20 @@
         "operational excellence"
       ],
       "weight": -9
+    },
+    "pure IT / data engineering": {
+      "terms": [
+        "data science",
+        "software engineer",
+        "enterprise analytics",
+        "analytics engineer",
+        "data transformation",
+        "backend",
+        "full stack",
+        "devops",
+        " developer"
+      ],
+      "weight": -11
     }
   }
 }

@@ -57,3 +57,7 @@ These signals may change review order later, but one signal must not rewrite ano
 - **Seniority mismatch remains the top Pass reason** (comments: "junior" 13x, "too senior" 14x) - existing junior/Director+ cautions confirmed, left as-is.
 - Held back on M&A / corporate-finance / analytics: their Pass rate looks driven by seniority/tax/compliance (already captured), not the theme itself, so their positive weights were left unchanged to avoid under-surfacing genuinely relevant transaction roles.
 - No direct thesis feedback yet (targeting_feedback.csv empty); changes above are rating-driven and deliberately conservative (reorder only, no hard exclusions, exploration preserved).
+
+## Cross-sector note 2026-08-17: pure IT / data roles
+
+Rejecting **pure IT / data / analytics-engineering** roles now repeats across both Consulting (L.E.K. "Digital Data and AI - too technical and IT") and Corporate (five separate Pass comments: "too data and IT", "data science too IT"). This has crossed the threshold from sector-specific into the **general** profile: analytics/data/tech is attractive only as a tool for a finance/investment problem, never as the whole role. Encoded as a caution in calibration_rules.json.

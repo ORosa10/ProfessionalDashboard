@@ -821,20 +821,18 @@ def render_sources() -> None:
         st.info("No source-run history yet. It will appear after the first workflow execution.")
 
 
-def render_remote() -> None:
-    st.title("Remote")
-    st.caption(
-        "Remote-work roles from public remote boards, judged against the same "
-        "profile and semantic fit as Jobs. No company layer -- these come from "
-        "boards, not the Company Universe."
-    )
-    path = DATA_DIR / "jobs_remote_staging.csv"
+def _render_board_stream(staging_filename: str, title: str, caption: str, key_prefix: str) -> None:
+    """Shared review view for board-sourced streams (D Remote, E Projects/Interim):
+    no company layer, same feedback + semantic-fit machinery as Jobs."""
+    st.title(title)
+    st.caption(caption)
+    path = DATA_DIR / staging_filename
     if not path.exists():
-        st.info("Remote sourcing has not produced its first snapshot yet.")
+        st.info("Sourcing has not produced its first snapshot yet.")
         return
     jobs = pd.read_csv(path).fillna("")
     if jobs.empty:
-        st.info("No remote roles yet -- the daily remote sourcing will populate this.")
+        st.info("Nothing here yet -- the daily sourcing will populate this.")
         return
     jobs = jobs.rename(columns={"job_id": "opportunity_id"})
     if "source_url" not in jobs.columns or jobs["source_url"].eq("").all():
@@ -868,8 +866,8 @@ def render_remote() -> None:
 
     f1, f2 = st.columns(2)
     available = [v for v in FEEDBACK_OPTIONS if v in set(jobs["feedback"])]
-    selected = f1.multiselect("Your rating", available, default=available)
-    query = f2.text_input("Search role / company")
+    selected = f1.multiselect("Your rating", available, default=available, key=f"{key_prefix}_fb")
+    query = f2.text_input("Search role / company", key=f"{key_prefix}_q")
     view = jobs[jobs["feedback"].isin(selected)].copy()
     if query.strip():
         q = query.lower()
@@ -882,7 +880,7 @@ def render_remote() -> None:
     view = view.sort_values(["_fb_order", "_fit_order", "calibration_score"], ascending=[True, True, False])
 
     c1, c2 = st.columns(2)
-    c1.metric("Remote roles", len(view))
+    c1.metric("Roles", len(view))
     c2.metric("Unrated", int(view["feedback"].eq("Unrated").sum()))
 
     columns = ["title", "company", "feedback", "comment", "fit_verdict",
@@ -891,7 +889,7 @@ def render_remote() -> None:
         if column not in view.columns:
             view[column] = ""
     editor_view = view.set_index("opportunity_id")[columns]
-    with st.form("remote_feedback_form"):
+    with st.form(f"{key_prefix}_form"):
         edited = st.data_editor(
             editor_view, hide_index=True, width="stretch", height=560,
             disabled=[c for c in columns if c not in {"feedback", "comment"}],
@@ -905,7 +903,7 @@ def render_remote() -> None:
                 "location": st.column_config.TextColumn("Location", width="small"),
                 "source_url": st.column_config.LinkColumn("Open", display_text="Open", width="small"),
             },
-            key="remote_feedback_editor",
+            key=f"{key_prefix}_editor",
         )
         saved = st.form_submit_button("Save my ratings", type="primary")
     if saved:
@@ -924,3 +922,24 @@ def render_remote() -> None:
                 st.error("Saving failed. Refresh and try again.")
             else:
                 st.success("Ratings saved.")
+
+
+def render_remote() -> None:
+    _render_board_stream(
+        "jobs_remote_staging.csv", "Remote",
+        "Remote-work roles from public remote boards, judged against the same "
+        "profile and semantic fit as Jobs. Permanent/ongoing roles only "
+        "(contract/interim live under Projects). No company layer.",
+        "remote",
+    )
+
+
+def render_projects() -> None:
+    _render_board_stream(
+        "jobs_projects_staging.csv", "Projekty / Interim",
+        "Paid project / interim / contract / freelance finance work for you "
+        "personally -- any location. Fit is judged on relevance, whether you "
+        "can personally deliver it, and reachability given your ICO and "
+        "experience (no company references). No company layer.",
+        "projects",
+    )

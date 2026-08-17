@@ -47,7 +47,20 @@ FINANCE_TITLE_TERMS = [
     "credit analyst", "finance manager", "structurer", "liquidity", "cfo",
 ]
 
+PROJECT_TERMS = [
+    "contract", "interim", "freelance", "fixed-term", "fixed term", "temporary",
+    "fractional", "b2b", "na dobu ur", "secondment", "maternity cover", " ftc",
+    "6-month", "9-month", "12-month", "6 month", "9 month", "12 month",
+]
+
 UA = {"User-Agent": "Mozilla/5.0 ProfessionalDashboard/1.0"}
+
+
+def is_project_role(title: str, desc: str) -> bool:
+    """Contract / interim / freelance / fixed-term roles belong to workstream E
+    (Projects / Interim), not D (Remote), which keeps ongoing/permanent roles."""
+    text = f" {title} {desc} ".lower()
+    return any(t in text for t in PROJECT_TERMS)
 
 
 def _clean(text: object) -> str:
@@ -124,6 +137,8 @@ def main() -> None:
         hits = _relevant(title, desc)
         if not hits:
             continue
+        if is_project_role(title, desc):
+            continue  # contract/interim -> workstream E, not Remote
         recs.append({
             "job_id": hashlib.sha256(url.encode("utf-8")).hexdigest()[:16],
             "canonical_company_id": "", "company": company or src.title(),

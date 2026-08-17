@@ -8,7 +8,7 @@ import streamlit as st
 from add_opportunity_ui import render_add_opportunity
 from cost_of_living_ui import render_cost_of_living
 from github_storage import RATING_COLUMNS, github_token, load_ratings, save_ratings
-from jobs_ui import render_jobs, render_remote, render_sources
+from jobs_ui import render_jobs, render_remote, render_projects, render_sources
 
 COMPANY_TARGETING_PATH = Path(__file__).parent / "COMPANY_TARGETING.md"
 GENERAL_COMPANY_TARGETING_PATH = Path(__file__).parent / "GENERAL_COMPANY_TARGETING.md"
@@ -133,6 +133,10 @@ def jobs_page() -> None:
 
 def remote_page() -> None:
     render_remote()
+
+
+def projects_page() -> None:
+    render_projects()
 
 
 def add_opportunity_page() -> None:
@@ -329,6 +333,7 @@ navigation = st.navigation(
             st.Page(opportunities_page, title="Overview"),
             st.Page(jobs_page, title="Jobs"),
             st.Page(remote_page, title="Remote"),
+            st.Page(projects_page, title="Projekty / Interim"),
             st.Page(add_opportunity_page, title="Add Opportunity"),
             st.Page(companies_page, title="Companies"),
             st.Page(cost_of_living_page, title="Cost of Living"),

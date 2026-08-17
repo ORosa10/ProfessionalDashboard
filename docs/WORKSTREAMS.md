@@ -52,19 +52,36 @@ Company vrstva se přeskakuje. Scope: cokoliv (full-time i kontrakt), doladí se
   sdíleného `job_feedback.csv`.
 - Stav: POSTAVENO, zatím bez dat - naplní se prvním během Action (dispatch nebo ranní cron).
   OVĚŘIT po prvním běhu, že boardy vrací relevantní role a commit projde.
-- Otevřené: sémantický fit pro remote role zatím negeneruje calibration-refresh (jen sektory) -
-  přidat, až D poběží.
+- Update: filtr utažen na finanční TITULY (popis dělal false-positives); D nově VYřazuje
+  contract/interim (ty patří do E) -> D = jen trvalé remote role.
+- Otevřené: sémantický fit pro remote/E role zatím negeneruje calibration-refresh (jen sektory) -
+  přidat, až mají data.
+
+## E - Projekty / Interim (nový opportunity stream)
+Placená PROJEKTOVÁ / interim / kontraktní / freelance finanční práce pro Ondřeje osobně.
+Osa = typ úvazku (na projekt/na dobu určitou), NE lokalita -> nepřekrývá se s D (D = trvalé remote).
+Fit lens E = relevance k finanční doméně x osobní dodatelnost x DOSAŽITELNOST (má IČO, ale žádné
+reference subjektu -> reference-heavy veřejné zakázky se sníží v pořadí, ne vyloučí).
+- Sourcing: `sourcing/projects_pilot.py` (reuse fetcherů z remote_pilot; nechá jen project-type
+  finanční role via `is_project_role`) + Action `.github/workflows/projects-sourcing.yml`
+  (denně 05:45 + dispatch) -> `data/jobs_projects_staging.csv`, commit do main.
+- App: stránka **Opportunities -> Projekty / Interim** (`render_projects`), sdílený review helper
+  `_render_board_stream` (společný s Remote), bez company vrstvy, feedback do `job_feedback.csv`.
+- Stav: POSTAVENO (kanál 1 = interim/kontrakt z boardů). Data po prvním běhu Action, OVĚŘIT kvalitu.
+- Otevřené (kanál 2 = TENDERY): TED (EU open data) + Věstník (XML), CPV finanční kódy, s příznakem
+  náročnosti referencí. Zatím NEpostaveno - dobrat zdroj (TED API vs Věstník) a přidat.
+- Otevřené: E-specifický fit lens (dosažitelnost) zatím jen popsán; promítnout do semantic-fit generace.
 
 ## Scheduled tasks (souhrn)
 - `company-discovery` — Po+Čt 07:00 (A)
 - `opportunity-enrichment` — denně 08:03 (B1 + B2)
 - `calibration-refresh` — manual / on-demand (C)
+GitHub Actions (sourcing): sector-sourcing, ..., + `remote-sourcing` (D, denně 05:30), `projects-sourcing` (E, denně 05:45) — commit do main.
 Pozn.: všechny commitují přes jeden fine-grained GitHub PAT uložený v promptu tasku (lokálně)
 i ve Streamlit secrets (pro ukládání z appky). NEREVOKOVAT bez náhrady na obou místech.
 
 ## Další plánované streamy (zatím nespecifikováno)
-- **E = české projekty / zakázky** (contracts/tendery/advisory) - k dobrainstormování.
-- Možná další (F+): expert cally / advisory & NED.
+- Možná **F = expert cally / advisory & NED** (placené hovory, GLG/Third Bridge apod.) - k dobrainstormování.
 
 ## Poznámky / další možné kroky
 - B2 automatiku potvrdit na reálném ratingu (ohodnotit 1 z 6 čekajících pozic).

@@ -819,3 +819,108 @@ def render_sources() -> None:
         )
     else:
         st.info("No source-run history yet. It will appear after the first workflow execution.")
+
+
+def render_remote() -> None:
+    st.title("Remote")
+    st.caption(
+        "Remote-work roles from public remote boards, judged against the same "
+        "profile and semantic fit as Jobs. No company layer -- these come from "
+        "boards, not the Company Universe."
+    )
+    path = DATA_DIR / "jobs_remote_staging.csv"
+    if not path.exists():
+        st.info("Remote sourcing has not produced its first snapshot yet.")
+        return
+    jobs = pd.read_csv(path).fillna("")
+    if jobs.empty:
+        st.info("No remote roles yet -- the daily remote sourcing will populate this.")
+        return
+    jobs = jobs.rename(columns={"job_id": "opportunity_id"})
+    if "source_url" not in jobs.columns or jobs["source_url"].eq("").all():
+        jobs["source_url"] = jobs.get("job_url", "")
+
+    token = _github_token()
+    try:
+        feedback, feedback_sha = _load_job_feedback(token)
+    except Exception:
+        feedback = pd.DataFrame(columns=["opportunity_id", "feedback", "comment", "updated_at"])
+        feedback_sha = None
+        st.warning("Job feedback could not be loaded.")
+    feedback = feedback.drop_duplicates("opportunity_id", keep="last")
+    jobs = jobs.merge(feedback[["opportunity_id", "feedback", "comment"]], on="opportunity_id", how="left")
+    jobs["feedback"] = jobs["feedback"].fillna("").replace("", "Unrated")
+    jobs["comment"] = jobs["comment"].fillna("")
+
+    jobs["fit_verdict"] = ""
+    jobs["fit_reasoning"] = ""
+    sem_path = DATA_DIR / "semantic_fit.csv"
+    if sem_path.exists():
+        sem = pd.read_csv(sem_path).fillna("")
+        if not sem.empty and "opportunity_id" in sem.columns:
+            sem = sem.drop_duplicates("opportunity_id", keep="last").set_index("opportunity_id")
+            if "fit" in sem.columns:
+                jobs["fit_verdict"] = jobs["opportunity_id"].map(sem["fit"]).fillna("")
+            if "reasoning" in sem.columns:
+                jobs["fit_reasoning"] = jobs["opportunity_id"].map(sem["reasoning"]).fillna("")
+    if "calibration_score" not in jobs.columns:
+        jobs["calibration_score"] = 0
+
+    f1, f2 = st.columns(2)
+    available = [v for v in FEEDBACK_OPTIONS if v in set(jobs["feedback"])]
+    selected = f1.multiselect("Your rating", available, default=available)
+    query = f2.text_input("Search role / company")
+    view = jobs[jobs["feedback"].isin(selected)].copy()
+    if query.strip():
+        q = query.lower()
+        view = view[view["title"].str.lower().str.contains(q) | view["company"].str.lower().str.contains(q)]
+
+    fit_rank = {"strong": 0, "moderate": 1, "partial": 1, "weak": 2}
+    view["_fit_order"] = view["fit_verdict"].astype(str).str.lower().map(
+        lambda v: next((r for k, r in fit_rank.items() if k in v), 3))
+    view["_fb_order"] = view["feedback"].map({"Unrated": 0, "Interested": 1, "Maybe": 2, "Pass": 3}).fillna(4)
+    view = view.sort_values(["_fb_order", "_fit_order", "calibration_score"], ascending=[True, True, False])
+
+    c1, c2 = st.columns(2)
+    c1.metric("Remote roles", len(view))
+    c2.metric("Unrated", int(view["feedback"].eq("Unrated").sum()))
+
+    columns = ["title", "company", "feedback", "comment", "fit_verdict",
+               "fit_reasoning", "location", "source_url"]
+    for column in columns:
+        if column not in view.columns:
+            view[column] = ""
+    editor_view = view.set_index("opportunity_id")[columns]
+    with st.form("remote_feedback_form"):
+        edited = st.data_editor(
+            editor_view, hide_index=True, width="stretch", height=560,
+            disabled=[c for c in columns if c not in {"feedback", "comment"}],
+            column_config={
+                "title": st.column_config.TextColumn("Role", width="large"),
+                "company": st.column_config.TextColumn("Company", width="medium"),
+                "feedback": st.column_config.SelectboxColumn("Your rating", options=FEEDBACK_OPTIONS, required=True, width="small"),
+                "comment": st.column_config.TextColumn("Your comment", width="medium"),
+                "fit_verdict": st.column_config.TextColumn("Fit", width="small"),
+                "fit_reasoning": st.column_config.TextColumn("Personal fit (semantic)", width=560),
+                "location": st.column_config.TextColumn("Location", width="small"),
+                "source_url": st.column_config.LinkColumn("Open", display_text="Open", width="small"),
+            },
+            key="remote_feedback_editor",
+        )
+        saved = st.form_submit_button("Save my ratings", type="primary")
+    if saved:
+        if not token:
+            st.error("GitHub saving is not configured for this app.")
+        else:
+            base = feedback.set_index("opportunity_id")
+            now = datetime.now(timezone.utc).isoformat()
+            for oid, row in edited.iterrows():
+                base.loc[oid, "feedback"] = row["feedback"]
+                base.loc[oid, "comment"] = row["comment"]
+                base.loc[oid, "updated_at"] = now
+            try:
+                _save_job_feedback(token, base.reset_index(), feedback_sha)
+            except Exception:
+                st.error("Saving failed. Refresh and try again.")
+            else:
+                st.success("Ratings saved.")

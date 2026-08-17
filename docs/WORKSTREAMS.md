@@ -39,12 +39,32 @@ Ukládá do `data/user_submitted_opportunities.csv`. Zůstává na vlastní str�
 - Stav: ✅ POSTAVENO a jednou odzkoušeno naostro: pravidla doladěna (treasury +12, nový markets/deriváty +12,
   compliance -12, real estate -9; 8f4e280), shortlisty přegenerovány, 57 semantic-fit reasoningů (6347ce2).
 
+## D - Remote work (nový opportunity stream)
+Stejný profil, fit i kalibrace jako Jobs (A/B/C), ale zdroj = veřejné remote boardy, NE firmy.
+Company vrstva se přeskakuje. Scope: cokoliv (full-time i kontrakt), doladí se hodnocením.
+- Sourcing: `sourcing/remote_pilot.py` + Action `.github/workflows/remote-sourcing.yml`
+  (denně 05:30 UTC + workflow_dispatch). Tahá Remote OK / Remotive / We Work Remotely feedy,
+  filtruje finanční/treasury/risk/investment termy, píše `data/jobs_remote_staging.csv`
+  (schéma jako sektor staging), skóruje přes calibrate_jobs. Commituje PŘÍMO do main
+  (čerstvý stream, žádná promotion vrstva).
+- App: nová stránka **Opportunities -> Remote** (`render_remote` v jobs_ui.py) - review grid
+  s Interested/Maybe/Pass + komentář a sémantický fit, bez company filtru. Feedback jde do
+  sdíleného `job_feedback.csv`.
+- Stav: POSTAVENO, zatím bez dat - naplní se prvním během Action (dispatch nebo ranní cron).
+  OVĚŘIT po prvním běhu, že boardy vrací relevantní role a commit projde.
+- Otevřené: sémantický fit pro remote role zatím negeneruje calibration-refresh (jen sektory) -
+  přidat, až D poběží.
+
 ## Scheduled tasks (souhrn)
 - `company-discovery` — Po+Čt 07:00 (A)
 - `opportunity-enrichment` — denně 08:03 (B1 + B2)
 - `calibration-refresh` — manual / on-demand (C)
 Pozn.: všechny commitují přes jeden fine-grained GitHub PAT uložený v promptu tasku (lokálně)
 i ve Streamlit secrets (pro ukládání z appky). NEREVOKOVAT bez náhrady na obou místech.
+
+## Další plánované streamy (zatím nespecifikováno)
+- **E = české projekty / zakázky** (contracts/tendery/advisory) - k dobrainstormování.
+- Možná další (F+): expert cally / advisory & NED.
 
 ## Poznámky / další možné kroky
 - B2 automatiku potvrdit na reálném ratingu (ohodnotit 1 z 6 čekajících pozic).

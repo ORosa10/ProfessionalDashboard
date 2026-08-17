@@ -72,6 +72,19 @@ reference subjektu -> reference-heavy veřejné zakázky se sníží v pořadí,
   náročnosti referencí. Zatím NEpostaveno - dobrat zdroj (TED API vs Věstník) a přidat.
 - Otevřené: E-specifický fit lens (dosažitelnost) zatím jen popsán; promítnout do semantic-fit generace.
 
+## F - Lidé / Network (access vrstva)
+Tvůj network (hlavně LinkedIn), napárovaný na firmy -> a tím na příležitosti. Znát někoho u firmy
+je SAMOSTATNÝ access signál (blueprint AccessStrength), který smí BOOSTNOUT pořadí, ne přepsat fit.
+- Ingest: nahrání **LinkedIn Connections CSV exportu** (Settings -> Data privacy -> Get a copy of
+  your data -> Connections). Žádný scraping (LinkedIn API network nedá; konektor neexistuje).
+- Kód: `people_ui.py` -> stránka **Opportunities -> Lidé / Network**. Parsuje LinkedIn export
+  (přeskočí "Notes:" preambuli), fuzzy-napáruje Company -> canonical_company_id (přes universe +
+  aliasy), uloží do `data/connections.csv`. Přehled "u které firmy koho znáš".
+- Stav: POSTAVENO a otestováno na syntetickém exportu (párování Deloitte/PPF/Evotec OK). Čeká na
+  tvůj reálný CSV export.
+- Otevřené (benefit): promítnout access do pořadí příležitostí (odznak "znáš tu N lidí" + mírný boost
+  na Jobs/Remote/Projects) a předvyplnit contact_strength na Companies. Zatím jen ingest + přehled.
+
 ## Scheduled tasks (souhrn)
 - `company-discovery` — Po+Čt 07:00 (A)
 - `opportunity-enrichment` — denně 08:03 (B1 + B2)
@@ -81,9 +94,9 @@ Pozn.: všechny commitují přes jeden fine-grained GitHub PAT uložený v promp
 i ve Streamlit secrets (pro ukládání z appky). NEREVOKOVAT bez náhrady na obou místech.
 
 ## Rozsah dashboardu (rozhodnuto 2026-08-17)
-Dashboard stojí na 5 pilířích: **A discovery firem, B ručně vkládané opportunity, C kalibrace+shortlisty,
-D Remote, E Projekty/Interim.** Zatím se DÁL NEROZŠIŘUJE. F (expert cally / advisory & NED) zamítnuto -
-nedostatečná seniorita zatím. Práce se soustředí na dotažení a doladění těchto pěti.
+Dashboard stojí na 6 pilířích: **A discovery firem, B ručně vkládané opportunity, C kalibrace+shortlisty,
+D Remote, E Projekty/Interim, F Lidé/Network (access).** F jako expert-cally bylo zamítnuto (seniorita),
+ale F bylo REDEFINOVÁNO na network/access vrstvu. Dál se nerozšiřuje; soustředíme se na dotažení těchto šesti.
 
 ## Poznámky / další možné kroky
 - B2 automatiku potvrdit na reálném ratingu (ohodnotit 1 z 6 čekajících pozic).

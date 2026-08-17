@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from add_opportunity_ui import render_add_opportunity
+from people_ui import render_people
 from cost_of_living_ui import render_cost_of_living
 from github_storage import RATING_COLUMNS, github_token, load_ratings, save_ratings
 from jobs_ui import render_jobs, render_remote, render_projects, render_sources
@@ -137,6 +138,10 @@ def remote_page() -> None:
 
 def projects_page() -> None:
     render_projects()
+
+
+def people_page() -> None:
+    render_people()
 
 
 def add_opportunity_page() -> None:
@@ -336,6 +341,7 @@ navigation = st.navigation(
             st.Page(projects_page, title="Projekty / Interim"),
             st.Page(add_opportunity_page, title="Add Opportunity"),
             st.Page(companies_page, title="Companies"),
+            st.Page(people_page, title="Lidé / Network"),
             st.Page(cost_of_living_page, title="Cost of Living"),
         ],
         "Workspace": [st.Page(pipeline_page, title="Pipeline"), st.Page(ideas_page, title="Ideas & Projects")],

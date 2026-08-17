@@ -1,21 +1,21 @@
 batch_id,display_order,opportunity_id,cohort,theme,seniority_band,selection_reason
-financial-services-calibration-01,1,f4c7887859cbc284,Boundary,Accounting / Reporting,Unclear / other,Boundary case to clarify preferences
-financial-services-calibration-01,2,ef6d37436f1003c2,Boundary,Treasury / Risk / Markets,Core professional,Boundary case to clarify preferences
-financial-services-calibration-01,3,ee9d02a83b800927,Boundary,Transactions / M&A,Junior / entry,Boundary case to clarify preferences
-financial-services-calibration-01,4,666697409a0fecda,Boundary,Other finance,Manager,Boundary case to clarify preferences
-financial-services-calibration-01,5,ede29493d776f105,Boundary,Strategy / Consulting,Core professional,Boundary case to clarify preferences
-financial-services-calibration-01,6,da8287293207ef4f,Exploration,Data / Analytics,Unclear / other,Exploration case to avoid overfitting
-financial-services-calibration-01,7,7a2e3d82f4b30aa8,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
-financial-services-calibration-01,8,0ac5be37b04a4209,Exploration,Transactions / M&A,Senior leadership,Exploration case to avoid overfitting
-financial-services-calibration-01,9,31afa6724107aef8,Exploration,Tax / Compliance,Manager,Exploration case to avoid overfitting
-financial-services-calibration-01,10,cc24b95b223e577d,Exploration,Data / Analytics,Unclear / other,Exploration case to avoid overfitting
-financial-services-calibration-01,11,0b02cb7fdf23f2fb,Exploration,Treasury / Risk / Markets,Manager,Exploration case to avoid overfitting
-financial-services-calibration-01,12,170544615262c3da,Exploration,Transactions / M&A,Core professional,Exploration case to avoid overfitting
-financial-services-calibration-01,13,370e60ccb85f326e,Exploration,Treasury / Risk / Markets,Unclear / other,Exploration case to avoid overfitting
-financial-services-calibration-01,14,364b9fedfadb2ee2,Exploration,Strategy / Consulting,Unclear / other,Exploration case to avoid overfitting
-financial-services-calibration-01,15,780f41cd008969ed,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
-financial-services-calibration-01,16,0e4bb134165c978d,Exploration,Data / Analytics,Core professional,Exploration case to avoid overfitting
-financial-services-calibration-01,17,6603f34c9d01b8d9,Exploration,Transactions / M&A,Manager,Exploration case to avoid overfitting
-financial-services-calibration-01,18,49ccd77155c87a0c,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
-financial-services-calibration-01,19,0333757f9781ac1d,Exploration,Treasury / Risk / Markets,Core professional,Exploration case to avoid overfitting
-financial-services-calibration-01,20,3d6018b097c43be8,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
+financial_services-calibration,1,f4c7887859cbc284,Boundary,Accounting / Reporting,Unclear / other,Boundary case to clarify preferences
+financial_services-calibration,2,ef6d37436f1003c2,Boundary,Treasury / Risk / Markets,Core professional,Boundary case to clarify preferences
+financial_services-calibration,3,ee9d02a83b800927,Boundary,Transactions / M&A,Junior / entry,Boundary case to clarify preferences
+financial_services-calibration,4,666697409a0fecda,Boundary,Other finance,Manager,Boundary case to clarify preferences
+financial_services-calibration,5,ede29493d776f105,Boundary,Strategy / Consulting,Core professional,Boundary case to clarify preferences
+financial_services-calibration,6,da8287293207ef4f,Exploration,Data / Analytics,Unclear / other,Exploration case to avoid overfitting
+financial_services-calibration,7,7a2e3d82f4b30aa8,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
+financial_services-calibration,8,0ac5be37b04a4209,Exploration,Transactions / M&A,Senior leadership,Exploration case to avoid overfitting
+financial_services-calibration,9,31afa6724107aef8,Exploration,Tax / Compliance,Manager,Exploration case to avoid overfitting
+financial_services-calibration,10,cc24b95b223e577d,Exploration,Data / Analytics,Unclear / other,Exploration case to avoid overfitting
+financial_services-calibration,11,0b02cb7fdf23f2fb,Exploration,Treasury / Risk / Markets,Manager,Exploration case to avoid overfitting
+financial_services-calibration,12,170544615262c3da,Exploration,Transactions / M&A,Core professional,Exploration case to avoid overfitting
+financial_services-calibration,13,370e60ccb85f326e,Exploration,Treasury / Risk / Markets,Unclear / other,Exploration case to avoid overfitting
+financial_services-calibration,14,364b9fedfadb2ee2,Exploration,Strategy / Consulting,Unclear / other,Exploration case to avoid overfitting
+financial_services-calibration,15,780f41cd008969ed,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
+financial_services-calibration,16,0e4bb134165c978d,Exploration,Data / Analytics,Core professional,Exploration case to avoid overfitting
+financial_services-calibration,17,6603f34c9d01b8d9,Exploration,Transactions / M&A,Manager,Exploration case to avoid overfitting
+financial_services-calibration,18,49ccd77155c87a0c,Exploration,Other finance,Core professional,Exploration case to avoid overfitting
+financial_services-calibration,19,0333757f9781ac1d,Exploration,Treasury / Risk / Markets,Core professional,Exploration case to avoid overfitting
+financial_services-calibration,20,3d6018b097c43be8,Exploration,Other finance,Core professional,Exploration case to avoid overfitting

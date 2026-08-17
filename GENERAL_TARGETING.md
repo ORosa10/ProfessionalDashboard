@@ -48,3 +48,12 @@ These signals may change review order later, but one signal must not rewrite ano
 - Low initial fit lowers review priority; it does not cause permanent exclusion.
 - Scoring remains transparent and recoverable. It must not become a hidden gate before enough real feedback exists.
 
+
+## Calibration update 2026-08-17 (from 128 ratings + 1 submitted opportunity)
+
+- **Treasury / markets is the confirmed lane.** Treasury-themed roles were the only theme rated net-positive (Interested 16 vs Pass 9); reinforced by the Evotec Treasury Manager submission (Interested). Raised the treasury weight and, importantly, added a dedicated **markets / derivatives / FX / hedging / liquidity / interest-rate / commodities** positive that was previously not scored at all despite being a core personal signal.
+- **Compliance/forensics strongly disliked** (Interested 2 vs Pass 16) - downrank deepened.
+- **Real estate** added as a light caution (repeated Pass in comments + the earlier PE finding of Real Estate 3/3 Pass).
+- **Seniority mismatch remains the top Pass reason** (comments: "junior" 13x, "too senior" 14x) - existing junior/Director+ cautions confirmed, left as-is.
+- Held back on M&A / corporate-finance / analytics: their Pass rate looks driven by seniority/tax/compliance (already captured), not the theme itself, so their positive weights were left unchanged to avoid under-surfacing genuinely relevant transaction roles.
+- No direct thesis feedback yet (targeting_feedback.csv empty); changes above are rating-driven and deliberately conservative (reorder only, no hard exclusions, exploration preserved).

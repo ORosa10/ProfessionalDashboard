@@ -35,11 +35,16 @@ STAGING_COLUMNS = [
     "calibration_score", "calibration_note",
 ]
 
-FINANCE_TERMS = [
-    "treasury", "risk", "derivative", "valuation", " fx ", "foreign exchange",
-    "interest rate", "liquidity", "commodit", "investment", "portfolio",
-    "corporate finance", "financial model", "quant", "capital markets",
-    "hedging", "fixed income", "financial analyst", "m&a", "fp&a",
+# Match on the ROLE TITLE only. Matching the description caught generic
+# boilerplate ("risk", "investment in your career", ...) and pulled in
+# non-finance roles (room attendant, cabin cleaner). Title terms are precise;
+# calibration + semantic fit then order what remains.
+FINANCE_TITLE_TERMS = [
+    "treasury", "risk", "valuation", "quant", "investment", "portfolio",
+    "corporate finance", "financial analyst", "fp&a", "fp & a", "derivative",
+    "capital markets", "fixed income", "trader", "trading", "financial controller",
+    "controlling", "actuar", "m&a", "private equity", "hedge fund", "asset management",
+    "credit analyst", "finance manager", "structurer", "liquidity", "cfo",
 ]
 
 UA = {"User-Agent": "Mozilla/5.0 ProfessionalDashboard/1.0"}
@@ -50,8 +55,9 @@ def _clean(text: object) -> str:
 
 
 def _relevant(title: str, desc: str) -> list[str]:
-    text = f" {title} {desc} ".lower()
-    return [t.strip() for t in FINANCE_TERMS if t in text]
+    # Title-only match for precision (desc is boilerplate-heavy).
+    text = f" {title} ".lower()
+    return [t.strip() for t in FINANCE_TITLE_TERMS if t in text]
 
 
 def fetch_remoteok() -> list[tuple]:

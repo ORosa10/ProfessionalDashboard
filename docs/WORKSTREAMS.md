@@ -1,4 +1,14 @@
-# Workstreams A / B / C — status tracker
+# Workstreams — status tracker
+
+## Legenda pilířů (A-F) — rychlá reference
+- **A** = Discovery firem (scheduled task najde nové firmy do universe)
+- **B** = Ručně vkládané opportunity (Add Opportunity): B1 obohacení, B2 do sourcingu + kontextu
+- **C** = Kalibrace + shortlisty (tvoje ratingy + thesis feedback -> pravidla/hypotézy -> shortlisty -> sémantický fit)
+- **D** = Remote (remote role z boardů, jen trvalé)
+- **E** = Projekty / Interim (projektová/kontraktní práce + tendery; jiný fit lens)
+- **F** = Lidé / Network (LinkedIn kontakty -> access signál na firmy/příležitosti)
+
+Dashboard je zamčený na těchto 6 pilířích (viz "Rozsah dashboardu" níže).
 
 Kostra rozdělané práce na ProfessionalDashboard. Drž tato písmenka, ať je vždy jasné,
 k čemu se vracíme. Aktualizovat při každé změně. (Cowork session nesdílejí paměť —

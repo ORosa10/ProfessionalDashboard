@@ -665,11 +665,21 @@ def render_jobs() -> None:
         view.loc[view["rating"].eq("A"), "company"].nunique(),
     )
     c4.metric("Selected countries", len(selected_countries))
+    _scope_blurb = {
+        "Big Four calibration (50)": "Big Four shortlist: 30 likely-fit, 12 boundary and 8 exploration roles.",
+        "PE calibration (20)": "PE shortlist: 20 roles from 25 verified candidates across 21 A-rated firms.",
+        "Consulting calibration (20)": "Consulting shortlist: 20 roles from 35 verified candidates across nine firms.",
+        "Corporate calibration (20)": "Corporate shortlist: a diverse 20-role learning sample from the Corporate sourcing.",
+        "Banking & Financial Services calibration (20)": "Banking & Financial Services shortlist: a diverse 20-role learning sample.",
+        "Public Markets & Asset Management calibration (12)": "Public Markets & Asset Management shortlist: a diverse learning sample.",
+        "Specialist & Boutique Funds calibration (6)": "Specialist & Boutique Funds shortlist: a small diverse learning sample.",
+        "All opportunities": "Every retained sourced role across all sectors.",
+        "Backlog only": "Roles not currently in any calibration shortlist.",
+    }
     st.caption(
-        "The Big Four shortlist contains 30 likely-fit roles, 12 boundary cases and 8 exploration cases. "
-        "The PE shortlist contains 20 roles selected from 25 verified candidates across 21 checked A-rated firms. "
-        "The consulting shortlist contains 20 roles selected from 35 verified candidates across nine firms. "
-        "All three are learning samples, not hard recommendations. Switch to All opportunities to see every retained role."
+        f"Showing: {review_scope}. {_scope_blurb.get(review_scope, '')} "
+        "Shortlists are diverse learning samples, not hard recommendations. "
+        "Switch to All opportunities to see every retained role."
     )
 
     st.caption(

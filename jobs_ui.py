@@ -10,11 +10,20 @@ import requests
 import streamlit as st
 
 from personal_fit import build_personal_fit_summary
+from github_storage import load_csv_file, save_csv_file
 
 DATA_DIR = Path(__file__).parent / "data"
 GENERAL_TARGETING_PATH = Path(__file__).parent / "GENERAL_TARGETING.md"
 CONSULTING_TARGETING_PATH = Path(__file__).parent / "CONSULTING_TARGETING.md"
 PE_TARGETING_PATH = Path(__file__).parent / "PE_TARGETING.md"
+TARGETING_FEEDBACK_PATH = "data/targeting_feedback.csv"
+TARGETING_FEEDBACK_COLUMNS = ["submitted_at", "scope", "feedback"]
+THESIS_SCOPES = [
+    "General (all sectors)", "Big Four", "Consulting", "Corporate",
+    "Banking & Financial Services", "Holding & Conglomerate",
+    "Private Equity & Private Markets", "Investment Banking",
+    "Public Markets & Asset Management", "Specialist & Boutique Funds",
+]
 VERIFIED_JOB_TYPES = {
     "schema.org/JobPosting",
     "schema.org/JobPosting JSON-LD",
@@ -246,6 +255,49 @@ def render_jobs() -> None:
                 "Sector-specific hypothesis for Private Equity, kept separate from Consulting's. "
                 "Update it in the project chat as more roles are rated."
             )
+
+    with st.expander("Give feedback on the targeting thesis"):
+        st.caption(
+            "Tell the calibration what to change in the thesis directly -- e.g. "
+            "'downrank pure compliance', 'treasury / FX is top priority', "
+            "'Manager level is fine if hands-on'. This is read by the calibration "
+            "refresh alongside your individual job ratings."
+        )
+        thesis_scope = st.selectbox("Scope", THESIS_SCOPES, key="thesis_fb_scope")
+        thesis_text = st.text_area(
+            "Your thesis feedback",
+            key="thesis_fb_text",
+            placeholder="What should the targeting emphasise or avoid?",
+        )
+        if st.button("Save thesis feedback", key="thesis_fb_save", disabled=not thesis_text.strip()):
+            fb_token = _github_token()
+            if not fb_token:
+                st.error("GitHub saving is not configured for this app.")
+            else:
+                existing, fb_sha = load_csv_file(fb_token, TARGETING_FEEDBACK_PATH, TARGETING_FEEDBACK_COLUMNS)
+                new_row = {
+                    "submitted_at": datetime.now(timezone.utc).isoformat(),
+                    "scope": thesis_scope,
+                    "feedback": thesis_text.strip(),
+                }
+                existing = pd.concat([existing, pd.DataFrame([new_row])], ignore_index=True)
+                try:
+                    save_csv_file(fb_token, TARGETING_FEEDBACK_PATH, existing, fb_sha, "Add targeting thesis feedback")
+                except Exception:
+                    st.error("Saving failed. Refresh and try again.")
+                else:
+                    st.success("Saved. It will be picked up on the next calibration refresh.")
+        try:
+            prior, _ = load_csv_file(_github_token(), TARGETING_FEEDBACK_PATH, TARGETING_FEEDBACK_COLUMNS)
+        except Exception:
+            prior = pd.DataFrame(columns=TARGETING_FEEDBACK_COLUMNS)
+        if not prior.empty:
+            st.caption("Your thesis feedback so far:")
+            st.dataframe(
+                prior.sort_values("submitted_at", ascending=False)[["scope", "feedback", "submitted_at"]],
+                hide_index=True, width="stretch",
+            )
+
     frames: list[pd.DataFrame] = []
     # Always read the live, promoted snapshot. Newly sourced roles land in
     # jobs_staging.csv on the sourcing-staging branch first and only appear

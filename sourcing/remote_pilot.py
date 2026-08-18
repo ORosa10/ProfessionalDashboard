@@ -67,10 +67,19 @@ def _clean(text: object) -> str:
     return re.sub(r"\s+", " ", html.unescape(re.sub("<[^>]+>", " ", str(text or "")))).strip()
 
 
-def _relevant(title: str, desc: str) -> list[str]:
-    # Title-only match for precision (desc is boilerplate-heavy).
-    text = f" {title} ".lower()
-    return [t.strip() for t in FINANCE_TITLE_TERMS if t in text]
+FINANCE_META_TERMS = ["finance", "fintech", "financial", "investment", "trading", "treasury"]
+
+
+def _relevant(title: str, meta: str = "") -> list[str]:
+    # Finance terms in the TITLE, or curated META (tags / category) -- never the
+    # boilerplate description. Meta lets finance-category feeds (Remotive
+    # finance-legal, WWR finance RSS, Remote OK finance tags) pass even when the
+    # title is generic (e.g. "Analyst"); calibration then orders what remains.
+    t = f" {title} ".lower()
+    m = f" {meta} ".lower()
+    hits = [x.strip() for x in FINANCE_TITLE_TERMS if x in t]
+    hits += [x for x in FINANCE_META_TERMS if x in m]
+    return list(dict.fromkeys(hits))
 
 
 def fetch_remoteok() -> list[tuple]:
@@ -81,9 +90,11 @@ def fetch_remoteok() -> list[tuple]:
         for item in r.json():
             if not isinstance(item, dict) or not item.get("position"):
                 continue
+            tags = item.get("tags") or []
+            meta = " ".join(tags) if isinstance(tags, list) else str(tags)
             out.append((_clean(item.get("position")), _clean(item.get("company")),
                         _clean(item.get("description")), item.get("url", ""),
-                        "remoteok", str(item.get("date", ""))))
+                        "remoteok", str(item.get("date", "")), meta))
     except Exception as exc:
         print("remoteok failed:", exc)
     return out
@@ -92,12 +103,14 @@ def fetch_remoteok() -> list[tuple]:
 def fetch_remotive() -> list[tuple]:
     out = []
     try:
-        r = requests.get("https://remotive.com/api/remote-jobs", headers=UA, timeout=30)
+        r = requests.get("https://remotive.com/api/remote-jobs?category=finance-legal", headers=UA, timeout=30)
         r.raise_for_status()
         for item in r.json().get("jobs", []):
+            tags = item.get("tags") or []
+            meta = "finance-legal " + (" ".join(tags) if isinstance(tags, list) else str(tags))
             out.append((_clean(item.get("title")), _clean(item.get("company_name")),
                         _clean(item.get("description")), item.get("url", ""),
-                        "remotive", str(item.get("publication_date", ""))))
+                        "remotive", str(item.get("publication_date", "")), meta))
     except Exception as exc:
         print("remotive failed:", exc)
     return out
@@ -116,7 +129,7 @@ def fetch_wwr() -> list[tuple]:
                     company, role = [p.strip() for p in title.split(":", 1)]
                 out.append((role, company, _clean(it.findtext("description")),
                             _clean(it.findtext("link")), "weworkremotely",
-                            _clean(it.findtext("pubDate"))))
+                            _clean(it.findtext("pubDate")), "finance"))
         except Exception as exc:
             print("wwr failed:", feed, exc)
     return out
@@ -128,17 +141,20 @@ def main() -> None:
     args = ap.parse_args()
     now = datetime.now(timezone.utc).isoformat()
 
-    raw = fetch_remoteok() + fetch_remotive() + fetch_wwr()
-    print(f"fetched {len(raw)} raw remote roles")
+    ro, rv, ww = fetch_remoteok(), fetch_remotive(), fetch_wwr()
+    print(f"raw fetched: remoteok={len(ro)} remotive={len(rv)} wwr={len(ww)}")
+    raw = ro + rv + ww
     recs = []
-    for title, company, desc, url, src, posted in raw:
+    kept = 0
+    for title, company, desc, url, src, posted, meta in raw:
         if not title or not url:
             continue
-        hits = _relevant(title, desc)
+        hits = _relevant(title, meta)
         if not hits:
             continue
         if is_project_role(title, desc):
             continue  # contract/interim -> workstream E, not Remote
+        kept += 1
         recs.append({
             "job_id": hashlib.sha256(url.encode("utf-8")).hexdigest()[:16],
             "canonical_company_id": "", "company": company or src.title(),

@@ -35,13 +35,14 @@ def main() -> None:
     args = ap.parse_args()
     now = datetime.now(timezone.utc).isoformat()
 
-    raw = fetch_remoteok() + fetch_remotive() + fetch_wwr()
-    print(f"fetched {len(raw)} raw roles")
+    ro, rv, ww = fetch_remoteok(), fetch_remotive(), fetch_wwr()
+    print(f"raw fetched: remoteok={len(ro)} remotive={len(rv)} wwr={len(ww)}")
+    raw = ro + rv + ww
     recs = []
-    for title, company, desc, url, src, posted in raw:
+    for title, company, desc, url, src, posted, meta in raw:
         if not title or not url:
             continue
-        hits = _relevant(title, desc)
+        hits = _relevant(title, meta)
         if not hits:
             continue
         if not is_project_role(title, desc):

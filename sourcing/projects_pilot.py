@@ -42,7 +42,7 @@ def main() -> None:
     for title, company, desc, url, src, posted, meta in raw:
         if not title or not url:
             continue
-        hits = _relevant(title, meta)
+        hits = _relevant(title, meta, src)
         if not hits:
             continue
         if not is_project_role(title, desc):

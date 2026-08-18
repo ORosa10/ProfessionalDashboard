@@ -67,19 +67,18 @@ def _clean(text: object) -> str:
     return re.sub(r"\s+", " ", html.unescape(re.sub("<[^>]+>", " ", str(text or "")))).strip()
 
 
-FINANCE_META_TERMS = ["finance", "fintech", "financial", "investment", "trading", "treasury"]
-
-
-def _relevant(title: str, meta: str = "") -> list[str]:
-    # Finance terms in the TITLE, or curated META (tags / category) -- never the
-    # boilerplate description. Meta lets finance-category feeds (Remotive
-    # finance-legal, WWR finance RSS, Remote OK finance tags) pass even when the
-    # title is generic (e.g. "Analyst"); calibration then orders what remains.
+def _relevant(title: str, meta: str = "", src: str = "") -> list[str]:
+    """Source-aware finance filter (never matches the boilerplate description):
+    - weworkremotely: the feed IS the finance category -> keep all.
+    - remotive: keep only if the job's own category says finance/legal.
+    - remoteok / other: keep only on a finance TITLE term (tags are too noisy).
+    Calibration then orders what remains."""
+    if src == "weworkremotely":
+        return ["finance (WWR finance feed)"]
+    if src == "remotive" and "finance" in f" {meta} ".lower():
+        return ["finance (Remotive finance/legal)"]
     t = f" {title} ".lower()
-    m = f" {meta} ".lower()
-    hits = [x.strip() for x in FINANCE_TITLE_TERMS if x in t]
-    hits += [x for x in FINANCE_META_TERMS if x in m]
-    return list(dict.fromkeys(hits))
+    return [x.strip() for x in FINANCE_TITLE_TERMS if x in t]
 
 
 def fetch_remoteok() -> list[tuple]:
@@ -90,11 +89,9 @@ def fetch_remoteok() -> list[tuple]:
         for item in r.json():
             if not isinstance(item, dict) or not item.get("position"):
                 continue
-            tags = item.get("tags") or []
-            meta = " ".join(tags) if isinstance(tags, list) else str(tags)
             out.append((_clean(item.get("position")), _clean(item.get("company")),
                         _clean(item.get("description")), item.get("url", ""),
-                        "remoteok", str(item.get("date", "")), meta))
+                        "remoteok", str(item.get("date", "")), ""))
     except Exception as exc:
         print("remoteok failed:", exc)
     return out
@@ -106,8 +103,7 @@ def fetch_remotive() -> list[tuple]:
         r = requests.get("https://remotive.com/api/remote-jobs?category=finance-legal", headers=UA, timeout=30)
         r.raise_for_status()
         for item in r.json().get("jobs", []):
-            tags = item.get("tags") or []
-            meta = "finance-legal " + (" ".join(tags) if isinstance(tags, list) else str(tags))
+            meta = _clean(item.get("category", ""))
             out.append((_clean(item.get("title")), _clean(item.get("company_name")),
                         _clean(item.get("description")), item.get("url", ""),
                         "remotive", str(item.get("publication_date", "")), meta))
@@ -149,7 +145,7 @@ def main() -> None:
     for title, company, desc, url, src, posted, meta in raw:
         if not title or not url:
             continue
-        hits = _relevant(title, meta)
+        hits = _relevant(title, meta, src)
         if not hits:
             continue
         if is_project_role(title, desc):

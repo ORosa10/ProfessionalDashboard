@@ -25,7 +25,7 @@ SUBMISSION_COLUMNS = [
     "submission_id", "submitted_at", "linkedin_url", "company_url", "job_url",
     "title", "company", "canonical_company_id", "company_category", "location",
     "country", "topic", "role_summary_en", "company_profile", "role_profile",
-    "salary_research", "user_comment", "feedback", "calibration_signal",
+    "salary_research", "salary_range", "user_comment", "feedback", "calibration_signal",
     "targeting_scope", "review_status", "source_domain",
 ]
 
@@ -331,7 +331,7 @@ def render_add_opportunity() -> None:
     saved = saved.sort_values("submitted_at", ascending=False).reset_index(drop=True)
     display_cols = [
         "title", "company", "company_category", "review_status", "feedback",
-        "company_profile", "role_profile", "salary_research", "user_comment", "job_url",
+        "company_profile", "role_profile", "salary_range", "salary_research", "user_comment", "job_url",
     ]
     editor = saved.set_index("submission_id")[display_cols]
     with st.form("rate_opportunities_form"):
@@ -351,6 +351,7 @@ def render_add_opportunity() -> None:
                 ),
                 "company_profile": st.column_config.TextColumn("Company profile", width="large"),
                 "role_profile": st.column_config.TextColumn("Role profile", width="large"),
+                "salary_range": st.column_config.TextColumn("Salary range", width="small"),
                 "salary_research": st.column_config.TextColumn("Salary read", width="large"),
                 "user_comment": st.column_config.TextColumn("Your comment", width="medium"),
                 "job_url": st.column_config.LinkColumn("Link", display_text="Open", width="small"),

@@ -69,9 +69,14 @@ LinkedIn kontakty → napárování na firmy → access signál na příležitos
 - **Otevřené (na uživateli):** nahrát LinkedIn export. **Na mně:** access boost do pořadí příležitostí + předvyplnění contact_strength na Companies (až budou kontakty).
 
 ## G — Country / board sweep
-Company-AGNOSTIC sweep full-time rolí v cílových zemích z národních boardů — doplněk k firmocentrickému A. Nový ZDROJ pro Jobs pilíř (ne nový typ příležitosti). Targeting z C.
-- Krok 1 ✅: registr `data/job_boards.csv` (21 boardů: CZ jobs.cz/prace.cz/StartupJobs/Cocuma; DE StepStone/Indeed/Stellenanzeigen; AT karriere.at/StepStone; CH jobs.ch/JobScout24; UK Reed/Indeed/Totaljobs; DK Jobindex; SE Platsbanken; NO FINN; FI Duunitori/Oikotie; + eFinancialCareers = finance-specific).
-- Krok 2 TODO: adaptéry per board (query-based, cílení z C), do vlastního staging + Jobs inbox. Doporučený start: **eFinancialCareers** (finance-specific, nejvyšší signál). LinkedIn VYNECHÁN (auth zeď).
+Company-AGNOSTIC sweep full-time rolí v cílových zemích z národních boardů — doplněk k firmocentrickému A. Nový ZDROJ pro Jobs pilíř (ne nový typ příležitosti). Targeting a pořadí z C.
+- Registr: `data/job_boards.csv` nyní obsahuje 22 kandidátů včetně přidané oficiální německé Bundesagentur. Stav u každého zdroje rozlišuje `active`, `candidate` a technicky blokované zdroje.
+- **První dva adaptéry ✅:** `sourcing/board_sweep.py` čte švédský Platsbanken přes oficiální JobSearch API a německou Bundesagentur přes serverově čitelné výsledky + plné schema.org `JobPosting` detaily.
+- Výstup: `data/jobs_board_staging.csv`; samostatná review stránka **Opportunities → Country / Board Sweep**. Feedback se ukládá do společného `job_feedback.csv` a vstupuje do C. `calibration_rules.json` určuje transparentní hrubé pořadí; semantic fit doplní calibration-refresh.
+- Action: `board-sourcing.yml` denně 06:00, zapisuje snapshot a `data/board_source_runs.csv` přímo do main.
+- První živý technický test: 27 ověřených rolí (15 Sweden, 12 Germany), bez chyb zdrojů.
+- **eFinancialCareers nelze použít jako bezobslužný první adaptér:** veřejná stránka vrací AWS Human Verification. Reed a Duunitori také blokují unattended přístup. Zůstávají evidované, ale nesmí se vykazovat jako fungující sourcing.
+- Další rozšiřování: nejprve ověřit kvalitu G feedbackem, potom přidat jeden zdroj pro ČR a další stabilní národní/API zdroje. LinkedIn zůstává vynechán (auth zeď).
 
 ---
 
@@ -89,7 +94,7 @@ Company-AGNOSTIC sweep full-time rolí v cílových zemích z národních board�
 2. **C:** uživatel napíše thesis feedback → spustit calibration-refresh; napojit semantic fit na D/E + submitted; zlepšit extrakci popisů (Public Markets boilerplate); zvážit deep-code-quant jako pravidlo.
 3. **D/E:** nízký objem z free boardů — případně přidat lepší finanční zdroj; E kanál 2 = tendery (TED/Věstník).
 4. **F:** uživatel nahraje LinkedIn export → dodělat access boost do pořadí příležitostí.
-5. **G:** krok 2 = board adaptéry, start eFinancialCareers.
+5. **G:** ohodnotit první Germany/Sweden board cohort; podle kvality doplnit český adaptér a další technicky stabilní země. Napojit G semantic fit při příštím calibration-refresh.
 
 ## Log klíčových rozhodnutí
 - Rozsah zamčen na **6→7 pilířů A–G**; F = network (ne expert cally).

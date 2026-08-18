@@ -1,6 +1,6 @@
 {
   "_comment": "Calibration scoring rules for calibrate_jobs(). Learnable from feedback; base score 50, clamped 0-100. Reorders review priority only - never a hard exclude.",
-  "updated": "2026-08-17 - Banking/PublicMarkets/Specialist calibration: added investments/portfolio/asset-management positive (was an unscored gap; Interested across all three sectors). IT/data, compliance, wealth-mgmt, senior downranks reinforced.",
+  "updated": "2026-08-18 - Workstream G launch: retained prior sector learning and added the established cross-sector caution for sales/client-acquisition-heavy roles.",
   "positive_rules": {
     "transactions / M&A": {
       "terms": [
@@ -73,6 +73,16 @@
     }
   },
   "caution_rules": {
+    "sales / client acquisition heavy": {
+      "terms": [
+        "sales manager",
+        "business development",
+        "client acquisition",
+        "relationship manager",
+        "new business"
+      ],
+      "weight": -12
+    },
     "junior or graduate level": {
       "terms": [
         "intern",

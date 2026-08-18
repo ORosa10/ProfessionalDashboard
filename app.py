@@ -9,7 +9,13 @@ from add_opportunity_ui import render_add_opportunity
 from people_ui import render_people
 from cost_of_living_ui import render_cost_of_living
 from github_storage import RATING_COLUMNS, github_token, load_ratings, save_ratings
-from jobs_ui import render_jobs, render_remote, render_projects, render_sources
+from jobs_ui import (
+    render_board_sweep,
+    render_jobs,
+    render_projects,
+    render_remote,
+    render_sources,
+)
 
 COMPANY_TARGETING_PATH = Path(__file__).parent / "COMPANY_TARGETING.md"
 GENERAL_COMPANY_TARGETING_PATH = Path(__file__).parent / "GENERAL_COMPANY_TARGETING.md"
@@ -138,6 +144,10 @@ def remote_page() -> None:
 
 def projects_page() -> None:
     render_projects()
+
+
+def board_sweep_page() -> None:
+    render_board_sweep()
 
 
 def people_page() -> None:
@@ -339,6 +349,7 @@ navigation = st.navigation(
             st.Page(jobs_page, title="Jobs"),
             st.Page(remote_page, title="Remote"),
             st.Page(projects_page, title="Projekty / Interim"),
+            st.Page(board_sweep_page, title="Country / Board Sweep"),
             st.Page(add_opportunity_page, title="Add Opportunity"),
             st.Page(companies_page, title="Companies"),
             st.Page(people_page, title="Lidé / Network"),

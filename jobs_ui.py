@@ -832,6 +832,11 @@ def _render_board_stream(staging_filename: str, title: str, caption: str, key_pr
     if jobs.empty:
         st.info("Nothing here yet -- the daily sourcing will populate this.")
         return
+    if "status" in jobs.columns:
+        jobs = jobs[jobs["status"].isin(["", "Open"])].copy()
+        if jobs.empty:
+            st.info("No currently open roles were seen in the latest sourcing run.")
+            return
     jobs = jobs.rename(columns={"job_id": "opportunity_id"})
     if "source_url" not in jobs.columns or jobs["source_url"].eq("").all():
         jobs["source_url"] = jobs.get("job_url", "")
@@ -940,4 +945,15 @@ def render_projects() -> None:
         "can personally deliver it, and reachability given your ICO and "
         "experience (no company references). No company layer.",
         "projects",
+    )
+
+
+def render_board_sweep() -> None:
+    _render_board_stream(
+        "jobs_board_staging.csv", "Country / Board Sweep",
+        "Company-agnostic full-time roles from national job sources. The first "
+        "live adapters cover Germany's Bundesagentur and Sweden's official "
+        "JobSearch API. Results use the same calibration rules and feed your "
+        "feedback back into workstream C; low-ranked exploration remains visible.",
+        "board_sweep",
     )

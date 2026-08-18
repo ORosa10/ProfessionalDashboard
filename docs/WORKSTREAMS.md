@@ -1,132 +1,101 @@
-# Workstreams — status tracker
+# Professional Dashboard — Workstreams handoff (A–G)
 
-## Legenda pilířů (A-F) — rychlá reference
-- **A** = Discovery firem (scheduled task najde nové firmy do universe)
-- **B** = Ručně vkládané opportunity (Add Opportunity): B1 obohacení, B2 do sourcingu + kontextu
-- **C** = Kalibrace + shortlisty (tvoje ratingy + thesis feedback -> pravidla/hypotézy -> shortlisty -> sémantický fit)
-- **D** = Remote (remote role z boardů, jen trvalé)
-- **E** = Projekty / Interim (projektová/kontraktní práce + tendery; jiný fit lens)
-- **F** = Lidé / Network (LinkedIn kontakty -> access signál na firmy/příležitosti)
-- **G** = Country / board sweep (národní job boardy jobs.cz/StepStone/karriere.at/... targetované z C; company-agnostic doplněk k A)
+Kompletní, samostatný přehled rozdělané práce. Cíl: dát se na to navázat v jakékoli nové
+session/kdekoli bez ztráty kontextu. Aktualizovat při každé změně.
 
-Dashboard je zamčený na těchto 6 pilířích (viz "Rozsah dashboardu" níže).
+Last updated: 2026-08-18
 
-Kostra rozdělané práce na ProfessionalDashboard. Drž tato písmenka, ať je vždy jasné,
-k čemu se vracíme. Aktualizovat při každé změně. (Cowork session nesdílejí paměť —
-tohle + build-log jsou to, co přetrvá.)
+## Jak to navázat
+- Repo: **ORosa10/ProfessionalDashboard** (public), Streamlit Community Cloud sleduje `main`, entry `app.py`.
+- Persistence = tento repo (data v CSV) + Project "Job". Cowork session spolu NESDÍLEJÍ paměť → tento dokument + repo jsou to, co přetrvá.
+- **GitHub token:** jeden fine-grained PAT je v (a) Streamlit secrets `[github] token` (ukládání z appky) a (b) promptech Cowork tasků (company-discovery, opportunity-enrichment, calibration-refresh — leží lokálně u uživatele v C:\Users\...\Claude\Scheduled). NEREVOKOVAT bez náhrady na obou místech.
 
-Last updated: 2026-08-17
+## Architektura (3 výpočetní vrstvy)
+1. **GitHub repo = jediný zdroj pravdy.** Žádná DB; všechno jsou CSV/MD v repu.
+2. **Streamlit app = zobrazení + zadávání.** Čte/píše CSV přes GitHub API. ZÁMĚRNĚ bez AI (náklady).
+3. **Motory nad tím:**
+   - **GitHub Actions = deterministický sourcing** (scrapery, píší do staging větví / u D,E přímo main). Bez LLM (výjimka: Gemini free-tier fallback adaptér).
+   - **Cowork scheduled/on-demand tasky = inteligence (Claude přes předplatné).** Discovery, enrichment, kalibrace. Běží mimo appku, sahají na stejné CSV.
+- **Jediný zdroj pravdy pro cílení i skórování = `data/calibration_rules.json`** (učí ho C). Čte ho `calibrate_jobs` (skóre) i D/E targeting. Prose thesis docs (`*_TARGETING.md`) jsou lidská podoba téhož.
 
-## A — Company discovery (hledání nových firem)
-Co: scheduled task najde nové reálné firmy per kategorie a připojí je jako `rating="Unrated"`
-do `company_universe_wave*.csv` (append-only, ATS/adaptér neřeší).
-- Task: `company-discovery` — cron Po+Čt 07:00.
-- Stav: ✅ BĚŽÍ, ověřeno ručně i automaticky. Přidáno 37 (2f7d9ee) + 28 (1d95170) = 65 firem.
-- Otevřené: nic zásadního; sledovat, že plánované běhy dál procházejí.
+## Legenda pilířů (rozsah zamčen na A–G)
+- **A** — Discovery firem
+- **B** — Ručně vkládané opportunity (Add Opportunity)
+- **C** — Kalibrace + shortlisty (jádro: pravidla, hypotézy, semantic fit)
+- **D** — Remote (trvalé remote role z boardů)
+- **E** — Projekty / Interim (projektová/kontraktní práce; tendery = TODO)
+- **F** — Lidé / Network (LinkedIn kontakty → access signál)
+- **G** — Country / board sweep (národní job boardy; company-agnostic)
+(F jako "expert cally" zamítnuto — seniorita; F redefinováno na network. Dál se nerozšiřuje.)
+
+---
+
+## A — Discovery firem
+Scheduled task najde nové reálné firmy per kategorie a připojí je jako `rating="Unrated"` do `company_universe_wave*.csv` (append-only).
+- Task: **company-discovery** (cron Po+Čt 07:00).
+- Stav: ✅ BĚŽÍ ručně i automaticky. Přidáno 37+28 = 65 firem.
 
 ## B — Ručně vkládané opportunity (stránka Add Opportunity)
-Vstup: 2 pole (LinkedIn link + firemní stránka), tlačítko "Save for enrichment".
-Ukládá do `data/user_submitted_opportunities.csv`. Zůstává na vlastní stránce (ne v Jobs inboxu).
+Vstup: 2 pole (LinkedIn + firemní stránka), tlačítko "Save for enrichment" → `data/user_submitted_opportunities.csv`. Vlastní stránka (ne v Jobs inboxu).
+- **B1 obohacení** (profil firmy + pozice + mzdový market research): task **opportunity-enrichment** (denně 08:03), Fáze 1. ✅
+- **B2 do kontextu**: Fáze 2 — Interested/Maybe → firma do Universe + `job_sources_<sektor>.csv` (task sám zjistí ATS adaptér), rating → hypotéza. ✅ postaveno, ověřeno ručně (Evotec → Workday).
+- Stav: 12 pozic "Enriched - ready to rate", 1 (Evotec) Interested/onboarded.
+- **Otevřené (na uživateli):** ohodnotit těch 12. **Otevřené (na mně):** automatická Fáze 2 zatím neproběhla na reálném ratingu.
 
-### B1 — obohacení (profil firmy + profil pozice + mzdový market research)
-- Task: `opportunity-enrichment` (denně 08:03), Fáze 1.
-- Stav: ✅ BĚŽÍ, ověřeno (Evotec ručně + 6 pozic ranním během). Kvalita OK.
+## C — Kalibrace + shortlisty (jádro)
+- **`data/calibration_rules.json`** = učené skórovací pravidlo (positive/caution termy + váhy). `calibrate_jobs` (sourcing/big4_pilot.py) ho čte. Jen mění pořadí, NIKDY tvrdé vyloučení; drží ~20% exploration.
+- **Sektorové thesis docs (6):** CONSULTING (+Big Four), PE, CORPORATE, FINANCIAL_SERVICES, PUBLIC_MARKETS, SPECIALIST_FUNDS + GENERAL. Zobrazují se na Jobs stránce (rozbalovací).
+- **`data/semantic_fit.csv`** = PRIMÁRNÍ fit (reasoning Strong/Moderate/Weak od Claude). App ho ukazuje jako headline; keyword skóre je jen hrubý předfiltr.
+- **`data/targeting_feedback.csv`** = přímý thesis feedback z panelu na Jobs (nejvyšší priorita vstupu do kalibrace). Zatím prázdný.
+- Task: **calibration-refresh** (NA VYŽÁDÁNÍ / Run now). Vstupy dle priority: targeting_feedback → rated submitted opps → job_feedback. Dělá: update pravidel + hypotéz → regenerace shortlistů → semantic fit (Fáze 2b).
+- Stav: všech 6 sektorů ohodnoceno (Big Four 50, PE 20, Consulting 20, Corporate 20, Banking 20, Public Markets 12, Specialist 6), thesis napsané, 2 díry v pravidlech zalepené (+caution IT/data; +positive investments/portfolio).
+- **Otevřené (na uživateli):** napsat thesis feedback do panelu; pak spustit calibration-refresh. **Na mně:** semantic fit napojit i na D/E + submitted; Public Markets popisy jsou generický boilerplate (zlepšit extrakci); deep-code quant jako mírné mínus (zatím jen v docs).
 
-### B2 — vstup do kontextu (firma -> Universe + sourcing; rating -> targeting hypotéza)
-- Task: `opportunity-enrichment`, Fáze 2. Interested/Maybe -> firma do Universe + `job_sources_<sektor>.csv`
-  (task sám zjistí ATS adaptér); Pass -> negativní. Rating se připíše do hypotézy.
-- Stav: ✅ POSTAVENO, ověřeno ručně (Evotec -> Universe + job_sources workday, commit f74c94d).
-- Otevřené: automatická Fáze 2 zatím neproběhla naostro na reálném uživatelském ratingu.
+## D — Remote (trvalé remote role)
+Stejný profil/fit/kalibrace jako Jobs; zdroj = remote boardy; BEZ company vrstvy. Osa = trvalý úvazek (kontrakt → E).
+- Kód: `sourcing/remote_pilot.py` + Action `remote-sourcing.yml` (denně 05:30, commit do main). Zdroje: Remote OK (finance title), Remotive (finance-legal kategorie), WWR (remote-management-and-finance feed, title filtr). Targeting z `calibration_rules.json`. App: stránka **Opportunities → Remote** (`render_remote`).
+- Stav: ✅ čisté, ale NÍZKÝ OBJEM (dnes 2 role: FP&A analytici). Free boardy finance skoro nenesou — slabina zdrojů, ne kódu.
 
-## C — Kalibrace + shortlisty
-- Skórovací pravidla vytažena z kódu do `data/calibration_rules.json` (calibrate_jobs je čte; ověřeno beze změny skóre).
-- `calibrate_jobs` = jen HRUBÝ předfiltr, není headline.
-- FIT je PRIMÁRNĚ SÉMANTICKÝ: reasoning od Claude per role (Strong/Moderate/Weak) v `data/semantic_fit.csv`,
-  appka ho zobrazuje jako "Personal fit (semantic)" + "Fit" a řadí podle něj.
-- Feedback k thesis: panel na stránce Jobs -> `data/targeting_feedback.csv`.
-- Task: `calibration-refresh` — NA VYŽÁDÁNÍ (Run now / ping), plně automatický. Vstupy v pořadí priority:
-  (1) targeting_feedback.csv, (2) rated user_submitted_opportunities.csv, (3) job_feedback.csv.
-  Dělá: update rules + hypotéz -> regenerace shortlistů -> Fáze 2b generuje semantic fit.
-- Stav: ✅ POSTAVENO a jednou odzkoušeno naostro: pravidla doladěna (treasury +12, nový markets/deriváty +12,
-  compliance -12, real estate -9; 8f4e280), shortlisty přegenerovány, 57 semantic-fit reasoningů (6347ce2).
+## E — Projekty / Interim
+Projektová/kontraktní/freelance finanční práce pro uživatele osobně. Osa = typ úvazku (ne lokalita) → nepřekrývá se s D. Fit lens: relevance × osobní dodatelnost × dosažitelnost (má IČO, ale bez referencí subjektu → reference-heavy tendery dolů, ne vyloučit).
+- Kód: `sourcing/projects_pilot.py` (reuse remote_pilot fetcherů, `is_project_role`) + Action `projects-sourcing.yml` (denně 05:45). App: stránka **Opportunities → Projekty / Interim** (`render_projects`, sdílený `_render_board_stream`).
+- Stav: ✅ postaveno, 0 rolí dnes (contract+finance na těch boardech vzácné).
+- **Otevřené:** kanál 2 = TENDERY (TED/Věstník, CPV finanční, s příznakem náročnosti referencí) — NEpostaveno, dobrat zdroj.
 
+## F — Lidé / Network (access vrstva)
+LinkedIn kontakty → napárování na firmy → access signál na příležitosti (blueprint AccessStrength, samostatný signál, jen boost pořadí).
+- Kód: `people_ui.py` → stránka **Opportunities → Lidé / Network**. Ingest = nahrání LinkedIn **Connections CSV exportu** (Settings → Data privacy → Get a copy of your data → Connections). Žádný scraping. Parsuje export, fuzzy-páruje Company → canonical_company_id, ukládá do `data/connections.csv`, přehled "u které firmy koho znáš".
+- Stav: ✅ postaveno a otestováno na syntetickém exportu. Čeká na reálný upload (0 kontaktů).
+- **Otevřené (na uživateli):** nahrát LinkedIn export. **Na mně:** access boost do pořadí příležitostí + předvyplnění contact_strength na Companies (až budou kontakty).
 
-### C update 2026-08-17: všech 6 sektorů ohodnoceno + thesis hotové
-- Sektorové thesis docs: CONSULTING (+BigFour), PE, CORPORATE, FINANCIAL_SERVICES, PUBLIC_MARKETS, SPECIALIST_FUNDS.
-- calibration_rules.json vylepšen (2 díry): + caution "pure IT / data engineering" (napříč Consulting+Corporate+Banking); + positive "investments / portfolio / asset management" (Interested napříč Banking/PM/Specialist). Plus restructuring/working-capital +, wealth-mgmt/private-banking -, org-performance -.
-- Otevřené: (1) spustit calibration-refresh (Run now) -> přegenerovat shortlisty s novými pravidly + semantic fit; (2) Public Markets popis-quality gap (Capital Group/Neuberger boilerplate popisy) - zlepšit extrakci; (3) deep-code quant jako mírné mínus (zatím jen v docs, ne v pravidlech).
+## G — Country / board sweep
+Company-AGNOSTIC sweep full-time rolí v cílových zemích z národních boardů — doplněk k firmocentrickému A. Nový ZDROJ pro Jobs pilíř (ne nový typ příležitosti). Targeting z C.
+- Krok 1 ✅: registr `data/job_boards.csv` (21 boardů: CZ jobs.cz/prace.cz/StartupJobs/Cocuma; DE StepStone/Indeed/Stellenanzeigen; AT karriere.at/StepStone; CH jobs.ch/JobScout24; UK Reed/Indeed/Totaljobs; DK Jobindex; SE Platsbanken; NO FINN; FI Duunitori/Oikotie; + eFinancialCareers = finance-specific).
+- Krok 2 TODO: adaptéry per board (query-based, cílení z C), do vlastního staging + Jobs inbox. Doporučený start: **eFinancialCareers** (finance-specific, nejvyšší signál). LinkedIn VYNECHÁN (auth zeď).
 
-## D - Remote work (nový opportunity stream)
-Stejný profil, fit i kalibrace jako Jobs (A/B/C), ale zdroj = veřejné remote boardy, NE firmy.
-Company vrstva se přeskakuje. Scope: cokoliv (full-time i kontrakt), doladí se hodnocením.
-- Sourcing: `sourcing/remote_pilot.py` + Action `.github/workflows/remote-sourcing.yml`
-  (denně 05:30 UTC + workflow_dispatch). Tahá Remote OK / Remotive / We Work Remotely feedy,
-  filtruje finanční/treasury/risk/investment termy, píše `data/jobs_remote_staging.csv`
-  (schéma jako sektor staging), skóruje přes calibrate_jobs. Commituje PŘÍMO do main
-  (čerstvý stream, žádná promotion vrstva).
-- App: nová stránka **Opportunities -> Remote** (`render_remote` v jobs_ui.py) - review grid
-  s Interested/Maybe/Pass + komentář a sémantický fit, bez company filtru. Feedback jde do
-  sdíleného `job_feedback.csv`.
-- Stav: POSTAVENO, zatím bez dat - naplní se prvním během Action (dispatch nebo ranní cron).
-  OVĚŘIT po prvním běhu, že boardy vrací relevantní role a commit projde.
-- Update: filtr utažen na finanční TITULY (popis dělal false-positives); D nově VYřazuje
-  contract/interim (ty patří do E) -> D = jen trvalé remote role.
-- Otevřené: sémantický fit pro remote/E role zatím negeneruje calibration-refresh (jen sektory) -
-  přidat, až mají data.
+---
 
-## E - Projekty / Interim (nový opportunity stream)
-Placená PROJEKTOVÁ / interim / kontraktní / freelance finanční práce pro Ondřeje osobně.
-Osa = typ úvazku (na projekt/na dobu určitou), NE lokalita -> nepřekrývá se s D (D = trvalé remote).
-Fit lens E = relevance k finanční doméně x osobní dodatelnost x DOSAŽITELNOST (má IČO, ale žádné
-reference subjektu -> reference-heavy veřejné zakázky se sníží v pořadí, ne vyloučí).
-- Sourcing: `sourcing/projects_pilot.py` (reuse fetcherů z remote_pilot; nechá jen project-type
-  finanční role via `is_project_role`) + Action `.github/workflows/projects-sourcing.yml`
-  (denně 05:45 + dispatch) -> `data/jobs_projects_staging.csv`, commit do main.
-- App: stránka **Opportunities -> Projekty / Interim** (`render_projects`), sdílený review helper
-  `_render_board_stream` (společný s Remote), bez company vrstvy, feedback do `job_feedback.csv`.
-- Stav: POSTAVENO (kanál 1 = interim/kontrakt z boardů). Data po prvním běhu Action, OVĚŘIT kvalitu.
-- Otevřené (kanál 2 = TENDERY): TED (EU open data) + Věstník (XML), CPV finanční kódy, s příznakem
-  náročnosti referencí. Zatím NEpostaveno - dobrat zdroj (TED API vs Věstník) a přidat.
-- Otevřené: E-specifický fit lens (dosažitelnost) zatím jen popsán; promítnout do semantic-fit generace.
+## Scheduled tasky (Cowork)
+- **company-discovery** — Po+Čt 07:00 (A).
+- **opportunity-enrichment** — denně 08:03 (B1 obohacení + B2 onboarding).
+- **calibration-refresh** — na vyžádání / Run now (C: pravidla + hypotézy + shortlisty + semantic fit).
 
-## F - Lidé / Network (access vrstva)
-Tvůj network (hlavně LinkedIn), napárovaný na firmy -> a tím na příležitosti. Znát někoho u firmy
-je SAMOSTATNÝ access signál (blueprint AccessStrength), který smí BOOSTNOUT pořadí, ne přepsat fit.
-- Ingest: nahrání **LinkedIn Connections CSV exportu** (Settings -> Data privacy -> Get a copy of
-  your data -> Connections). Žádný scraping (LinkedIn API network nedá; konektor neexistuje).
-- Kód: `people_ui.py` -> stránka **Opportunities -> Lidé / Network**. Parsuje LinkedIn export
-  (přeskočí "Notes:" preambuli), fuzzy-napáruje Company -> canonical_company_id (přes universe +
-  aliasy), uloží do `data/connections.csv`. Přehled "u které firmy koho znáš".
-- Stav: POSTAVENO a otestováno na syntetickém exportu (párování Deloitte/PPF/Evotec OK). Čeká na
-  tvůj reálný CSV export.
-- Otevřené (benefit): promítnout access do pořadí příležitostí (odznak "znáš tu N lidí" + mírný boost
-  na Jobs/Remote/Projects) a předvyplnit contact_strength na Companies. Zatím jen ingest + přehled.
+## GitHub Actions (deterministický sourcing)
+- Firmocentrické: `job-sourcing` (Big Four), `pe-sourcing`, `consulting-sourcing`, `sector-sourcing` (matrix), `promote-staging`.
+- Board-based (přímo main): `remote-sourcing` (D, 05:30), `projects-sourcing` (E, 05:45).
 
-## G - Country / board sweep (národní job boardy)
-Company-AGNOSTIC sweep full-time rolí v cílových zemích z národních boardů - doplněk k firmocentrickému A
-(A jede jen firmy z universe; G chytá role u firem mimo universe i to, co není na kariérce).
-NENÍ nový typ příležitosti - je to nový ZDROJ pro Jobs pilíř (SOURCE dimenze blueprintu).
-Targeting bere z C (`calibration_rules.json` pozitivní termy), stejně jako D/E.
-- Krok 1 HOTOVO: registr boardů `data/job_boards.csv` (21 boardů: CZ jobs.cz/prace.cz/startupjobs/cocuma,
-  DE StepStone/Indeed/Stellenanzeigen, AT karriere.at/StepStone, CH jobs.ch/JobScout24, UK Reed/Indeed/Totaljobs,
-  DK Jobindex, SE Platsbanken, NO FINN, FI Duunitori/Oikotie, + eFinancialCareers = finance-specific, nejvyšší relevance).
-- Krok 2 TODO: adaptéry per board (query-based, jako D/E), zapsat do vlastního staging + Jobs inbox.
-- LinkedIn VYNECHÁN (auth zeď; jen přes Chrome, neřešíme).
-- Feasibilita: boardy scrapovatelné ale bespoke/křehké (jako D/E); eFinancialCareers je prioritní start.
+## Otevřené body (master list, jen dotažení A–G, žádné nové pilíře)
+1. **B:** uživatel ohodnotí 12 vložených pozic; ověřit automatickou Fázi 2 na reálném ratingu.
+2. **C:** uživatel napíše thesis feedback → spustit calibration-refresh; napojit semantic fit na D/E + submitted; zlepšit extrakci popisů (Public Markets boilerplate); zvážit deep-code-quant jako pravidlo.
+3. **D/E:** nízký objem z free boardů — případně přidat lepší finanční zdroj; E kanál 2 = tendery (TED/Věstník).
+4. **F:** uživatel nahraje LinkedIn export → dodělat access boost do pořadí příležitostí.
+5. **G:** krok 2 = board adaptéry, start eFinancialCareers.
 
-## Scheduled tasks (souhrn)
-- `company-discovery` — Po+Čt 07:00 (A)
-- `opportunity-enrichment` — denně 08:03 (B1 + B2)
-- `calibration-refresh` — manual / on-demand (C)
-GitHub Actions (sourcing): sector-sourcing, ..., + `remote-sourcing` (D, denně 05:30), `projects-sourcing` (E, denně 05:45) — commit do main.
-Pozn.: všechny commitují přes jeden fine-grained GitHub PAT uložený v promptu tasku (lokálně)
-i ve Streamlit secrets (pro ukládání z appky). NEREVOKOVAT bez náhrady na obou místech.
-
-## Rozsah dashboardu (rozhodnuto 2026-08-17)
-Dashboard stojí na 6 pilířích: **A discovery firem, B ručně vkládané opportunity, C kalibrace+shortlisty,
-D Remote, E Projekty/Interim, F Lidé/Network (access).** F jako expert-cally bylo zamítnuto (seniorita),
-ale F bylo REDEFINOVÁNO na network/access vrstvu. Dál se nerozšiřuje; soustředíme se na dotažení těchto šesti.
-
-## Poznámky / další možné kroky
-- B2 automatiku potvrdit na reálném ratingu (ohodnotit 1 z 6 čekajících pozic).
-- Až přibude víc feedbacku (hlavně přímý thesis feedback), pustit `calibration-refresh` znovu.
+## Log klíčových rozhodnutí
+- Rozsah zamčen na **6→7 pilířů A–G**; F = network (ne expert cally).
+- **Fit je primárně SÉMANTICKÝ** (reasoning), keyword skóre jen hrubý předfiltr.
+- **`calibration_rules.json` = jediný zdroj pravdy** pro skórování (C) i targeting (D/E, budoucí G).
+- Sourcing = Actions/deterministický (bez placeného LLM; Gemini free fallback); inteligence = Cowork tasky (předplatné).
+- D vs E dělení podle **typu úvazku** (trvalé → D, projektové → E), ne lokality.
+- **LinkedIn se nescrapuje** (F = CSV export; G bez LinkedInu).
+- Žádné tvrdé vylučování rolí — kalibrace jen mění pořadí, drží exploration.

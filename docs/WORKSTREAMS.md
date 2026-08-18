@@ -7,6 +7,7 @@
 - **D** = Remote (remote role z boardů, jen trvalé)
 - **E** = Projekty / Interim (projektová/kontraktní práce + tendery; jiný fit lens)
 - **F** = Lidé / Network (LinkedIn kontakty -> access signál na firmy/příležitosti)
+- **G** = Country / board sweep (národní job boardy jobs.cz/StepStone/karriere.at/... targetované z C; company-agnostic doplněk k A)
 
 Dashboard je zamčený na těchto 6 pilířích (viz "Rozsah dashboardu" níže).
 
@@ -100,6 +101,18 @@ je SAMOSTATNÝ access signál (blueprint AccessStrength), který smí BOOSTNOUT 
   tvůj reálný CSV export.
 - Otevřené (benefit): promítnout access do pořadí příležitostí (odznak "znáš tu N lidí" + mírný boost
   na Jobs/Remote/Projects) a předvyplnit contact_strength na Companies. Zatím jen ingest + přehled.
+
+## G - Country / board sweep (národní job boardy)
+Company-AGNOSTIC sweep full-time rolí v cílových zemích z národních boardů - doplněk k firmocentrickému A
+(A jede jen firmy z universe; G chytá role u firem mimo universe i to, co není na kariérce).
+NENÍ nový typ příležitosti - je to nový ZDROJ pro Jobs pilíř (SOURCE dimenze blueprintu).
+Targeting bere z C (`calibration_rules.json` pozitivní termy), stejně jako D/E.
+- Krok 1 HOTOVO: registr boardů `data/job_boards.csv` (21 boardů: CZ jobs.cz/prace.cz/startupjobs/cocuma,
+  DE StepStone/Indeed/Stellenanzeigen, AT karriere.at/StepStone, CH jobs.ch/JobScout24, UK Reed/Indeed/Totaljobs,
+  DK Jobindex, SE Platsbanken, NO FINN, FI Duunitori/Oikotie, + eFinancialCareers = finance-specific, nejvyšší relevance).
+- Krok 2 TODO: adaptéry per board (query-based, jako D/E), zapsat do vlastního staging + Jobs inbox.
+- LinkedIn VYNECHÁN (auth zeď; jen přes Chrome, neřešíme).
+- Feasibilita: boardy scrapovatelné ale bespoke/křehké (jako D/E); eFinancialCareers je prioritní start.
 
 ## Scheduled tasks (souhrn)
 - `company-discovery` — Po+Čt 07:00 (A)

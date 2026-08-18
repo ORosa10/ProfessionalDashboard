@@ -1,0 +1,22 @@
+board_id,country,name,base_url,finance_specific,adapter,enabled,status,notes
+jobs-cz,Czechia,Jobs.cz,https://www.jobs.cz/,False,,True,candidate,Main CZ board (LMC)
+prace-cz,Czechia,Prace.cz,https://www.prace.cz/,False,,True,candidate,Main CZ board (LMC)
+startupjobs-cz,Czechia,StartupJobs,https://www.startupjobs.cz/,False,,True,candidate,CZ/SK startups
+cocuma-cz,Czechia,Cocuma,https://www.cocuma.cz/,False,,True,candidate,CZ curated
+stepstone-de,Germany,StepStone.de,https://www.stepstone.de/,False,,True,candidate,Main DE board
+indeed-de,Germany,Indeed Germany,https://de.indeed.com/,False,,True,candidate,Aggregator DE
+stellenanzeigen-de,Germany,Stellenanzeigen.de,https://www.stellenanzeigen.de/,False,,True,candidate,DE board
+karriere-at,Austria,karriere.at,https://www.karriere.at/,False,,True,candidate,Main AT board
+stepstone-at,Austria,StepStone.at,https://www.stepstone.at/,False,,True,candidate,AT board
+jobs-ch,Switzerland,jobs.ch,https://www.jobs.ch/,False,,True,candidate,Main CH board
+jobscout24-ch,Switzerland,JobScout24.ch,https://www.jobscout24.ch/,False,,True,candidate,CH board
+efinancialcareers,Multi-region,eFinancialCareers,https://www.efinancialcareers.com/,True,,True,candidate,FINANCE-SPECIFIC across UK/DE/CH - highest relevance
+reed-uk,United Kingdom,Reed.co.uk,https://www.reed.co.uk/,False,,True,candidate,Main UK board
+indeed-uk,United Kingdom,Indeed UK,https://uk.indeed.com/,False,,True,candidate,Aggregator UK
+totaljobs-uk,United Kingdom,Totaljobs,https://www.totaljobs.com/,False,,True,candidate,UK board
+jobindex-dk,Denmark,Jobindex.dk,https://www.jobindex.dk/,False,,True,candidate,Main DK board
+thehub,Multi-region,The Hub,https://thehub.io/,False,,True,candidate,Nordic startups/scaleups
+platsbanken-se,Sweden,Platsbanken,https://arbetsformedlingen.se/platsbanken/,False,,True,candidate,Main SE public board
+finn-no,Norway,FINN.no,https://www.finn.no/job/,False,,True,candidate,Main NO board
+duunitori-fi,Finland,Duunitori,https://duunitori.fi/,False,,True,candidate,Main FI board
+oikotie-fi,Finland,Oikotie Tyopaikat,https://tyopaikat.oikotie.fi/,False,,True,candidate,FI board

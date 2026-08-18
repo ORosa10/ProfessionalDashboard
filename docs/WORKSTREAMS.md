@@ -49,6 +49,12 @@ Ukládá do `data/user_submitted_opportunities.csv`. Zůstává na vlastní str�
 - Stav: ✅ POSTAVENO a jednou odzkoušeno naostro: pravidla doladěna (treasury +12, nový markets/deriváty +12,
   compliance -12, real estate -9; 8f4e280), shortlisty přegenerovány, 57 semantic-fit reasoningů (6347ce2).
 
+
+### C update 2026-08-17: všech 6 sektorů ohodnoceno + thesis hotové
+- Sektorové thesis docs: CONSULTING (+BigFour), PE, CORPORATE, FINANCIAL_SERVICES, PUBLIC_MARKETS, SPECIALIST_FUNDS.
+- calibration_rules.json vylepšen (2 díry): + caution "pure IT / data engineering" (napříč Consulting+Corporate+Banking); + positive "investments / portfolio / asset management" (Interested napříč Banking/PM/Specialist). Plus restructuring/working-capital +, wealth-mgmt/private-banking -, org-performance -.
+- Otevřené: (1) spustit calibration-refresh (Run now) -> přegenerovat shortlisty s novými pravidly + semantic fit; (2) Public Markets popis-quality gap (Capital Group/Neuberger boilerplate popisy) - zlepšit extrakci; (3) deep-code quant jako mírné mínus (zatím jen v docs, ne v pravidlech).
+
 ## D - Remote work (nový opportunity stream)
 Stejný profil, fit i kalibrace jako Jobs (A/B/C), ale zdroj = veřejné remote boardy, NE firmy.
 Company vrstva se přeskakuje. Scope: cokoliv (full-time i kontrakt), doladí se hodnocením.

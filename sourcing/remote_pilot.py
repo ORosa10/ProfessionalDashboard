@@ -73,8 +73,6 @@ def _relevant(title: str, meta: str = "", src: str = "") -> list[str]:
     - remotive: keep only if the job's own category says finance/legal.
     - remoteok / other: keep only on a finance TITLE term (tags are too noisy).
     Calibration then orders what remains."""
-    if src == "weworkremotely":
-        return ["finance (WWR finance feed)"]
     if src == "remotive" and "finance" in f" {meta} ".lower():
         return ["finance (Remotive finance/legal)"]
     t = f" {title} ".lower()
@@ -114,7 +112,7 @@ def fetch_remotive() -> list[tuple]:
 
 def fetch_wwr() -> list[tuple]:
     out = []
-    for feed in ["https://weworkremotely.com/categories/remote-finance-and-legal-jobs.rss"]:
+    for feed in ["https://weworkremotely.com/categories/remote-management-and-finance-jobs.rss"]:
         try:
             r = requests.get(feed, headers=UA, timeout=30)
             r.raise_for_status()

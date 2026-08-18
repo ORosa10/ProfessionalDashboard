@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import html
+import json
 import re
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
@@ -39,13 +40,35 @@ STAGING_COLUMNS = [
 # boilerplate ("risk", "investment in your career", ...) and pulled in
 # non-finance roles (room attendant, cabin cleaner). Title terms are precise;
 # calibration + semantic fit then order what remains.
-FINANCE_TITLE_TERMS = [
+_DEFAULT_FINANCE_TERMS = [
     "treasury", "risk", "valuation", "quant", "investment", "portfolio",
     "corporate finance", "financial analyst", "fp&a", "fp & a", "derivative",
     "capital markets", "fixed income", "trader", "trading", "financial controller",
     "controlling", "actuar", "m&a", "private equity", "hedge fund", "asset management",
     "credit analyst", "finance manager", "structurer", "liquidity", "cfo",
 ]
+
+
+def _load_targeting_terms() -> list[str]:
+    """Targeting terms come from workstream C's learned POSITIVE rules in
+    data/calibration_rules.json -- the executable form of the targeting thesis --
+    so D/E target whatever C has learned is a fit (single source of truth).
+    Falls back to a sensible default if the file is missing/malformed."""
+    try:
+        with open(ROOT / "data" / "calibration_rules.json", encoding="utf-8") as fh:
+            data = json.load(fh)
+        terms: list[str] = []
+        for rule in data.get("positive_rules", {}).values():
+            terms += [str(t).strip().lower() for t in rule.get("terms", [])]
+        terms = [t for t in dict.fromkeys(terms) if t]
+        if terms:
+            return terms
+    except (FileNotFoundError, json.JSONDecodeError, OSError, AttributeError):
+        pass
+    return _DEFAULT_FINANCE_TERMS
+
+
+FINANCE_TITLE_TERMS = _load_targeting_terms()
 
 PROJECT_TERMS = [
     "contract", "interim", "freelance", "fixed-term", "fixed term", "temporary",

@@ -61,3 +61,9 @@ These signals may change review order later, but one signal must not rewrite ano
 ## Cross-sector note 2026-08-17: pure IT / data roles
 
 Rejecting **pure IT / data / analytics-engineering** roles now repeats across both Consulting (L.E.K. "Digital Data and AI - too technical and IT") and Corporate (five separate Pass comments: "too data and IT", "data science too IT"). This has crossed the threshold from sector-specific into the **general** profile: analytics/data/tech is attractive only as a tool for a finance/investment problem, never as the whole role. Encoded as a caution in calibration_rules.json.
+
+## Cross-sector note 2026-08-17: investments/portfolio is a core positive; a data-quality gap
+
+- **Investment / portfolio management / fixed income / asset management** roles were rated Interested across Banking, Public Markets and Specialist Funds but were previously unscored — now a positive in calibration_rules.json. This belongs in the general profile.
+- **Deep code-heavy quant** is a mild negative even though modelling is positive (repeated: "too much in code", "too much quant", "depends how quantitative"). Quant is attractive as applied modelling, not as a software/quant-dev job.
+- **Open data-quality item:** several Public Markets roles (Capital Group, Neuberger) could not be judged because their sourced descriptions were generic company boilerplate. Improve description extraction for those employers so the semantic fit has real text to reason over.

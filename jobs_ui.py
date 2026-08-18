@@ -225,36 +225,24 @@ def render_jobs() -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title("Jobs")
     st.caption("Verified individual vacancies from official employer career portals.")
-    if GENERAL_TARGETING_PATH.exists():
-        with st.expander(
-            "General targeting principles (cross-sector)",
-            expanded=False,
-        ):
-            st.markdown(GENERAL_TARGETING_PATH.read_text(encoding="utf-8"))
-            st.caption(
-                "General principles are updated only when a signal belongs to the personal baseline "
-                "or repeats across multiple employer sectors."
-            )
-    if CONSULTING_TARGETING_PATH.exists():
-        with st.expander(
-            "Consulting sector hypothesis — first 50 Big Four ratings",
-            expanded=False,
-        ):
-            st.markdown(CONSULTING_TARGETING_PATH.read_text(encoding="utf-8"))
-            st.caption(
-                "This is the first sector-specific learning hypothesis. Review it in the project chat; "
-                "Private Markets and later sectors will retain their own hypotheses."
-            )
-    if PE_TARGETING_PATH.exists():
-        with st.expander(
-            "PE sector hypothesis — first 20 calibration ratings",
-            expanded=False,
-        ):
-            st.markdown(PE_TARGETING_PATH.read_text(encoding="utf-8"))
-            st.caption(
-                "Sector-specific hypothesis for Private Equity, kept separate from Consulting's. "
-                "Update it in the project chat as more roles are rated."
-            )
+    st.caption(
+        "Targeting hypotheses below are the current per-sector thesis. Read them, and if a "
+        "sector is mis-targeted, correct it in \"Give feedback on the targeting thesis\" below "
+        "— that feedback is the top input to the next calibration."
+    )
+    _thesis_docs = [
+        (GENERAL_TARGETING_PATH, "General targeting principles (cross-sector)"),
+        (CONSULTING_TARGETING_PATH, "Consulting hypothesis (incl. Big Four)"),
+        (PE_TARGETING_PATH, "Private Equity hypothesis"),
+        (Path(__file__).parent / "CORPORATE_TARGETING.md", "Corporate hypothesis"),
+        (Path(__file__).parent / "FINANCIAL_SERVICES_TARGETING.md", "Banking & Financial Services hypothesis"),
+        (Path(__file__).parent / "PUBLIC_MARKETS_TARGETING.md", "Public Markets & Asset Management hypothesis"),
+        (Path(__file__).parent / "SPECIALIST_FUNDS_TARGETING.md", "Specialist & Boutique Funds hypothesis"),
+    ]
+    for _doc_path, _doc_title in _thesis_docs:
+        if _doc_path.exists():
+            with st.expander(_doc_title, expanded=False):
+                st.markdown(_doc_path.read_text(encoding="utf-8"))
 
     with st.expander("Give feedback on the targeting thesis"):
         st.caption(

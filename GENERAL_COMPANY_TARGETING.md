@@ -10,6 +10,7 @@ This company-level thesis is inferred from the current A/B/C/Exclude ratings in 
 - **Strong institutional quality.** Professional management, clear governance and a credible operating or investment model matter more than fame alone.
 - **Europe-focused opportunity sets**, especially DACH, UK, Nordics and Switzerland. Czech opportunities remain valid, but a local-only Czech platform is generally less attractive when an otherwise similar international alternative exists.
 - **Interesting market exposure is a plus, not an industry mandate.** Energy is attractive partly because commodities create useful market/risk exposure, but energy should not automatically outrank retail, industrials, consumer or other sectors with equally sophisticated finance functions.
+- **Second-tier and mid-market companies are explicitly in scope.** Do not over-index on flagship employers. A company does not need to be a household name or mega-cap to rank highly if its business model creates meaningful treasury, markets, investment, financing, commodity, M&A or capital-allocation complexity. Smaller international businesses with professional finance teams can be especially attractive because relevant roles may be broader and more attainable.
 
 ## What tends to rank down
 
@@ -18,6 +19,16 @@ This company-level thesis is inferred from the current A/B/C/Exclude ratings in 
 - **Opaque or highly idiosyncratic groups**, especially local conglomerates where governance, capital-allocation logic or the location of relevant finance work is unclear.
 - **Real-estate-heavy investment platforms** are less attractive than private-markets firms with active company/deal/portfolio involvement.
 - **Single negative examples are not rules.** An `Exclude` rating is evidence, not proof that every similar company must be excluded.
+
+## Discovery mix: avoid flagship bias
+
+Company discovery should deliberately span three layers rather than repeatedly returning only the largest employers:
+
+1. **Established / flagship platforms (~50%)** — large, institutionally strong companies that clearly match the thesis.
+2. **Second-tier / mid-market (~40%)** — less famous but professionally managed firms with enough international or financial complexity to support relevant roles.
+3. **Exploration (~10%)** — smaller or less obvious companies that may still be attractive because of unusual market exposure, acquisitive growth, leverage, export/FX complexity, commodity exposure, project finance, active ownership or another reason that creates sophisticated finance work.
+
+These percentages are guidance, not a hard quota. Company size should not be screened through a rigid EBITDA or revenue minimum. Roughly speaking, even businesses around tens of millions of EUR of EBITDA can be worth testing if the finance complexity is real; the business model and likely role content matter more than a specific threshold.
 
 ## Company relevance versus attainability
 

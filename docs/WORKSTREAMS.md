@@ -16,25 +16,28 @@ Last updated: 2026-08-19
 3. **Motory nad tím:**
    - **GitHub Actions = deterministický sourcing** (scrapery, píší do staging větví / u D,E,G přímo main). Bez LLM (výjimka: Gemini free-tier fallback adaptér).
    - **Cowork scheduled/on-demand tasky = inteligence (Claude přes předplatné).** Discovery, enrichment, kalibrace. Běží mimo appku, sahají na stejné CSV.
-- **Jediný zdroj pravdy pro cílení i skórování = `data/calibration_rules.json`** (učí ho C). Čte ho `calibrate_jobs` (skóre) i D/E/G targeting. Prose thesis docs (`*_TARGETING.md`) jsou lidská podoba téhož.
+- **Jediný zdroj pravdy pro cílení i skórování rolí = `data/calibration_rules.json`** (učí ho C). Čte ho `calibrate_jobs` (skóre) i D/E/G targeting. Prose thesis docs (`*_TARGETING.md`) jsou lidská podoba téhož.
 
 ## Legenda pilířů (rozsah A–H)
-- **A** — Discovery firem
+- **A** — Discovery + relevance firem
 - **B** — Ručně vkládané opportunity (Add Opportunity)
-- **C** — Kalibrace + shortlisty (jádro: pravidla, hypotézy, semantic fit)
+- **C** — Kalibrace + shortlisty (jádro: pravidla, hypotézy, semantic fit rolí)
 - **D** — Remote (trvalé remote role z boardů)
 - **E** — Projekty / Interim (projektová/kontraktní práce; tendery = TODO)
 - **F** — Lidé / Network (LinkedIn kontakty → access signál)
-- **G** — Country / board sweep (národní job boardy; company-agnostic)
+- **G** — Country / board sweep (discovery engine; vstup do A + C, ne samostatný review pilíř)
 - **H** — Application outcomes / Market feedback (co se stalo po aplikaci → attainability)
 (F jako "expert cally" zamítnuto — seniorita; F redefinováno na network.)
 
 ---
 
-## A — Discovery firem
-Scheduled task najde nové reálné firmy per kategorie a připojí je jako `rating="Unrated"` do `company_universe_wave*.csv` (append-only).
-- Task: **company-discovery** (cron Po+Čt 07:00).
-- Stav: ✅ BĚŽÍ ručně i automaticky.
+## A — Discovery + relevance firem
+A udržuje universe firem a jejich relevanci vůči uživatelské company thesis.
+- Scheduled task **company-discovery** (cron Po+Čt 07:00) hledá nové reálné firmy per kategorie a připojuje je do `company_universe_wave*.csv`.
+- Nová firma nemusí být ručně hodnocena uživatelem, aby šla dál. Systém má umět vytvořit **automatický company relevance assessment** podle semantické podobnosti s firmami, které už uživatel hodnotil, a podle příslušné company thesis.
+- Výstup nemá být binární hard filter. Firma může mít např. vyšší / střední / nižší company relevance; neznámá nebo slabší firma nesmí automaticky skrýt výbornou roli.
+- Pokud už firma v A existuje, G/B/C reuse její existující profil a signály místo vytváření duplicity.
+- Stav: ✅ company discovery běží ručně i automaticky. **Otevřené (na systému):** formalizovat a uložit automatické semantické company relevance skóre/reasoning, které lze použít i pro firmy objevené přes G.
 
 ## B — Ručně vkládané opportunity (stránka Add Opportunity)
 Vstup: LinkedIn/job link + firemní stránka → `data/user_submitted_opportunities.csv`. Vlastní stránka (ne v Jobs inboxu).
@@ -46,10 +49,11 @@ Vstup: LinkedIn/job link + firemní stránka → `data/user_submitted_opportunit
 ## C — Kalibrace + shortlisty (jádro)
 - **`data/calibration_rules.json`** = učené skórovací pravidlo (positive/caution termy + váhy). `calibrate_jobs` ho čte. Jen mění pořadí, NIKDY tvrdé vyloučení; drží exploration.
 - **Sektorové thesis docs** = lidská formulace targeting logiky.
-- **`data/semantic_fit.csv`** = PRIMÁRNÍ preference/content fit (reasoning Strong/Moderate/Weak od Claude). App ho ukazuje jako headline; keyword skóre je jen hrubý předfiltr.
+- **`data/semantic_fit.csv`** = PRIMÁRNÍ preference/content fit role (reasoning Strong/Moderate/Weak od Claude). App ho ukazuje jako headline; keyword skóre je jen hrubý předfiltr.
 - **`data/targeting_feedback.csv`** = přímý thesis feedback z panelu na Jobs.
 - Task: **calibration-refresh** (NA VYŽÁDÁNÍ / Run now). Vstupy dle priority: targeting_feedback → rated submitted opps → job_feedback. Dělá: update pravidel + hypotéz → regenerace shortlistů → semantic fit.
 - Stav: všech 6 sektorů historicky ohodnoceno, thesis napsané, pravidla už jednou kalibrována.
+- **G integrace:** role nalezené přes G nemají dostávat zvláštní ruční G-rating. Po company assessmentu v A se samotný job vyhodnotí stejným C semantic-fit frameworkem jako ostatní Jobs. Relevantní G role se pak zobrazí v normálním Jobs review s informací o source boardu.
 - **Otevřené (na uživateli):** thesis feedback jen pokud se objeví skutečný pattern; není nutné ho vyrábět uměle. **Na systému:** semantic fit napojit i na D/E/G + submitted; zlepšit Public Markets popisy; deep-code quant případně převést z docs do mírného caution pravidla.
 
 ## D — Remote (trvalé remote role)
@@ -70,13 +74,21 @@ LinkedIn kontakty → napárování na firmy → access signál na příležitos
 - **Otevřené (na uživateli):** nahrát LinkedIn export. **Na systému:** access boost do pořadí příležitostí + předvyplnění `contact_strength` na Companies.
 
 ## G — Country / board sweep
-Company-agnostic sweep full-time rolí v cílových zemích z národních boardů — nový zdroj pro Jobs, ne nový typ příležitosti. Targeting a pořadí z C.
+G je **discovery engine**, ne samostatný uživatelský review workflow. Prohledává národní job boardy mimo známý company universe, aby našel nové firmy a role, které firmocentrické A nemusí zachytit.
 - Registr `data/job_boards.csv`; první aktivní adaptéry = švédský Platsbanken + německá Bundesagentur.
-- Výstup `data/jobs_board_staging.csv`; review stránka **Opportunities → Country / Board Sweep**; feedback jde do společného `job_feedback.csv`.
-- Action `board-sourcing.yml` denně 06:00.
+- Action `board-sourcing.yml` denně 06:00; technický staging zůstává `data/jobs_board_staging.csv`.
 - První živý test: 27 ověřených rolí (15 Sweden, 12 Germany), bez chyb zdrojů.
 - eFinancialCareers/Reed/Duunitori jsou unattended blokované a nesmí se tvářit jako funkční sourcing.
-- **Otevřené (na uživateli):** ohodnotit první Germany/Sweden cohort. **Na systému:** podle kvality přidat český adaptér a další stabilní zdroje; semantic fit přes C.
+
+### Cílový pipeline G → A → C
+1. **G najde job + firmu** na country boardu.
+2. **A vyhodnotí firmu:** pokud už existuje v universe, reuse existující profil/signály; pokud je nová, automaticky ji obohatí a dá jí **semantické company relevance skóre/reasoning podle podobnosti s již hodnocenými firmami a podle company thesis**.
+3. Company relevance je **soft signal, ne hard filter**. Nízké skóre firmy může roli posunout níž, ale nesmí samo o sobě vyřadit job s výborným content fit.
+4. **C vyhodnotí samotnou roli** stejným Semantic fit frameworkem jako ostatní Jobs.
+5. Relevantní výsledky se propíšou do **normálního Jobs inboxu/review**, pouze s označením zdroje (`Platsbanken`, `Bundesagentur`, budoucí CZ board apod.). Uživatel nemá hodnotit samostatnou pseudofirmu ani celý G cohort jen proto, že přišel z boardu.
+
+- **Otevřené (na systému):** implementovat A company-semantic assessment pro nové G firmy; napojit G role na C semantic fit; sloučit relevantní G výsledky do standardního Jobs review; potom podle kvality přidat český adaptér a další stabilní zdroje.
+- **Otevřené (na uživateli):** žádný samostatný G cohort review. Uživatel hodnotí až role, které projdou běžným A+C rankingem a objeví se v Jobs.
 
 ## H — Application outcomes / Market feedback
 Samostatná validační vrstva nad reálnými aplikacemi. C odpovídá **„co se uživateli líbí / co je obsahově fit“**; H odpovídá **„kam ho trh reálně pustí dál a kde ne“**.
@@ -118,29 +130,34 @@ Attainability nesmí nahrazovat Semantic fit ani role tvrdě vyřazovat; má bý
 
 ## GitHub Actions (deterministický sourcing)
 - Firmocentrické: `job-sourcing`, `pe-sourcing`, `consulting-sourcing`, `sector-sourcing`, `promote-staging`.
-- Board-based: `remote-sourcing` (D), `projects-sourcing` (E), `board-sourcing` (G).
+- Board-based: `remote-sourcing` (D), `projects-sourcing` (E), `board-sourcing` (G discovery → A+C).
 
 ## Otevřené body — master list
-1. **B:** ratingy už jsou průběžně doplňované; ověřit automatickou Fázi 2 na nových reálných `Interested` ratingách a oddělit application outcome od preference feedbacku.
-2. **C:** případný skutečný thesis feedback → calibration-refresh; napojit semantic fit na D/E/G + submitted; zlepšit Public Markets extrakci; zvážit deep-code-quant caution.
-3. **D/E:** nízký objem free boardů; E kanál 2 = tendery (TED/Věstník).
-4. **F:** uživatel nahraje LinkedIn Connections export → poté access boost.
-5. **G:** uživatel ohodnotí první Germany/Sweden board cohort → podle kvality doplnit CZ a další stabilní adaptéry.
-6. **H:** postavit outcome datový model + UI; převést existující `Lost` signály do H; následně první transparentní **Attainability score vedle Semantic fit** a postupně jej kalibrovat podle skutečných application outcomes.
+1. **A/G:** postavit automatické semantické company relevance hodnocení pro firmy nalezené přes G podle podobnosti s již hodnocenými firmami + company thesis; bez hard filtru.
+2. **B:** ratingy už jsou průběžně doplňované; ověřit automatickou Fázi 2 na nových reálných `Interested` ratingách a oddělit application outcome od preference feedbacku.
+3. **C/G:** napojit G role na standardní C semantic fit a relevantní výsledky sloučit do normálního Jobs inboxu; případný skutečný thesis feedback → calibration-refresh; zlepšit Public Markets extrakci; zvážit deep-code-quant caution.
+4. **D/E:** nízký objem free boardů; E kanál 2 = tendery (TED/Věstník).
+5. **F:** uživatel nahraje LinkedIn Connections export → poté access boost.
+6. **G:** po integraci A+C přidat CZ a další stabilní adaptéry; samostatný Germany/Sweden cohort review se ruší.
+7. **H:** postavit outcome datový model + UI; převést existující `Lost` signály do H; následně první transparentní **Attainability score vedle Semantic fit** a postupně jej kalibrovat podle skutečných application outcomes.
 
 ## Co je teď konkrétně na uživateli
-1. **G:** ohodnotit první Germany/Sweden board cohort.
-2. **F:** nahrát LinkedIn Connections CSV export.
-3. **H:** u skutečných aplikací průběžně evidovat outcome (`Lost`, další kolo, offer atd.); pokud je znám konkrétní důvod neúspěchu, stručně ho přidat.
-4. **C:** thesis feedback jen tehdy, když se při používání objeví jasný pattern; pak spustit calibration-refresh.
+1. **F:** nahrát LinkedIn Connections CSV export.
+2. **H:** u skutečných aplikací průběžně evidovat outcome (`Lost`, další kolo, offer atd.); pokud je znám konkrétní důvod neúspěchu, stručně ho přidat.
+3. **C:** thesis feedback jen tehdy, když se při používání objeví jasný pattern; pak spustit calibration-refresh.
+
+**G už není samostatný úkol na uživateli.** Country-board výsledky má nejprve zpracovat A+C a uživatel bude hodnotit pouze relevantní role v běžném Jobs workflow.
 
 ## Log klíčových rozhodnutí
 - Rozsah je nyní **A–H**; H není další sourcing kanál, ale outcome/market-validation vrstva.
-- **Fit je primárně SÉMANTICKÝ** (preference/content fit), keyword skóre jen hrubý předfiltr.
+- **G je discovery engine, ne samostatný review stream:** `G → A company relevance → C role semantic fit → Jobs inbox`.
+- Nové G firmy se mají hodnotit **semanticky podle podobnosti s již hodnocenými firmami a podle company thesis**, nikoli ručně jednu po druhé.
+- **Company relevance je soft signal, nikdy hard filter.** Výborný job u méně známé firmy musí zůstat viditelný.
+- **Fit role je primárně SÉMANTICKÝ** (preference/content fit), keyword skóre jen hrubý předfiltr.
 - **Attainability je samostatný druhý signál** vedle Semantic fit; nesmí role skrývat ani přepisovat preference fit.
 - `Lost` a jiné outcomes se nesmí míchat do `Interested/Maybe/Pass`; preference a market outcome jsou dvě rozdílné osy.
 - Jednotlivý rejection není dostatečný pro snížení attainability; rozhodují opakující se empirické patterny.
-- `calibration_rules.json` = zdroj pravdy pro targeting/skórování C/D/E/G; H je oddělená empirická validační vrstva.
+- `calibration_rules.json` = zdroj pravdy pro role targeting/skórování C/D/E/G; H je oddělená empirická validační vrstva.
 - Sourcing = Actions/deterministický; inteligence = Cowork tasky.
 - D vs E dělení podle typu úvazku, ne lokality.
 - LinkedIn se nescrapuje (F = CSV export; G bez LinkedInu).

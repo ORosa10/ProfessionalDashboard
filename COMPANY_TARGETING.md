@@ -1,55 +1,61 @@
 # Company sourcing hypothesis (per sector)
 
-Baseline sector theses inferred from the current A/B/C/Exclude ratings in `data/company_ratings.csv`. These are **soft semantic ranking hypotheses**, not hard filters. They should evolve from future ratings and `data/company_targeting_feedback.csv`.
+Sector theses inferred from the current A/B/C/Exclude ratings in `data/company_ratings.csv` and the first complete feedback round in `data/company_targeting_feedback.csv`. These are **soft semantic ranking hypotheses**, not hard filters. Company attractiveness and hiring attainability are separate concepts.
 
 ## Big Four
 
-All four Big Four firms are currently A-rated. Treat the category as a strong positive baseline because each offers broad finance / deals / treasury / risk / valuation ecosystems, international mobility and enough scale for relevant specialist teams. Do not assume every Big Four role is attractive: company fit is strong, while C must still distinguish treasury/markets/deals/risk work from generic audit, compliance, IT or reporting roles.
+All four Big Four firms are A-rated and the first feedback round confirmed the thesis **in line**. Treat the category as a strong positive baseline because each offers broad finance / deals / treasury / risk / valuation ecosystems, international mobility and enough scale for relevant specialist teams.
+
+Do not assume every Big Four role is attractive: A says the platform is strong; C must still distinguish treasury/markets/deals/risk work from generic audit, compliance, IT or reporting roles.
 
 ## Consulting
 
-The strongest pattern is preference for firms with **finance-heavy, restructuring, transactions, risk, performance or analytically demanding strategy work**. A-rated examples include Alvarez & Marsal, AlixPartners, FTI, Oliver Wyman, Roland Berger, L.E.K., Horváth, zeb, Capco, Grant Thornton, BDO, RSM, Protiviti and several implementation-oriented firms with credible finance practices.
+The first feedback round confirmed this thesis **in line**. Prefer firms with **finance-heavy, restructuring, transactions, risk, performance or analytically demanding strategy work**. A-rated anchors include Alvarez & Marsal, AlixPartners, FTI, Oliver Wyman, Roland Berger, L.E.K., Horváth, zeb, Capco, Grant Thornton, BDO, RSM and Protiviti.
 
-Generalist strategy brands such as McKinsey/BCG and several broad technology consultancies often sit at B rather than automatically A. C-rated examples cluster more around narrower commercial/organisation consulting or generic delivery-heavy technology consulting. Therefore rank up consulting firms where finance, risk, transactions, restructuring, treasury, valuation or performance improvement are substantial practices; rank down firms whose likely opportunity set is primarily sales/marketing strategy, generic organisation work or pure IT delivery.
+Generalist strategy brands and broad technology consultancies remain relevant, but should not automatically outrank firms with more direct finance/risk/transactions depth. Rank up consulting firms where finance, treasury, risk, valuation, restructuring, transactions or performance improvement are substantial practices; rank down firms whose likely opportunity set is mainly sales/marketing strategy, generic organisation work or pure IT delivery.
 
 ## Corporate
 
-A-rated corporates are disproportionately **large, international and financially complex industrial / energy / infrastructure / consumer groups**: major utilities and energy companies, automotive and engineering groups, transport/logistics, telecom/technology manufacturers and global consumer businesses. The common attraction is not the industry itself but the likelihood of meaningful group treasury, financing, capital allocation, risk and cross-border finance work.
+The baseline preference for **large, international and financially complex corporates** is confirmed, but the feedback clarifies that **energy itself is not the preferred industry**. Energy names score well partly because commodities add an attractive markets/risk angle; equally sophisticated retail, industrial, consumer, transport or other corporates should score just as well if the finance function is strong.
 
-B-rated firms remain relevant when they are large and credible but where the expected finance exposure is less obviously aligned or more reporting/sector-specific. Individual exclusions should not become industry bans. Rank new corporates up when they combine scale, international operations, multi-currency/capital-markets complexity and sophisticated central finance; rank down smaller or simpler businesses where finance is likely dominated by accounting/controlling rather than markets, treasury, investments or strategic finance.
+Rank up companies with cross-border operations, multi-currency exposure, meaningful treasury/financing/capital-allocation activity and sophisticated central finance. Treat commodity exposure as a positive feature where present, not as a sector requirement. Rank down smaller or simpler businesses where finance is likely dominated by accounting/controlling rather than markets, treasury, investments or strategic finance.
 
 ## Banking & Financial Services
 
-A-rated examples strongly favour **large universal banks, internationally active banks, sophisticated insurers/reinsurers and Nordic/UK/DACH institutions** with genuine markets, treasury, balance-sheet, investment or risk functions. Deutsche Bank, Commerzbank, ING, UniCredit, UBS, Nordea, SEB, Danske, major UK banks and several Nordic institutions are positive anchors.
+The first feedback round confirmed the thesis with one important refinement: **do not favour banks whose relevant opportunity set is mainly relationship management / client coverage**. The positive anchors are institutions with genuine markets, treasury, ALM, balance-sheet, investment or financial-risk functions.
 
-B-rated names include some exchanges, private banks, smaller/regional banks and insurers where the platform is credible but the opportunity set may be narrower, more relationship-led or less directly aligned. Rank up institutions with meaningful capital markets, derivatives, ALM, treasury, risk, investment or balance-sheet activity; rank down firms dominated by retail distribution, pure private-banking sales or operational financial services.
+Rank up large universal banks, internationally active banks, insurers/reinsurers and institutions with derivatives, treasury, risk, balance-sheet or investment depth. Rank down firms where the likely roles are dominated by retail distribution, private-banking sales, relationship management, client acquisition or operational financial services. Company scale alone is not enough.
 
 ## Holding & Conglomerate
 
-The positive pattern favours **institutional, professionally managed holding companies with transparent capital-allocation logic and high-quality underlying assets**. A-rated examples such as Investor AB, Industrivärden, Exor, Porsche SE and A.P. Møller Holding suggest a preference for established investment/holding platforms where portfolio oversight, financing and capital allocation are core activities.
+The positive pattern remains **institutional, professionally managed holdings with clear capital-allocation logic and high-quality underlying assets**. Investor AB, Industrivärden, Exor, Porsche SE and A.P. Møller Holding are strong anchors.
 
-B-rated firms such as PPF/KKCG remain relevant but less consistently strong, while C/Exclude examples suggest caution around property-heavy, opaque or highly idiosyncratic conglomerates. Rank up holdings that resemble long-term institutional investors with clear governance and analytical capital allocation; rank down groups where the structure is opaque, heavily operational/political, property-dominated or unlikely to offer transferable analytical finance roles.
+The feedback clarifies that PPF and KKCG are lower primarily because they are **Czech/local conglomerates**, not because their underlying business model is inherently unattractive. An otherwise similar international holding could be A/B. Rank up transparent, professionally governed international holdings; rank down local-only, opaque, politically exposed, property-heavy or highly idiosyncratic conglomerates. Czech conglomerates are a preference caution, not a universal hard exclusion.
 
 ## Private Equity & Private Markets
 
-The strongest A pattern is broad across **credible European mid-market / sector-specialist private-capital platforms**, including firms such as Advent, Cinven, BC Partners, Triton, Ardian, TPG, Bain Capital, Ares, ICG, PAI, Waterland, Nordic Capital, Altor, Axcel, FSN and others. Mega-funds are often B rather than automatically A, indicating that brand size alone is not the target.
+Prefer **credible European mid-market / sector-specialist private-capital platforms with active involvement in portfolio companies**, where the work plausibly includes company/deal analysis, valuation, portfolio work and value creation. This is more attractive than a passive fund-selection model or a real-estate-heavy platform.
 
-Rank up firms where the investment model implies real company/deal analysis, valuation, portfolio work and a plausible fit with the user's background. European presence, institutional quality and analytical investment depth matter. Rank down platforms that are very locally idiosyncratic, unclear in strategy, or where the likely role mix is too commercial/operational. Do not use fund size as a hard rule.
+Mega-funds should not automatically rank highest. The first feedback confirms two reasons: they may be **less attainable** and the work-life balance may be less desirable. Those are cautions, not hard exclusions. A very large PE firm can still have strong company relevance, with attainability handled separately.
+
+Rank up firms with real company ownership, portfolio-company engagement, analytical investment depth and strong European presence. Rank down real-estate-dominated platforms, unclear strategies, or firms where the likely role mix is mainly fundraising, operations or commercial coverage rather than investing.
 
 ## Investment Banking
 
-A-rated firms concentrate among **top global banks and high-quality independent advisory platforms**: Goldman Sachs, Morgan Stanley, JPMorgan, Citi, Bank of America, Lazard, Rothschild, Evercore and Jefferies. This indicates a clear preference for institutional-quality platforms with strong execution, modelling, valuation and capital-markets exposure.
+The initial thesis over-weighted prestige. The feedback clarifies that **large global banks are not automatically preferred and may themselves be reach targets**. Smaller boutiques can be attractive if they offer good analytical execution, modelling, valuation and transaction exposure.
 
-Several smaller boutiques sit at B and Wood & Company at C, suggesting that boutique status alone is not enough. Rank up firms with strong transaction quality, recognised teams and substantial analytical execution; rank down smaller/local advisory platforms where the role may be more sales/fundraising-driven, less institutional or materially below the desired career trajectory.
+Therefore do not use firm size as the main company-level ranking rule. Rank up investment banks and advisory boutiques with institutional-quality execution, meaningful modelling/valuation work, good transaction exposure and an international opportunity set. Rank down weak/local platforms where the work is likely narrow, domestically focused, fundraising-led or otherwise below the desired analytical depth.
+
+Wood & Company is a useful negative example mainly because Czech investment banking is less preferred / perceived as less interesting, not because every boutique is weak. Smaller non-Czech boutiques can absolutely be relevant.
 
 ## Public Markets & Asset Management
 
-A-rated firms include large and credible managers such as Fidelity International, Invesco, Vanguard, M&G, Man Group, Janus Henderson and Robeco. Many other established managers are B, which suggests the sector is attractive but company-level differentiation is weaker than in some other categories.
+The sector remains attractive where the platform offers genuine **investment research, fixed income, portfolio management, risk, multi-asset or quantitative investing**. Large managers are credible positive anchors, but the feedback notes that the very biggest investment companies may also be **reach targets**.
 
-Rank up managers where the platform offers genuine investment research, fixed income, portfolio management, quantitative investing, risk or multi-asset analytical work. Traditional brand scale is positive but not decisive. Rank down firms where the likely opportunity set is primarily distribution, wealth sales, fund operations or generic product support rather than investment decision-making.
+Do not reduce their company relevance solely because of competitiveness; flag attainability separately. Rank up managers with real investment decision-making and analytical depth. Rank down firms where the opportunity set is mostly distribution, wealth sales, product support, fund operations or administration.
 
 ## Specialist & Boutique Funds
 
-The clearest A-rated anchors are **analytically intensive systematic / quantitative investment firms** such as AQR, Two Sigma and D. E. Shaw. Several hedge funds and systematic managers sit at B, while smaller Czech/local investment platforms sit at C.
+Quantitative investing is explicitly **fine**, but the target should not drift into roles or firms where success depends primarily on extreme software engineering / research-scientist depth. The positive company pattern is analytical markets/investing sophistication, not maximum technicality for its own sake.
 
-Rank up specialist managers with serious research, markets, quantitative or portfolio-construction depth and institutional infrastructure. Rank down small/local boutiques where the investment process is unclear, heavily relationship-driven or where the role would likely be operational rather than analytical. Deep software-engineering requirements should be assessed by C at the role level rather than used to exclude the company itself.
+Rank up specialist managers with serious research, markets, systematic, quantitative or portfolio-construction depth and institutional infrastructure. Rank down small/local boutiques where the process is unclear or relationship-driven. Deep-code requirements should mainly be assessed by C at the specific role level rather than used to exclude a quantitatively oriented firm altogether.

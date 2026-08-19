@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from add_opportunity_ui import render_add_opportunity
+from company_targeting_ui import render_company_targeting_feedback
 from people_ui import render_people
 from cost_of_living_ui import render_cost_of_living
 from github_storage import RATING_COLUMNS, github_token, load_ratings, save_ratings
@@ -323,6 +324,8 @@ def companies_page() -> None:
     for sector in COMPANY_SECTORS:
         with st.expander(f"{sector} — sourcing hypothesis"):
             st.markdown(sections.get(sector, "_Not yet generated._"))
+
+    render_company_targeting_feedback()
 
 
 def pipeline_page() -> None:

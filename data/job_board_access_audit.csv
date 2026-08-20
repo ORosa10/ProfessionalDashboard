@@ -38,9 +38,9 @@ finansavisen-no,manual_fallback,finansavisen_no_html,False,NO,Unattended request
 jobbnorge-no,manual_fallback,,False,NO,Client-side search and no stable unattended retrieval endpoint confirmed,2026-08-20
 karrierestart-no,manual_fallback,,False,NO,No stable machine-readable search surface confirmed,2026-08-20
 jobbank-dk,manual_fallback,jobbank_dk_html,False,NO,Repeated live 403 despite fallback; manual only,2026-08-20
-jobdanmark-dk,active,jobdanmark_dk_html,True,YES,Latest live run returned a verified role,2026-08-20
-academicwork-dk,adapter_ready,academicwork_dk_html,True,YES,Server-rendered Academic Work catalogue; live validation in progress,2026-08-20
-jobunivers-dk,adapter_ready,jobunivers_dk_html,True,YES,Djoef finance/economics catalogue is server-rendered with stable job ids; live validation queued,2026-08-20
+jobdanmark-dk,active,jobdanmark_dk_html,True,YES,Latest live run returned 1 verified role,2026-08-20
+academicwork-dk,active,academicwork_dk_html,True,YES,Live retrieval completed without errors; current catalogue retained zero finance matches,2026-08-20
+jobunivers-dk,active,jobunivers_dk_html,True,YES,Live GitHub Actions validation returned 12 verified finance/economics roles,2026-08-20
 jobindex-dk,manual_fallback,,False,NO,No reliable unattended path confirmed,2026-08-20
 jobnet-dk,api_credentials,,True,YES_CREDENTIALS,Official JobannonceService requires onboarding/certificate access,2026-08-20
 jobfinder-dk,manual_fallback,,False,NO,No stable unattended path confirmed,2026-08-20
@@ -51,6 +51,6 @@ oikotie-fi,closed,,False,NO,Oikotie Tyopaikat is closed,2026-08-20
 tyomarkkinatori-fi,api_credentials,,True,YES_CREDENTIALS,Official Job Market Finland retrieval REST API requires credentials,2026-08-20
 jobly-fi,manual_fallback,jobly_fi_html,False,NO,Repeated live 403 across Finnish and English routes; manual only,2026-08-20
 barona-fi,active,barona_fi_html,True,YES,Latest live run returned 2 verified Finnish roles,2026-08-20
-academicwork-fi,adapter_ready,academicwork_fi_html,True,YES,Server-rendered catalogue with current cash-management role; live validation in progress,2026-08-20
+academicwork-fi,active,academicwork_fi_html,True,YES,Live GitHub Actions validation returned 3 verified Finnish finance roles,2026-08-20
 efinancialcareers,blocked_waf,,False,NO,WAF/human verification blocks unattended access,2026-08-20
 thehub,manual_fallback,thehub_html,False,NO,Manual fallback,2026-08-20

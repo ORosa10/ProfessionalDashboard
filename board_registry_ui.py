@@ -9,21 +9,53 @@ DATA_DIR = Path(__file__).parent / "data"
 
 STATUS_LABELS = {
     "active": "Active",
-    "candidate": "Candidate",
+    "adapter_ready": "Adapter ready",
     "web_verified": "Web verified",
     "api_credentials": "API credentials needed",
+    "manual_fallback": "Manual fallback",
+    "candidate": "Candidate",
     "blocked": "Blocked",
     "blocked_waf": "Blocked / WAF",
+    "closed": "Closed",
 }
 
 STATUS_ORDER = {
     "active": 0,
-    "web_verified": 1,
+    "adapter_ready": 1,
     "api_credentials": 2,
-    "candidate": 3,
-    "blocked": 4,
-    "blocked_waf": 5,
+    "web_verified": 3,
+    "candidate": 4,
+    "manual_fallback": 5,
+    "blocked": 6,
+    "blocked_waf": 7,
+    "closed": 8,
 }
+
+
+def _load_registry() -> pd.DataFrame:
+    path = DATA_DIR / "job_boards.csv"
+    boards = pd.read_csv(path).fillna("")
+    audit_path = DATA_DIR / "job_board_access_audit.csv"
+    if not audit_path.exists() or boards.empty:
+        return boards
+
+    audit = pd.read_csv(audit_path).fillna("")
+    if audit.empty or "board_id" not in audit.columns:
+        return boards
+    audit = audit.drop_duplicates("board_id", keep="last").set_index("board_id")
+
+    status = boards["board_id"].map(audit.get("status_override", pd.Series(dtype=str))).fillna("")
+    adapter = boards["board_id"].map(audit.get("adapter_override", pd.Series(dtype=str))).fillna("")
+    enabled = boards["board_id"].map(audit.get("enabled_override", pd.Series(dtype=str))).fillna("")
+    audit_note = boards["board_id"].map(audit.get("audit_note", pd.Series(dtype=str))).fillna("")
+    audited_at = boards["board_id"].map(audit.get("audited_at", pd.Series(dtype=str))).fillna("")
+
+    boards["status"] = status.where(status.ne(""), boards["status"])
+    boards["adapter"] = adapter.where(adapter.ne(""), boards["adapter"])
+    boards["enabled"] = enabled.where(enabled.ne(""), boards["enabled"])
+    boards["notes"] = audit_note.where(audit_note.ne(""), boards["notes"])
+    boards["audited_at"] = audited_at
+    return boards
 
 
 def render_board_registry() -> None:
@@ -40,7 +72,7 @@ def render_board_registry() -> None:
         st.info("No job-board registry found yet.")
         return
 
-    boards = pd.read_csv(path).fillna("")
+    boards = _load_registry()
     if boards.empty:
         st.info("The job-board registry is empty.")
         return
@@ -50,14 +82,16 @@ def render_board_registry() -> None:
 
     countries = sorted(c for c in boards["country"].unique() if c and c != "Multi-region")
     active = int(boards["status"].eq("active").sum())
-    testable = int(boards["status"].isin(["web_verified", "api_credentials", "candidate"]).sum())
-    blocked = int(boards["status"].isin(["blocked", "blocked_waf"]).sum())
+    ready = int(boards["status"].eq("adapter_ready").sum())
+    structured = int(boards["status"].isin(["active", "adapter_ready", "api_credentials"]).sum())
+    fallback = int(boards["status"].isin(["manual_fallback", "blocked", "blocked_waf", "closed"]).sum())
 
-    m1, m2, m3, m4 = st.columns(4)
+    m1, m2, m3, m4, m5 = st.columns(5)
     m1.metric("Countries", len(countries))
     m2.metric("Board sources", len(boards))
-    m3.metric("Active adapters", active)
-    m4.metric("Next to activate", testable)
+    m3.metric("Active", active)
+    m4.metric("Adapter ready", ready)
+    m5.metric("Structured path", structured)
 
     st.code("G BOARD → ROLE + COMPANY → A COMPANY CONTEXT → C SEMANTIC FIT → JOBS INBOX")
 
@@ -87,9 +121,10 @@ def render_board_registry() -> None:
     ].copy()
 
     st.caption(
-        "Active = working adapter today. Web verified = public searchable pages are confirmed and "
-        "an adapter can be tested next. API credentials needed = official API exists but requires onboarding/token. "
-        "Candidate = source is registered but unattended access is not yet verified."
+        "Active = working production adapter. Adapter ready = code exists and awaits/undergoes live runner validation. "
+        "API credentials needed = official structured source exists but onboarding/token is required. "
+        "Web verified = useful public source whose unattended transport still needs validation. "
+        "Manual fallback = useful for ad-hoc research but intentionally not scheduled."
     )
 
     for country in selected_countries:
@@ -98,8 +133,11 @@ def render_board_registry() -> None:
             continue
         country_rows = country_rows.sort_values(["_status_order", "finance_specific", "name"], ascending=[True, False, True])
         with st.expander(f"{country} — {len(country_rows)} sources", expanded=True):
+            display_columns = ["name", "status_label", "adapter", "finance_specific", "base_url", "notes"]
+            if "audited_at" in country_rows.columns:
+                display_columns.append("audited_at")
             st.dataframe(
-                country_rows[["name", "status_label", "adapter", "finance_specific", "base_url", "notes"]],
+                country_rows[display_columns],
                 hide_index=True,
                 width="stretch",
                 column_config={
@@ -109,6 +147,7 @@ def render_board_registry() -> None:
                     "finance_specific": st.column_config.CheckboxColumn("Finance-specific", width="small"),
                     "base_url": st.column_config.LinkColumn("Board", display_text="Open", width="small"),
                     "notes": st.column_config.TextColumn("Technical / sourcing note", width="large"),
+                    "audited_at": st.column_config.TextColumn("Audited", width="small"),
                 },
             )
 
@@ -135,5 +174,7 @@ def render_board_registry() -> None:
                 "data/jobs_board_staging.csv for migration/testing only. They are no longer a separate review queue."
             )
 
-    if blocked:
-        st.caption(f"{blocked} registered sources are currently blocked for unattended access and remain fallback/manual sources only.")
+    if fallback:
+        st.caption(
+            f"{fallback} registered sources are intentionally non-scheduled (manual fallback, blocked, or closed)."
+        )

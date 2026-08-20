@@ -1,0 +1,43 @@
+board_id,status_override,adapter_override,enabled_override,audit_note,audited_at
+jobs-cz,adapter_ready,jobs_cz_html,True,Public search and vacancy pages verified; adapter implemented and awaiting live GitHub runner validation,2026-08-20
+prace-cz,adapter_ready,prace_cz_html,True,Public listing and vacancy URLs verified; adapter implemented and awaiting live runner validation,2026-08-20
+startupjobs-cz,web_verified,,True,Public site is readable and searchable but current search transport needs endpoint inspection before unattended adapter,2026-08-20
+cocuma-cz,web_verified,,True,Server-rendered paginated vacancy catalogue verified; small enough for controlled browse-and-filter adapter,2026-08-20
+arbeitsagentur-de,active,arbeitsagentur_html,True,Existing production adapter working,2026-08-20
+stepstone-de,adapter_ready,stepstone_de_html,True,Same stable search/detail family as StepStone Austria; ready for adapter validation,2026-08-20
+indeed-de,manual_fallback,,False,Readable in browser but high-volume aggregator and unstable unattended access make it a fallback rather than scheduled source,2026-08-20
+stellenanzeigen-de,adapter_ready,stellenanzeigen_de_html,True,Server-rendered keyword pages such as /jobs/treasury/ and stable /job/ detail links verified,2026-08-20
+jobware-de,manual_fallback,,False,Public landing page requires JavaScript for job search; no stable unattended transport confirmed,2026-08-20
+karriere-at,adapter_ready,karriere_at_html,True,Public keyword result pages and stable numeric vacancy URLs verified; adapter implemented,2026-08-20
+ams-at,web_verified,,True,Official Austrian employment source retained as high-priority candidate; unattended search interface still needs endpoint/API confirmation,2026-08-20
+stepstone-at,adapter_ready,stepstone_at_html,True,Public search and JobPosting detail pages verified; adapter implemented,2026-08-20
+willhaben-at,web_verified,,True,Server-rendered keyword result pages and stable /jobs/job/... detail URLs verified; adapter can be built if terms permit scheduled retrieval,2026-08-20
+jobs-ch,adapter_ready,jobs_ch_html,True,Public term search and stable UUID vacancy detail pages verified; dedicated adapter implemented,2026-08-20
+jobscout24-ch,blocked,,False,Direct unattended fetch currently returns 403; keep as fallback only,2026-08-20
+jobup-ch,web_verified,,True,Public server-rendered finance/category pages verified; keyword search/detail transport still to validate,2026-08-20
+indeed-ch,manual_fallback,,False,Readable in browser but aggregator/anti-bot characteristics make it unsuitable as primary scheduled source,2026-08-20
+reed-uk,blocked,,False,Previously returned 403 unattended; keep as manual/web fallback,2026-08-20
+indeed-uk,manual_fallback,,False,Readable in browser but high-volume aggregator and unstable unattended access; fallback only,2026-08-20
+totaljobs-uk,manual_fallback,,False,Major board but unattended web fetch is inconsistent; no stable adapter confirmed,2026-08-20
+cv-library-uk,web_verified,,True,Large public server-rendered board verified; search/detail URL transport needs adapter test,2026-08-20
+cityjobs-uk,manual_fallback,,False,Finance-focused but unattended fetch is inconsistent; retain as high-relevance manual fallback,2026-08-20
+platsbanken-se,active,jobtech_api,True,Official open JobSearch API; production adapter working,2026-08-20
+jobbsafari-se,adapter_ready,jobbsafari_se_html,True,Public search and detail pages verified; adapter implemented,2026-08-20
+jobbland-se,web_verified,,True,Large server-rendered catalogue verified but overlaps with Duunitori/JobbSafari group inventory; lower automation priority,2026-08-20
+ledigajobb-se,web_verified,,True,Large server-rendered Swedish vacancy catalogue verified; adapter transport still to validate,2026-08-20
+finn-no,manual_fallback,,False,Excellent inventory but FINN explicitly prohibits regular systematic collection without written permission; do not schedule scrape,2026-08-20
+arbeidsplassen-no,api_credentials,,True,Official NAV vacancy feed confirmed; consumer token required for stable unattended use,2026-08-20
+jobbnorge-no,web_verified,,True,Public server-rendered vacancy search verified; candidate for controlled HTML adapter,2026-08-20
+karrierestart-no,manual_fallback,,False,Site is live but no stable machine-readable search surface confirmed,2026-08-20
+jobindex-dk,manual_fallback,,False,Major Danish board but unattended fetch/search surface not reliably accessible in current tests,2026-08-20
+jobnet-dk,api_credentials,,True,Official JobannonceService supports importing vacancies but requires onboarding/certificate access,2026-08-20
+jobfinder-dk,manual_fallback,,False,Specialist Danish board retained as fallback; unattended access not confirmed,2026-08-20
+ofir-dk,manual_fallback,,False,Public board retained as fallback; unattended access not confirmed,2026-08-20
+jobscopenhagen-dk,manual_fallback,,False,Useful English-language Copenhagen niche source but unattended access not confirmed,2026-08-20
+duunitori-fi,blocked,,False,Previously returned 403 to unattended access; keep as fallback only,2026-08-20
+oikotie-fi,closed,,False,Oikotie Työpaikat is closed; remove from active sourcing consideration,2026-08-20
+tyomarkkinatori-fi,api_credentials,,True,Official Job Market Finland retrieval API confirmed; KEHA onboarding/credentials required,2026-08-20
+jobly-fi,web_verified,,True,Large server-rendered Finnish board with finance category verified; adapter transport still to validate,2026-08-20
+barona-fi,web_verified,,True,Public finance/expert vacancy sections verified; useful supplementary employer/recruiter source,2026-08-20
+efinancialcareers,blocked_waf,,False,High relevance but WAF/human verification blocks unattended GitHub Actions access,2026-08-20
+thehub,web_verified,,True,Nordic startup/scale-up board is publicly readable; useful exploration source after transport test,2026-08-20

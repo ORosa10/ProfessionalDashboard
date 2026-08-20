@@ -18,6 +18,7 @@ from sourcing.board_additional_adapters import discover_additional_board
 from sourcing.board_html_adapters import discover_html_jsonld_board
 from sourcing.board_jobs_ch import discover_jobs_ch
 from sourcing.board_jobly_fi import discover_jobly
+from sourcing.board_thehub import discover_thehub
 from sourcing.board_sweep import (
     BOARDS_PATH,
     DEFAULT_QUERIES,
@@ -81,6 +82,8 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
         return discover_additional_board("cv-library-uk", "United Kingdom", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "jobly_fi_html":
         return discover_jobly(per_query, max_details)
+    if adapter == "thehub_html":
+        return discover_thehub(max_details)
     return [], [f"Unsupported adapter: {adapter}"]
 
 

@@ -33,7 +33,8 @@ jobbland-se,active,jobbland_se_html,True,YES,Latest live run returned 4 verified
 ledigajobb-se,active,ledigajobb_se_html,True,YES,Latest live run returned 8 verified roles,2026-08-20
 finn-no,manual_fallback,,False,NO,Manual fallback,2026-08-20
 arbeidsplassen-no,adapter_ready,nav_stilling_feed,True,YES,NAV token header sanitization fixed; queued for live revalidation,2026-08-20
-finansavisen-no,adapter_ready,finansavisen_no_html,True,YES,Public finance career board; redirect issue remains under live revalidation,2026-08-20
+jobbsafari-no,adapter_ready,jobbsafari_no_html,True,YES,Server-rendered Norwegian keyword search and public vacancy details; queued for live validation,2026-08-20
+finansavisen-no,manual_fallback,finansavisen_no_html,False,NO,Unattended requests enter a Zephr redirect loop; retain as manual source,2026-08-20
 jobbnorge-no,manual_fallback,,False,NO,Client-side search and no stable unattended retrieval endpoint confirmed,2026-08-20
 karrierestart-no,manual_fallback,,False,NO,No stable machine-readable search surface confirmed,2026-08-20
 jobbank-dk,adapter_ready,jobbank_dk_html,True,YES,Browser headers and public catalogue fallback added; queued for live revalidation,2026-08-20
@@ -47,6 +48,6 @@ duunitori-fi,blocked,,False,NO,Previously returned 403 unattended,2026-08-20
 oikotie-fi,closed,,False,NO,Oikotie Tyopaikat is closed,2026-08-20
 tyomarkkinatori-fi,api_credentials,,True,YES_CREDENTIALS,Official Job Market Finland retrieval REST API requires credentials,2026-08-20
 jobly-fi,adapter_ready,jobly_fi_html,True,YES,Finnish routes and browser headers fixed; queued for live revalidation,2026-08-20
-barona-fi,adapter_ready,barona_fi_html,True,YES,Adapter now targets public Barona Careers finance catalogue; queued for live revalidation,2026-08-20
+barona-fi,adapter_ready,barona_fi_html,True,YES,Adapter targets public Barona Careers finance catalogue; queued for live revalidation,2026-08-20
 efinancialcareers,blocked_waf,,False,NO,WAF/human verification blocks unattended access,2026-08-20
 thehub,manual_fallback,thehub_html,False,NO,Manual fallback,2026-08-20

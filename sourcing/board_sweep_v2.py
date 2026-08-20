@@ -29,6 +29,29 @@ from sourcing.board_sweep import (
     translate_with_board_cache,
 )
 
+ROOT = Path(__file__).resolve().parents[1]
+AUDIT_PATH = ROOT / "data" / "job_board_access_audit.csv"
+
+
+def _registry_with_audit() -> pd.DataFrame:
+    boards = pd.read_csv(BOARDS_PATH).fillna("")
+    if not AUDIT_PATH.exists():
+        return boards
+    audit = pd.read_csv(AUDIT_PATH).fillna("")
+    if audit.empty or "board_id" not in audit.columns:
+        return boards
+    audit = audit.drop_duplicates("board_id", keep="last").set_index("board_id")
+    for target, source in (
+        ("status", "status_override"),
+        ("adapter", "adapter_override"),
+        ("enabled", "enabled_override"),
+    ):
+        if source not in audit.columns:
+            continue
+        mapped = boards["board_id"].map(audit[source]).fillna("")
+        boards[target] = mapped.where(mapped.ne(""), boards[target])
+    return boards
+
 
 def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict], list[str]]:
     adapter = str(getattr(row, "adapter", ""))
@@ -44,6 +67,14 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
         return discover_html_jsonld_board(
             "prace-cz", "Czechia", DEFAULT_QUERIES, per_query, max_details
         )
+    if adapter == "stepstone_de_html":
+        return discover_html_jsonld_board(
+            "stepstone-de", "Germany", DEFAULT_QUERIES, per_query, max_details
+        )
+    if adapter == "stellenanzeigen_de_html":
+        return discover_html_jsonld_board(
+            "stellenanzeigen-de", "Germany", DEFAULT_QUERIES, per_query, max_details
+        )
     if adapter == "stepstone_at_html":
         return discover_html_jsonld_board(
             "stepstone-at", "Austria", DEFAULT_QUERIES, per_query, max_details
@@ -51,6 +82,10 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
     if adapter == "karriere_at_html":
         return discover_html_jsonld_board(
             "karriere-at", "Austria", DEFAULT_QUERIES, per_query, max_details
+        )
+    if adapter == "willhaben_at_html":
+        return discover_html_jsonld_board(
+            "willhaben-at", "Austria", DEFAULT_QUERIES, per_query, max_details
         )
     if adapter == "jobbsafari_se_html":
         return discover_html_jsonld_board(
@@ -71,7 +106,7 @@ def main() -> None:
     parser.add_argument("--source-id", action="append", default=[])
     args = parser.parse_args()
 
-    boards = pd.read_csv(BOARDS_PATH).fillna("")
+    boards = _registry_with_audit()
     runnable = boards[
         boards["enabled"].astype(str).str.lower().eq("true")
         & boards["status"].isin(["active", "adapter_ready"])

@@ -156,10 +156,30 @@ def main() -> None:
         out = deduplicate_board_jobs(out.drop_duplicates("job_id", keep="first"))
         out = calibrate_jobs(out)
         if not args.no_translate:
-            out = translate_with_board_cache(out, Path(args.out))
+            # A zero-byte staging file can be left behind by an older failed run.
+            # Treat it as no cache rather than letting pandas raise EmptyDataError.
+            cache_path = Path(args.out)
+            if cache_path.exists() and cache_path.stat().st_size == 0:
+                out = translate_with_board_cache(out, Path("__missing_board_cache__.csv"))
+            else:
+                out = translate_with_board_cache(out, cache_path)
 
     out_path = Path(args.out)
-    out = _merge_with_existing(out, out_path).reindex(columns=STAGING_COLUMNS, fill_value="")
+    # Never let an empty/failed sweep erase previously collected roles. Also
+    # bypass the legacy merge helper when the existing staging is zero bytes.
+    if out.empty:
+        if out_path.exists() and out_path.stat().st_size > 0:
+            try:
+                out = pd.read_csv(out_path).fillna("").reindex(columns=STAGING_COLUMNS, fill_value="")
+            except (pd.errors.EmptyDataError, pd.errors.ParserError):
+                out = pd.DataFrame(columns=STAGING_COLUMNS)
+        else:
+            out = pd.DataFrame(columns=STAGING_COLUMNS)
+    elif out_path.exists() and out_path.stat().st_size > 0:
+        out = _merge_with_existing(out, out_path).reindex(columns=STAGING_COLUMNS, fill_value="")
+    else:
+        out = out.reindex(columns=STAGING_COLUMNS, fill_value="")
+
     if not out.empty:
         out = out.sort_values(["status", "calibration_score", "last_seen_at"], ascending=[True, False, False])
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -167,9 +187,12 @@ def main() -> None:
 
     runs_path = Path(args.runs)
     runs = pd.DataFrame(run_rows)
-    if runs_path.exists():
-        prior = pd.read_csv(runs_path).fillna("")
-        runs = pd.concat([prior, runs], ignore_index=True, sort=False).tail(500)
+    if runs_path.exists() and runs_path.stat().st_size > 0:
+        try:
+            prior = pd.read_csv(runs_path).fillna("")
+            runs = pd.concat([prior, runs], ignore_index=True, sort=False).tail(500)
+        except (pd.errors.EmptyDataError, pd.errors.ParserError):
+            pass
     runs.to_csv(runs_path, index=False)
     print(f"wrote {len(out)} board-sourced roles to {out_path}")
 

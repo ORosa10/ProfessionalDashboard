@@ -8,6 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 from sourcing.big4_pilot import calibrate_jobs
+from sourcing.board_academicwork import discover_academicwork
 from sourcing.board_additional_adapters import discover_additional_board
 from sourcing.board_catalog_adapters import discover_catalog_board
 from sourcing.board_html_adapters import discover_html_jsonld_board
@@ -56,6 +57,8 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
     if adapter == "findajob_uk_html": return discover_findajob(DEFAULT_QUERIES, per_query, max_details)
     if adapter == "nav_stilling_feed": return discover_nav(max_details)
     if adapter == "jobbsafari_no_html": return discover_jobbsafari_no(DEFAULT_QUERIES, per_query, max_details)
+    if adapter == "academicwork_dk_html": return discover_academicwork("academicwork-dk", max_details)
+    if adapter == "academicwork_fi_html": return discover_academicwork("academicwork-fi", max_details)
     if adapter in CATALOG_ADAPTERS: return discover_catalog_board(CATALOG_ADAPTERS[adapter], DEFAULT_QUERIES, per_query, max_details)
     html_map = {
         "jobs_cz_html": ("jobs-cz", "Czechia"), "prace_cz_html": ("prace-cz", "Czechia"),

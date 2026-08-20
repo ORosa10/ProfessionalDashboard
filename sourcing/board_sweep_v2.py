@@ -17,6 +17,7 @@ from sourcing.big4_pilot import calibrate_jobs
 from sourcing.board_additional_adapters import discover_additional_board
 from sourcing.board_html_adapters import discover_html_jsonld_board
 from sourcing.board_jobs_ch import discover_jobs_ch
+from sourcing.board_jobly_fi import discover_jobly
 from sourcing.board_sweep import (
     BOARDS_PATH,
     DEFAULT_QUERIES,
@@ -42,11 +43,7 @@ def _registry_with_audit() -> pd.DataFrame:
     if audit.empty or "board_id" not in audit.columns:
         return boards
     audit = audit.drop_duplicates("board_id", keep="last").set_index("board_id")
-    for target, source in (
-        ("status", "status_override"),
-        ("adapter", "adapter_override"),
-        ("enabled", "enabled_override"),
-    ):
+    for target, source in (("status", "status_override"), ("adapter", "adapter_override"), ("enabled", "enabled_override")):
         if source not in audit.columns:
             continue
         mapped = boards["board_id"].map(audit[source]).fillna("")
@@ -82,6 +79,8 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
         return discover_additional_board("jobup-ch", "Switzerland", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "cv_library_uk_html":
         return discover_additional_board("cv-library-uk", "United Kingdom", DEFAULT_QUERIES, per_query, max_details)
+    if adapter == "jobly_fi_html":
+        return discover_jobly(per_query, max_details)
     return [], [f"Unsupported adapter: {adapter}"]
 
 
@@ -96,10 +95,7 @@ def main() -> None:
     args = parser.parse_args()
 
     boards = _registry_with_audit()
-    runnable = boards[
-        boards["enabled"].astype(str).str.lower().eq("true")
-        & boards["status"].isin(["active", "adapter_ready"])
-    ]
+    runnable = boards[boards["enabled"].astype(str).str.lower().eq("true") & boards["status"].isin(["active", "adapter_ready"])]
     if args.source_id:
         runnable = runnable[runnable["board_id"].isin(args.source_id)]
 
@@ -112,16 +108,7 @@ def main() -> None:
         except Exception as exc:
             found, errors = [], [f"runner: {type(exc).__name__}: {exc}"]
         records.extend(found)
-        run_rows.append({
-            "run_at": started,
-            "board_id": row.board_id,
-            "country": row.country,
-            "adapter": row.adapter,
-            "registry_status": row.status,
-            "queries": len(DEFAULT_QUERIES),
-            "verified_jobs": len(found),
-            "errors": " | ".join(errors[:12]),
-        })
+        run_rows.append({"run_at": started, "board_id": row.board_id, "country": row.country, "adapter": row.adapter, "registry_status": row.status, "queries": len(DEFAULT_QUERIES), "verified_jobs": len(found), "errors": " | ".join(errors[:12])})
         print(f"{row.board_id} [{row.status}]: verified={len(found)} errors={len(errors)}")
 
     out = pd.DataFrame(records).reindex(columns=STAGING_COLUMNS, fill_value="")

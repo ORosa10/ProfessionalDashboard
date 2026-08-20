@@ -14,6 +14,16 @@ class BoardHtmlAdaptersTest(unittest.TestCase):
             ["https://www.jobs.cz/rpd/2000999999/?searchId=abc"],
         )
 
+    def test_prace_cz_extracts_offer_detail(self):
+        html = '''
+        <a href="/nabidky/praha/finance-a-ekonomika/">filter</a>
+        <a href="/firma/example/nabidka/0005884f-5d38-41a9-b84e-45f2bba8b393/?rps=2077">Group Finance Project Lead</a>
+        '''
+        self.assertEqual(
+            extract_html_search_links("prace-cz", html, 10),
+            ["https://www.prace.cz/firma/example/nabidka/0005884f-5d38-41a9-b84e-45f2bba8b393/?rps=2077"],
+        )
+
     def test_stepstone_extracts_vacancy_detail(self):
         html = '''
         <a href="/jobs/treasury">filter</a>

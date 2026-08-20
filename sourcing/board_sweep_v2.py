@@ -39,6 +39,10 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
         return discover_html_jsonld_board(
             "jobs-cz", "Czechia", DEFAULT_QUERIES, per_query, max_details
         )
+    if adapter == "prace_cz_html":
+        return discover_html_jsonld_board(
+            "prace-cz", "Czechia", DEFAULT_QUERIES, per_query, max_details
+        )
     if adapter == "stepstone_at_html":
         return discover_html_jsonld_board(
             "stepstone-at", "Austria", DEFAULT_QUERIES, per_query, max_details

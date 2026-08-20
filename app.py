@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from add_opportunity_ui import render_add_opportunity
+from board_registry_ui import render_board_registry
 from company_targeting_ui import render_company_targeting_feedback
 from people_ui import render_people
 from cost_of_living_ui import render_cost_of_living
@@ -148,7 +149,7 @@ def projects_page() -> None:
 
 
 def board_sweep_page() -> None:
-    render_board_sweep()
+    render_board_registry()
 
 
 def people_page() -> None:
@@ -166,10 +167,6 @@ def cost_of_living_page() -> None:
 def _load_company_universe() -> pd.DataFrame:
     universe = pd.read_csv(DATA_DIR / "company_universe.csv").fillna("")
     categories = pd.read_csv(DATA_DIR / "company_categories.csv").fillna("")
-    # The base universe may carry its own inline company_category column. Fold it
-    # into the categories table (lowest precedence) and drop it from the frame so
-    # it can't collide with company_categories.csv during the merge below, which
-    # would otherwise produce company_category_x/_y and crash the Companies page.
     if "company_category" in universe.columns:
         categories = pd.concat(
             [universe[["canonical_company_id", "company_category"]], categories],
@@ -209,8 +206,6 @@ def companies_page() -> None:
     universe = _load_company_universe()
     token = github_token()
     ratings_sha = None
-    # load_ratings falls back to the repo-bundled company_ratings.csv when there
-    # is no token or the GitHub read fails, so historical ratings show either way.
     try:
         saved_ratings, ratings_sha = load_ratings(token)
     except Exception:

@@ -97,3 +97,7 @@ run_at,board_id,country,adapter,queries,verified_jobs,errors,registry_status
 2026-08-20T21:38:40.077344+00:00,jobunivers-dk,Denmark,jobunivers_dk_html,9,12,,adapter_ready
 2026-08-20T21:38:40.077344+00:00,barona-fi,Finland,barona_fi_html,9,2,,active
 2026-08-20T21:38:40.077344+00:00,academicwork-fi,Finland,academicwork_fi_html,9,3,,adapter_ready
+2026-08-20T21:50:17.466563+00:00,findajob-uk,United Kingdom,findajob_uk_html,9,0,search finance: q: ReadTimeout / qwd: ReadTimeout | search treasury: q: ReadTimeout / qwd: ReadTimeout | search investment: q: ReadTimeout / qwd: no detail links | search risk: q: no detail links / qwd: ReadTimeout,adapter_ready
+2026-08-20T21:50:17.466563+00:00,jobserve-uk,United Kingdom,jobserve_uk_html,9,10,,active
+2026-08-20T21:50:17.466563+00:00,arbeidsplassen-no,Norway,nav_stilling_feed,9,4,,adapter_ready
+2026-08-20T21:50:17.466563+00:00,jobbsafari-no,Norway,jobbsafari_no_html,9,6,,active

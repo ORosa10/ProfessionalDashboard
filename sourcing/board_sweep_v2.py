@@ -18,6 +18,7 @@ from sourcing.board_additional_adapters import discover_additional_board
 from sourcing.board_html_adapters import discover_html_jsonld_board
 from sourcing.board_jobs_ch import discover_jobs_ch
 from sourcing.board_jobly_fi import discover_jobly
+from sourcing.board_nav_no import discover_nav
 from sourcing.board_official_adapters import discover_findajob, discover_mpsv
 from sourcing.board_thehub import discover_thehub
 from sourcing.board_sweep import (
@@ -63,6 +64,8 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
         return discover_mpsv(max_details)
     if adapter == "findajob_uk_html":
         return discover_findajob(DEFAULT_QUERIES, per_query, max_details)
+    if adapter == "nav_stilling_feed":
+        return discover_nav(max_details)
     if adapter == "jobs_cz_html":
         return discover_html_jsonld_board("jobs-cz", "Czechia", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "prace_cz_html":

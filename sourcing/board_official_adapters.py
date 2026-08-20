@@ -86,7 +86,7 @@ def _label_value(text: str, label: str) -> str:
 
 
 def _findajob_detail(url: str) -> dict | None:
-    response = requests.get(url, headers=HEADERS, timeout=35); response.raise_for_status(); soup = BeautifulSoup(response.text, "html.parser")
+    response = requests.get(url, headers=HEADERS, timeout=25); response.raise_for_status(); soup = BeautifulSoup(response.text, "html.parser")
     h1 = soup.find("h1"); title = _clean(h1.get_text(" ", strip=True) if h1 else "")
     if not title: return None
     text = soup.get_text("\n", strip=True); company = _label_value(text, "Company") or "Employer not stated"; location = _label_value(text, "Location") or "United Kingdom"; date_posted = _label_value(text, "Posting date")
@@ -100,36 +100,52 @@ def _findajob_detail(url: str) -> dict | None:
     return {"title": title, "company": company, "location": location, "date_posted": date_posted, "description": _clean(" ".join(description_parts))}
 
 
-def _findajob_search(query: str, per_query: int) -> requests.Response:
-    # qwd is the current server-rendered search transport; q is retained as a
-    # fallback because DWP has used both parameter names across search surfaces.
-    last_exc: Exception | None = None
-    for params in ({"qwd": query, "pp": min(50, max(10, per_query)), "lang_code": "en"}, {"q": query, "pp": min(50, max(10, per_query))}):
+def _findajob_links_for_query(query: str, per_query: int) -> tuple[list[str], list[str]]:
+    """Try both DWP search parameter variants and require actual detail links.
+
+    A 200 search page with zero /details/<id> links is not considered success;
+    this is important because DWP has used more than one search parameter name.
+    """
+    errors: list[str] = []
+    limit = min(50, max(12, per_query))
+    variants = (
+        {"qwd": query, "pp": limit, "lang_code": "en"},
+        {"q": query, "pp": limit},
+    )
+    for params in variants:
         try:
-            response = requests.get("https://findajob.dwp.gov.uk/search", params=params, headers=HEADERS, timeout=35); response.raise_for_status(); return response
+            response = requests.get("https://findajob.dwp.gov.uk/search", params=params, headers=HEADERS, timeout=15)
+            response.raise_for_status()
+            links = extract_findajob_links(response.text, limit)
+            if links:
+                return links, errors
+            errors.append(f"{next(iter(params))}: no detail links")
         except Exception as exc:
-            last_exc = exc
-    assert last_exc is not None
-    raise last_exc
+            status = getattr(getattr(exc, "response", None), "status_code", "")
+            errors.append(f"{next(iter(params))}: {type(exc).__name__}{f' {status}' if status else ''}")
+    return [], errors
 
 
 def discover_findajob(queries: list[str], per_query: int, max_details: int) -> tuple[list[dict], list[str]]:
     source_id = "findajob-uk"; now = datetime.now(timezone.utc).isoformat(); candidates: dict[str, set[str]] = {}; errors: list[str] = []
-    for query in queries:
-        try:
-            response = _findajob_search(query, per_query); links = extract_findajob_links(response.text, per_query)
-            if not links: errors.append(f"search {query}: no detail links")
-            for link in links: candidates.setdefault(link, set()).add(query)
-        except Exception as exc:
-            status = getattr(getattr(exc, "response", None), "status_code", "")
-            errors.append(f"search {query}: {type(exc).__name__}{f' {status}' if status else ''}")
+    # Broad seeds are much more reliable on DWP than issuing nine long exact
+    # phrases. C performs the semantic ranking downstream, so broad recall is OK.
+    seeds = ["finance", "treasury", "investment", "risk"]
+    for query in seeds:
+        links, search_errors = _findajob_links_for_query(query, per_query)
+        if not links:
+            errors.append(f"search {query}: {' / '.join(search_errors)}")
+        for link in links:
+            candidates.setdefault(link, set()).add(query)
+        if len(candidates) >= max_details:
+            break
     jobs: list[dict] = []
     for url, matched in list(candidates.items())[:max_details]:
         try:
             item = _findajob_detail(url)
             if not item: raise ValueError("detail parse failed")
         except Exception as exc:
-            errors.append(f"detail {url.rsplit('/', 1)[-1]}: {type(exc).__name__}"); continue
+            errors.append(f"detail {url.rstrip('/').rsplit('/', 1)[-1]}: {type(exc).__name__}"); continue
         if not _relevant_title(item["title"]): continue
         external_id = url.rstrip("/").rsplit("/", 1)[-1]
         jobs.append({"job_id": _stable_id(source_id, external_id, url), "canonical_company_id": "", "company": item["company"], "title": item["title"], "description": item["description"], "description_en": item["description"], "translation_status": "original-en", "market": "United Kingdom", "location": item["location"], "priority_locations": item["location"], "job_url": url, "source_url": url, "source_id": source_id, "date_posted": item["date_posted"], "discovered_at": now, "last_seen_at": now, "relevance_score": len(matched), "matched_terms": "; ".join(sorted(matched)), "verification": "official DWP Find a job vacancy detail", "status": "Open", "alternate_job_urls": "", "duplicate_count": 0, "calibration_score": "", "calibration_note": ""})

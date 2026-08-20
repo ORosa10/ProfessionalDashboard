@@ -40,4 +40,4 @@ tyomarkkinatori-fi,api_credentials,,True,Official Job Market Finland retrieval A
 jobly-fi,adapter_ready,jobly_fi_html,True,Server-rendered finance category and stable /en/job/<slug>-<id> details verified; adapter implemented and queued for live validation,2026-08-20
 barona-fi,web_verified,,True,Public finance/expert vacancy sections verified; useful supplementary employer/recruiter source,2026-08-20
 efinancialcareers,blocked_waf,,False,High relevance but WAF/human verification blocks unattended GitHub Actions access,2026-08-20
-thehub,web_verified,,True,Nordic startup/scale-up board is publicly readable; useful exploration source after transport test,2026-08-20
+thehub,adapter_ready,thehub_html,True,Server-rendered Nordic startup job catalogue and stable /jobs/<id> details verified; exploration adapter queued for live validation,2026-08-20

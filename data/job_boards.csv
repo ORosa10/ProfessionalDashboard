@@ -1,5 +1,5 @@
 board_id,country,name,base_url,finance_specific,adapter,enabled,status,notes
-jobs-cz,Czechia,Jobs.cz,https://www.jobs.cz/,False,,True,web_verified,Public keyword/location search pages verified and indexable; strong next HTML adapter candidate for Czechia
+jobs-cz,Czechia,Jobs.cz,https://www.jobs.cz/,False,jobs_cz_html,True,adapter_ready,Public keyword/location search pages verified and indexable; HTML search + JobPosting JSON-LD adapter added and ready for GitHub Actions validation
 prace-cz,Czechia,Prace.cz,https://www.prace.cz/,False,,True,candidate,Large Czech Alma Career board; useful complementary employer coverage
 startupjobs-cz,Czechia,StartupJobs,https://www.startupjobs.cz/,False,,True,candidate,Czech startup and scale-up board; useful exploration source for second-tier firms
 cocuma-cz,Czechia,Cocuma,https://www.cocuma.cz/jobs/,False,,True,candidate,Curated Czech employer/job platform; smaller but useful differentiated company set
@@ -10,7 +10,7 @@ stellenanzeigen-de,Germany,Stellenanzeigen.de,https://www.stellenanzeigen.de/,Fa
 jobware-de,Germany,Jobware,https://www.jobware.de/,False,,True,candidate,German professional/specialist board; potentially good for experienced finance roles
 karriere-at,Austria,karriere.at,https://www.karriere.at/,False,,True,candidate,Primary Austrian commercial board; important source for Vienna and second-tier Austrian employers
 ams-at,Austria,AMS Jobs,https://www.ams.at/arbeitsuchende,False,,True,candidate,Official Austrian employment service; broad national coverage and strong second-tier discovery potential
-stepstone-at,Austria,StepStone.at,https://www.stepstone.at/,False,,True,web_verified,Public finance/risk keyword and Vienna location result pages verified and readable; strong HTML search adapter candidate
+stepstone-at,Austria,StepStone.at,https://www.stepstone.at/,False,stepstone_at_html,True,adapter_ready,Public search/result and vacancy pages verified; HTML search + JobPosting JSON-LD adapter added and ready for GitHub Actions validation
 willhaben-at,Austria,willhaben Jobs,https://www.willhaben.at/jobs/,False,,True,candidate,Large Austrian marketplace job section; useful broader employer coverage if unattended access proves stable
 jobs-ch,Switzerland,jobs.ch,https://www.jobs.ch/,False,,True,candidate,Primary Swiss board; strong Zurich/Basel/Zug professional coverage
 jobscout24-ch,Switzerland,JobScout24.ch,https://www.jobscout24.ch/,False,,True,candidate,Large Swiss job board; complementary employer coverage
@@ -22,7 +22,7 @@ totaljobs-uk,United Kingdom,Totaljobs,https://www.totaljobs.com/,False,,True,can
 cv-library-uk,United Kingdom,CV-Library,https://www.cv-library.co.uk/,False,,True,candidate,Major UK job board; useful independent source alongside Totaljobs/Reed/Indeed
 cityjobs-uk,United Kingdom,CityJobs,https://www.cityjobs.com/,True,,True,candidate,UK finance/accounting-oriented board; potentially high relevance for G semantic search
 platsbanken-se,Sweden,Platsbanken,https://arbetsformedlingen.se/platsbanken/,False,jobtech_api,True,active,Official JobSearch API; CC0 and no registration required; existing working G adapter
-jobbsafari-se,Sweden,JobbSafari,https://jobbsafari.se/,False,,True,web_verified,Public individual vacancies and category/listing pages verified and readable; current finance and fixed-income roles visible; strong second HTML source after Platsbanken
+jobbsafari-se,Sweden,JobbSafari,https://jobbsafari.se/,False,,True,web_verified,Public individual vacancies and category/listing pages verified and readable; current finance and fixed-income roles visible; search/discovery adapter still to validate
 jobbland-se,Sweden,Jobbland,https://jobbland.se/,False,,True,candidate,Swedish job search platform; useful complementary employer coverage
 ledigajobb-se,Sweden,LedigaJobb.se,https://ledigajobb.se/,False,,True,candidate,Swedish national vacancy aggregator; candidate for additional recall after access testing
 finn-no,Norway,FINN Jobb,https://www.finn.no/job/search,False,,True,candidate,Primary Norwegian commercial job marketplace with very broad employer coverage
@@ -30,7 +30,7 @@ arbeidsplassen-no,Norway,Arbeidsplassen NAV,https://arbeidsplassen.nav.no/,False
 jobbnorge-no,Norway,Jobbnorge,https://www.jobbnorge.no/search/en,False,,True,candidate,Norwegian recruitment/job portal; strong institutional/public/employer coverage and searchable listings
 karrierestart-no,Norway,Karrierestart,https://karrierestart.no/,False,,True,candidate,Norwegian career/job portal; useful supplementary source for professional roles
 jobindex-dk,Denmark,Jobindex.dk,https://www.jobindex.dk/,False,,True,candidate,Primary Danish commercial board
-jobnet-dk,Denmark,Jobnet,https://jobnet.dk/,False,,True,web_verified,Official Danish source; public server-rendered vacancy detail pages are accessible through the Workindenmark/Jobnet surface; next step is search/discovery adapter
+jobnet-dk,Denmark,Jobnet,https://jobnet.dk/,False,,True,web_verified,Official Danish source; public server-rendered vacancy detail pages are accessible through the Workindenmark/Jobnet surface; search/discovery adapter still to validate
 jobfinder-dk,Denmark,Jobfinder,https://www.jobfinder.dk/,False,,True,candidate,Danish professional/specialist job portal; useful differentiated source
 ofir-dk,Denmark,Ofir,https://www.ofir.dk/,False,,True,candidate,Danish job board; complementary national coverage
 jobscopenhagen-dk,Denmark,Jobs in Copenhagen,https://www.jobsincopenhagen.com/,False,,True,candidate,English-language Copenhagen-focused board; useful for language-feasible roles

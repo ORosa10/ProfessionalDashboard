@@ -8,7 +8,7 @@ stepstone-de,Germany,StepStone.de,https://www.stepstone.de/,False,,True,candidat
 indeed-de,Germany,Indeed Germany,https://de.indeed.com/,False,,True,candidate,Large aggregator; broad recall but likely requires tighter prefiltering and access testing
 stellenanzeigen-de,Germany,Stellenanzeigen.de,https://www.stellenanzeigen.de/,False,,True,candidate,German board with broad employer coverage; useful second-tier source
 jobware-de,Germany,Jobware,https://www.jobware.de/,False,,True,candidate,German professional/specialist board; potentially good for experienced finance roles
-karriere-at,Austria,karriere.at,https://www.karriere.at/,False,,True,candidate,Primary Austrian commercial board; important source for Vienna and second-tier Austrian employers
+karriere-at,Austria,karriere.at,https://www.karriere.at/,False,karriere_at_html,True,adapter_ready,Public keyword result pages and stable /jobs/<numeric-id> vacancies verified; HTML search + JobPosting JSON-LD adapter ready for GitHub Actions validation
 ams-at,Austria,AMS Jobs,https://www.ams.at/arbeitsuchende,False,,True,candidate,Official Austrian employment service; broad national coverage and strong second-tier discovery potential
 stepstone-at,Austria,StepStone.at,https://www.stepstone.at/,False,stepstone_at_html,True,adapter_ready,Public search/result and vacancy pages verified; HTML search + JobPosting JSON-LD adapter added and ready for GitHub Actions validation
 willhaben-at,Austria,willhaben Jobs,https://www.willhaben.at/jobs/,False,,True,candidate,Large Austrian marketplace job section; useful broader employer coverage if unattended access proves stable

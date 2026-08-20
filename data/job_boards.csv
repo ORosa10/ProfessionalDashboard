@@ -22,7 +22,7 @@ totaljobs-uk,United Kingdom,Totaljobs,https://www.totaljobs.com/,False,,True,can
 cv-library-uk,United Kingdom,CV-Library,https://www.cv-library.co.uk/,False,,True,candidate,Major UK job board; useful independent source alongside Totaljobs/Reed/Indeed
 cityjobs-uk,United Kingdom,CityJobs,https://www.cityjobs.com/,True,,True,candidate,UK finance/accounting-oriented board; potentially high relevance for G semantic search
 platsbanken-se,Sweden,Platsbanken,https://arbetsformedlingen.se/platsbanken/,False,jobtech_api,True,active,Official JobSearch API; CC0 and no registration required; existing working G adapter
-jobbsafari-se,Sweden,JobbSafari,https://jobbsafari.se/,False,,True,web_verified,Public individual vacancies and category/listing pages verified and readable; current finance and fixed-income roles visible; search/discovery adapter still to validate
+jobbsafari-se,Sweden,JobbSafari,https://jobbsafari.se/,False,jobbsafari_se_html,True,adapter_ready,Public search URL and individual vacancies verified; HTML search + JobPosting JSON-LD adapter added and ready for GitHub Actions validation
 jobbland-se,Sweden,Jobbland,https://jobbland.se/,False,,True,candidate,Swedish job search platform; useful complementary employer coverage
 ledigajobb-se,Sweden,LedigaJobb.se,https://ledigajobb.se/,False,,True,candidate,Swedish national vacancy aggregator; candidate for additional recall after access testing
 finn-no,Norway,FINN Jobb,https://www.finn.no/job/search,False,,True,candidate,Primary Norwegian commercial job marketplace with very broad employer coverage

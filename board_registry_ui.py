@@ -83,6 +83,21 @@ def _table(frame: pd.DataFrame) -> None:
     )
 
 
+def _country_summary(boards: pd.DataFrame, countries: list[str]) -> pd.DataFrame:
+    rows = []
+    for country in countries:
+        frame = boards[boards["country"].eq(country)]
+        rows.append({
+            "Country": country,
+            "Active": int(frame["status"].eq("active").sum()),
+            "Scrapeable": int(frame["scrapeability"].eq("YES").sum()),
+            "Needs credentials": int(frame["scrapeability"].eq("YES_CREDENTIALS").sum()),
+            "Manual / no": int(frame["scrapeability"].eq("NO").sum()),
+            "Total sources": len(frame),
+        })
+    return pd.DataFrame(rows)
+
+
 def render_board_registry() -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title("Country / Board Sweep")
@@ -105,12 +120,29 @@ def render_board_registry() -> None:
     scrape_yes = int(boards["scrapeability"].eq("YES").sum())
     scrape_creds = int(boards["scrapeability"].eq("YES_CREDENTIALS").sum())
     scrape_no = int(boards["scrapeability"].eq("NO").sum())
-    ran = int(boards["last_run"].ne("").sum())
+    active = int(boards["status"].eq("active").sum())
 
     m1, m2, m3, m4, m5 = st.columns(5)
-    m1.metric("Countries", len(countries)); m2.metric("Board sources", len(boards)); m3.metric("Scrapeable", scrape_yes)
-    m4.metric("Needs credentials", scrape_creds); m5.metric("Manual / no", scrape_no)
+    m1.metric("Countries", len(countries)); m2.metric("Board sources", len(boards)); m3.metric("Active now", active)
+    m4.metric("Scrapeable", scrape_yes); m5.metric("Needs credentials", scrape_creds)
     st.code("G BOARD → ROLE + COMPANY → A COMPANY CONTEXT → C SEMANTIC FIT → JOBS INBOX")
+
+    st.subheader("Coverage by country")
+    st.dataframe(
+        _country_summary(boards, countries),
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "Active": st.column_config.NumberColumn("Active now", format="%d"),
+            "Scrapeable": st.column_config.NumberColumn("Scrapeable", format="%d"),
+            "Needs credentials": st.column_config.NumberColumn("Credentials", format="%d"),
+            "Manual / no": st.column_config.NumberColumn("Manual / no", format="%d"),
+            "Total sources": st.column_config.NumberColumn("Total", format="%d"),
+        },
+    )
+    st.caption(
+        "Active now = already proven production adapter. Scrapeable = technically usable source, including adapters still being activated."
+    )
 
     f1, f2, f3 = st.columns(3)
     selected_countries = f1.multiselect("Countries", countries, default=countries)
@@ -135,8 +167,17 @@ def render_board_registry() -> None:
         rows = filtered[filtered["country"].eq(country)].copy()
         if rows.empty:
             continue
+        all_country = boards[boards["country"].eq(country)]
+        active_country = int(all_country["status"].eq("active").sum())
+        scrape_country = int(all_country["scrapeability"].eq("YES").sum())
+        creds_country = int(all_country["scrapeability"].eq("YES_CREDENTIALS").sum())
         rows = rows.sort_values(["_status_order", "finance_specific", "name"], ascending=[True, False, True])
-        with st.expander(f"{country} — {len(rows)} sources", expanded=True):
+        label = (
+            f"{country} — {active_country} active / {scrape_country} scrapeable"
+            + (f" / {creds_country} credentials" if creds_country else "")
+            + f" / {len(all_country)} sources"
+        )
+        with st.expander(label, expanded=True):
             _table(rows)
 
     multi = boards[boards["country"].eq("Multi-region")].sort_values(["_status_order", "name"])

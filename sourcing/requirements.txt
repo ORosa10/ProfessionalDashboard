@@ -1,4 +1,3 @@
-# Only installed by sourcing workflows that use the "llm" adapter
-# (sourcing/llm_fallback.py), never by Streamlit Cloud -- keeps the live app's
-# own requirements.txt light and avoids installing a browser binary there.
+# Extra dependencies used only by sourcing workflows, never by Streamlit Cloud.
 playwright>=1.40,<2
+ijson>=3.3,<4

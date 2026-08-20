@@ -10,7 +10,7 @@ indeed-de,manual_fallback,,False,High-volume aggregator with unstable unattended
 stellenanzeigen-de,adapter_ready,stellenanzeigen_de_html,True,Server-rendered keyword pages and stable job detail links verified; queued for live/terms validation,2026-08-20
 jobware-de,manual_fallback,,False,Job search requires JavaScript and no stable unattended transport confirmed,2026-08-20
 karriere-at,adapter_ready,karriere_at_html,True,Public keyword result pages and stable numeric vacancy URLs verified; live/terms validation pending,2026-08-20
-ams-at,web_verified,,True,Official AMS alle jobs is the preferred Austrian source; public search is free/no-registration but retrieval endpoint still needs adapter research,2026-08-20
+ams-at,manual_fallback,,False,AMS alle jobs terms explicitly allow only personal manual job search and prohibit automated mechanisms for using listed vacancy data,2026-08-20
 stepstone-at,manual_fallback,stepstone_at_html,False,Adapter returned 24 roles in Actions but StepStone terms prohibit scraping/automated content capture; removed from scheduler,2026-08-20
 willhaben-at,web_verified,willhaben_at_html,False,Technically parseable commercial source; leave unscheduled until terms explicitly support automated retrieval,2026-08-20
 arbeit-jobroom-ch,web_verified,,True,Official Swiss Job-Room portal added; Jobs API is for publication and public retrieval transport still needs research,2026-08-20
@@ -29,7 +29,7 @@ jobbsafari-se,manual_fallback,jobbsafari_se_html,False,Adapter returned 27 roles
 jobbland-se,web_verified,,True,Large server-rendered catalogue; lower automation priority than official Platsbanken and terms still need confirmation,2026-08-20
 ledigajobb-se,web_verified,,True,Server-rendered Swedish catalogue; transport/terms still to validate,2026-08-20
 finn-no,manual_fallback,,False,FINN explicitly prohibits regular systematic collection without written permission,2026-08-20
-arbeidsplassen-no,api_credentials,,True,Official NAV vacancy feed confirmed; consumer token required for stable unattended use,2026-08-20
+arbeidsplassen-no,adapter_ready,nav_stilling_feed,True,Official NAV Job Vacancy Feed permits API use and analytics/republishing; runtime public-token adapter implemented for validation while private token is recommended for stable production,2026-08-20
 jobbnorge-no,web_verified,,True,Public server-rendered vacancy search; candidate complement to NAV after terms check,2026-08-20
 karrierestart-no,manual_fallback,,False,No stable machine-readable search surface confirmed,2026-08-20
 jobindex-dk,manual_fallback,,False,Major Danish board but unattended search not reliably accessible,2026-08-20

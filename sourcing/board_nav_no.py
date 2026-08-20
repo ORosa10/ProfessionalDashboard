@@ -27,10 +27,19 @@ def _relevant_title(value: object) -> bool:
 
 
 def _sanitize_token(value: object) -> str:
-    token = str(value or "").strip().strip('"').strip("'")
+    """Extract the signed JWT from NAV's human-readable public-token response."""
+    raw = str(value or "").strip().strip('"').strip("'")
+    # /api/publicToken currently returns text like:
+    #   Current public token for Nav Job Vacancy Feed:\n<JWT>
+    # rather than a bare token. Prefer extracting a JWT-shaped value so the
+    # descriptive prefix never leaks into the Authorization header.
+    jwt = re.search(r"([A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)", raw)
+    if jwt:
+        return jwt.group(1)
+    token = raw
+    token = re.sub(r"(?i)^authorization\s*:\s*bearer\s+", "", token).strip()
+    token = re.sub(r"(?i)^bearer\s+", "", token).strip()
     token = re.sub(r"\s+", "", token)
-    if token.lower().startswith("bearer"):
-        token = token[6:].lstrip(":")
     if not token:
         raise ValueError("NAV token empty")
     return token

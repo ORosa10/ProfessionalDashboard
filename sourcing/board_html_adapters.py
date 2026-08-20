@@ -20,11 +20,11 @@ HEADERS = {
 }
 
 FINANCE_TITLE_MARKERS = (
-    "treasury", "fp&a", "finance", "financial", "finanz", "controller",
+    "treasury", "fp&a", "finance", "financial", "finans", "finanz", "controller",
     "controlling", "corporate finance", "corporate development", "m&a",
-    "valuation", "bewertung", "investment", "portfolio", "risk", "risiko",
-    "restructuring", "turnaround", "liquidity", "liquidität", "cash management",
-    "transaction", "private equity", "asset management",
+    "valuation", "bewertung", "investment", "investering", "portfolio", "risk", "risiko",
+    "restructuring", "turnaround", "liquidity", "likviditet", "liquidität", "cash management",
+    "transaction", "private equity", "asset management", "förvaltare",
 )
 
 
@@ -55,6 +55,9 @@ def extract_html_search_links(source_id: str, html: str, limit: int) -> list[str
     elif source_id == "stepstone-at":
         base = "https://www.stepstone.at"
         predicates = ("/stellenangebote--",)
+    elif source_id == "jobbsafari-se":
+        base = "https://jobbsafari.se"
+        predicates = ("/jobb/",)
     else:
         raise ValueError(f"Unsupported HTML board source: {source_id}")
 
@@ -70,7 +73,7 @@ def extract_html_search_links(source_id: str, html: str, limit: int) -> list[str
             data_attrs = " ".join(f"{k}={v}" for k, v in anchor.attrs.items())
             if "job" not in (classes + " " + data_attrs).lower():
                 continue
-        full = urljoin(base, href.split("#", 1)[0])
+        full = urljoin(base, href.split("#", 1)[0].split("?utm_", 1)[0])
         if full not in found:
             found.append(full)
         if len(found) >= limit:
@@ -129,6 +132,8 @@ def _search_url(source_id: str, query: str) -> str:
     if source_id == "stepstone-at":
         slug = re.sub(r"[^a-z0-9]+", "-", query.lower()).strip("-")
         return f"https://www.stepstone.at/jobs/{slug}"
+    if source_id == "jobbsafari-se":
+        return "https://jobbsafari.se/lediga-jobb?sok=" + quote(query)
     raise ValueError(f"Unsupported HTML board source: {source_id}")
 
 

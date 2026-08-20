@@ -14,12 +14,12 @@ stepstone-at,active,stepstone_at_html,True,Live GitHub Actions validation return
 willhaben-at,web_verified,,True,Server-rendered keyword result pages and stable /jobs/job/... detail URLs verified; adapter code exists but scheduled use remains disabled pending terms review,2026-08-20
 jobs-ch,adapter_ready,jobs_ch_html,True,Public term search and stable UUID vacancy detail pages verified; dedicated adapter implemented,2026-08-20
 jobscout24-ch,blocked,,False,Direct unattended fetch currently returns 403; keep as fallback only,2026-08-20
-jobup-ch,web_verified,,True,Public server-rendered finance/category pages verified; keyword search/detail transport still to validate,2026-08-20
+jobup-ch,adapter_ready,jobup_ch_html,True,Public term search and stable UUID vacancy details verified; adapter implemented and queued for live validation,2026-08-20
 indeed-ch,manual_fallback,,False,Readable in browser but aggregator/anti-bot characteristics make it unsuitable as primary scheduled source,2026-08-20
 reed-uk,blocked,,False,Previously returned 403 unattended; keep as manual/web fallback,2026-08-20
 indeed-uk,manual_fallback,,False,Readable in browser but high-volume aggregator and unstable unattended access; fallback only,2026-08-20
 totaljobs-uk,manual_fallback,,False,Major board but unattended web fetch is inconsistent; no stable adapter confirmed,2026-08-20
-cv-library-uk,web_verified,,True,Large public server-rendered board verified; search/detail URL transport needs adapter test,2026-08-20
+cv-library-uk,adapter_ready,cv_library_uk_html,True,Server-rendered keyword pages and stable /job/<id>/<slug> details verified; adapter implemented and queued for live validation,2026-08-20
 cityjobs-uk,manual_fallback,,False,Finance-focused but unattended fetch is inconsistent; retain as high-relevance manual fallback,2026-08-20
 platsbanken-se,active,jobtech_api,True,Official open JobSearch API; production adapter working,2026-08-20
 jobbsafari-se,active,jobbsafari_se_html,True,Live GitHub Actions validation returned 27 verified roles; promoted to production,2026-08-20

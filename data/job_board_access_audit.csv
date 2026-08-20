@@ -1,46 +1,46 @@
-board_id,status_override,adapter_override,enabled_override,audit_note,audited_at
-mpsv-open-data-cz,adapter_ready,mpsv_open_data,True,Official daily MPSV/ÚP open-data dataset; streaming full-dataset adapter implemented and queued for live validation,2026-08-20
-jobs-cz,adapter_ready,jobs_cz_html,True,Public jobseeker search is intended use and no explicit automation ban was found in the accessible product terms; keep validating but prefer official MPSV source,2026-08-20
-prace-cz,adapter_ready,prace_cz_html,True,Public jobseeker search is intended use and no explicit automation ban was found in the accessible product terms; keep validating but prefer official MPSV source,2026-08-20
-startupjobs-cz,web_verified,,True,Public site is readable/searchable; transport and terms still need confirmation before scheduled adapter,2026-08-20
-cocuma-cz,web_verified,,True,Server-rendered paginated vacancy catalogue verified; terms/transport still need confirmation before scheduler,2026-08-20
-arbeitsagentur-de,active,arbeitsagentur_html,True,Existing production adapter working,2026-08-20
-stepstone-de,manual_fallback,stepstone_de_html,False,StepStone terms prohibit scraping/similar automated content capture; adapter kept only for non-scheduled diagnostics,2026-08-20
-indeed-de,manual_fallback,,False,High-volume aggregator with unstable unattended access; fallback only,2026-08-20
-stellenanzeigen-de,adapter_ready,stellenanzeigen_de_html,True,Server-rendered keyword pages and stable job detail links verified; queued for live/terms validation,2026-08-20
-jobware-de,manual_fallback,,False,Job search requires JavaScript and no stable unattended transport confirmed,2026-08-20
-karriere-at,adapter_ready,karriere_at_html,True,Public keyword result pages and stable numeric vacancy URLs verified; live/terms validation pending,2026-08-20
-ams-at,manual_fallback,,False,AMS alle jobs terms explicitly allow only personal manual job search and prohibit automated mechanisms for using listed vacancy data,2026-08-20
-stepstone-at,manual_fallback,stepstone_at_html,False,Adapter returned 24 roles in Actions but StepStone terms prohibit scraping/automated content capture; removed from scheduler,2026-08-20
-willhaben-at,web_verified,willhaben_at_html,False,Technically parseable commercial source; leave unscheduled until terms explicitly support automated retrieval,2026-08-20
-arbeit-jobroom-ch,web_verified,,True,Official Swiss Job-Room portal added; Jobs API is for publication and public retrieval transport still needs research,2026-08-20
-jobs-ch,manual_fallback,jobs_ch_html,False,JobCloud terms explicitly prohibit crawlers/scrapers/data extraction and automated access,2026-08-20
-jobscout24-ch,blocked,,False,JobCloud automated access prohibited; direct unattended fetch also returned 403,2026-08-20
-jobup-ch,manual_fallback,jobup_ch_html,False,JobCloud terms explicitly prohibit crawlers/scrapers/data extraction and automated access,2026-08-20
-indeed-ch,manual_fallback,,False,Aggregator/anti-bot characteristics make it unsuitable as primary scheduled source,2026-08-20
-findajob-uk,adapter_ready,findajob_uk_html,True,Official DWP Find a job source; server-rendered search/detail adapter implemented and queued for live validation,2026-08-20
-reed-uk,blocked,,False,Previously returned 403 unattended; fallback only,2026-08-20
-indeed-uk,manual_fallback,,False,Large aggregator with unstable unattended access; fallback only,2026-08-20
-totaljobs-uk,manual_fallback,,False,Major board but unattended search is inconsistent; fallback only,2026-08-20
-cv-library-uk,manual_fallback,cv_library_uk_html,False,Technically parseable but terms restrict use/copying to normal employment/recruitment purposes; not scheduled,2026-08-20
-cityjobs-uk,manual_fallback,,False,Finance-focused but unattended fetch is inconsistent; high-relevance manual fallback,2026-08-20
-platsbanken-se,active,jobtech_api,True,Official open JobSearch API; CC0/no registration; production adapter working,2026-08-20
-jobbsafari-se,manual_fallback,jobbsafari_se_html,False,Adapter returned 27 roles but terms explicitly prohibit scraping/systematic copying; removed from scheduler,2026-08-20
-jobbland-se,web_verified,,True,Large server-rendered catalogue; lower automation priority than official Platsbanken and terms still need confirmation,2026-08-20
-ledigajobb-se,web_verified,,True,Server-rendered Swedish catalogue; transport/terms still to validate,2026-08-20
-finn-no,manual_fallback,,False,FINN explicitly prohibits regular systematic collection without written permission,2026-08-20
-arbeidsplassen-no,adapter_ready,nav_stilling_feed,True,Official NAV Job Vacancy Feed permits API use and analytics/republishing; runtime public-token adapter implemented for validation while private token is recommended for stable production,2026-08-20
-jobbnorge-no,web_verified,,True,Public server-rendered vacancy search; candidate complement to NAV after terms check,2026-08-20
-karrierestart-no,manual_fallback,,False,No stable machine-readable search surface confirmed,2026-08-20
-jobindex-dk,manual_fallback,,False,Major Danish board but unattended search not reliably accessible,2026-08-20
-jobnet-dk,api_credentials,,True,Official JobannonceService supports importing Jobnet vacancies but requires onboarding/certificate access,2026-08-20
-jobfinder-dk,manual_fallback,,False,Specialist Danish board; unattended access not confirmed,2026-08-20
-ofir-dk,manual_fallback,,False,Danish board; unattended access not confirmed,2026-08-20
-jobscopenhagen-dk,manual_fallback,,False,English-language Copenhagen niche source; fallback only,2026-08-20
-duunitori-fi,blocked,,False,Previously returned 403 to unattended access,2026-08-20
-oikotie-fi,closed,,False,Oikotie Työpaikat is closed,2026-08-20
-tyomarkkinatori-fi,api_credentials,,True,Official Job Market Finland retrieval REST API confirmed; KEHA onboarding/credentials required,2026-08-20
-jobly-fi,adapter_ready,jobly_fi_html,True,Server-rendered finance category and stable vacancy details; live validation pending and no retrieval permission/ban confirmed yet,2026-08-20
-barona-fi,web_verified,,True,Public finance/expert vacancy sections; supplementary source pending terms/transport review,2026-08-20
-efinancialcareers,blocked_waf,,False,High-relevance finance index but WAF/human verification blocks unattended GitHub Actions access,2026-08-20
-thehub,manual_fallback,thehub_html,False,General terms allow personal viewing/printing but restrict saving/copying/reproducing content without consent; not scheduled,2026-08-20
+board_id,status_override,adapter_override,enabled_override,scrapeability,audit_note,audited_at
+mpsv-open-data-cz,adapter_ready,mpsv_open_data,True,YES,Official daily MPSV/ÚP open-data dataset; streaming full-dataset adapter implemented and queued for live validation,2026-08-20
+jobs-cz,adapter_ready,jobs_cz_html,True,YES,Public server-rendered search and vacancy pages; adapter exists and is being validated,2026-08-20
+prace-cz,adapter_ready,prace_cz_html,True,YES,Public finance/category listings and stable vacancy detail URLs; adapter exists and is being validated,2026-08-20
+startupjobs-cz,web_verified,,True,YES,Server-rendered Finance category and stable /nabidka/<id>/<slug> vacancy pages verified; technically scrapeable,2026-08-20
+cocuma-cz,web_verified,,True,YES,Server-rendered paginated catalogue and stable /job/<slug>/<id>/ details verified; technically scrapeable,2026-08-20
+arbeitsagentur-de,active,arbeitsagentur_html,True,YES,Existing production adapter working,2026-08-20
+stepstone-de,manual_fallback,stepstone_de_html,False,NO,Technically parseable but StepStone terms prohibit scraping/similar automated content capture; manual only,2026-08-20
+indeed-de,manual_fallback,,False,NO,High-volume aggregator with unstable unattended access/anti-bot behaviour; manual fallback only,2026-08-20
+stellenanzeigen-de,adapter_ready,stellenanzeigen_de_html,True,YES,Server-rendered keyword pages and stable /job/ detail links verified; adapter ready,2026-08-20
+jobware-de,manual_fallback,,False,NO,Job search requires client-side JavaScript and no stable unattended transport was confirmed,2026-08-20
+karriere-at,adapter_ready,karriere_at_html,True,YES,Public server-rendered keyword result pages and stable numeric vacancy URLs; adapter exists,2026-08-20
+ams-at,manual_fallback,,False,NO,AMS alle jobs terms explicitly restrict use to manual personal search and prohibit automated mechanisms,2026-08-20
+stepstone-at,manual_fallback,stepstone_at_html,False,NO,Adapter worked technically but StepStone terms prohibit scraping/automated content capture; manual only,2026-08-20
+willhaben-at,web_verified,willhaben_at_html,False,YES,Server-rendered search and stable job detail links are technically scrapeable; adapter code exists but source is kept unscheduled pending acceptable automated-use terms,2026-08-20
+arbeit-jobroom-ch,manual_fallback,,False,NO,Public portal is readable but search/results depend on client-side application transport; no stable unattended retrieval path confirmed,2026-08-20
+jobs-ch,manual_fallback,jobs_ch_html,False,NO,JobCloud terms prohibit crawlers/scrapers/data extraction and automated access,2026-08-20
+jobscout24-ch,blocked,,False,NO,Direct unattended access returned 403 and JobCloud automated access is prohibited,2026-08-20
+jobup-ch,manual_fallback,jobup_ch_html,False,NO,JobCloud terms prohibit crawlers/scrapers/data extraction and automated access,2026-08-20
+indeed-ch,manual_fallback,,False,NO,Aggregator/anti-bot characteristics make unattended scraping unreliable,2026-08-20
+findajob-uk,adapter_ready,findajob_uk_html,True,YES,Official DWP Find a job service has server-rendered search/detail pages; adapter implemented,2026-08-20
+reed-uk,blocked,,False,NO,Previously returned 403 to unattended access,2026-08-20
+indeed-uk,manual_fallback,,False,NO,Large aggregator with unstable unattended access/anti-bot behaviour,2026-08-20
+totaljobs-uk,manual_fallback,,False,NO,Unattended search surface is inconsistent and no stable scraper path was confirmed,2026-08-20
+cv-library-uk,manual_fallback,cv_library_uk_html,False,NO,Technically parseable but terms restrict automated copying/use; manual fallback,2026-08-20
+cityjobs-uk,manual_fallback,,False,NO,Finance-focused but unattended fetch/search is inconsistent; no stable scraper path confirmed,2026-08-20
+platsbanken-se,active,jobtech_api,True,YES,Official open JobSearch API; production adapter working,2026-08-20
+jobbsafari-se,manual_fallback,jobbsafari_se_html,False,NO,Adapter worked technically but site terms explicitly prohibit scraping/systematic copying,2026-08-20
+jobbland-se,web_verified,,True,YES,Large server-rendered catalogue with category and vacancy links; technically scrapeable,2026-08-20
+ledigajobb-se,web_verified,,True,YES,Large server-rendered catalogue with dedicated finance/banking categories and job links; technically scrapeable,2026-08-20
+finn-no,manual_fallback,,False,NO,FINN explicitly prohibits regular systematic collection without written permission,2026-08-20
+arbeidsplassen-no,adapter_ready,nav_stilling_feed,True,YES,Official NAV Job Vacancy Feed supports API use; runtime public-token adapter implemented for validation,2026-08-20
+jobbnorge-no,manual_fallback,,False,NO,Search UI requires client-side JavaScript and no stable unattended retrieval endpoint was confirmed,2026-08-20
+karrierestart-no,manual_fallback,,False,NO,No stable machine-readable or server-rendered search surface confirmed,2026-08-20
+jobindex-dk,manual_fallback,,False,NO,Major board but unattended search surface is not reliably accessible in current tests,2026-08-20
+jobnet-dk,api_credentials,,True,YES_CREDENTIALS,Official JobannonceService can provide structured vacancy retrieval but requires onboarding/certificate access,2026-08-20
+jobfinder-dk,manual_fallback,,False,NO,No stable unattended retrieval path confirmed,2026-08-20
+ofir-dk,manual_fallback,,False,NO,No stable unattended retrieval path confirmed,2026-08-20
+jobscopenhagen-dk,manual_fallback,,False,NO,Useful niche board but no stable unattended retrieval path confirmed,2026-08-20
+duunitori-fi,blocked,,False,NO,Previously returned 403 to unattended access,2026-08-20
+oikotie-fi,closed,,False,NO,Oikotie Työpaikat is closed,2026-08-20
+tyomarkkinatori-fi,api_credentials,,True,YES_CREDENTIALS,Official Job Market Finland retrieval REST API exists but requires KEHA onboarding/credentials,2026-08-20
+jobly-fi,adapter_ready,jobly_fi_html,True,YES,Server-rendered finance category and stable vacancy detail URLs; adapter implemented,2026-08-20
+barona-fi,web_verified,,True,YES,Server-rendered open-jobs and finance/expert listings are publicly readable; technically scrapeable,2026-08-20
+efinancialcareers,blocked_waf,,False,NO,WAF/human verification blocks unattended access,2026-08-20
+thehub,manual_fallback,thehub_html,False,NO,Technically parseable but terms restrict saving/copying/reproducing content without consent; manual only,2026-08-20

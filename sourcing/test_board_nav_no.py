@@ -1,6 +1,6 @@
 import unittest
 
-from sourcing.board_nav_no import _absolute_api_url, _relevant_title
+from sourcing.board_nav_no import _absolute_api_url, _relevant_title, _sanitize_token
 
 
 class NavAdapterTest(unittest.TestCase):
@@ -14,6 +14,11 @@ class NavAdapterTest(unittest.TestCase):
         self.assertTrue(_relevant_title("Senior Treasury Analyst"))
         self.assertTrue(_relevant_title("Finansiell risikoanalytiker"))
         self.assertFalse(_relevant_title("Barnehagelærer"))
+
+    def test_public_token_human_readable_response(self):
+        token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwdWJsaWMifQ.signature_part"
+        payload = f"Current public token for Nav Job Vacancy Feed:\n{token}"
+        self.assertEqual(_sanitize_token(payload), token)
 
 
 if __name__ == "__main__":

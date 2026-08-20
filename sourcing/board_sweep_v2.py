@@ -32,7 +32,7 @@ CATALOG_ADAPTERS = {
     "jobserve_uk_html": "jobserve-uk", "jobbland_se_html": "jobbland-se",
     "ledigajobb_se_html": "ledigajobb-se", "finansavisen_no_html": "finansavisen-no",
     "jobbank_dk_html": "jobbank-dk", "jobdanmark_dk_html": "jobdanmark-dk",
-    "barona_fi_html": "barona-fi",
+    "jobunivers_dk_html": "jobunivers-dk", "barona_fi_html": "barona-fi",
 }
 
 

@@ -16,10 +16,12 @@ on:
       - "sourcing/board_jobs_ch.py"
       - "sourcing/board_additional_adapters.py"
       - "sourcing/board_jobly_fi.py"
+      - "sourcing/board_thehub.py"
       - "sourcing/test_board_html_adapters.py"
       - "sourcing/test_board_jobs_ch.py"
       - "sourcing/test_board_additional_adapters.py"
       - "sourcing/test_board_jobly_fi.py"
+      - "sourcing/test_board_thehub.py"
       - "data/job_boards.csv"
       - "data/job_board_access_audit.csv"
       - "data/calibration_rules.json"
@@ -44,7 +46,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt -r sourcing/requirements.txt
       - name: Validate board adapter parsers
-        run: python -m unittest sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_jobly_fi
+        run: python -m unittest sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_jobly_fi sourcing.test_board_thehub
       - name: Fetch supported national-board roles
         run: python -m sourcing.board_sweep_v2
       - name: Commit refreshed board roles to main

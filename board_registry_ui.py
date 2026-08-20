@@ -93,7 +93,7 @@ def _country_summary(boards: pd.DataFrame, countries: list[str]) -> pd.DataFrame
             "Scrapeable": int(frame["scrapeability"].eq("YES").sum()),
             "Needs credentials": int(frame["scrapeability"].eq("YES_CREDENTIALS").sum()),
             "Manual / no": int(frame["scrapeability"].eq("NO").sum()),
-            "Total sources": len(frame),
+            "Registered sources": len(frame),
         })
     return pd.DataFrame(rows)
 
@@ -119,12 +119,14 @@ def render_board_registry() -> None:
     countries = sorted(c for c in boards["country"].unique() if c and c != "Multi-region")
     scrape_yes = int(boards["scrapeability"].eq("YES").sum())
     scrape_creds = int(boards["scrapeability"].eq("YES_CREDENTIALS").sum())
-    scrape_no = int(boards["scrapeability"].eq("NO").sum())
     active = int(boards["status"].eq("active").sum())
 
     m1, m2, m3, m4, m5 = st.columns(5)
-    m1.metric("Countries", len(countries)); m2.metric("Board sources", len(boards)); m3.metric("Active now", active)
-    m4.metric("Scrapeable", scrape_yes); m5.metric("Needs credentials", scrape_creds)
+    m1.metric("Countries", len(countries))
+    m2.metric("Registered sources", len(boards))
+    m3.metric("Active now", active)
+    m4.metric("Scrapeable", scrape_yes)
+    m5.metric("Needs credentials", scrape_creds)
     st.code("G BOARD → ROLE + COMPANY → A COMPANY CONTEXT → C SEMANTIC FIT → JOBS INBOX")
 
     st.subheader("Coverage by country")
@@ -137,11 +139,12 @@ def render_board_registry() -> None:
             "Scrapeable": st.column_config.NumberColumn("Scrapeable", format="%d"),
             "Needs credentials": st.column_config.NumberColumn("Credentials", format="%d"),
             "Manual / no": st.column_config.NumberColumn("Manual / no", format="%d"),
-            "Total sources": st.column_config.NumberColumn("Total", format="%d"),
+            "Registered sources": st.column_config.NumberColumn("Registered sources", format="%d"),
         },
     )
     st.caption(
-        "Active now = already proven production adapter. Scrapeable = technically usable source, including adapters still being activated."
+        "Registered sources is the total inventory for that country, so it includes scrapeable, credential-gated and manual/blocked sources. "
+        "It is not an additional status bucket. Active now is the subset already proven in GitHub Actions."
     )
 
     f1, f2, f3 = st.columns(3)
@@ -159,9 +162,8 @@ def render_board_registry() -> None:
     ].copy()
 
     st.caption(
-        "Scrapeability is the simple decision layer: YES = technically usable for automated retrieval; "
-        "YES — credentials = structured retrieval exists after token/onboarding; NO — manual = keep as a manual fallback. "
-        "Status separately shows whether an adapter is already active, implemented, or still to be built."
+        "Scrapeability: YES = technically usable for automated retrieval; YES — credentials = token/onboarding required; "
+        "NO — manual = keep as a manual fallback. Status separately shows whether the scraper is already active or still being activated."
     )
     for country in selected_countries:
         rows = filtered[filtered["country"].eq(country)].copy()
@@ -175,14 +177,14 @@ def render_board_registry() -> None:
         label = (
             f"{country} — {active_country} active / {scrape_country} scrapeable"
             + (f" / {creds_country} credentials" if creds_country else "")
-            + f" / {len(all_country)} sources"
+            + f" / {len(all_country)} registered"
         )
         with st.expander(label, expanded=True):
             _table(rows)
 
     multi = boards[boards["country"].eq("Multi-region")].sort_values(["_status_order", "name"])
     if not multi.empty:
-        with st.expander(f"Multi-region — {len(multi)} sources", expanded=False):
+        with st.expander(f"Multi-region — {len(multi)} registered", expanded=False):
             _table(multi)
 
     legacy_path = DATA_DIR / "jobs_board_staging.csv"

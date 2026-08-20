@@ -2,7 +2,6 @@ name: Country board sourcing
 
 # Workstream G: country/job-board retrieval. G is a source layer, not a second
 # review inbox: downstream A/C enrichment will route retained roles to Jobs.
-# Manual refresh marker: 2026-08-20 16:38 CEST
 
 on:
   workflow_dispatch:
@@ -39,7 +38,7 @@ permissions:
 
 concurrency:
   group: country-board-sourcing
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   source-country-boards:
@@ -55,9 +54,6 @@ jobs:
       - name: Validate board adapter parsers
         run: python -m unittest sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_thehub sourcing.test_board_official_adapters
       - name: Fetch and save supported national-board roles
-        # Retrieval first. Translation/semantic enrichment belongs downstream;
-        # keeping it out of the board sweep makes a full multi-country refresh
-        # substantially faster and less likely to time out.
         run: python -m sourcing.board_sweep_v2 --no-translate
       - name: Commit refreshed board roles to main
         run: |

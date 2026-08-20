@@ -27,6 +27,7 @@ on:
       - "sourcing/test_board_additional_adapters.py"
       - "sourcing/test_board_catalog_adapters.py"
       - "sourcing/test_board_jobly_fi.py"
+      - "sourcing/test_board_nav_no.py"
       - "sourcing/test_board_jobbsafari_no.py"
       - "sourcing/test_board_academicwork.py"
       - "sourcing/test_board_thehub.py"
@@ -56,9 +57,18 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt -r sourcing/requirements.txt
       - name: Validate board adapter parsers
-        run: python -m unittest sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_jobbsafari_no sourcing.test_board_academicwork sourcing.test_board_thehub sourcing.test_board_official_adapters
+        run: python -m unittest sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_nav_no sourcing.test_board_jobbsafari_no sourcing.test_board_academicwork sourcing.test_board_thehub sourcing.test_board_official_adapters
       - name: Fetch and save supported national-board roles
-        run: python -m sourcing.board_sweep_v2 --no-translate
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            python -m sourcing.board_sweep_v2 --no-translate \
+              --source-id jobserve-uk \
+              --source-id findajob-uk \
+              --source-id jobbsafari-no \
+              --source-id arbeidsplassen-no
+          else
+            python -m sourcing.board_sweep_v2 --no-translate
+          fi
       - name: Commit refreshed board roles to main
         run: |
           git config user.name "professional-dashboard-bot"

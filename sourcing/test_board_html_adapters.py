@@ -24,7 +24,7 @@ class BoardHtmlAdaptersTest(unittest.TestCase):
             ["https://www.prace.cz/firma/example/nabidka/0005884f-5d38-41a9-b84e-45f2bba8b393/?rps=2077"],
         )
 
-    def test_stepstone_extracts_vacancy_detail(self):
+    def test_stepstone_at_extracts_vacancy_detail(self):
         html = '''
         <a href="/jobs/treasury">filter</a>
         <a href="/stellenangebote--Treasury-Expert-Wien-Example--992643-inline.html">role</a>
@@ -32,6 +32,26 @@ class BoardHtmlAdaptersTest(unittest.TestCase):
         self.assertEqual(
             extract_html_search_links("stepstone-at", html, 10),
             ["https://www.stepstone.at/stellenangebote--Treasury-Expert-Wien-Example--992643-inline.html"],
+        )
+
+    def test_stepstone_de_extracts_vacancy_detail(self):
+        html = '''
+        <a href="/jobs/treasury">filter</a>
+        <a href="/stellenangebote--Treasury-Manager-Frankfurt-Example--123456-inline.html">role</a>
+        '''
+        self.assertEqual(
+            extract_html_search_links("stepstone-de", html, 10),
+            ["https://www.stepstone.de/stellenangebote--Treasury-Manager-Frankfurt-Example--123456-inline.html"],
+        )
+
+    def test_stellenanzeigen_extracts_job_detail(self):
+        html = '''
+        <a href="/jobs/treasury/">search</a>
+        <a href="/job/senior-treasury-manager-hamburg-16413766/">Senior Treasury Manager</a>
+        '''
+        self.assertEqual(
+            extract_html_search_links("stellenanzeigen-de", html, 10),
+            ["https://www.stellenanzeigen.de/job/senior-treasury-manager-hamburg-16413766/"],
         )
 
     def test_karriere_at_extracts_numeric_job_detail(self):
@@ -42,6 +62,16 @@ class BoardHtmlAdaptersTest(unittest.TestCase):
         self.assertEqual(
             extract_html_search_links("karriere-at", html, 10),
             ["https://www.karriere.at/jobs/10028350"],
+        )
+
+    def test_willhaben_extracts_job_detail(self):
+        html = '''
+        <a href="/jobs/suche/treasury">search</a>
+        <a href="/jobs/job/treasury-financial-markets-trader/13177276">Treasury Trader</a>
+        '''
+        self.assertEqual(
+            extract_html_search_links("willhaben-at", html, 10),
+            ["https://www.willhaben.at/jobs/job/treasury-financial-markets-trader/13177276"],
         )
 
     def test_jobbsafari_extracts_job_detail(self):

@@ -39,6 +39,7 @@ jobbnorge-no,Norway,Jobbnorge,https://www.jobbnorge.no/search/en,False,,False,ma
 karrierestart-no,Norway,Karrierestart,https://karrierestart.no/,False,,False,manual_fallback,Manual fallback
 jobbank-dk,Denmark,Akademikernes Jobbank,https://jobbank.dk/,True,jobbank_dk_html,True,adapter_ready,Catalogue fallback added; queued for revalidation
 jobdanmark-dk,Denmark,JobDanmark,https://jobdanmark.dk/,False,jobdanmark_dk_html,True,active,Live-verified Danish source
+academicwork-dk,Denmark,Academic Work Denmark,https://www.academicwork.dk/ledige-stillinger,False,academicwork_dk_html,True,adapter_ready,Server-rendered national catalogue and stable vacancy details
 jobindex-dk,Denmark,Jobindex.dk,https://www.jobindex.dk/,False,,False,manual_fallback,Manual fallback
 jobnet-dk,Denmark,Jobnet,https://jobnet.dk/,False,,True,api_credentials,Official JobannonceService requires credentials
 jobfinder-dk,Denmark,Jobfinder,https://www.jobfinder.dk/,False,,False,manual_fallback,Manual fallback
@@ -49,5 +50,6 @@ oikotie-fi,Finland,Oikotie Työpaikat,https://tyopaikat.oikotie.fi/,False,,False
 tyomarkkinatori-fi,Finland,Työmarkkinatori,https://tyomarkkinatori.fi/henkiloasiakkaat/avoimet-tyopaikat,False,,True,api_credentials,Official API requires credentials
 jobly-fi,Finland,Jobly,https://www.jobly.fi/,False,jobly_fi_html,True,adapter_ready,Finnish finance routes fixed; queued for revalidation
 barona-fi,Finland,Barona Careers,https://www.baronacareers.com/fi/fi/job/finance-accounting,False,barona_fi_html,True,adapter_ready,Public finance catalogue; queued for revalidation
+academicwork-fi,Finland,Academic Work Finland,https://www.academicwork.fi/avoimet-tyopaikat,False,academicwork_fi_html,True,adapter_ready,Server-rendered catalogue; current cash management and finance roles verified
 efinancialcareers,Multi-region,eFinancialCareers,https://www.efinancialcareers.com/,True,,False,blocked_waf,WAF blocks unattended access
 thehub,Multi-region,The Hub,https://thehub.io/,False,thehub_html,False,manual_fallback,Manual fallback

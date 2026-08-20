@@ -14,6 +14,7 @@ from pathlib import Path
 import pandas as pd
 
 from sourcing.big4_pilot import calibrate_jobs
+from sourcing.board_additional_adapters import discover_additional_board
 from sourcing.board_html_adapters import discover_html_jsonld_board
 from sourcing.board_jobs_ch import discover_jobs_ch
 from sourcing.board_sweep import (
@@ -60,39 +61,27 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
     if adapter == "arbeitsagentur_html":
         return discover_arbeitsagentur(DEFAULT_QUERIES, per_query, max_details)
     if adapter == "jobs_cz_html":
-        return discover_html_jsonld_board(
-            "jobs-cz", "Czechia", DEFAULT_QUERIES, per_query, max_details
-        )
+        return discover_html_jsonld_board("jobs-cz", "Czechia", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "prace_cz_html":
-        return discover_html_jsonld_board(
-            "prace-cz", "Czechia", DEFAULT_QUERIES, per_query, max_details
-        )
+        return discover_html_jsonld_board("prace-cz", "Czechia", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "stepstone_de_html":
-        return discover_html_jsonld_board(
-            "stepstone-de", "Germany", DEFAULT_QUERIES, per_query, max_details
-        )
+        return discover_html_jsonld_board("stepstone-de", "Germany", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "stellenanzeigen_de_html":
-        return discover_html_jsonld_board(
-            "stellenanzeigen-de", "Germany", DEFAULT_QUERIES, per_query, max_details
-        )
+        return discover_html_jsonld_board("stellenanzeigen-de", "Germany", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "stepstone_at_html":
-        return discover_html_jsonld_board(
-            "stepstone-at", "Austria", DEFAULT_QUERIES, per_query, max_details
-        )
+        return discover_html_jsonld_board("stepstone-at", "Austria", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "karriere_at_html":
-        return discover_html_jsonld_board(
-            "karriere-at", "Austria", DEFAULT_QUERIES, per_query, max_details
-        )
+        return discover_html_jsonld_board("karriere-at", "Austria", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "willhaben_at_html":
-        return discover_html_jsonld_board(
-            "willhaben-at", "Austria", DEFAULT_QUERIES, per_query, max_details
-        )
+        return discover_html_jsonld_board("willhaben-at", "Austria", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "jobbsafari_se_html":
-        return discover_html_jsonld_board(
-            "jobbsafari-se", "Sweden", DEFAULT_QUERIES, per_query, max_details
-        )
+        return discover_html_jsonld_board("jobbsafari-se", "Sweden", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "jobs_ch_html":
         return discover_jobs_ch(DEFAULT_QUERIES, per_query, max_details)
+    if adapter == "jobup_ch_html":
+        return discover_additional_board("jobup-ch", "Switzerland", DEFAULT_QUERIES, per_query, max_details)
+    if adapter == "cv_library_uk_html":
+        return discover_additional_board("cv-library-uk", "United Kingdom", DEFAULT_QUERIES, per_query, max_details)
     return [], [f"Unsupported adapter: {adapter}"]
 
 
@@ -133,10 +122,7 @@ def main() -> None:
             "verified_jobs": len(found),
             "errors": " | ".join(errors[:12]),
         })
-        print(
-            f"{row.board_id} [{row.status}]: verified={len(found)} "
-            f"errors={len(errors)}"
-        )
+        print(f"{row.board_id} [{row.status}]: verified={len(found)} errors={len(errors)}")
 
     out = pd.DataFrame(records).reindex(columns=STAGING_COLUMNS, fill_value="")
     if not out.empty:
@@ -148,10 +134,7 @@ def main() -> None:
     out_path = Path(args.out)
     out = _merge_with_existing(out, out_path).reindex(columns=STAGING_COLUMNS, fill_value="")
     if not out.empty:
-        out = out.sort_values(
-            ["status", "calibration_score", "last_seen_at"],
-            ascending=[True, False, False],
-        )
+        out = out.sort_values(["status", "calibration_score", "last_seen_at"], ascending=[True, False, False])
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(out_path, index=False)
 

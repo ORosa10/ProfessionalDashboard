@@ -24,7 +24,7 @@ TITLE_MARKERS = (
     "controlling", "corporate finance", "corporate development", "m&a", "valuation",
     "investment", "investering", "portfolio", "risk", "liquidity", "cash management",
     "transaction", "private equity", "asset management", "equity research", "credit",
-    "rahoitus", "talouspäällikkö",
+    "rahoitus", "talouspäällikkö", "økonomi", "økonom", "analyse", "analytiker", "regnskab",
 )
 CONFIG = {
     "startupjobs-cz": {"market": "Czechia", "base": "https://www.startupjobs.cz", "listing": "https://www.startupjobs.cz/nabidky/finance", "patterns": (r"/nabidka/\d+/",)},
@@ -37,6 +37,7 @@ CONFIG = {
     "finansavisen-no": {"market": "Norway", "base": "https://www.finansavisen.no", "listing": "https://www.finansavisen.no/stillinger", "patterns": (r"/stillinger/", r"/jobb/")},
     "jobbank-dk": {"market": "Denmark", "base": "https://jobbank.dk", "listing": "https://jobbank.dk/job/?key={query}", "fallback_listing": "https://jobbank.dk/job/", "patterns": (r"/job/\d+",)},
     "jobdanmark-dk": {"market": "Denmark", "base": "https://jobdanmark.dk", "listing": "https://jobdanmark.dk/", "patterns": (r"/job/",)},
+    "jobunivers-dk": {"market": "Denmark", "base": "https://www.jobunivers.dk", "listing": "https://www.jobunivers.dk/job/finans-oekonomi-og-regnskab/", "patterns": (r"[?&]job=\d+",)},
     "barona-fi": {"market": "Finland", "base": "https://www.baronacareers.com", "listing": "https://www.baronacareers.com/fi/fi/job/finance-accounting", "patterns": (r"/fi/fi/jobs/",)},
 }
 

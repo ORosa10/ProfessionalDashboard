@@ -20,13 +20,13 @@ CONFIG = {
     "academicwork-dk": {
         "market": "Denmark",
         "base": "https://www.academicwork.dk",
-        "listing": "https://www.academicwork.dk/ledige-stillinger",
+        "listing": "https://www.academicwork.dk/en/jobs",
         "detail_patterns": (r"^/(?:en/jobs|ledige-stillinger)/j/[^?#]+/[A-Z0-9]+/?$",),
     },
     "academicwork-fi": {
         "market": "Finland",
         "base": "https://www.academicwork.fi",
-        "listing": "https://www.academicwork.fi/avoimet-tyopaikat",
+        "listing": "https://www.academicwork.fi/en/jobs",
         "detail_patterns": (r"^/(?:en/jobs|avoimet-tyopaikat)/j/[^?#]+/[A-Z0-9]+/?$",),
     },
 }

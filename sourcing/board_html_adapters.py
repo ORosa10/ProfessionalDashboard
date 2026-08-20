@@ -58,6 +58,9 @@ def extract_html_search_links(source_id: str, html: str, limit: int) -> list[str
     elif source_id == "stepstone-at":
         base = "https://www.stepstone.at"
         predicates = ("/stellenangebote--",)
+    elif source_id == "karriere-at":
+        base = "https://www.karriere.at"
+        predicates = ("/jobs/",)
     elif source_id == "jobbsafari-se":
         base = "https://jobbsafari.se"
         predicates = ("/jobb/",)
@@ -74,6 +77,8 @@ def extract_html_search_links(source_id: str, html: str, limit: int) -> list[str
             data_attrs = " ".join(f"{k}={v}" for k, v in anchor.attrs.items())
             if "job" not in (classes + " " + data_attrs).lower():
                 continue
+        if source_id == "karriere-at" and not re.search(r"/jobs/\d+(?:[/?#]|$)", href):
+            continue
         full = urljoin(base, href.split("#", 1)[0].split("?utm_", 1)[0])
         if full not in found:
             found.append(full)
@@ -135,6 +140,9 @@ def _search_url(source_id: str, query: str) -> str:
     if source_id == "stepstone-at":
         slug = re.sub(r"[^a-z0-9]+", "-", query.lower()).strip("-")
         return f"https://www.stepstone.at/jobs/{slug}"
+    if source_id == "karriere-at":
+        slug = re.sub(r"[^a-z0-9]+", "-", query.lower()).strip("-")
+        return f"https://www.karriere.at/jobs/{slug}"
     if source_id == "jobbsafari-se":
         return "https://jobbsafari.se/lediga-jobb?sok=" + quote(query)
     raise ValueError(f"Unsupported HTML board source: {source_id}")

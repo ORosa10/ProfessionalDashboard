@@ -43,6 +43,10 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
         return discover_html_jsonld_board(
             "stepstone-at", "Austria", DEFAULT_QUERIES, per_query, max_details
         )
+    if adapter == "jobbsafari_se_html":
+        return discover_html_jsonld_board(
+            "jobbsafari-se", "Sweden", DEFAULT_QUERIES, per_query, max_details
+        )
     return [], [f"Unsupported adapter: {adapter}"]
 
 
@@ -109,7 +113,6 @@ def main() -> None:
     runs = pd.DataFrame(run_rows)
     if runs_path.exists():
         prior = pd.read_csv(runs_path).fillna("")
-        # Schema can evolve as registry diagnostics improve.
         runs = pd.concat([prior, runs], ignore_index=True, sort=False).tail(500)
     runs.to_csv(runs_path, index=False)
     print(f"wrote {len(out)} board-sourced roles to {out_path}")

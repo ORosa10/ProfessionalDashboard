@@ -1,8 +1,7 @@
 name: Country board sourcing
 
-# Workstream G: company-agnostic full-time roles from supported national
-# sources. The output is a separate review stream and feeds the same feedback
-# and calibration loop as the core Jobs page.
+# Workstream G: country/job-board retrieval. G is a source layer, not a second
+# review inbox: downstream A/C enrichment will route retained roles to Jobs.
 
 on:
   workflow_dispatch:
@@ -12,6 +11,8 @@ on:
     branches: [main]
     paths:
       - "sourcing/board_sweep.py"
+      - "sourcing/board_sweep_v2.py"
+      - "sourcing/board_html_adapters.py"
       - "data/job_boards.csv"
       - "data/calibration_rules.json"
       - ".github/workflows/board-sourcing.yml"
@@ -35,7 +36,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt -r sourcing/requirements.txt
       - name: Fetch supported national-board roles
-        run: python -m sourcing.board_sweep
+        run: python -m sourcing.board_sweep_v2
       - name: Commit refreshed board roles to main
         run: |
           git config user.name "professional-dashboard-bot"

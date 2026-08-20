@@ -1,6 +1,6 @@
 board_id,status_override,adapter_override,enabled_override,audit_note,audited_at
-jobs-cz,adapter_ready,jobs_cz_html,True,Public search and vacancy pages verified; adapter implemented and awaiting live GitHub runner validation,2026-08-20
-prace-cz,adapter_ready,prace_cz_html,True,Public listing and vacancy URLs verified; adapter implemented and awaiting live runner validation,2026-08-20
+jobs-cz,adapter_ready,jobs_cz_html,True,Public search and vacancy pages verified; adapter fixed after first live validation and awaiting rerun,2026-08-20
+prace-cz,adapter_ready,prace_cz_html,True,Stable Finance and Economics category retrieval implemented after first live validation; awaiting rerun,2026-08-20
 startupjobs-cz,web_verified,,True,Public site is readable and searchable but current search transport needs endpoint inspection before unattended adapter,2026-08-20
 cocuma-cz,web_verified,,True,Server-rendered paginated vacancy catalogue verified; small enough for controlled browse-and-filter adapter,2026-08-20
 arbeitsagentur-de,active,arbeitsagentur_html,True,Existing production adapter working,2026-08-20
@@ -10,8 +10,8 @@ stellenanzeigen-de,adapter_ready,stellenanzeigen_de_html,True,Server-rendered ke
 jobware-de,manual_fallback,,False,Public landing page requires JavaScript for job search; no stable unattended transport confirmed,2026-08-20
 karriere-at,adapter_ready,karriere_at_html,True,Public keyword result pages and stable numeric vacancy URLs verified; adapter implemented,2026-08-20
 ams-at,web_verified,,True,Official Austrian employment source retained as high-priority candidate; unattended search interface still needs endpoint/API confirmation,2026-08-20
-stepstone-at,adapter_ready,stepstone_at_html,True,Public search and JobPosting detail pages verified; adapter implemented,2026-08-20
-willhaben-at,web_verified,,True,Server-rendered keyword result pages and stable /jobs/job/... detail URLs verified; adapter can be built if terms permit scheduled retrieval,2026-08-20
+stepstone-at,active,stepstone_at_html,True,Live GitHub Actions validation returned 24 verified roles; promoted to production,2026-08-20
+willhaben-at,web_verified,,True,Server-rendered keyword result pages and stable /jobs/job/... detail URLs verified; adapter code exists but scheduled use remains disabled pending terms review,2026-08-20
 jobs-ch,adapter_ready,jobs_ch_html,True,Public term search and stable UUID vacancy detail pages verified; dedicated adapter implemented,2026-08-20
 jobscout24-ch,blocked,,False,Direct unattended fetch currently returns 403; keep as fallback only,2026-08-20
 jobup-ch,web_verified,,True,Public server-rendered finance/category pages verified; keyword search/detail transport still to validate,2026-08-20
@@ -22,7 +22,7 @@ totaljobs-uk,manual_fallback,,False,Major board but unattended web fetch is inco
 cv-library-uk,web_verified,,True,Large public server-rendered board verified; search/detail URL transport needs adapter test,2026-08-20
 cityjobs-uk,manual_fallback,,False,Finance-focused but unattended fetch is inconsistent; retain as high-relevance manual fallback,2026-08-20
 platsbanken-se,active,jobtech_api,True,Official open JobSearch API; production adapter working,2026-08-20
-jobbsafari-se,adapter_ready,jobbsafari_se_html,True,Public search and detail pages verified; adapter implemented,2026-08-20
+jobbsafari-se,active,jobbsafari_se_html,True,Live GitHub Actions validation returned 27 verified roles; promoted to production,2026-08-20
 jobbland-se,web_verified,,True,Large server-rendered catalogue verified but overlaps with Duunitori/JobbSafari group inventory; lower automation priority,2026-08-20
 ledigajobb-se,web_verified,,True,Large server-rendered Swedish vacancy catalogue verified; adapter transport still to validate,2026-08-20
 finn-no,manual_fallback,,False,Excellent inventory but FINN explicitly prohibits regular systematic collection without written permission; do not schedule scrape,2026-08-20

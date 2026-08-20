@@ -37,7 +37,7 @@ jobscopenhagen-dk,manual_fallback,,False,Useful English-language Copenhagen nich
 duunitori-fi,blocked,,False,Previously returned 403 to unattended access; keep as fallback only,2026-08-20
 oikotie-fi,closed,,False,Oikotie Työpaikat is closed; remove from active sourcing consideration,2026-08-20
 tyomarkkinatori-fi,api_credentials,,True,Official Job Market Finland retrieval API confirmed; KEHA onboarding/credentials required,2026-08-20
-jobly-fi,web_verified,,True,Large server-rendered Finnish board with finance category verified; adapter transport still to validate,2026-08-20
+jobly-fi,adapter_ready,jobly_fi_html,True,Server-rendered finance category and stable /en/job/<slug>-<id> details verified; adapter implemented and queued for live validation,2026-08-20
 barona-fi,web_verified,,True,Public finance/expert vacancy sections verified; useful supplementary employer/recruiter source,2026-08-20
 efinancialcareers,blocked_waf,,False,High relevance but WAF/human verification blocks unattended GitHub Actions access,2026-08-20
 thehub,web_verified,,True,Nordic startup/scale-up board is publicly readable; useful exploration source after transport test,2026-08-20

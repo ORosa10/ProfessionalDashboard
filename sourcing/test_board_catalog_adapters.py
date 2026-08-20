@@ -25,6 +25,13 @@ class CatalogAdapterTest(unittest.TestCase):
             ["https://jobbank.dk/job/3067629/"],
         )
 
+    def test_jobunivers(self):
+        html = '<a href="/job/finans-oekonomi-og-regnskab/?job=7746&offset=0">Finance Manager</a>'
+        self.assertEqual(
+            extract_catalog_links("jobunivers-dk", html, 5),
+            ["https://www.jobunivers.dk/job/finans-oekonomi-og-regnskab/?job=7746&offset=0"],
+        )
+
     def test_ledigajobb(self):
         html = '<a href="/jobb/c348d8/example">Treasury Analyst</a>'
         self.assertEqual(

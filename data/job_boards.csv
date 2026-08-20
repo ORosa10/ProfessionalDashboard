@@ -18,7 +18,7 @@ jobup-ch,Switzerland,jobup.ch,https://www.jobup.ch/,False,,True,candidate,Import
 indeed-ch,Switzerland,Indeed Switzerland,https://ch.indeed.com/,False,,True,candidate,Broad aggregator; potentially useful for recall but needs unattended-access and dedupe testing
 reed-uk,United Kingdom,Reed.co.uk,https://www.reed.co.uk/,False,,False,blocked,Public site previously returned 403 unattended; retain as manual/web source unless access changes
 indeed-uk,United Kingdom,Indeed UK,https://uk.indeed.com/,False,,True,candidate,Large UK aggregator; broad recall and likely high duplicate volume
- totaljobs-uk,United Kingdom,Totaljobs,https://www.totaljobs.com/,False,,True,candidate,Major UK commercial board; professional/corporate coverage
+totaljobs-uk,United Kingdom,Totaljobs,https://www.totaljobs.com/,False,,True,candidate,Major UK commercial board; professional/corporate coverage
 cv-library-uk,United Kingdom,CV-Library,https://www.cv-library.co.uk/,False,,True,candidate,Major UK job board; useful independent source alongside Totaljobs/Reed/Indeed
 cityjobs-uk,United Kingdom,CityJobs,https://www.cityjobs.com/,True,,True,candidate,UK finance/accounting-oriented board; potentially high relevance for G semantic search
 platsbanken-se,Sweden,Platsbanken,https://arbetsformedlingen.se/platsbanken/,False,jobtech_api,True,active,Official JobSearch API; CC0 and no registration required; existing working G adapter
@@ -34,7 +34,7 @@ jobnet-dk,Denmark,Jobnet,https://jobnet.dk/,False,,True,candidate,Official Danis
 jobfinder-dk,Denmark,Jobfinder,https://www.jobfinder.dk/,False,,True,candidate,Danish professional/specialist job portal; useful differentiated source
 ofir-dk,Denmark,Ofir,https://www.ofir.dk/,False,,True,candidate,Danish job board; complementary national coverage
 jobscopenhagen-dk,Denmark,Jobs in Copenhagen,https://www.jobsincopenhagen.com/,False,,True,candidate,English-language Copenhagen-focused board; useful for language-feasible roles
- duunitori-fi,Finland,Duunitori,https://duunitori.fi/,False,,False,blocked,Previously returned 403 to unattended access; keep as manual/web source unless access changes
+duunitori-fi,Finland,Duunitori,https://duunitori.fi/,False,,False,blocked,Previously returned 403 to unattended access; keep as manual/web source unless access changes
 oikotie-fi,Finland,Oikotie Työpaikat,https://tyopaikat.oikotie.fi/,False,,True,candidate,Major Finnish commercial board; needs unattended-access testing
 tyomarkkinatori-fi,Finland,Työmarkkinatori,https://tyomarkkinatori.fi/henkiloasiakkaat/avoimet-tyopaikat,False,,True,candidate,Official Finnish Job Market Finland portal; high-priority public-source adapter candidate
 jobly-fi,Finland,Jobly,https://www.jobly.fi/,False,,True,candidate,Finnish job platform; complementary professional/corporate coverage

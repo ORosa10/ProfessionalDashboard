@@ -15,6 +15,7 @@ import pandas as pd
 
 from sourcing.big4_pilot import calibrate_jobs
 from sourcing.board_html_adapters import discover_html_jsonld_board
+from sourcing.board_jobs_ch import discover_jobs_ch
 from sourcing.board_sweep import (
     BOARDS_PATH,
     DEFAULT_QUERIES,
@@ -55,6 +56,8 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
         return discover_html_jsonld_board(
             "jobbsafari-se", "Sweden", DEFAULT_QUERIES, per_query, max_details
         )
+    if adapter == "jobs_ch_html":
+        return discover_jobs_ch(DEFAULT_QUERIES, per_query, max_details)
     return [], [f"Unsupported adapter: {adapter}"]
 
 

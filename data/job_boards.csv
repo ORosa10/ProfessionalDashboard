@@ -1,23 +1,43 @@
 board_id,country,name,base_url,finance_specific,adapter,enabled,status,notes
-jobs-cz,Czechia,Jobs.cz,https://www.jobs.cz/,False,,True,candidate,Main CZ board (LMC)
-prace-cz,Czechia,Prace.cz,https://www.prace.cz/,False,,True,candidate,Main CZ board (LMC)
-startupjobs-cz,Czechia,StartupJobs,https://www.startupjobs.cz/,False,,True,candidate,CZ/SK startups
-cocuma-cz,Czechia,Cocuma,https://www.cocuma.cz/,False,,True,candidate,CZ curated
-stepstone-de,Germany,StepStone.de,https://www.stepstone.de/,False,,True,candidate,Main DE board
-indeed-de,Germany,Indeed Germany,https://de.indeed.com/,False,,True,candidate,Aggregator DE
-stellenanzeigen-de,Germany,Stellenanzeigen.de,https://www.stellenanzeigen.de/,False,,True,candidate,DE board
-karriere-at,Austria,karriere.at,https://www.karriere.at/,False,,True,candidate,Main AT board
-stepstone-at,Austria,StepStone.at,https://www.stepstone.at/,False,,True,candidate,AT board
-jobs-ch,Switzerland,jobs.ch,https://www.jobs.ch/,False,,True,candidate,Main CH board
-jobscout24-ch,Switzerland,JobScout24.ch,https://www.jobscout24.ch/,False,,True,candidate,CH board
-efinancialcareers,Multi-region,eFinancialCareers,https://www.efinancialcareers.com/,True,,False,blocked_waf,High-relevance index but AWS human verification blocks unattended GitHub Actions access
-reed-uk,United Kingdom,Reed.co.uk,https://www.reed.co.uk/,False,,False,blocked,Public site responds 403 to unattended access; API requires separate credentials
-indeed-uk,United Kingdom,Indeed UK,https://uk.indeed.com/,False,,True,candidate,Aggregator UK
-totaljobs-uk,United Kingdom,Totaljobs,https://www.totaljobs.com/,False,,True,candidate,UK board
-jobindex-dk,Denmark,Jobindex.dk,https://www.jobindex.dk/,False,,True,candidate,Main DK board
-thehub,Multi-region,The Hub,https://thehub.io/,False,,True,candidate,Nordic startups/scaleups
-platsbanken-se,Sweden,Platsbanken,https://arbetsformedlingen.se/platsbanken/,False,jobtech_api,True,active,Official JobSearch API; CC0 and no registration required
-finn-no,Norway,FINN.no,https://www.finn.no/job/,False,,True,candidate,Main NO board
-duunitori-fi,Finland,Duunitori,https://duunitori.fi/,False,,False,blocked,Public site responds 403 to unattended access
-oikotie-fi,Finland,Oikotie Tyopaikat,https://tyopaikat.oikotie.fi/,False,,True,candidate,FI board
-arbeitsagentur-de,Germany,Bundesagentur Jobsuche,https://www.arbeitsagentur.de/jobsuche/,False,arbeitsagentur_html,True,active,Official German public job search with server-rendered JobPosting detail pages
+jobs-cz,Czechia,Jobs.cz,https://www.jobs.cz/,False,,True,candidate,Primary Czech commercial board; broad finance and corporate coverage; semantic G retrieval candidate
+prace-cz,Czechia,Prace.cz,https://www.prace.cz/,False,,True,candidate,Large Czech Alma Career board; useful complementary employer coverage
+startupjobs-cz,Czechia,StartupJobs,https://www.startupjobs.cz/,False,,True,candidate,Czech startup and scale-up board; useful exploration source for second-tier firms
+cocuma-cz,Czechia,Cocuma,https://www.cocuma.cz/jobs/,False,,True,candidate,Curated Czech employer/job platform; smaller but useful differentiated company set
+arbeitsagentur-de,Germany,Bundesagentur Jobsuche,https://www.arbeitsagentur.de/jobsuche/,False,arbeitsagentur_html,True,active,Official German public job search; existing working G adapter
+stepstone-de,Germany,StepStone.de,https://www.stepstone.de/,False,,True,candidate,Major German commercial board; strong corporate and professional-role coverage
+indeed-de,Germany,Indeed Germany,https://de.indeed.com/,False,,True,candidate,Large aggregator; broad recall but likely requires tighter prefiltering and access testing
+stellenanzeigen-de,Germany,Stellenanzeigen.de,https://www.stellenanzeigen.de/,False,,True,candidate,German board with broad employer coverage; useful second-tier source
+jobware-de,Germany,Jobware,https://www.jobware.de/,False,,True,candidate,German professional/specialist board; potentially good for experienced finance roles
+karriere-at,Austria,karriere.at,https://www.karriere.at/,False,,True,candidate,Primary Austrian commercial board; important source for Vienna and second-tier Austrian employers
+ams-at,Austria,AMS Jobs,https://www.ams.at/arbeitsuchende,False,,True,candidate,Official Austrian employment service; broad national coverage and strong second-tier discovery potential
+stepstone-at,Austria,StepStone.at,https://www.stepstone.at/,False,,True,candidate,Major Austrian commercial board; professional and corporate roles
+willhaben-at,Austria,willhaben Jobs,https://www.willhaben.at/jobs/,False,,True,candidate,Large Austrian marketplace job section; useful broader employer coverage if unattended access proves stable
+jobs-ch,Switzerland,jobs.ch,https://www.jobs.ch/,False,,True,candidate,Primary Swiss board; strong Zurich/Basel/Zug professional coverage
+jobscout24-ch,Switzerland,JobScout24.ch,https://www.jobscout24.ch/,False,,True,candidate,Large Swiss job board; complementary employer coverage
+jobup-ch,Switzerland,jobup.ch,https://www.jobup.ch/,False,,True,candidate,Important Swiss board especially French-speaking Switzerland; useful for Geneva/Lausanne finance and corporates
+indeed-ch,Switzerland,Indeed Switzerland,https://ch.indeed.com/,False,,True,candidate,Broad aggregator; potentially useful for recall but needs unattended-access and dedupe testing
+reed-uk,United Kingdom,Reed.co.uk,https://www.reed.co.uk/,False,,False,blocked,Public site previously returned 403 unattended; retain as manual/web source unless access changes
+indeed-uk,United Kingdom,Indeed UK,https://uk.indeed.com/,False,,True,candidate,Large UK aggregator; broad recall and likely high duplicate volume
+ totaljobs-uk,United Kingdom,Totaljobs,https://www.totaljobs.com/,False,,True,candidate,Major UK commercial board; professional/corporate coverage
+cv-library-uk,United Kingdom,CV-Library,https://www.cv-library.co.uk/,False,,True,candidate,Major UK job board; useful independent source alongside Totaljobs/Reed/Indeed
+cityjobs-uk,United Kingdom,CityJobs,https://www.cityjobs.com/,True,,True,candidate,UK finance/accounting-oriented board; potentially high relevance for G semantic search
+platsbanken-se,Sweden,Platsbanken,https://arbetsformedlingen.se/platsbanken/,False,jobtech_api,True,active,Official JobSearch API; CC0 and no registration required; existing working G adapter
+jobbsafari-se,Sweden,JobbSafari,https://jobbsafari.se/,False,,True,candidate,Large Swedish aggregator with broad current vacancy coverage; useful second source
+jobbland-se,Sweden,Jobbland,https://jobbland.se/,False,,True,candidate,Swedish job search platform; useful complementary employer coverage
+ledigajobb-se,Sweden,LedigaJobb.se,https://ledigajobb.se/,False,,True,candidate,Swedish national vacancy aggregator; candidate for additional recall after access testing
+finn-no,Norway,FINN Jobb,https://www.finn.no/job/search,False,,True,candidate,Primary Norwegian commercial job marketplace with very broad employer coverage
+arbeidsplassen-no,Norway,Arbeidsplassen NAV,https://arbeidsplassen.nav.no/,False,,True,candidate,Official Norwegian vacancy portal; high-value candidate for stable public-source adapter
+jobbnorge-no,Norway,Jobbnorge,https://www.jobbnorge.no/search/en,False,,True,candidate,Norwegian recruitment/job portal; strong institutional/public/employer coverage and searchable listings
+karrierestart-no,Norway,Karrierestart,https://karrierestart.no/,False,,True,candidate,Norwegian career/job portal; useful supplementary source for professional roles
+jobindex-dk,Denmark,Jobindex.dk,https://www.jobindex.dk/,False,,True,candidate,Primary Danish commercial board
+jobnet-dk,Denmark,Jobnet,https://jobnet.dk/,False,,True,candidate,Official Danish public job portal; priority candidate for unattended adapter
+jobfinder-dk,Denmark,Jobfinder,https://www.jobfinder.dk/,False,,True,candidate,Danish professional/specialist job portal; useful differentiated source
+ofir-dk,Denmark,Ofir,https://www.ofir.dk/,False,,True,candidate,Danish job board; complementary national coverage
+jobscopenhagen-dk,Denmark,Jobs in Copenhagen,https://www.jobsincopenhagen.com/,False,,True,candidate,English-language Copenhagen-focused board; useful for language-feasible roles
+ duunitori-fi,Finland,Duunitori,https://duunitori.fi/,False,,False,blocked,Previously returned 403 to unattended access; keep as manual/web source unless access changes
+oikotie-fi,Finland,Oikotie Työpaikat,https://tyopaikat.oikotie.fi/,False,,True,candidate,Major Finnish commercial board; needs unattended-access testing
+tyomarkkinatori-fi,Finland,Työmarkkinatori,https://tyomarkkinatori.fi/henkiloasiakkaat/avoimet-tyopaikat,False,,True,candidate,Official Finnish Job Market Finland portal; high-priority public-source adapter candidate
+jobly-fi,Finland,Jobly,https://www.jobly.fi/,False,,True,candidate,Finnish job platform; complementary professional/corporate coverage
+barona-fi,Finland,Barona Jobs,https://www.barona.fi/tyopaikat/,False,,True,candidate,Large Finnish staffing/recruitment portal; potentially useful second-tier employer source
+efinancialcareers,Multi-region,eFinancialCareers,https://www.efinancialcareers.com/,True,,False,blocked_waf,High-relevance finance index but AWS human verification blocks unattended GitHub Actions access
+thehub,Multi-region,The Hub,https://thehub.io/,False,,True,candidate,Nordic startup/scale-up source spanning Denmark Sweden Norway Finland; useful exploration channel

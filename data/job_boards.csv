@@ -1,6 +1,6 @@
 board_id,country,name,base_url,finance_specific,adapter,enabled,status,notes
 jobs-cz,Czechia,Jobs.cz,https://www.jobs.cz/,False,jobs_cz_html,True,adapter_ready,Public keyword/location search pages verified and indexable; HTML search + JobPosting JSON-LD adapter added and ready for GitHub Actions validation
-prace-cz,Czechia,Prace.cz,https://www.prace.cz/,False,,True,candidate,Large Czech Alma Career board; useful complementary employer coverage
+prace-cz,Czechia,Prace.cz,https://www.prace.cz/,False,prace_cz_html,True,adapter_ready,Public finance listings and stable /firma/.../nabidka/<id>/ vacancy URLs verified; HTML search + JobPosting JSON-LD adapter ready for validation
 startupjobs-cz,Czechia,StartupJobs,https://www.startupjobs.cz/,False,,True,candidate,Czech startup and scale-up board; useful exploration source for second-tier firms
 cocuma-cz,Czechia,Cocuma,https://www.cocuma.cz/jobs/,False,,True,candidate,Curated Czech employer/job platform; smaller but useful differentiated company set
 arbeitsagentur-de,Germany,Bundesagentur Jobsuche,https://www.arbeitsagentur.de/jobsuche/,False,arbeitsagentur_html,True,active,Official German public job search; existing working G adapter
@@ -30,7 +30,7 @@ arbeidsplassen-no,Norway,Arbeidsplassen NAV,https://arbeidsplassen.nav.no/,False
 jobbnorge-no,Norway,Jobbnorge,https://www.jobbnorge.no/search/en,False,,True,candidate,Norwegian recruitment/job portal; strong institutional/public/employer coverage and searchable listings
 karrierestart-no,Norway,Karrierestart,https://karrierestart.no/,False,,True,candidate,Norwegian career/job portal; useful supplementary source for professional roles
 jobindex-dk,Denmark,Jobindex.dk,https://www.jobindex.dk/,False,,True,candidate,Primary Danish commercial board
-jobnet-dk,Denmark,Jobnet,https://jobnet.dk/,False,,True,web_verified,Official Danish source; public server-rendered vacancy detail pages are accessible through the Workindenmark/Jobnet surface; search/discovery adapter still to validate
+jobnet-dk,Denmark,Jobnet,https://jobnet.dk/,False,,True,api_credentials,Official JobannonceService supports importing Jobnet vacancies into external portals but requires onboarding and certificate/service access; public Find Job UI alone is not reliable unattended discovery
 jobfinder-dk,Denmark,Jobfinder,https://www.jobfinder.dk/,False,,True,candidate,Danish professional/specialist job portal; useful differentiated source
 ofir-dk,Denmark,Ofir,https://www.ofir.dk/,False,,True,candidate,Danish job board; complementary national coverage
 jobscopenhagen-dk,Denmark,Jobs in Copenhagen,https://www.jobsincopenhagen.com/,False,,True,candidate,English-language Copenhagen-focused board; useful for language-feasible roles

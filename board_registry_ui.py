@@ -16,10 +16,16 @@ STATUS_ORDER = {
     "active": 0, "adapter_ready": 1, "api_credentials": 2, "web_verified": 3,
     "candidate": 4, "manual_fallback": 5, "blocked": 6, "blocked_waf": 7, "closed": 8,
 }
+SCRAPE_LABELS = {
+    "YES": "YES",
+    "YES_CREDENTIALS": "YES — credentials",
+    "NO": "NO — manual",
+}
 
 
 def _load_registry() -> pd.DataFrame:
     boards = pd.read_csv(DATA_DIR / "job_boards.csv").fillna("")
+    boards["scrapeability"] = ""
     audit_path = DATA_DIR / "job_board_access_audit.csv"
     if audit_path.exists() and not boards.empty:
         audit = pd.read_csv(audit_path).fillna("")
@@ -30,6 +36,9 @@ def _load_registry() -> pd.DataFrame:
             ):
                 mapped = boards["board_id"].map(audit.get(source, pd.Series(dtype=str))).fillna("")
                 boards[target] = mapped.where(mapped.ne(""), boards[target])
+            boards["scrapeability"] = boards["board_id"].map(
+                audit.get("scrapeability", pd.Series(dtype=str))
+            ).fillna("")
             note = boards["board_id"].map(audit.get("audit_note", pd.Series(dtype=str))).fillna("")
             boards["notes"] = note.where(note.ne(""), boards["notes"])
             boards["audited_at"] = boards["board_id"].map(
@@ -54,13 +63,14 @@ def _load_registry() -> pd.DataFrame:
 
 def _table(frame: pd.DataFrame) -> None:
     columns = [
-        "name", "status_label", "last_verified_jobs", "last_run", "adapter",
+        "name", "scrapeability_label", "status_label", "last_verified_jobs", "last_run", "adapter",
         "finance_specific", "base_url", "last_error", "notes",
     ]
     st.dataframe(
         frame[columns], hide_index=True, width="stretch",
         column_config={
             "name": st.column_config.TextColumn("Board", width="medium"),
+            "scrapeability_label": st.column_config.TextColumn("Scrapeability", width="small"),
             "status_label": st.column_config.TextColumn("Status", width="small"),
             "last_verified_jobs": st.column_config.TextColumn("Last roles", width="small"),
             "last_run": st.column_config.TextColumn("Last live run", width="medium"),
@@ -89,29 +99,37 @@ def render_board_registry() -> None:
         return
 
     boards["status_label"] = boards["status"].map(STATUS_LABELS).fillna(boards["status"])
+    boards["scrapeability_label"] = boards["scrapeability"].map(SCRAPE_LABELS).fillna(boards["scrapeability"])
     boards["_status_order"] = boards["status"].map(STATUS_ORDER).fillna(99)
     countries = sorted(c for c in boards["country"].unique() if c and c != "Multi-region")
-    active = int(boards["status"].eq("active").sum())
-    ready = int(boards["status"].eq("adapter_ready").sum())
-    structured = int(boards["status"].isin(["active", "adapter_ready", "api_credentials"]).sum())
+    scrape_yes = int(boards["scrapeability"].eq("YES").sum())
+    scrape_creds = int(boards["scrapeability"].eq("YES_CREDENTIALS").sum())
+    scrape_no = int(boards["scrapeability"].eq("NO").sum())
     ran = int(boards["last_run"].ne("").sum())
 
     m1, m2, m3, m4, m5 = st.columns(5)
-    m1.metric("Countries", len(countries)); m2.metric("Board sources", len(boards)); m3.metric("Active", active)
-    m4.metric("Adapter ready", ready); m5.metric("Ever live-tested", ran)
+    m1.metric("Countries", len(countries)); m2.metric("Board sources", len(boards)); m3.metric("Scrapeable", scrape_yes)
+    m4.metric("Needs credentials", scrape_creds); m5.metric("Manual / no", scrape_no)
     st.code("G BOARD → ROLE + COMPANY → A COMPANY CONTEXT → C SEMANTIC FIT → JOBS INBOX")
 
-    f1, f2 = st.columns(2)
+    f1, f2, f3 = st.columns(3)
     selected_countries = f1.multiselect("Countries", countries, default=countries)
+    scrape_options = [label for key, label in SCRAPE_LABELS.items() if key in set(boards["scrapeability"])]
+    selected_scrape = f2.multiselect("Scrapeability", scrape_options, default=scrape_options)
     status_options = [label for key, label in STATUS_LABELS.items() if key in set(boards["status"])]
-    selected_statuses = f2.multiselect("Technical status", status_options, default=status_options)
+    selected_statuses = f3.multiselect("Technical status", status_options, default=status_options)
     selected_keys = {key for key, label in STATUS_LABELS.items() if label in selected_statuses}
-    filtered = boards[boards["country"].isin(selected_countries) & boards["status"].isin(selected_keys)].copy()
+    selected_scrape_keys = {key for key, label in SCRAPE_LABELS.items() if label in selected_scrape}
+    filtered = boards[
+        boards["country"].isin(selected_countries)
+        & boards["status"].isin(selected_keys)
+        & boards["scrapeability"].isin(selected_scrape_keys)
+    ].copy()
 
     st.caption(
-        "Active = proven in GitHub Actions. Adapter ready = implemented and awaiting/undergoing live validation. "
-        "API credentials needed = official structured source needs onboarding/token. Web verified = useful public source "
-        "whose unattended transport is not yet production-ready. Manual fallback = intentionally not scheduled."
+        "Scrapeability is the simple decision layer: YES = technically usable for automated retrieval; "
+        "YES — credentials = structured retrieval exists after token/onboarding; NO — manual = keep as a manual fallback. "
+        "Status separately shows whether an adapter is already active, implemented, or still to be built."
     )
     for country in selected_countries:
         rows = filtered[filtered["country"].eq(country)].copy()

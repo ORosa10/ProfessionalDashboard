@@ -18,6 +18,7 @@ from sourcing.board_additional_adapters import discover_additional_board
 from sourcing.board_html_adapters import discover_html_jsonld_board
 from sourcing.board_jobs_ch import discover_jobs_ch
 from sourcing.board_jobly_fi import discover_jobly
+from sourcing.board_official_adapters import discover_findajob, discover_mpsv
 from sourcing.board_thehub import discover_thehub
 from sourcing.board_sweep import (
     BOARDS_PATH,
@@ -58,6 +59,10 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
         return discover_platsbanken(DEFAULT_QUERIES, per_query)
     if adapter == "arbeitsagentur_html":
         return discover_arbeitsagentur(DEFAULT_QUERIES, per_query, max_details)
+    if adapter == "mpsv_open_data":
+        return discover_mpsv(max_details)
+    if adapter == "findajob_uk_html":
+        return discover_findajob(DEFAULT_QUERIES, per_query, max_details)
     if adapter == "jobs_cz_html":
         return discover_html_jsonld_board("jobs-cz", "Czechia", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "prace_cz_html":
@@ -98,7 +103,10 @@ def main() -> None:
     args = parser.parse_args()
 
     boards = _registry_with_audit()
-    runnable = boards[boards["enabled"].astype(str).str.lower().eq("true") & boards["status"].isin(["active", "adapter_ready"])]
+    runnable = boards[
+        boards["enabled"].astype(str).str.lower().eq("true")
+        & boards["status"].isin(["active", "adapter_ready"])
+    ]
     if args.source_id:
         runnable = runnable[runnable["board_id"].isin(args.source_id)]
 
@@ -111,7 +119,16 @@ def main() -> None:
         except Exception as exc:
             found, errors = [], [f"runner: {type(exc).__name__}: {exc}"]
         records.extend(found)
-        run_rows.append({"run_at": started, "board_id": row.board_id, "country": row.country, "adapter": row.adapter, "registry_status": row.status, "queries": len(DEFAULT_QUERIES), "verified_jobs": len(found), "errors": " | ".join(errors[:12])})
+        run_rows.append({
+            "run_at": started,
+            "board_id": row.board_id,
+            "country": row.country,
+            "adapter": row.adapter,
+            "registry_status": row.status,
+            "queries": len(DEFAULT_QUERIES),
+            "verified_jobs": len(found),
+            "errors": " | ".join(errors[:12]),
+        })
         print(f"{row.board_id} [{row.status}]: verified={len(found)} errors={len(errors)}")
 
     out = pd.DataFrame(records).reindex(columns=STAGING_COLUMNS, fill_value="")

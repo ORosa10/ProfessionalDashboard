@@ -51,7 +51,7 @@ def extract_html_search_links(source_id: str, html: str, limit: int) -> list[str
     soup = BeautifulSoup(html, "html.parser")
     if source_id == "jobs-cz":
         base = "https://www.jobs.cz"
-        predicates = ("/rpd/", "/prace/")
+        predicates = ("/rpd/",)
     elif source_id == "prace-cz":
         base = "https://www.prace.cz"
         predicates = ("/nabidka/",)
@@ -81,11 +81,6 @@ def extract_html_search_links(source_id: str, html: str, limit: int) -> list[str
         href = str(anchor.get("href") or "")
         if not any(marker in href for marker in predicates):
             continue
-        if source_id == "jobs-cz" and "/rpd/" not in href:
-            classes = " ".join(anchor.get("class") or [])
-            data_attrs = " ".join(f"{k}={v}" for k, v in anchor.attrs.items())
-            if "job" not in (classes + " " + data_attrs).lower():
-                continue
         if source_id == "karriere-at" and not re.search(r"/jobs/\d+(?:[/?#]|$)", href):
             continue
         full = urljoin(base, href.split("#", 1)[0].split("?utm_", 1)[0])
@@ -149,7 +144,10 @@ def _search_url(source_id: str, query: str) -> str:
     if source_id == "jobs-cz":
         return "https://www.jobs.cz/prace/?q%5B%5D=" + quote(query)
     if source_id == "prace-cz":
-        return "https://www.prace.cz/nabidky/?searchString=" + quote(query)
+        # Prace.cz exposes a stable server-rendered Finance & Economics category.
+        # The free-text form transport is not stable enough for unattended GETs,
+        # so retrieve this focused category and let the title prefilter + C do the rest.
+        return "https://www.prace.cz/nabidky/finance-a-ekonomika/"
     if source_id == "stepstone-at":
         return f"https://www.stepstone.at/jobs/{_slug(query)}"
     if source_id == "stepstone-de":
@@ -177,7 +175,8 @@ def discover_html_jsonld_board(
     candidates: dict[str, set[str]] = {}
     errors: list[str] = []
 
-    for query in queries:
+    search_queries = ["finance-category"] if source_id == "prace-cz" else queries
+    for query in search_queries:
         try:
             response = requests.get(_search_url(source_id, query), headers=HEADERS, timeout=35)
             response.raise_for_status()

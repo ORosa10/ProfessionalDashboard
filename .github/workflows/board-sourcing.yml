@@ -17,6 +17,7 @@ on:
       - "sourcing/test_board_html_adapters.py"
       - "sourcing/test_board_jobs_ch.py"
       - "data/job_boards.csv"
+      - "data/job_board_access_audit.csv"
       - "data/calibration_rules.json"
       - ".github/workflows/board-sourcing.yml"
 

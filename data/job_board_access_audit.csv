@@ -1,7 +1,7 @@
 board_id,status_override,adapter_override,enabled_override,scrapeability,audit_note,audited_at
 mpsv-open-data-cz,active,mpsv_open_data,True,YES,Live GitHub Actions validation returned 65 verified roles,2026-08-20
-jobs-cz,adapter_ready,jobs_cz_html,True,YES,Canonical detail URL and HTML fallback fixes queued for live revalidation,2026-08-20
-prace-cz,adapter_ready,prace_cz_html,True,YES,Finance-category depth and canonical detail fixes queued for live revalidation,2026-08-20
+jobs-cz,active,jobs_cz_html,True,YES,Live GitHub Actions validation after canonical URL fix returned 37 roles,2026-08-20
+prace-cz,adapter_ready,prace_cz_html,True,YES,Finance-category retrieval works technically but latest run retained zero finance titles,2026-08-20
 startupjobs-cz,manual_fallback,startupjobs_cz_html,False,NO,Finance catalogue is client-rendered in unattended retrieval; keep as manual fallback,2026-08-20
 cocuma-cz,active,cocuma_cz_html,True,YES,Live GitHub Actions validation returned verified roles,2026-08-20
 arbeitsagentur-de,active,arbeitsagentur_html,True,YES,Production adapter working; latest live run returned 55 roles,2026-08-20
@@ -14,14 +14,14 @@ ams-at,manual_fallback,,False,NO,Manual fallback,2026-08-20
 stepstone-at,manual_fallback,stepstone_at_html,False,NO,Manual only,2026-08-20
 willhaben-at,active,willhaben_at_html,True,YES,Latest live run returned 10 verified roles,2026-08-20
 jobwinner-ch,active,jobwinner_ch_html,True,YES,Latest live run returned 48 verified roles,2026-08-20
-nzz-jobs-ch,active,nzz_jobs_ch_html,True,YES,Latest live run returned 8 verified roles,2026-08-20
+nzz-jobs-ch,active,nzz_jobs_ch_html,True,YES,Latest live run returned 32 verified roles,2026-08-20
 arbeit-jobroom-ch,manual_fallback,,False,NO,Client-side search transport; no stable unattended path confirmed,2026-08-20
 jobs-ch,manual_fallback,jobs_ch_html,False,NO,Manual fallback,2026-08-20
 jobscout24-ch,blocked,,False,NO,Direct unattended access returned 403,2026-08-20
 jobup-ch,manual_fallback,jobup_ch_html,False,NO,Manual fallback,2026-08-20
 indeed-ch,manual_fallback,,False,NO,Aggregator/anti-bot characteristics make unattended scraping unreliable,2026-08-20
-findajob-uk,adapter_ready,findajob_uk_html,True,YES,DWP search headers and qwd transport hardened; queued for live revalidation,2026-08-20
-jobserve-uk,active,jobserve_uk_html,True,YES,Latest live run returned verified UK roles,2026-08-20
+findajob-uk,adapter_ready,findajob_uk_html,True,YES,DWP source still times out intermittently; retain for revalidation,2026-08-20
+jobserve-uk,active,jobserve_uk_html,True,YES,Latest live run returned 10 verified UK roles,2026-08-20
 reed-uk,blocked,,False,NO,Previously returned 403 unattended,2026-08-20
 indeed-uk,manual_fallback,,False,NO,Large aggregator with unstable unattended access,2026-08-20
 totaljobs-uk,manual_fallback,,False,NO,No stable unattended path confirmed,2026-08-20
@@ -29,16 +29,18 @@ cv-library-uk,manual_fallback,cv_library_uk_html,False,NO,Manual fallback,2026-0
 cityjobs-uk,manual_fallback,,False,NO,Finance-focused manual fallback,2026-08-20
 platsbanken-se,active,jobtech_api,True,YES,Official open JobSearch API; latest live run returned 26 roles,2026-08-20
 jobbsafari-se,manual_fallback,jobbsafari_se_html,False,NO,Manual fallback,2026-08-20
-jobbland-se,active,jobbland_se_html,True,YES,Latest live run returned 4 verified roles,2026-08-20
-ledigajobb-se,active,ledigajobb_se_html,True,YES,Latest live run returned 8 verified roles,2026-08-20
+jobbland-se,active,jobbland_se_html,True,YES,Latest live run returned 21 verified roles,2026-08-20
+ledigajobb-se,active,ledigajobb_se_html,True,YES,Latest live run returned 48 verified roles,2026-08-20
 finn-no,manual_fallback,,False,NO,Manual fallback,2026-08-20
-arbeidsplassen-no,adapter_ready,nav_stilling_feed,True,YES,NAV token header sanitization fixed; queued for live revalidation,2026-08-20
-jobbsafari-no,adapter_ready,jobbsafari_no_html,True,YES,Server-rendered Norwegian keyword search and public vacancy details; queued for live validation,2026-08-20
+arbeidsplassen-no,adapter_ready,nav_stilling_feed,True,YES,NAV public token path returned 401; private token likely needed for stable production,2026-08-20
+jobbsafari-no,active,jobbsafari_no_html,True,YES,Latest live run returned 6 verified Norwegian roles,2026-08-20
 finansavisen-no,manual_fallback,finansavisen_no_html,False,NO,Unattended requests enter a Zephr redirect loop; retain as manual source,2026-08-20
 jobbnorge-no,manual_fallback,,False,NO,Client-side search and no stable unattended retrieval endpoint confirmed,2026-08-20
 karrierestart-no,manual_fallback,,False,NO,No stable machine-readable search surface confirmed,2026-08-20
-jobbank-dk,adapter_ready,jobbank_dk_html,True,YES,Browser headers and public catalogue fallback added; queued for live revalidation,2026-08-20
+jobbank-dk,manual_fallback,jobbank_dk_html,False,NO,Repeated live 403 despite fallback; manual only,2026-08-20
 jobdanmark-dk,active,jobdanmark_dk_html,True,YES,Latest live run returned a verified role,2026-08-20
+academicwork-dk,adapter_ready,academicwork_dk_html,True,YES,Server-rendered Academic Work catalogue; live validation in progress,2026-08-20
+jobunivers-dk,adapter_ready,jobunivers_dk_html,True,YES,Djoef finance/economics catalogue is server-rendered with stable job ids; live validation queued,2026-08-20
 jobindex-dk,manual_fallback,,False,NO,No reliable unattended path confirmed,2026-08-20
 jobnet-dk,api_credentials,,True,YES_CREDENTIALS,Official JobannonceService requires onboarding/certificate access,2026-08-20
 jobfinder-dk,manual_fallback,,False,NO,No stable unattended path confirmed,2026-08-20
@@ -47,7 +49,8 @@ jobscopenhagen-dk,manual_fallback,,False,NO,No stable unattended path confirmed,
 duunitori-fi,blocked,,False,NO,Previously returned 403 unattended,2026-08-20
 oikotie-fi,closed,,False,NO,Oikotie Tyopaikat is closed,2026-08-20
 tyomarkkinatori-fi,api_credentials,,True,YES_CREDENTIALS,Official Job Market Finland retrieval REST API requires credentials,2026-08-20
-jobly-fi,adapter_ready,jobly_fi_html,True,YES,Finnish routes and browser headers fixed; queued for live revalidation,2026-08-20
-barona-fi,adapter_ready,barona_fi_html,True,YES,Adapter targets public Barona Careers finance catalogue; queued for live revalidation,2026-08-20
+jobly-fi,manual_fallback,jobly_fi_html,False,NO,Repeated live 403 across Finnish and English routes; manual only,2026-08-20
+barona-fi,active,barona_fi_html,True,YES,Latest live run returned 2 verified Finnish roles,2026-08-20
+academicwork-fi,adapter_ready,academicwork_fi_html,True,YES,Server-rendered catalogue with current cash-management role; live validation in progress,2026-08-20
 efinancialcareers,blocked_waf,,False,NO,WAF/human verification blocks unattended access,2026-08-20
 thehub,manual_fallback,thehub_html,False,NO,Manual fallback,2026-08-20

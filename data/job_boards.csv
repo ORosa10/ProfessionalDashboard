@@ -1,5 +1,5 @@
 board_id,country,name,base_url,finance_specific,adapter,enabled,status,notes
-jobs-cz,Czechia,Jobs.cz,https://www.jobs.cz/,False,,True,candidate,Primary Czech commercial board; broad finance and corporate coverage; semantic G retrieval candidate
+jobs-cz,Czechia,Jobs.cz,https://www.jobs.cz/,False,,True,web_verified,Public keyword/location search pages verified and indexable; strong next HTML adapter candidate for Czechia
 prace-cz,Czechia,Prace.cz,https://www.prace.cz/,False,,True,candidate,Large Czech Alma Career board; useful complementary employer coverage
 startupjobs-cz,Czechia,StartupJobs,https://www.startupjobs.cz/,False,,True,candidate,Czech startup and scale-up board; useful exploration source for second-tier firms
 cocuma-cz,Czechia,Cocuma,https://www.cocuma.cz/jobs/,False,,True,candidate,Curated Czech employer/job platform; smaller but useful differentiated company set
@@ -26,17 +26,17 @@ jobbsafari-se,Sweden,JobbSafari,https://jobbsafari.se/,False,,True,candidate,Lar
 jobbland-se,Sweden,Jobbland,https://jobbland.se/,False,,True,candidate,Swedish job search platform; useful complementary employer coverage
 ledigajobb-se,Sweden,LedigaJobb.se,https://ledigajobb.se/,False,,True,candidate,Swedish national vacancy aggregator; candidate for additional recall after access testing
 finn-no,Norway,FINN Jobb,https://www.finn.no/job/search,False,,True,candidate,Primary Norwegian commercial job marketplace with very broad employer coverage
-arbeidsplassen-no,Norway,Arbeidsplassen NAV,https://arbeidsplassen.nav.no/,False,,True,candidate,Official Norwegian vacancy portal; high-value candidate for stable public-source adapter
+arbeidsplassen-no,Norway,Arbeidsplassen NAV,https://arbeidsplassen.nav.no/,False,,True,api_credentials,Official free NAV public vacancy feed confirmed; all may use it but stable unattended use requires a consumer token; high-priority API adapter
 jobbnorge-no,Norway,Jobbnorge,https://www.jobbnorge.no/search/en,False,,True,candidate,Norwegian recruitment/job portal; strong institutional/public/employer coverage and searchable listings
 karrierestart-no,Norway,Karrierestart,https://karrierestart.no/,False,,True,candidate,Norwegian career/job portal; useful supplementary source for professional roles
 jobindex-dk,Denmark,Jobindex.dk,https://www.jobindex.dk/,False,,True,candidate,Primary Danish commercial board
-jobnet-dk,Denmark,Jobnet,https://jobnet.dk/,False,,True,candidate,Official Danish public job portal; priority candidate for unattended adapter
+jobnet-dk,Denmark,Jobnet,https://jobnet.dk/,False,,True,web_verified,Official Danish source; public server-rendered vacancy detail pages are accessible through the Workindenmark/Jobnet surface; next step is search/discovery adapter
 jobfinder-dk,Denmark,Jobfinder,https://www.jobfinder.dk/,False,,True,candidate,Danish professional/specialist job portal; useful differentiated source
 ofir-dk,Denmark,Ofir,https://www.ofir.dk/,False,,True,candidate,Danish job board; complementary national coverage
 jobscopenhagen-dk,Denmark,Jobs in Copenhagen,https://www.jobsincopenhagen.com/,False,,True,candidate,English-language Copenhagen-focused board; useful for language-feasible roles
 duunitori-fi,Finland,Duunitori,https://duunitori.fi/,False,,False,blocked,Previously returned 403 to unattended access; keep as manual/web source unless access changes
 oikotie-fi,Finland,Oikotie Työpaikat,https://tyopaikat.oikotie.fi/,False,,True,candidate,Major Finnish commercial board; needs unattended-access testing
-tyomarkkinatori-fi,Finland,Työmarkkinatori,https://tyomarkkinatori.fi/henkiloasiakkaat/avoimet-tyopaikat,False,,True,candidate,Official Finnish Job Market Finland portal; high-priority public-source adapter candidate
+tyomarkkinatori-fi,Finland,Työmarkkinatori,https://tyomarkkinatori.fi/henkiloasiakkaat/avoimet-tyopaikat,False,,True,api_credentials,Official Job Market Finland retrieval REST API confirmed; requires KEHA onboarding and production credentials/IP setup; strong structured-source candidate
 jobly-fi,Finland,Jobly,https://www.jobly.fi/,False,,True,candidate,Finnish job platform; complementary professional/corporate coverage
 barona-fi,Finland,Barona Jobs,https://www.barona.fi/tyopaikat/,False,,True,candidate,Large Finnish staffing/recruitment portal; potentially useful second-tier employer source
 efinancialcareers,Multi-region,eFinancialCareers,https://www.efinancialcareers.com/,True,,False,blocked_waf,High-relevance finance index but AWS human verification blocks unattended GitHub Actions access

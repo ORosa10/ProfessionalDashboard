@@ -18,6 +18,7 @@ on:
       - "sourcing/board_catalog_adapters.py"
       - "sourcing/board_jobly_fi.py"
       - "sourcing/board_nav_no.py"
+      - "sourcing/board_jobbsafari_no.py"
       - "sourcing/board_thehub.py"
       - "sourcing/board_official_adapters.py"
       - "sourcing/test_board_html_adapters.py"
@@ -25,6 +26,7 @@ on:
       - "sourcing/test_board_additional_adapters.py"
       - "sourcing/test_board_catalog_adapters.py"
       - "sourcing/test_board_jobly_fi.py"
+      - "sourcing/test_board_jobbsafari_no.py"
       - "sourcing/test_board_thehub.py"
       - "sourcing/test_board_official_adapters.py"
       - "sourcing/requirements.txt"
@@ -52,7 +54,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt -r sourcing/requirements.txt
       - name: Validate board adapter parsers
-        run: python -m unittest sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_thehub sourcing.test_board_official_adapters
+        run: python -m unittest sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_jobbsafari_no sourcing.test_board_thehub sourcing.test_board_official_adapters
       - name: Fetch and save supported national-board roles
         run: python -m sourcing.board_sweep_v2 --no-translate
       - name: Commit refreshed board roles to main

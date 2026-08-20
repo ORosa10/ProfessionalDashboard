@@ -34,6 +34,16 @@ class BoardHtmlAdaptersTest(unittest.TestCase):
             ["https://www.stepstone.at/stellenangebote--Treasury-Expert-Wien-Example--992643-inline.html"],
         )
 
+    def test_karriere_at_extracts_numeric_job_detail(self):
+        html = '''
+        <a href="/jobs/treasury/wien">search</a>
+        <a href="/jobs/10028350">Finance, Treasury and Insurance Manager</a>
+        '''
+        self.assertEqual(
+            extract_html_search_links("karriere-at", html, 10),
+            ["https://www.karriere.at/jobs/10028350"],
+        )
+
     def test_jobbsafari_extracts_job_detail(self):
         html = '''
         <a href="/lediga-jobb?sok=treasury">search</a>

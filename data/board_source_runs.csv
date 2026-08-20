@@ -25,3 +25,11 @@ run_at,board_id,country,adapter,queries,verified_jobs,errors,registry_status
 2026-08-20T12:18:13.977537+00:00,stepstone-at,Austria,stepstone_at_html,9,24,detail stellenangebote--Front-Backoffice-Patient-Relation: HTTPError,adapter_ready
 2026-08-20T12:18:13.977537+00:00,platsbanken-se,Sweden,jobtech_api,9,26,,active
 2026-08-20T12:18:13.977537+00:00,jobbsafari-se,Sweden,jobbsafari_se_html,9,27,,adapter_ready
+2026-08-20T12:43:14.476351+00:00,jobs-cz,Czechia,jobs_cz_html,9,0,detail ?q%255B0%255D%3Dtreasury: ValueError | detail ?searchId=62b7872f-7e6e-4d69-b2fc-d236ecc8bd65&rps: ValueError | detail ?q%255B0%255D%3Dtreasury%26addToFavorite%3D2001207: ValueError | detail ?searchId=62b7872f-7e6e-4d69-b2fc-d236ecc8bd65&rps: ValueError | detail ?q%255B0%255D%3Dtreasury%26addToFavorite%3D2001293: ValueError | detail ?searchId=62b7872f-7e6e-4d69-b2fc-d236ecc8bd65&rps: ValueError | detail ?q%255B0%255D%3Dtreasury%26addToFavorite%3D2001382: ValueError | detail ?searchId=62b7872f-7e6e-4d69-b2fc-d236ecc8bd65&rps: ValueError | detail ?q%255B0%255D%3DFP%2526A: ValueError | detail ?searchId=d991c92a-b5fd-4e0d-a7ae-d40b81158a6e&rps: ValueError | detail ?q%255B0%255D%3DFP%2526A%26addToFavorite%3D2001371: ValueError | detail ?searchId=d991c92a-b5fd-4e0d-a7ae-d40b81158a6e&rps: ValueError,adapter_ready
+2026-08-20T12:43:14.476351+00:00,prace-cz,Czechia,prace_cz_html,9,0,,adapter_ready
+2026-08-20T12:43:14.476351+00:00,arbeitsagentur-de,Germany,arbeitsagentur_html,9,55,,active
+2026-08-20T12:43:14.476351+00:00,karriere-at,Austria,karriere_at_html,9,43,search FP&A: no detail links,adapter_ready
+2026-08-20T12:43:14.476351+00:00,stepstone-at,Austria,stepstone_at_html,9,0,search treasury: ReadTimeout | search FP&A: ReadTimeout | search corporate finance: ReadTimeout | search M&A: ReadTimeout | search valuation: ReadTimeout | search investment analyst: ReadTimeout | search portfolio management: ReadTimeout | search financial risk: ReadTimeout | search restructuring: ReadTimeout,adapter_ready
+2026-08-20T12:43:14.476351+00:00,jobs-ch,Switzerland,jobs_ch_html,9,33,detail 04552f7b-1deb-4e6e-8d2f-ca6aeca484ef: HTTPError,adapter_ready
+2026-08-20T12:43:14.476351+00:00,platsbanken-se,Sweden,jobtech_api,9,26,,active
+2026-08-20T12:43:14.476351+00:00,jobbsafari-se,Sweden,jobbsafari_se_html,9,27,,adapter_ready

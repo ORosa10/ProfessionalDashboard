@@ -12,7 +12,7 @@ karriere-at,Austria,karriere.at,https://www.karriere.at/,False,karriere_at_html,
 ams-at,Austria,AMS Jobs,https://www.ams.at/arbeitsuchende,False,,True,candidate,Official Austrian employment service; broad national coverage and strong second-tier discovery potential
 stepstone-at,Austria,StepStone.at,https://www.stepstone.at/,False,stepstone_at_html,True,adapter_ready,Public search/result and vacancy pages verified; HTML search + JobPosting JSON-LD adapter added and ready for GitHub Actions validation
 willhaben-at,Austria,willhaben Jobs,https://www.willhaben.at/jobs/,False,,True,candidate,Large Austrian marketplace job section; useful broader employer coverage if unattended access proves stable
-jobs-ch,Switzerland,jobs.ch,https://www.jobs.ch/,False,,True,candidate,Primary Swiss board; strong Zurich/Basel/Zug professional coverage
+jobs-ch,Switzerland,jobs.ch,https://www.jobs.ch/,False,jobs_ch_html,True,adapter_ready,Public term search and stable /en/vacancies/detail/<uuid>/ vacancy pages verified; dedicated HTML + JobPosting JSON-LD adapter ready for validation
 jobscout24-ch,Switzerland,JobScout24.ch,https://www.jobscout24.ch/,False,,True,candidate,Large Swiss job board; complementary employer coverage
 jobup-ch,Switzerland,jobup.ch,https://www.jobup.ch/,False,,True,candidate,Important Swiss board especially French-speaking Switzerland; useful for Geneva/Lausanne finance and corporates
 indeed-ch,Switzerland,Indeed Switzerland,https://ch.indeed.com/,False,,True,candidate,Broad aggregator; potentially useful for recall but needs unattended-access and dedupe testing

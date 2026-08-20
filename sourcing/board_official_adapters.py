@@ -101,35 +101,35 @@ def _findajob_detail(url: str) -> dict | None:
 
 
 def _findajob_links_for_query(query: str, per_query: int) -> tuple[list[str], list[str]]:
-    """Try both DWP search parameter variants and require actual detail links.
-
-    A 200 search page with zero /details/<id> links is not considered success;
-    this is important because DWP has used more than one search parameter name.
-    """
+    """Try both DWP transports and require actual vacancy detail links."""
     errors: list[str] = []
     limit = min(50, max(12, per_query))
+    # q + Accounting & Finance category is the currently verified public
+    # transport. qwd is kept as a fallback because DWP also exposes it on its
+    # advanced-search pages.
     variants = (
-        {"qwd": query, "pp": limit, "lang_code": "en"},
-        {"q": query, "pp": limit},
+        {"q": query, "cat": 1, "loc": 86383, "pp": limit, "lang_code": "en"},
+        {"qwd": query, "cat": 1, "loc": 86383, "pp": limit, "lang_code": "en"},
     )
     for params in variants:
+        transport = "q" if "q" in params else "qwd"
         try:
             response = requests.get("https://findajob.dwp.gov.uk/search", params=params, headers=HEADERS, timeout=15)
             response.raise_for_status()
             links = extract_findajob_links(response.text, limit)
             if links:
                 return links, errors
-            errors.append(f"{next(iter(params))}: no detail links")
+            errors.append(f"{transport}: no detail links")
         except Exception as exc:
             status = getattr(getattr(exc, "response", None), "status_code", "")
-            errors.append(f"{next(iter(params))}: {type(exc).__name__}{f' {status}' if status else ''}")
+            errors.append(f"{transport}: {type(exc).__name__}{f' {status}' if status else ''}")
     return [], errors
 
 
 def discover_findajob(queries: list[str], per_query: int, max_details: int) -> tuple[list[dict], list[str]]:
     source_id = "findajob-uk"; now = datetime.now(timezone.utc).isoformat(); candidates: dict[str, set[str]] = {}; errors: list[str] = []
-    # Broad seeds are much more reliable on DWP than issuing nine long exact
-    # phrases. C performs the semantic ranking downstream, so broad recall is OK.
+    # Broad seeds are reliable on the official finance category; downstream C
+    # handles semantic ranking, so broad retrieval does not pollute the inbox.
     seeds = ["finance", "treasury", "investment", "risk"]
     for query in seeds:
         links, search_errors = _findajob_links_for_query(query, per_query)

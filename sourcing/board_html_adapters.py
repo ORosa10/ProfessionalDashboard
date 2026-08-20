@@ -52,6 +52,9 @@ def extract_html_search_links(source_id: str, html: str, limit: int) -> list[str
     if source_id == "jobs-cz":
         base = "https://www.jobs.cz"
         predicates = ("/rpd/", "/prace/")
+    elif source_id == "prace-cz":
+        base = "https://www.prace.cz"
+        predicates = ("/nabidka/",)
     elif source_id == "stepstone-at":
         base = "https://www.stepstone.at"
         predicates = ("/stellenangebote--",)
@@ -66,8 +69,6 @@ def extract_html_search_links(source_id: str, html: str, limit: int) -> list[str
         href = str(anchor.get("href") or "")
         if not any(marker in href for marker in predicates):
             continue
-        # Jobs.cz search/filter links also live under /prace/. Only retain links
-        # that look like individual advertisements when /rpd/ is unavailable.
         if source_id == "jobs-cz" and "/rpd/" not in href:
             classes = " ".join(anchor.get("class") or [])
             data_attrs = " ".join(f"{k}={v}" for k, v in anchor.attrs.items())
@@ -129,6 +130,8 @@ def _description(item: dict) -> str:
 def _search_url(source_id: str, query: str) -> str:
     if source_id == "jobs-cz":
         return "https://www.jobs.cz/prace/?q%5B%5D=" + quote(query)
+    if source_id == "prace-cz":
+        return "https://www.prace.cz/nabidky/?searchString=" + quote(query)
     if source_id == "stepstone-at":
         slug = re.sub(r"[^a-z0-9]+", "-", query.lower()).strip("-")
         return f"https://www.stepstone.at/jobs/{slug}"

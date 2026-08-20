@@ -15,6 +15,7 @@ import pandas as pd
 
 from sourcing.big4_pilot import calibrate_jobs
 from sourcing.board_additional_adapters import discover_additional_board
+from sourcing.board_catalog_adapters import discover_catalog_board
 from sourcing.board_html_adapters import discover_html_jsonld_board
 from sourcing.board_jobs_ch import discover_jobs_ch
 from sourcing.board_jobly_fi import discover_jobly
@@ -36,6 +37,20 @@ from sourcing.board_sweep import (
 
 ROOT = Path(__file__).resolve().parents[1]
 AUDIT_PATH = ROOT / "data" / "job_board_access_audit.csv"
+
+CATALOG_ADAPTERS = {
+    "startupjobs_cz_html": "startupjobs-cz",
+    "cocuma_cz_html": "cocuma-cz",
+    "jobwinner_ch_html": "jobwinner-ch",
+    "nzz_jobs_ch_html": "nzz-jobs-ch",
+    "jobserve_uk_html": "jobserve-uk",
+    "jobbland_se_html": "jobbland-se",
+    "ledigajobb_se_html": "ledigajobb-se",
+    "finansavisen_no_html": "finansavisen-no",
+    "jobbank_dk_html": "jobbank-dk",
+    "jobdanmark_dk_html": "jobdanmark-dk",
+    "barona_fi_html": "barona-fi",
+}
 
 
 def _registry_with_audit() -> pd.DataFrame:
@@ -66,6 +81,8 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
         return discover_findajob(DEFAULT_QUERIES, per_query, max_details)
     if adapter == "nav_stilling_feed":
         return discover_nav(max_details)
+    if adapter in CATALOG_ADAPTERS:
+        return discover_catalog_board(CATALOG_ADAPTERS[adapter], DEFAULT_QUERIES, per_query, max_details)
     if adapter == "jobs_cz_html":
         return discover_html_jsonld_board("jobs-cz", "Czechia", DEFAULT_QUERIES, per_query, max_details)
     if adapter == "prace_cz_html":

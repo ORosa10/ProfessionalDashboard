@@ -11,6 +11,7 @@ from github_storage import github_token, load_csv_file, save_csv_file
 
 DATA_DIR = Path(__file__).parent / "data"
 BOARD_JOBS_PATH = DATA_DIR / "jobs_board_staging.csv"
+CURATED_PATH = DATA_DIR / "j_curated_shortlist.csv"
 SEMANTIC_FIT_PATH = DATA_DIR / "semantic_fit.csv"
 HISTORY_PATH = "data/opportunity_history.csv"
 
@@ -33,8 +34,8 @@ def _norm(value: object) -> str:
 def _role_family(title: object, description: object = "") -> str:
     text = f"{title} {description}".lower()
     rules = [
-        ("Treasury / Markets", ("treasury", "cash management", "liquidity", "hedging", "fx ", "interest rate", "alm")),
-        ("Investments / PE", ("private equity", "investment analyst", "investment associate", "portfolio management", "investments")),
+        ("Treasury / Markets", ("treasury", "cash management", "liquidity", "hedging", "fx ", "interest rate", "alm", "market risk")),
+        ("Investments / PE", ("private equity", "investment analyst", "investment associate", "portfolio management", "investments", "beteiligung")),
         ("Corporate Finance / M&A", ("corporate finance", "corporate development", "m&a", "merger", "acquisition", "valuation", "transaction")),
         ("Risk", ("market risk", "financial risk", "risk analyst", "risk manager", "credit risk")),
         ("FP&A / Performance", ("fp&a", "financial planning", "controlling", "controller", "performance management")),
@@ -61,9 +62,6 @@ def _load_company_context() -> pd.DataFrame:
     universe = pd.concat(frames, ignore_index=True, sort=False).fillna("")
     universe = universe.drop_duplicates("canonical_company_id", keep="last")
 
-    # Keep the universe's default rating as a fallback, but let the user's live
-    # company_ratings.csv value override it. Avoid pandas rating_x/rating_y,
-    # which would otherwise silently remove A's rating from J's rank.
     if "rating" in universe.columns:
         universe["base_rating"] = universe["rating"].fillna("")
         universe = universe.drop(columns=["rating"])
@@ -76,10 +74,14 @@ def _load_company_context() -> pd.DataFrame:
         universe = universe.drop(columns=["company_category"])
     categories_path = DATA_DIR / "company_categories.csv"
     if categories_path.exists():
-        category_frames.append(pd.read_csv(categories_path).fillna("")[["canonical_company_id", "company_category"]])
+        categories = pd.read_csv(categories_path).fillna("")
+        if {"canonical_company_id", "company_category"}.issubset(categories.columns):
+            category_frames.append(categories[["canonical_company_id", "company_category"]])
     overrides_path = DATA_DIR / "company_category_overrides.csv"
     if overrides_path.exists():
-        category_frames.append(pd.read_csv(overrides_path).fillna("")[["canonical_company_id", "company_category"]])
+        overrides = pd.read_csv(overrides_path).fillna("")
+        if {"canonical_company_id", "company_category"}.issubset(overrides.columns):
+            category_frames.append(overrides[["canonical_company_id", "company_category"]])
     if category_frames:
         categories = pd.concat(category_frames, ignore_index=True).drop_duplicates("canonical_company_id", keep="last")
         universe = universe.merge(categories, on="canonical_company_id", how="left")
@@ -89,14 +91,15 @@ def _load_company_context() -> pd.DataFrame:
     ratings_path = DATA_DIR / "company_ratings.csv"
     if ratings_path.exists():
         ratings = pd.read_csv(ratings_path).fillna("")
-        ratings = ratings.drop_duplicates("canonical_company_id", keep="last")
-        ratings = ratings[["canonical_company_id", "rating"]].rename(columns={"rating": "saved_rating"})
-        universe = universe.merge(ratings, on="canonical_company_id", how="left")
-        universe["saved_rating"] = universe["saved_rating"].fillna("")
-        universe["rating"] = universe["saved_rating"].where(
-            universe["saved_rating"].ne(""), universe["base_rating"]
-        )
-        universe = universe.drop(columns=["saved_rating"])
+        if {"canonical_company_id", "rating"}.issubset(ratings.columns):
+            ratings = ratings.drop_duplicates("canonical_company_id", keep="last")
+            ratings = ratings[["canonical_company_id", "rating"]].rename(columns={"rating": "saved_rating"})
+            universe = universe.merge(ratings, on="canonical_company_id", how="left")
+            universe["saved_rating"] = universe["saved_rating"].fillna("")
+            universe["rating"] = universe["saved_rating"].where(universe["saved_rating"].ne(""), universe["base_rating"])
+            universe = universe.drop(columns=["saved_rating"])
+        else:
+            universe["rating"] = universe["base_rating"]
     else:
         universe["rating"] = universe["base_rating"]
     universe["rating"] = universe["rating"].replace("", "Unrated")
@@ -150,8 +153,12 @@ def _enrich_company(jobs: pd.DataFrame) -> pd.DataFrame:
 
 def _merge_semantic_fit(jobs: pd.DataFrame) -> pd.DataFrame:
     out = jobs.copy()
-    out["semantic_fit"] = ""
-    out["semantic_reasoning"] = ""
+    if "semantic_fit" not in out.columns:
+        out["semantic_fit"] = ""
+    if "semantic_reasoning" not in out.columns:
+        out["semantic_reasoning"] = ""
+    out["semantic_fit"] = out["semantic_fit"].fillna("")
+    out["semantic_reasoning"] = out["semantic_reasoning"].fillna("")
     if not SEMANTIC_FIT_PATH.exists():
         return out
     sem = pd.read_csv(SEMANTIC_FIT_PATH).fillna("")
@@ -161,10 +168,41 @@ def _merge_semantic_fit(jobs: pd.DataFrame) -> pd.DataFrame:
     fit_col = "fit" if "fit" in sem.columns else "semantic_fit" if "semantic_fit" in sem.columns else ""
     reasoning_col = "reasoning" if "reasoning" in sem.columns else "fit_reasoning" if "fit_reasoning" in sem.columns else ""
     if fit_col:
-        out["semantic_fit"] = out["job_id"].map(sem[fit_col]).fillna("")
+        mapped = out["job_id"].map(sem[fit_col]).fillna("")
+        out["semantic_fit"] = out["semantic_fit"].where(out["semantic_fit"].ne(""), mapped)
     if reasoning_col:
-        out["semantic_reasoning"] = out["job_id"].map(sem[reasoning_col]).fillna("")
+        mapped = out["job_id"].map(sem[reasoning_col]).fillna("")
+        out["semantic_reasoning"] = out["semantic_reasoning"].where(out["semantic_reasoning"].ne(""), mapped)
     return out
+
+
+def _load_candidates() -> pd.DataFrame:
+    frames: list[pd.DataFrame] = []
+
+    if CURATED_PATH.exists() and CURATED_PATH.stat().st_size > 0:
+        curated = pd.read_csv(CURATED_PATH).fillna("")
+        curated["is_curated"] = True
+        curated["curated_rank"] = pd.to_numeric(curated.get("curated_rank", 999), errors="coerce").fillna(999)
+        curated["status"] = "Open"
+        frames.append(curated)
+
+    if BOARD_JOBS_PATH.exists() and BOARD_JOBS_PATH.stat().st_size > 0:
+        board = pd.read_csv(BOARD_JOBS_PATH).fillna("")
+        if not board.empty:
+            board = board[board.get("status", "").eq("Open")].copy()
+            board["is_curated"] = False
+            board["curated_rank"] = 999
+            frames.append(board)
+
+    if not frames:
+        return pd.DataFrame()
+
+    jobs = pd.concat(frames, ignore_index=True, sort=False).fillna("")
+    jobs = jobs.drop_duplicates("job_id", keep="first")
+    for col in ["description", "description_en", "source_id", "date_posted", "discovered_at", "last_seen_at", "calibration_score"]:
+        if col not in jobs.columns:
+            jobs[col] = ""
+    return jobs
 
 
 def _rank(jobs: pd.DataFrame) -> pd.DataFrame:
@@ -178,21 +216,25 @@ def _rank(jobs: pd.DataFrame) -> pd.DataFrame:
         + out["company_rating"].map(company_points).fillna(0)
     )
     out["role_family"] = out.apply(
-        lambda r: _role_family(r.get("title", ""), r.get("description_en", "") or r.get("description", "")),
+        lambda r: str(r.get("role_family", "")) or _role_family(r.get("title", ""), r.get("description_en", "") or r.get("description", "")),
         axis=1,
     )
     out["_posted"] = pd.to_datetime(out.get("date_posted", ""), errors="coerce", utc=True)
-    return out.sort_values(["_score", "_posted", "last_seen_at"], ascending=[False, False, False])
+    out["_curated_sort"] = out["is_curated"].map({True: 0, False: 1}).fillna(1)
+    out["curated_rank"] = pd.to_numeric(out.get("curated_rank", 999), errors="coerce").fillna(999)
+    return out.sort_values(
+        ["_curated_sort", "curated_rank", "_score", "_posted", "last_seen_at"],
+        ascending=[True, True, False, False, False],
+    )
 
 
-def _diversified_top(jobs: pd.DataFrame, limit: int = 20) -> pd.DataFrame:
-    if jobs.empty:
-        return jobs
+def _diversified_fill(jobs: pd.DataFrame, limit: int) -> pd.DataFrame:
+    if jobs.empty or limit <= 0:
+        return jobs.iloc[0:0].copy()
     selected: list[int] = []
     family_count: dict[str, int] = {}
     company_count: dict[str, int] = {}
     country_count: dict[str, int] = {}
-
     for idx, row in jobs.iterrows():
         family = str(row.get("role_family", "Other finance"))
         company = _norm(row.get("company", "")) or str(idx)
@@ -209,16 +251,10 @@ def _diversified_top(jobs: pd.DataFrame, limit: int = 20) -> pd.DataFrame:
         country_count[country] = country_count.get(country, 0) + 1
         if len(selected) >= limit:
             break
-
     if len(selected) < limit:
-        for idx, row in jobs.iterrows():
-            if idx in selected:
-                continue
-            company = _norm(row.get("company", "")) or str(idx)
-            if company_count.get(company, 0) >= 2:
-                continue
-            selected.append(idx)
-            company_count[company] = company_count.get(company, 0) + 1
+        for idx in jobs.index:
+            if idx not in selected:
+                selected.append(idx)
             if len(selected) >= limit:
                 break
     return jobs.loc[selected].copy()
@@ -233,13 +269,10 @@ def _history() -> tuple[pd.DataFrame, str | None]:
 
 
 def _current_shortlist() -> tuple[pd.DataFrame, pd.DataFrame, str | None]:
-    if not BOARD_JOBS_PATH.exists():
-        return pd.DataFrame(), pd.DataFrame(columns=HISTORY_COLUMNS), None
-    jobs = pd.read_csv(BOARD_JOBS_PATH).fillna("")
+    jobs = _load_candidates()
     if jobs.empty:
         return jobs, pd.DataFrame(columns=HISTORY_COLUMNS), None
-    jobs = jobs[jobs["status"].eq("Open")].copy()
-    jobs = jobs.drop_duplicates("job_id", keep="last")
+
     jobs = _merge_semantic_fit(_enrich_company(jobs))
     jobs = _rank(jobs)
 
@@ -257,7 +290,14 @@ def _current_shortlist() -> tuple[pd.DataFrame, pd.DataFrame, str | None]:
         jobs["prior_role_feedback"] = ""
         jobs["prior_comment"] = ""
 
-    return _diversified_top(jobs, 20), history, history_sha
+    curated = jobs[jobs["is_curated"].eq(True)].head(20).copy()
+    if len(curated) >= 20:
+        return curated, history, history_sha
+
+    remaining = jobs[~jobs["job_id"].isin(curated["job_id"])].copy()
+    fill = _diversified_fill(remaining, 20 - len(curated))
+    shortlist = pd.concat([curated, fill], ignore_index=False, sort=False).head(20)
+    return shortlist, history, history_sha
 
 
 def _upsert_history(history: pd.DataFrame, edited: pd.DataFrame, source: pd.DataFrame) -> pd.DataFrame:
@@ -320,13 +360,13 @@ def render_action_queue() -> None:
     st.markdown('<div class="eyebrow">Workstream J</div>', unsafe_allow_html=True)
     st.title("Apply Shortlist")
     st.caption(
-        "Your actionable TOP 20 from automated sourcing. G finds roles; A adds company context; "
-        "C ranks role fit; this page is where you decide what to do."
+        "Your actionable TOP 20 from G. The first slots are actively researched prime roles; "
+        "A adds company context, C supplies role fit, and this is where you decide what to do."
     )
 
     shortlist, history, history_sha = _current_shortlist()
     if shortlist.empty:
-        st.info("No open G roles are currently available for the shortlist.")
+        st.info("No actionable G roles are currently available for the shortlist.")
         return
 
     m1, m2, m3, m4 = st.columns(4)
@@ -336,8 +376,8 @@ def render_action_queue() -> None:
     m4.metric("Strong semantic fit", int(shortlist["semantic_fit"].eq("Strong").sum()))
 
     st.caption(
-        "The list is deliberately diversified: one role family, company or country cannot fill the whole TOP 20. "
-        "Apply and Skip leave this queue after saving; Maybe stays available."
+        "Prime roles are actively selected from G rather than waiting for a random first queue. "
+        "Apply and Skip leave J after saving; the next best G candidate fills the vacancy. Maybe stays available."
     )
 
     display = shortlist.set_index("job_id").copy()
@@ -349,7 +389,6 @@ def render_action_queue() -> None:
         lambda r: (
             f"{r.get('semantic_fit') or 'C pre-score'}"
             + (f" · {r.get('semantic_reasoning')}" if r.get("semantic_reasoning") else "")
-            + (f" · score {r.get('calibration_score')}" if r.get("calibration_score") != "" else "")
         ),
         axis=1,
     )
@@ -409,5 +448,5 @@ def render_action_queue() -> None:
         st.write(
             "Your action is the primary operational signal. Company and role feedback are stored separately so "
             "future batch calibration can feed company patterns back to A and role patterns back to C. "
-            "Nothing rewrites A/C after every single click; calibration can use accumulated batches."
+            "Nothing rewrites A/C after every single click; calibration uses accumulated batches."
         )

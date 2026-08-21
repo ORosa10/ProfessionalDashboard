@@ -14,6 +14,7 @@ on:
       - "sourcing/board_sweep_v2.py"
       - "sourcing/build_semantic_fit_queue.py"
       - "sourcing/filter_language_requirements.py"
+      - "sourcing/test_filter_language_requirements.py"
       - "sourcing/board_html_adapters.py"
       - "sourcing/board_jobs_ch.py"
       - "sourcing/board_additional_adapters.py"
@@ -59,7 +60,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt -r sourcing/requirements.txt
       - name: Validate board adapter parsers
-        run: python -m unittest sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_nav_no sourcing.test_board_jobbsafari_no sourcing.test_board_academicwork sourcing.test_board_thehub sourcing.test_board_official_adapters
+        run: python -m unittest sourcing.test_filter_language_requirements sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_nav_no sourcing.test_board_jobbsafari_no sourcing.test_board_academicwork sourcing.test_board_thehub sourcing.test_board_official_adapters
       - name: Fetch and save supported national-board roles
         run: |
           if [ "$GITHUB_EVENT_NAME" = "push" ]; then

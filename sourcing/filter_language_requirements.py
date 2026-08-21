@@ -28,17 +28,6 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PATH = ROOT / "data" / "jobs_board_staging.csv"
 
 GERMAN_TERMS = ("german", "deutsch", "deutsche", "deutschen", "deutscher")
-GERMAN_BLOCK_LEVELS = (
-    r"\bc1\b",
-    r"\bc2\b",
-    r"\bfluent\b",
-    r"\bfluency\b",
-    r"flie(?:ß|ss)end",
-    r"verhandlungssicher",
-    r"\bnative\b",
-    r"muttersprach",
-    r"muttersprache",
-)
 
 # English and Czech are intentionally absent. German is handled separately.
 OTHER_LANGUAGES = {
@@ -54,22 +43,6 @@ OTHER_LANGUAGES = {
     "Spanish": ("spanish", "español", "espanol"),
 }
 
-REQUIREMENT_MARKERS = (
-    r"\brequired\b",
-    r"\brequirement\b",
-    r"\bprerequisite\b",
-    r"\bmandatory\b",
-    r"\bmust\b",
-    r"\bessential\b",
-    r"\bfluent\b",
-    r"\bfluency\b",
-    r"professional (?:working )?proficiency",
-    r"business[- ](?:level|fluent)",
-    r"native",
-    r"mother tongue",
-    r"muttersprach",
-)
-
 
 def _text(row: pd.Series) -> str:
     parts = [
@@ -83,28 +56,72 @@ def _text(row: pd.Series) -> str:
 
 def _sentences(text: str) -> list[str]:
     # Keep bullet-style requirements separate enough that a language marker is
-    # not accidentally paired with an unrelated "required" several paragraphs away.
+    # not accidentally paired with an unrelated requirement several paragraphs away.
     return [s.strip().lower() for s in re.split(r"[\n\r•;.!?]+", text) if s.strip()]
 
 
-def _contains_any(sentence: str, patterns: tuple[str, ...]) -> bool:
-    return any(re.search(pattern, sentence, flags=re.IGNORECASE) for pattern in patterns)
+def _language_regex(terms: tuple[str, ...]) -> str:
+    return "(?:" + "|".join(re.escape(term) for term in terms) + ")"
+
+
+def _german_block(sentence: str) -> bool:
+    lang = _language_regex(GERMAN_TERMS)
+
+    # Explicit B1/B2 should stay eligible unless the same sentence also states
+    # a genuinely higher German requirement.
+    ordinary_level = re.search(rf"(?:{lang}).{{0,25}}\b(?:b1|b2)\b|\b(?:b1|b2)\b.{{0,25}}(?:{lang})", sentence)
+
+    explicit_high = [
+        rf"(?:{lang}).{{0,35}}\b(?:c1|c2)\b",
+        rf"\b(?:c1|c2)\b.{{0,35}}(?:{lang})",
+        rf"\bfluent\b.{{0,25}}(?:in\s+)?(?:{lang})",
+        rf"(?:{lang}).{{0,25}}\bfluent\b",
+        rf"\bfluency\s+in\s+(?:{lang})",
+        rf"(?:{lang}).{{0,25}}flie(?:ß|ss)end",
+        rf"flie(?:ß|ss)end.{{0,25}}(?:{lang})",
+        rf"(?:{lang}).{{0,25}}verhandlungssicher",
+        rf"verhandlungssicher.{{0,25}}(?:{lang})",
+        rf"\bnative\b.{{0,25}}(?:{lang})",
+        rf"(?:{lang}).{{0,25}}\bnative\b",
+        rf"muttersprach\w*.{{0,25}}(?:{lang})",
+        rf"(?:{lang}).{{0,25}}muttersprach\w*",
+    ]
+    high = any(re.search(pattern, sentence, flags=re.IGNORECASE) for pattern in explicit_high)
+    if ordinary_level and not high:
+        return False
+    return high
+
+
+def _other_language_block(sentence: str, terms: tuple[str, ...]) -> bool:
+    lang = _language_regex(terms)
+    explicit = [
+        rf"(?:{lang}).{{0,35}}\b(?:required|mandatory|essential|prerequisite)\b",
+        rf"\b(?:required|mandatory|essential)\b.{{0,35}}(?:{lang})",
+        rf"\bprerequisite\b.{{0,35}}(?:{lang})",
+        rf"\bfluent\b.{{0,25}}(?:in\s+)?(?:{lang})",
+        rf"(?:{lang}).{{0,25}}\bfluent\b",
+        rf"\bfluency\s+in\s+(?:{lang})",
+        rf"professional (?:working )?proficiency.{{0,20}}(?:in\s+)?(?:{lang})",
+        rf"(?:{lang}).{{0,20}}professional (?:working )?proficiency",
+        rf"business[- ](?:level|fluent).{{0,20}}(?:{lang})",
+        rf"(?:{lang}).{{0,20}}business[- ](?:level|fluent)",
+        rf"\bnative\b.{{0,25}}(?:{lang})",
+        rf"(?:{lang}).{{0,25}}\bnative\b",
+        rf"\bmust\b.{{0,20}}(?:speak|know|be fluent in|have).{{0,20}}(?:{lang})",
+    ]
+    return any(re.search(pattern, sentence, flags=re.IGNORECASE) for pattern in explicit)
 
 
 def blocking_language_requirement(text: str) -> str:
     sentences = _sentences(text)
 
-    # German exception: B1/B2 and ordinary working/good German are allowed.
     for sentence in sentences:
-        if any(term in sentence for term in GERMAN_TERMS) and _contains_any(sentence, GERMAN_BLOCK_LEVELS):
+        if any(term in sentence for term in GERMAN_TERMS) and _german_block(sentence):
             return "German C1/C2/fluent/native-level requirement"
 
-    # For other languages, require both the language and an explicit requirement
-    # marker in the same sentence/bullet. Mere mention of a country/language does
-    # not block the role.
     for label, terms in OTHER_LANGUAGES.items():
         for sentence in sentences:
-            if any(term in sentence for term in terms) and _contains_any(sentence, REQUIREMENT_MARKERS):
+            if any(term in sentence for term in terms) and _other_language_block(sentence, terms):
                 return f"Mandatory {label} requirement"
     return ""
 

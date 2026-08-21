@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+import time
 from datetime import datetime, timedelta, timezone
 from email.utils import format_datetime
 from urllib.parse import urljoin
@@ -29,10 +30,6 @@ def _relevant_title(value: object) -> bool:
 def _sanitize_token(value: object) -> str:
     """Extract the signed JWT from NAV's human-readable public-token response."""
     raw = str(value or "").strip().strip('"').strip("'")
-    # /api/publicToken currently returns text like:
-    #   Current public token for Nav Job Vacancy Feed:\n<JWT>
-    # rather than a bare token. Prefer extracting a JWT-shaped value so the
-    # descriptive prefix never leaks into the Authorization header.
     jwt = re.search(r"([A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)", raw)
     if jwt:
         return jwt.group(1)
@@ -45,15 +42,30 @@ def _sanitize_token(value: object) -> str:
     return token
 
 
-def _get_public_token() -> str:
-    response = requests.get(TOKEN_URL, headers=HEADERS, timeout=30); response.raise_for_status()
-    try: payload = response.json()
-    except ValueError: return _sanitize_token(response.text)
-    if isinstance(payload, str): return _sanitize_token(payload)
-    if isinstance(payload, dict):
-        for key in ("token", "publicToken", "access_token"):
-            if payload.get(key): return _sanitize_token(payload[key])
-    raise ValueError("NAV public token response did not contain a token")
+def _get_public_token(attempts: int = 3) -> str:
+    """Fetch NAV's rotating public token, retrying transient network failures."""
+    last_exc: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            response = requests.get(TOKEN_URL, headers=HEADERS, timeout=45)
+            response.raise_for_status()
+            try:
+                payload = response.json()
+            except ValueError:
+                return _sanitize_token(response.text)
+            if isinstance(payload, str):
+                return _sanitize_token(payload)
+            if isinstance(payload, dict):
+                for key in ("token", "publicToken", "access_token"):
+                    if payload.get(key):
+                        return _sanitize_token(payload[key])
+            raise ValueError("NAV public token response did not contain a token")
+        except Exception as exc:
+            last_exc = exc
+            if attempt < attempts - 1:
+                time.sleep(1.5 * (attempt + 1))
+    assert last_exc is not None
+    raise last_exc
 
 
 def _auth_headers(token: str, since: datetime | None = None) -> dict[str, str]:

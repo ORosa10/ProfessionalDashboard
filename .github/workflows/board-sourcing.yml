@@ -13,6 +13,7 @@ on:
       - "sourcing/board_sweep.py"
       - "sourcing/board_sweep_v2.py"
       - "sourcing/build_semantic_fit_queue.py"
+      - "sourcing/filter_language_requirements.py"
       - "sourcing/board_html_adapters.py"
       - "sourcing/board_jobs_ch.py"
       - "sourcing/board_additional_adapters.py"
@@ -70,6 +71,8 @@ jobs:
           else
             python -m sourcing.board_sweep_v2 --no-translate
           fi
+      - name: Filter explicit language blockers before C and J
+        run: python -m sourcing.filter_language_requirements
       - name: Build pending C semantic-fit queue
         run: python -m sourcing.build_semantic_fit_queue --limit 80
       - name: Commit refreshed board roles to main

@@ -123,3 +123,7 @@ run_at,board_id,country,adapter,queries,verified_jobs,errors,registry_status
 2026-08-21T06:52:44.838336+00:00,jobunivers-dk,Denmark,jobunivers_dk_html,9,11,,active
 2026-08-21T06:52:44.838336+00:00,barona-fi,Finland,barona_fi_html,9,1,,active
 2026-08-21T06:52:44.838336+00:00,academicwork-fi,Finland,academicwork_fi_html,9,3,,active
+2026-08-21T09:35:55.535368+00:00,findajob-uk,United Kingdom,findajob_uk_html,9,0,search finance: q: ReadTimeout / qwd: no detail links | search treasury: q: ReadTimeout / qwd: ReadTimeout | search investment: q: no detail links / qwd: no detail links | search risk: q: no detail links / qwd: no detail links,adapter_ready
+2026-08-21T09:35:55.535368+00:00,jobserve-uk,United Kingdom,jobserve_uk_html,9,12,,active
+2026-08-21T09:35:55.535368+00:00,arbeidsplassen-no,Norway,nav_stilling_feed,9,0,feed page 1: ReadTimeout,adapter_ready
+2026-08-21T09:35:55.535368+00:00,jobbsafari-no,Norway,jobbsafari_no_html,9,7,,active

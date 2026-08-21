@@ -61,6 +61,15 @@ def _load_company_context() -> pd.DataFrame:
     universe = pd.concat(frames, ignore_index=True, sort=False).fillna("")
     universe = universe.drop_duplicates("canonical_company_id", keep="last")
 
+    # Keep the universe's default rating as a fallback, but let the user's live
+    # company_ratings.csv value override it. Avoid pandas rating_x/rating_y,
+    # which would otherwise silently remove A's rating from J's rank.
+    if "rating" in universe.columns:
+        universe["base_rating"] = universe["rating"].fillna("")
+        universe = universe.drop(columns=["rating"])
+    else:
+        universe["base_rating"] = ""
+
     category_frames: list[pd.DataFrame] = []
     if "company_category" in universe.columns:
         category_frames.append(universe[["canonical_company_id", "company_category"]])
@@ -81,12 +90,16 @@ def _load_company_context() -> pd.DataFrame:
     if ratings_path.exists():
         ratings = pd.read_csv(ratings_path).fillna("")
         ratings = ratings.drop_duplicates("canonical_company_id", keep="last")
-        universe = universe.merge(
-            ratings[["canonical_company_id", "rating"]],
-            on="canonical_company_id", how="left",
+        ratings = ratings[["canonical_company_id", "rating"]].rename(columns={"rating": "saved_rating"})
+        universe = universe.merge(ratings, on="canonical_company_id", how="left")
+        universe["saved_rating"] = universe["saved_rating"].fillna("")
+        universe["rating"] = universe["saved_rating"].where(
+            universe["saved_rating"].ne(""), universe["base_rating"]
         )
+        universe = universe.drop(columns=["saved_rating"])
     else:
-        universe["rating"] = "Unrated"
+        universe["rating"] = universe["base_rating"]
+    universe["rating"] = universe["rating"].replace("", "Unrated")
 
     for col in ["why_test", "archetype", "aliases_entities", "company_category", "rating"]:
         if col not in universe.columns:

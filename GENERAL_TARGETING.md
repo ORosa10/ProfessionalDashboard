@@ -1,6 +1,6 @@
 # General Targeting Principles v0.1
 
-Updated: 2026-08-12  
+Updated: 2026-08-21  
 Scope: cross-sector rules for Consulting, Private Markets, Banking, Investment Banking, Corporates and future employer categories
 
 ## How sector learning is combined
@@ -29,8 +29,11 @@ Scope: cross-sector rules for Consulting, Private Markets, Banking, Investment B
 
 - Primary geography: Czechia; Germany, especially Munich, Berlin, Frankfurt and Hamburg; Vienna; Switzerland, especially Zurich/Zug; the Nordics; London and surrounding UK opportunities.
 - English and Czech are fluent. German is approximately B2.
-- Business-fluent, native or C1/C2 German is a visible feasibility caution, not an automatic deletion.
-- Other mandatory local-language requirements must be shown separately from intrinsic interest in the role.
+- **German is not an automatic blocker at ordinary working level.** Roles asking for B1/B2, good German, gute Deutschkenntnisse or ordinary working knowledge remain eligible for J.
+- **German becomes an automatic feasibility pass only when the advert explicitly requires C1/C2, fluent / fließend, verhandlungssicher, native / muttersprachlich or equivalent near-native business proficiency.**
+- For Norwegian, Swedish, Danish, Finnish and other non-English/Czech local languages, an **explicit mandatory / prerequisite / fluent requirement is an automatic feasibility pass before J**.
+- A mere mention of a language, country or multilingual environment is not enough to filter a role. The requirement must be explicit.
+- Language feasibility is separate from intrinsic semantic fit: a role can still be conceptually attractive while being removed from the actionable shortlist because its language requirement makes it non-actionable.
 
 ## Signals that must remain separate
 
@@ -67,3 +70,10 @@ Rejecting **pure IT / data / analytics-engineering** roles now repeats across bo
 - **Investment / portfolio management / fixed income / asset management** roles were rated Interested across Banking, Public Markets and Specialist Funds but were previously unscored — now a positive in calibration_rules.json. This belongs in the general profile.
 - **Deep code-heavy quant** is a mild negative even though modelling is positive (repeated: "too much in code", "too much quant", "depends how quantitative"). Quant is attractive as applied modelling, not as a software/quant-dev job.
 - **Open data-quality item:** several Public Markets roles (Capital Group, Neuberger) could not be judged because their sourced descriptions were generic company boilerplate. Improve description extraction for those employers so the semantic fit has real text to reason over.
+
+## Operational note 2026-08-21: language feasibility before J
+
+- Workstream J is an actionable apply queue, so explicit language blockers are removed **before** C queue construction and before J ranking.
+- The source row is preserved for auditability with status `Pass_language`; it is not deleted.
+- This is a feasibility rule only. It must not retrain or distort semantic-fit preferences in C.
+- German follows the B2 exception above; other mandatory local languages are passed when the requirement is explicit.

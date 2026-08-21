@@ -1,7 +1,7 @@
 name: Country board sourcing
 
 # Workstream G: country/job-board retrieval. G is a source layer, not a second
-# review inbox: downstream A/C enrichment will route retained roles to Jobs.
+# review inbox: downstream A/C enrichment will route retained roles to J.
 
 on:
   workflow_dispatch:
@@ -12,6 +12,7 @@ on:
     paths:
       - "sourcing/board_sweep.py"
       - "sourcing/board_sweep_v2.py"
+      - "sourcing/build_semantic_fit_queue.py"
       - "sourcing/board_html_adapters.py"
       - "sourcing/board_jobs_ch.py"
       - "sourcing/board_additional_adapters.py"
@@ -69,11 +70,13 @@ jobs:
           else
             python -m sourcing.board_sweep_v2 --no-translate
           fi
+      - name: Build pending C semantic-fit queue
+        run: python -m sourcing.build_semantic_fit_queue --limit 80
       - name: Commit refreshed board roles to main
         run: |
           git config user.name "professional-dashboard-bot"
           git config user.email "professional-dashboard-bot@users.noreply.github.com"
-          git add data/jobs_board_staging.csv data/board_source_runs.csv
+          git add data/jobs_board_staging.csv data/board_source_runs.csv data/semantic_fit_queue.csv
           if git diff --cached --quiet; then echo "no board changes"; exit 0; fi
           git commit -m "Refresh country board sourced roles (workstream G)"
           for a in 1 2 3; do

@@ -127,3 +127,7 @@ run_at,board_id,country,adapter,queries,verified_jobs,errors,registry_status
 2026-08-21T09:35:55.535368+00:00,jobserve-uk,United Kingdom,jobserve_uk_html,9,12,,active
 2026-08-21T09:35:55.535368+00:00,arbeidsplassen-no,Norway,nav_stilling_feed,9,0,feed page 1: ReadTimeout,adapter_ready
 2026-08-21T09:35:55.535368+00:00,jobbsafari-no,Norway,jobbsafari_no_html,9,7,,active
+2026-08-21T11:13:58.377272+00:00,findajob-uk,United Kingdom,findajob_uk_html,9,0,search finance: q: no detail links / qwd: ReadTimeout | search treasury: q: ReadTimeout / qwd: no detail links | search investment: q: ReadTimeout / qwd: no detail links | search risk: q: ReadTimeout / qwd: no detail links,adapter_ready
+2026-08-21T11:13:58.377272+00:00,jobserve-uk,United Kingdom,jobserve_uk_html,9,14,,active
+2026-08-21T11:13:58.377272+00:00,arbeidsplassen-no,Norway,nav_stilling_feed,9,0,feed page 1: ReadTimeout,adapter_ready
+2026-08-21T11:13:58.377272+00:00,jobbsafari-no,Norway,jobbsafari_no_html,9,6,,active

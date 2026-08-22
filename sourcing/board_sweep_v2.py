@@ -21,7 +21,7 @@ from sourcing.board_nav_no import discover_nav
 from sourcing.board_official_adapters import discover_findajob, discover_mpsv
 from sourcing.board_thehub import discover_thehub
 from sourcing.board_sweep import (
-    BOARDS_PATH, DEFAULT_QUERIES, OUT_PATH, RUNS_PATH, STAGING_COLUMNS,
+    BOARDS_PATH, OUT_PATH, RUNS_PATH, STAGING_COLUMNS,
     _merge_with_existing, deduplicate_board_jobs, discover_arbeitsagentur,
     discover_platsbanken, translate_with_board_cache,
 )
@@ -29,6 +29,59 @@ from sourcing.board_sweep import (
 ROOT = Path(__file__).resolve().parents[1]
 AUDIT_PATH = ROOT / "data" / "job_board_access_audit.csv"
 COUNTRY_WEIGHTS_PATH = ROOT / "data" / "country_sourcing_weights.json"
+
+# Search vocabulary is deliberately broader and more role-specific than the old
+# generic nine-query set. G should build a deep candidate pool; C then makes the
+# semantic judgement. These are discovery queries, never hard inclusion rules.
+SEARCH_QUERIES = [
+    # Treasury / markets
+    "treasury",
+    "corporate treasury",
+    "treasury analyst",
+    "treasury specialist",
+    "treasury manager",
+    "cash management",
+    "liquidity management",
+    "funding",
+    "financial markets",
+    "market risk",
+    "liquidity risk",
+    "interest rate risk",
+    "FX risk",
+    "hedging",
+    "derivatives",
+    "commodity risk",
+    "ALM",
+    # Investments / asset management
+    "investment analyst",
+    "investment associate",
+    "investment manager",
+    "private equity",
+    "portfolio management",
+    "portfolio analyst",
+    "asset management",
+    "equity analyst",
+    "fixed income analyst",
+    "credit analyst",
+    "investment research",
+    # Corporate finance / transactions
+    "corporate finance",
+    "corporate development",
+    "M&A",
+    "transaction services",
+    "deal advisory",
+    "valuation",
+    "financial modelling",
+    "capital advisory",
+    "debt advisory",
+    "restructuring",
+    # Strategic finance / adjacent finance
+    "strategic finance",
+    "FP&A",
+    "business controller",
+    "finance business partner",
+]
+
 CATALOG_ADAPTERS = {
     "startupjobs_cz_html": "startupjobs-cz", "cocuma_cz_html": "cocuma-cz",
     "jobwinner_ch_html": "jobwinner-ch", "nzz_jobs_ch_html": "nzz-jobs-ch",
@@ -87,10 +140,7 @@ def _country_board_budgets(runnable: pd.DataFrame, base_per_query: int, base_max
         if not country_weight or counts[country] <= 0:
             scale = 1.0
         else:
-            # Uniform per-board effort would be 1 / n_boards. Target effort per
-            # board is country_weight / number_of_boards_in_country.
             scale = (country_weight / counts[country]) * n_boards
-        # Avoid pathological tiny/huge requests while preserving the target mix.
         scale = min(2.5, max(0.35, scale))
         per_query = max(2, round(base_per_query * scale))
         max_details = max(12, round(base_max_details * scale))
@@ -100,15 +150,15 @@ def _country_board_budgets(runnable: pd.DataFrame, base_per_query: int, base_max
 
 def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict], list[str]]:
     adapter = str(getattr(row, "adapter", ""))
-    if adapter == "jobtech_api": return discover_platsbanken(DEFAULT_QUERIES, per_query)
-    if adapter == "arbeitsagentur_html": return discover_arbeitsagentur(DEFAULT_QUERIES, per_query, max_details)
+    if adapter == "jobtech_api": return discover_platsbanken(SEARCH_QUERIES, per_query)
+    if adapter == "arbeitsagentur_html": return discover_arbeitsagentur(SEARCH_QUERIES, per_query, max_details)
     if adapter == "mpsv_open_data": return discover_mpsv(max_details)
-    if adapter == "findajob_uk_html": return discover_findajob(DEFAULT_QUERIES, per_query, max_details)
+    if adapter == "findajob_uk_html": return discover_findajob(SEARCH_QUERIES, per_query, max_details)
     if adapter == "nav_stilling_feed": return discover_nav(max_details)
-    if adapter == "jobbsafari_no_html": return discover_jobbsafari_no(DEFAULT_QUERIES, per_query, max_details)
+    if adapter == "jobbsafari_no_html": return discover_jobbsafari_no(SEARCH_QUERIES, per_query, max_details)
     if adapter == "academicwork_dk_html": return discover_academicwork("academicwork-dk", max_details)
     if adapter == "academicwork_fi_html": return discover_academicwork("academicwork-fi", max_details)
-    if adapter in CATALOG_ADAPTERS: return discover_catalog_board(CATALOG_ADAPTERS[adapter], DEFAULT_QUERIES, per_query, max_details)
+    if adapter in CATALOG_ADAPTERS: return discover_catalog_board(CATALOG_ADAPTERS[adapter], SEARCH_QUERIES, per_query, max_details)
     html_map = {
         "jobs_cz_html": ("jobs-cz", "Czechia"), "prace_cz_html": ("prace-cz", "Czechia"),
         "stepstone_de_html": ("stepstone-de", "Germany"), "stellenanzeigen_de_html": ("stellenanzeigen-de", "Germany"),
@@ -117,10 +167,10 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
     }
     if adapter in html_map:
         source_id, market = html_map[adapter]
-        return discover_html_jsonld_board(source_id, market, DEFAULT_QUERIES, per_query, max_details)
-    if adapter == "jobs_ch_html": return discover_jobs_ch(DEFAULT_QUERIES, per_query, max_details)
-    if adapter == "jobup_ch_html": return discover_additional_board("jobup-ch", "Switzerland", DEFAULT_QUERIES, per_query, max_details)
-    if adapter == "cv_library_uk_html": return discover_additional_board("cv-library-uk", "United Kingdom", DEFAULT_QUERIES, per_query, max_details)
+        return discover_html_jsonld_board(source_id, market, SEARCH_QUERIES, per_query, max_details)
+    if adapter == "jobs_ch_html": return discover_jobs_ch(SEARCH_QUERIES, per_query, max_details)
+    if adapter == "jobup_ch_html": return discover_additional_board("jobup-ch", "Switzerland", SEARCH_QUERIES, per_query, max_details)
+    if adapter == "cv_library_uk_html": return discover_additional_board("cv-library-uk", "United Kingdom", SEARCH_QUERIES, per_query, max_details)
     if adapter == "jobly_fi_html": return discover_jobly(per_query, max_details)
     if adapter == "thehub_html": return discover_thehub(max_details)
     return [], [f"Unsupported adapter: {adapter}"]
@@ -161,7 +211,7 @@ def main() -> None:
             "country": row.country,
             "adapter": row.adapter,
             "registry_status": row.status,
-            "queries": len(DEFAULT_QUERIES),
+            "queries": len(SEARCH_QUERIES),
             "per_query_budget": board_per_query,
             "max_details_budget": board_max_details,
             "verified_jobs": len(found),

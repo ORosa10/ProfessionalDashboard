@@ -1,0 +1,14 @@
+run_at,source_id,company,market,seed_url,pages_checked,candidate_job_pages,verified_jobs,errors
+2026-08-22T05:44:40.645190+00:00,csg-global,Czechoslovak Group,Multi-region,https://czechoslovakgroup.com/en/career,2,2,0,
+2026-08-22T05:44:58.367415+00:00,cpi-property-group-global,CPI Property Group,Multi-region,https://www.cpipg.com/careers,0,0,0,"https://www.cpipg.com/careers: TimeoutError: Page.goto: Timeout 25000ms exceeded.
+Call log:
+  - navigating to ""https://www.cpipg.com/careers"", waiting until ""domcontentloaded""
+"
+2026-08-22T05:45:49.002092+00:00,investor-ab-global,Investor AB,Multi-region,https://www.investorab.com/career/,2,2,0,
+2026-08-22T05:46:18.440816+00:00,industrivarden-global,Industrivärden,Multi-region,https://www.industrivarden.se/en-gb/career/,1,1,0,https://www.industrivarden.se/en-gb/career/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:46:42.182443+00:00,kinnevik-global,Kinnevik,Multi-region,https://www.kinnevik.com/careers,2,2,0,
+2026-08-22T05:46:54.611438+00:00,exor-global,Exor,Multi-region,https://www.exor.com/pages/exor/careers,2,2,0,
+2026-08-22T05:47:17.889553+00:00,porsche-se-global,Porsche Automobil Holding,Multi-region,https://www.porsche-se.com/en/company/career,1,1,0,https://www.porsche-se.com/en/company/career: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:47:34.416678+00:00,ap-moller-holding-global,A.P. Moller Holding,Multi-region,https://apmoller.com/careers/,1,1,0,https://apmoller.com/careers/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:47:51.339055+00:00,ppf-group-global,PPF Group,Multi-region,https://www.ppf.eu/en/careers,7,0,0,
+2026-08-22T05:47:56.114298+00:00,kkcg-global,KKCG,Multi-region,https://kkcg.com/en/careers,6,0,0,

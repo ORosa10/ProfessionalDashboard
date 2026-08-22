@@ -52,7 +52,7 @@ concurrency:
 jobs:
   source-country-boards:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -62,28 +62,19 @@ jobs:
       - run: pip install -r requirements.txt -r sourcing/requirements.txt
       - name: Validate board adapter parsers
         run: python -m unittest sourcing.test_filter_language_requirements sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_nav_no sourcing.test_board_jobbsafari_no sourcing.test_board_academicwork sourcing.test_board_thehub sourcing.test_board_official_adapters
-      - name: Fetch and save supported national-board roles
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
-            python -m sourcing.board_sweep_v2 --no-translate \
-              --source-id jobserve-uk \
-              --source-id findajob-uk \
-              --source-id jobbsafari-no \
-              --source-id arbeidsplassen-no
-          else
-            python -m sourcing.board_sweep_v2 --no-translate
-          fi
+      - name: Deep full-country sourcing sweep
+        run: python -m sourcing.board_sweep_v2 --no-translate --per-query 18 --max-details 160
       - name: Filter explicit language blockers before C and J
         run: python -m sourcing.filter_language_requirements
-      - name: Build pending C semantic-fit queue
-        run: python -m sourcing.build_semantic_fit_queue --limit 80
+      - name: Build broad pending C semantic-fit queue
+        run: python -m sourcing.build_semantic_fit_queue --limit 160
       - name: Commit refreshed board roles to main
         run: |
           git config user.name "professional-dashboard-bot"
           git config user.email "professional-dashboard-bot@users.noreply.github.com"
           git add data/jobs_board_staging.csv data/board_source_runs.csv data/semantic_fit_queue.csv
           if git diff --cached --quiet; then echo "no board changes"; exit 0; fi
-          git commit -m "Refresh country board sourced roles (workstream G)"
+          git commit -m "Refresh deep country board sourced roles (workstream G)"
           for a in 1 2 3; do
             git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
             sleep $((a * 5))

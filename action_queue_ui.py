@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -13,6 +14,7 @@ DATA_DIR = Path(__file__).parent / "data"
 BOARD_JOBS_PATH = DATA_DIR / "jobs_board_staging.csv"
 CURATED_PATH = DATA_DIR / "j_curated_shortlist.csv"
 SEMANTIC_FIT_PATH = DATA_DIR / "semantic_fit.csv"
+COUNTRY_WEIGHTS_PATH = DATA_DIR / "country_sourcing_weights.json"
 HISTORY_PATH = "data/opportunity_history.csv"
 
 HISTORY_COLUMNS = [
@@ -46,6 +48,16 @@ def _role_family(title: object, description: object = "") -> str:
         if any(term in text for term in terms):
             return family
     return "Other finance"
+
+
+def _country_targets() -> dict[str, int]:
+    if not COUNTRY_WEIGHTS_PATH.exists():
+        return {}
+    try:
+        payload = json.loads(COUNTRY_WEIGHTS_PATH.read_text(encoding="utf-8"))
+        return {str(k): int(v) for k, v in payload.get("top20_targets", {}).items() if int(v) > 0}
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return {}
 
 
 @st.cache_data(ttl=300)
@@ -260,6 +272,50 @@ def _diversified_fill(jobs: pd.DataFrame, limit: int) -> pd.DataFrame:
     return jobs.loc[selected].copy()
 
 
+def _country_targeted_top(jobs: pd.DataFrame, limit: int = 20) -> pd.DataFrame:
+    """Use the agreed country mix as a soft J target, then fill by quality."""
+    if jobs.empty or limit <= 0:
+        return jobs.iloc[0:0].copy()
+    targets = _country_targets()
+    if not targets:
+        return _diversified_fill(jobs, limit)
+
+    selected: list[int] = []
+    family_count: dict[str, int] = {}
+    company_count: dict[str, int] = {}
+
+    for country, target in targets.items():
+        taken = 0
+        for idx, row in jobs[jobs["market"].astype(str).eq(country)].iterrows():
+            family = str(row.get("role_family", "Other finance"))
+            company = _norm(row.get("company", "")) or str(idx)
+            if family_count.get(family, 0) >= 6:
+                continue
+            if company_count.get(company, 0) >= 2:
+                continue
+            selected.append(idx)
+            family_count[family] = family_count.get(family, 0) + 1
+            company_count[company] = company_count.get(company, 0) + 1
+            taken += 1
+            if taken >= target or len(selected) >= limit:
+                break
+        if len(selected) >= limit:
+            break
+
+    if len(selected) < limit:
+        remaining = jobs[~jobs.index.isin(selected)].copy()
+        fill = _diversified_fill(remaining, limit - len(selected))
+        selected.extend(list(fill.index))
+
+    if len(selected) < min(limit, len(jobs)):
+        for idx in jobs.index:
+            if idx not in selected:
+                selected.append(idx)
+            if len(selected) >= limit:
+                break
+    return jobs.loc[selected[:limit]].copy()
+
+
 def _history() -> tuple[pd.DataFrame, str | None]:
     token = github_token()
     try:
@@ -290,14 +346,7 @@ def _current_shortlist() -> tuple[pd.DataFrame, pd.DataFrame, str | None]:
         jobs["prior_role_feedback"] = ""
         jobs["prior_comment"] = ""
 
-    curated = jobs[jobs["is_curated"].eq(True)].head(20).copy()
-    if len(curated) >= 20:
-        return curated, history, history_sha
-
-    remaining = jobs[~jobs["job_id"].isin(curated["job_id"])].copy()
-    fill = _diversified_fill(remaining, 20 - len(curated))
-    shortlist = pd.concat([curated, fill], ignore_index=False, sort=False).head(20)
-    return shortlist, history, history_sha
+    return _country_targeted_top(jobs, 20), history, history_sha
 
 
 def _upsert_history(history: pd.DataFrame, edited: pd.DataFrame, source: pd.DataFrame) -> pd.DataFrame:
@@ -360,7 +409,7 @@ def render_action_queue() -> None:
     st.markdown('<div class="eyebrow">Workstream J</div>', unsafe_allow_html=True)
     st.title("Apply Shortlist")
     st.caption(
-        "Your actionable TOP 20 from G. The first slots are actively researched prime roles; "
+        "Your actionable TOP 20 from G. Country representation follows the agreed soft target mix; "
         "A adds company context, C supplies role fit, and this is where you decide what to do."
     )
 
@@ -374,6 +423,11 @@ def render_action_queue() -> None:
     m2.metric("Companies", shortlist["company"].nunique())
     m3.metric("Countries", shortlist["market"].nunique())
     m4.metric("Strong semantic fit", int(shortlist["semantic_fit"].eq("Strong").sum()))
+
+    targets = _country_targets()
+    if targets:
+        target_text = " · ".join(f"{country}: {count}" for country, count in targets.items())
+        st.caption(f"Soft TOP20 country target: {target_text}. Missing quality in one market is filled by the next best role elsewhere.")
 
     st.caption(
         "Prime roles are actively selected from G rather than waiting for a random first queue. "

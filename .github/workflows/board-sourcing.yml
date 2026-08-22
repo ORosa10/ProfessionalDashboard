@@ -39,6 +39,7 @@ on:
       - "data/job_boards.csv"
       - "data/job_board_access_audit.csv"
       - "data/calibration_rules.json"
+      - "data/country_sourcing_weights.json"
       - ".github/workflows/board-sourcing.yml"
 
 permissions:

@@ -8,6 +8,7 @@ our architecture: Actions prepare data; the semantic agent performs judgement.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 from pathlib import Path
 
@@ -18,6 +19,7 @@ JOBS_PATH = ROOT / "data" / "jobs_board_staging.csv"
 SEMANTIC_PATH = ROOT / "data" / "semantic_fit.csv"
 HISTORY_PATH = ROOT / "data" / "opportunity_history.csv"
 OUT_PATH = ROOT / "data" / "semantic_fit_queue.csv"
+COUNTRY_WEIGHTS_PATH = ROOT / "data" / "country_sourcing_weights.json"
 
 QUEUE_COLUMNS = [
     "opportunity_id", "title", "company", "canonical_company_id", "company_category",
@@ -46,6 +48,31 @@ def _role_family(title: object, description: object = "") -> str:
         if any(term in text for term in terms):
             return family
     return "Other finance"
+
+
+def _country_weights() -> dict[str, float]:
+    if not COUNTRY_WEIGHTS_PATH.exists():
+        return {}
+    try:
+        payload = json.loads(COUNTRY_WEIGHTS_PATH.read_text(encoding="utf-8"))
+        weights = {str(k): float(v) for k, v in payload.get("weights", {}).items() if float(v) > 0}
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return {}
+    total = sum(weights.values())
+    return {k: v / total for k, v in weights.items()} if total > 0 else {}
+
+
+def _target_slots(limit: int) -> dict[str, int]:
+    weights = _country_weights()
+    if not weights or limit <= 0:
+        return {}
+    raw = {country: weight * limit for country, weight in weights.items()}
+    slots = {country: int(value) for country, value in raw.items()}
+    remaining = limit - sum(slots.values())
+    order = sorted(raw, key=lambda country: (raw[country] - slots[country], raw[country]), reverse=True)
+    for country in order[:remaining]:
+        slots[country] += 1
+    return slots
 
 
 def _load_company_universe() -> pd.DataFrame:
@@ -145,9 +172,7 @@ def build_queue(limit: int = 80) -> pd.DataFrame:
     jobs["company_category"] = [str(x.get("company_category", "")) for x in found]
     jobs["company_rating"] = [str(x.get("rating", "") or "Unrated") for x in found]
     jobs["company_context"] = [
-        " · ".join(
-            part for part in [str(x.get("archetype", "")), str(x.get("why_test", ""))] if part
-        )
+        " · ".join(part for part in [str(x.get("archetype", "")), str(x.get("why_test", ""))] if part)
         for x in found
     ]
     jobs["description_for_fit"] = jobs.apply(
@@ -160,24 +185,39 @@ def build_queue(limit: int = 80) -> pd.DataFrame:
     jobs["_posted"] = pd.to_datetime(jobs.get("date_posted", ""), errors="coerce", utc=True)
     jobs = jobs.sort_values(["calibration_score", "_posted", "last_seen_at"], ascending=[False, False, False])
 
-    # Keep the semantic workload broad enough for J's diversified shortlist.
-    # This is intentionally much looser than J: C should judge candidates before
-    # the final diversity pass rather than inherit a treasury-heavy prefilter.
+    # First allocate C workload by the agreed country sourcing mix. These are
+    # soft targets: if one market cannot fill its allocation, the strongest
+    # remaining roles from other countries fill the queue.
+    targets = _target_slots(limit)
     chosen: list[int] = []
     family_counts: dict[str, int] = {}
     country_counts: dict[str, int] = {}
-    for idx, row in jobs.iterrows():
-        family = str(row.get("role_family", "Other finance"))
-        country = str(row.get("market", ""))
-        if family_counts.get(family, 0) >= 18:
+    for country, target in targets.items():
+        if target <= 0:
             continue
-        if country_counts.get(country, 0) >= 24:
-            continue
-        chosen.append(idx)
-        family_counts[family] = family_counts.get(family, 0) + 1
-        country_counts[country] = country_counts.get(country, 0) + 1
-        if len(chosen) >= limit:
-            break
+        for idx, row in jobs[jobs["market"].astype(str).eq(country)].iterrows():
+            family = str(row.get("role_family", "Other finance"))
+            if family_counts.get(family, 0) >= 18:
+                continue
+            chosen.append(idx)
+            family_counts[family] = family_counts.get(family, 0) + 1
+            country_counts[country] = country_counts.get(country, 0) + 1
+            if country_counts[country] >= target:
+                break
+
+    # Quality-first fallback for unfilled country slots or markets with sparse data.
+    if len(chosen) < min(limit, len(jobs)):
+        for idx, row in jobs.iterrows():
+            if idx in chosen:
+                continue
+            family = str(row.get("role_family", "Other finance"))
+            if family_counts.get(family, 0) >= 18:
+                continue
+            chosen.append(idx)
+            family_counts[family] = family_counts.get(family, 0) + 1
+            if len(chosen) >= limit:
+                break
+
     if len(chosen) < min(limit, len(jobs)):
         for idx in jobs.index:
             if idx not in chosen:

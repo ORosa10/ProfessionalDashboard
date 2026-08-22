@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "updated_at": "2026-08-22",
+  "principle": "Soft sourcing and shortlist targets. Quality wins when a country cannot supply a sufficiently relevant actionable role.",
+  "weights": {
+    "Czechia": 0.0909,
+    "Germany": 0.1818,
+    "Austria": 0.1364,
+    "Switzerland": 0.1364,
+    "United Kingdom": 0.1364,
+    "Sweden": 0.0909,
+    "Norway": 0.0455,
+    "Denmark": 0.0909,
+    "Finland": 0.0909
+  },
+  "top20_targets": {
+    "Czechia": 2,
+    "Germany": 4,
+    "Austria": 3,
+    "Switzerland": 3,
+    "United Kingdom": 3,
+    "Sweden": 2,
+    "Norway": 1,
+    "Denmark": 1,
+    "Finland": 1
+  }
+}

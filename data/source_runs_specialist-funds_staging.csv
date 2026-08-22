@@ -1,0 +1,14 @@
+run_at,source_id,company,market,seed_url,pages_checked,candidate_job_pages,verified_jobs,errors
+2026-08-22T05:44:42.860303+00:00,citadel-global,Citadel,Multi-region,https://www.citadel.com/careers/,1,0,0,https://www.citadel.com/careers/: HTTPError
+2026-08-22T05:44:43.144827+00:00,millennium-management-global,Millennium Management,Multi-region,https://www.mlp.com/careers/,4,0,0,
+2026-08-22T05:44:45.446526+00:00,point72-global,Point72,Multi-region,https://careers.point72.com/,1,0,0,
+2026-08-22T05:44:46.494583+00:00,marshall-wace-global,Marshall Wace,Multi-region,https://www.mwam.com/careers/,1,0,0,https://www.mwam.com/careers/: HTTPError
+2026-08-22T05:44:47.099582+00:00,brevan-howard-global,Brevan Howard,Multi-region,https://www.brevanhoward.com/careers/,1,0,0,
+2026-08-22T05:44:48.256573+00:00,qube-rt-global,Qube Research & Technologies,Multi-region,https://www.qube-rt.com/careers/,1,0,0,
+2026-08-22T05:44:49.179667+00:00,winton-global,Winton,Multi-region,https://www.winton.com/careers,1,0,0,https://www.winton.com/careers: HTTPError
+2026-08-22T05:44:49.626764+00:00,aqr-global,AQR Capital Management,Multi-region,https://www.aqr.com/About-Us/Careers,2,0,0,
+2026-08-22T05:44:51.641116+00:00,two-sigma-global,Two Sigma,Multi-region,https://www.twosigma.com/careers/,28,0,0,
+2026-08-22T05:45:04.986676+00:00,de-shaw-global,D. E. Shaw,Multi-region,https://www.deshaw.com/careers,30,25,25,
+2026-08-22T05:45:21.988935+00:00,rsj-global,RSJ,Multi-region,https://www.rsj.com/cz/investments/kariera.html,1,0,0,
+2026-08-22T05:45:22.986647+00:00,conseq-global,Conseq Investment Management,Multi-region,https://www.conseq.cz/kariera,1,0,0,
+2026-08-22T05:45:25.781321+00:00,pale-fire-capital-global,Pale Fire Capital,Multi-region,https://palefirecapital.com/,1,0,0,

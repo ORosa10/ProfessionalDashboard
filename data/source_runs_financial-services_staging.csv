@@ -1,0 +1,50 @@
+run_at,source_id,company,market,seed_url,pages_checked,candidate_job_pages,verified_jobs,errors
+2026-08-22T05:44:44.484149+00:00,deutsche-bank-global,Deutsche Bank,Multi-region,https://db.wd3.myworkdayjobs.com/DBWebsite,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://db.wd3.myworkdayjobs.com/wday/cxs/db/DBWebsite/jobs
+2026-08-22T05:44:48.104095+00:00,commerzbank-global,Commerzbank,Multi-region,https://jobs.commerzbank.com/index.php?ac=search_result,1,1,1,
+2026-08-22T05:45:32.385921+00:00,dz-bank-global,DZ BANK,Multi-region,https://career012.successfactors.eu/career?company=DZBank,1,0,0,https://career012.successfactors.eu/sitemap.xml: HTTPError
+2026-08-22T05:45:33.117311+00:00,kfw-global,KfW Group,Multi-region,https://www.kfw.de/About-KfW/Career/,2,2,0,
+2026-08-22T05:45:58.772300+00:00,helaba-global,Helaba,Multi-region,https://www.helaba.com/int/career/,2,2,0,
+2026-08-22T05:46:33.750016+00:00,lbbw-global,LBBW,Multi-region,https://karriere.lbbw.de/,38,0,0,
+2026-08-22T05:47:17.833376+00:00,bayernlb-global,BayernLB,Multi-region,https://www.bayernlb.com/internet/en/blb/resp/career/career.jsp,1,1,0,https://www.bayernlb.com/internet/en/blb/resp/career/career.jsp: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:48:08.464110+00:00,ing-global,ING Group,Multi-region,https://ing.wd3.myworkdayjobs.com/ICSGBLCOR,21,15,15,
+2026-08-22T05:48:25.119550+00:00,unicredit-global,UniCredit,Multi-region,https://careers.unicredit.eu/,1,1,0,https://careers.unicredit.eu/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:48:46.559512+00:00,eex-global,EEX Group,Multi-region,https://www.eex-group.com/en/career,1,1,0,https://www.eex-group.com/en/career: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:49:04.822379+00:00,bawag-global,BAWAG Group,Multi-region,https://jobs.bawaggroup.at,9,0,0,
+2026-08-22T05:49:19.801546+00:00,oekb-global,OeKB Group,Multi-region,https://www.oekb.at/jobs-und-karriere.html,1,1,0,https://www.oekb.at/jobs-und-karriere.html: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:49:37.794371+00:00,vienna-insurance-group-global,Vienna Insurance Group,Multi-region,https://group.vig/career/,1,1,0,https://group.vig/career/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:49:57.204825+00:00,uniqa-global,UNIQA Insurance Group,Multi-region,https://careers.uniqagroup.com/,5,4,4,
+2026-08-22T05:49:58.310366+00:00,julius-baer-global,Julius Baer,Multi-region,https://juliusbaer.wd3.myworkdayjobs.com/External,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://juliusbaer.wd3.myworkdayjobs.com/wday/cxs/juliusbaer/External/jobs
+2026-08-22T05:50:02.448697+00:00,pictet-global,Pictet Group,Multi-region,https://career5.successfactors.eu/career?company=banquepict,1,0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
+2026-08-22T05:50:03.129084+00:00,lombard-odier-global,Lombard Odier,Multi-region,https://lombardodier.wd3.myworkdayjobs.com/Lombard_Odier_Careers,12,4,4,
+2026-08-22T05:50:14.076046+00:00,zurich-insurance-global,Zurich Insurance Group,Multi-region,https://www.careers.zurich.com/,1,1,0,https://www.careers.zurich.com/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:50:33.845158+00:00,swiss-life-global,Swiss Life Group,Multi-region,https://swisslife.wd3.myworkdayjobs.com/Swiss_Life_International_Division_Career_Site,6,0,0,
+2026-08-22T05:50:40.492574+00:00,zkb-global,Zürcher Kantonalbank,Multi-region,https://www.zkb.ch/en/home/career.html,1,1,0,https://www.zkb.ch/en/home/career.html: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:50:59.372590+00:00,swedbank-global,Swedbank,Multi-region,https://jobs.swedbank.com/,1,1,0,https://jobs.swedbank.com/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:51:16.483506+00:00,handelsbanken-global,Handelsbanken,Multi-region,https://www.handelsbanken.com/en/careers/vacancies,1,1,0,https://www.handelsbanken.com/en/careers/vacancies: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:51:40.713860+00:00,dnb-global,DNB Group,Multi-region,https://careers.smartrecruiters.com/DNB1,1,0,0,
+2026-08-22T05:51:41.297625+00:00,op-financial-global,OP Financial Group,Multi-region,https://www.op-careers.fi/,0,0,0,"https://www.op-careers.fi/: Error: Page.goto: net::ERR_CERT_DATE_INVALID at https://www.op-careers.fi/
+Call log:
+  - navigating to ""https://www.op-careers.fi/"", waiting until ""domcontentloaded""
+"
+2026-08-22T05:51:43.296043+00:00,sampo-global,Sampo Group,Multi-region,https://www.sampo.com/careers/,1,1,0,https://www.sampo.com/careers/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:52:00.771146+00:00,storebrand-global,Storebrand,Multi-region,https://storebrand.wd3.myworkdayjobs.com/Storebrand_Careers,0,0,0,Workday listing: ValueError: Target Workday locations were not found
+2026-08-22T05:52:01.860794+00:00,hsbc-global,HSBC Holdings,Multi-region,https://www.hsbc.com/careers,1,1,0,https://www.hsbc.com/careers: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:52:18.653742+00:00,barclays-global,Barclays,Multi-region,https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays,6,0,0,
+2026-08-22T05:52:23.745482+00:00,lloyds-banking-group-global,Lloyds Banking Group,Multi-region,https://lbg.wd3.myworkdayjobs.com/LBG_Careers,25,17,17,
+2026-08-22T05:52:48.547907+00:00,natwest-global,NatWest Group,Multi-region,https://jobs.natwestgroup.com/search/jobs,1,1,0,https://jobs.natwestgroup.com/search/jobs: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:53:31.037866+00:00,standard-chartered-global,Standard Chartered,Multi-region,https://jobs.standardchartered.com/,121,0,0,
+2026-08-22T05:55:47.260273+00:00,lseg-global,London Stock Exchange Group,Multi-region,https://lseg.wd3.myworkdayjobs.com/Careers,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://lseg.wd3.myworkdayjobs.com/wday/cxs/lseg/Careers/jobs
+2026-08-22T05:55:50.967943+00:00,aviva-global,Aviva,Multi-region,https://aviva.wd1.myworkdayjobs.com/External,10,4,4,
+2026-08-22T05:55:57.588539+00:00,legal-general-global,Legal & General,Multi-region,https://careers.legalandgeneral.com/,1,1,0,https://careers.legalandgeneral.com/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions
+2026-08-22T05:56:15.492943+00:00,marsh-mclennan-global,Marsh McLennan,Multi-region,https://careers.marsh.com/global/en/marsh-search,0,0,0,https://careers.marsh.com/global/en/marsh-search?keywords=finance&from=0&s=1: HTTPError
+2026-08-22T05:56:16.627318+00:00,jt-finance-group-global,J&T Finance Group,Multi-region,https://www.jtfg.com/,1,0,0,
+2026-08-22T05:56:18.614817+00:00,erste-group-global,Erste Group,Multi-region,https://www.erstegroup.com/en/career,11,0,0,
+2026-08-22T05:56:25.510350+00:00,allianz-group-global,Allianz Group,Multi-region,https://careers.allianz.com/global/en,30,0,0,
+2026-08-22T05:56:51.047908+00:00,munich-re-global,Munich Re Group,Multi-region,https://careers.munichre.com/en/munichre,30,2,2,
+2026-08-22T05:57:12.545011+00:00,rbi-global,Raiffeisen Bank International,Multi-region,https://jobs.rbinternational.com/,30,14,14,
+2026-08-22T05:57:42.317014+00:00,ubs-global,UBS Group,Multi-region,https://www.ubs.com/global/en/careers/search-jobs.html,30,0,0,
+2026-08-22T05:57:59.342860+00:00,swiss-re-global,Swiss Re,Multi-region,https://www.swissre.com/careers/jobSearch.html,30,0,0,
+2026-08-22T05:58:37.501191+00:00,nordea-global,Nordea,Multi-region,https://www.nordea.com/en/careers,30,0,0,
+2026-08-22T05:59:02.929908+00:00,seb-global,SEB Group,Multi-region,https://sebgroup.com/career,22,0,0,
+2026-08-22T05:59:22.228162+00:00,danske-bank-global,Danske Bank,Multi-region,https://danskebank.com/careers,18,0,0,https://danskebank.com/careers/professionals: ReadTimeout | https://danskebank.com/careers/flexible-work: ReadTimeout
+2026-08-22T06:00:35.430094+00:00,ebrd-global,European Bank for Reconstruction and Development,Multi-region,https://jobs.ebrd.com/,30,7,7,

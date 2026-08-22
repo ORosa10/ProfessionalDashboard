@@ -1,6 +1,6 @@
 # General Targeting Principles v0.1
 
-Updated: 2026-08-21  
+Updated: 2026-08-22  
 Scope: cross-sector rules for Consulting, Private Markets, Banking, Investment Banking, Corporates and future employer categories
 
 ## How sector learning is combined
@@ -35,6 +35,24 @@ Scope: cross-sector rules for Consulting, Private Markets, Banking, Investment B
 - A mere mention of a language, country or multilingual environment is not enough to filter a role. The requirement must be explicit.
 - Language feasibility is separate from intrinsic semantic fit: a role can still be conceptually attractive while being removed from the actionable shortlist because its language requirement makes it non-actionable.
 
+### Country sourcing mix
+
+Use the following as **soft sourcing weights**, not hard quotas. They determine how much effort G spends in each market and how J tries to balance its TOP20. If a country cannot supply a sufficiently relevant actionable role, quality wins and the slot is filled by the next best role elsewhere.
+
+| Country | Normalized sourcing weight | TOP20 target |
+|---|---:|---:|
+| Czechia | 9.09% | 2 |
+| Germany | 18.18% | 4 |
+| Austria | 13.64% | 3 |
+| Switzerland | 13.64% | 3 |
+| United Kingdom | 13.64% | 3 |
+| Sweden | 9.09% | 2 |
+| Norway | 4.55% | 1 |
+| Denmark | 9.09% | 1 |
+| Finland | 9.09% | 1 |
+
+Operationally, G allocates country effort while accounting for the number of runnable job boards in each market, so a country with more technical adapters does not automatically dominate simply because it has more sources. C's semantic-fit queue uses the same country mix before quality-first fallback. J uses the TOP20 targets as a soft representation target.
+
 ## Signals that must remain separate
 
 - **Intrinsic role interest:** whether the work itself is attractive.
@@ -50,7 +68,6 @@ These signals may change review order later, but one signal must not rewrite ano
 - Keep roughly **20% exploration capacity** for adjacent, uncertain or unexpectedly titled roles.
 - Low initial fit lowers review priority; it does not cause permanent exclusion.
 - Scoring remains transparent and recoverable. It must not become a hidden gate before enough real feedback exists.
-
 
 ## Calibration update 2026-08-17 (from 128 ratings + 1 submitted opportunity)
 

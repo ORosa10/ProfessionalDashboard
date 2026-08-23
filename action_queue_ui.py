@@ -15,6 +15,7 @@ CURATED_PATH = DATA_DIR / "j_curated_shortlist.csv"
 BOARD_PATH = DATA_DIR / "jobs_board_staging.csv"
 SEMANTIC_PATH = DATA_DIR / "semantic_fit.csv"
 COUNTRY_PATH = DATA_DIR / "country_sourcing_weights.json"
+SALARY_PATH = DATA_DIR / "j_salary_research.csv"
 HISTORY_PATH = "data/opportunity_history.csv"
 HISTORY_COLUMNS = [
     "opportunity_id", "source_stream", "source_id", "first_seen_at", "decision_at",
@@ -125,6 +126,23 @@ def _company_context(jobs: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def _salary_context(jobs: pd.DataFrame) -> pd.DataFrame:
+    out = jobs.copy()
+    out["salary_range"] = "Needs salary research"
+    if not SALARY_PATH.exists() or not SALARY_PATH.stat().st_size:
+        return out
+    try:
+        salary = pd.read_csv(SALARY_PATH).fillna("")
+    except Exception:
+        return out
+    if salary.empty or not {"job_id", "salary_range"}.issubset(salary.columns):
+        return out
+    salary = salary.drop_duplicates("job_id", keep="last").set_index("job_id")
+    mapped = out["job_id"].map(salary["salary_range"]).fillna("")
+    out["salary_range"] = mapped.where(mapped.ne(""), "Needs salary research")
+    return out
+
+
 def _quality_and_rank(jobs: pd.DataFrame) -> pd.DataFrame:
     out = jobs.copy()
     strong = out["semantic_fit"].eq("Strong")
@@ -198,7 +216,8 @@ def _current_shortlist() -> tuple[pd.DataFrame, pd.DataFrame, str | None]:
     ]:
         jobs[col] = jobs["job_id"].map(latest[hist_col]).fillna("") if latest is not None and hist_col in latest.columns else ""
     jobs = jobs[~jobs["prior_action"].isin(["Apply", "Skip"])].copy()
-    return _select_top(jobs, 20), history, sha
+    shortlist = _select_top(jobs, 20)
+    return _salary_context(shortlist), history, sha
 
 
 def _upsert_history(history: pd.DataFrame, edited: pd.DataFrame, source: pd.DataFrame) -> pd.DataFrame:
@@ -267,7 +286,7 @@ def render_action_queue() -> None:
     display["role_feedback"] = display["prior_role_feedback"].replace("", "Not rated")
     display["user_comment"] = display["prior_comment"]
     display["fit"] = display.apply(lambda r: f"{r.get('semantic_fit')} · {r.get('semantic_reasoning')}" if r.get("semantic_reasoning") else str(r.get("semantic_fit", "")), axis=1)
-    cols = ["company", "title", "role_family", "market", "location", "fit", "job_url", "action", "company_feedback", "role_feedback", "user_comment"]
+    cols = ["company", "title", "role_family", "market", "location", "salary_range", "fit", "job_url", "action", "company_feedback", "role_feedback", "user_comment"]
     with st.form("action_queue_form"):
         edited = st.data_editor(
             display[cols], hide_index=True, width="stretch", height=720, row_height=95,
@@ -278,6 +297,7 @@ def render_action_queue() -> None:
                 "role_family": st.column_config.TextColumn("Bucket", width="small"),
                 "market": st.column_config.TextColumn("Country", width="small"),
                 "location": st.column_config.TextColumn("Location", width="small"),
+                "salary_range": st.column_config.TextColumn("Salary", width="medium"),
                 "fit": st.column_config.TextColumn("C — semantic fit", width="large"),
                 "job_url": st.column_config.LinkColumn("Job page", display_text="Open"),
                 "action": st.column_config.SelectboxColumn("Your action", options=ACTION_OPTIONS, required=True),

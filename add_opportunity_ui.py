@@ -21,6 +21,7 @@ from github_storage import github_token, load_csv_file, save_csv_file
 DATA_DIR = Path(__file__).parent / "data"
 SUBMISSIONS_PATH = "data/user_submitted_opportunities.csv"
 COMPANIES_PATH = "data/user_submitted_companies.csv"
+RESEARCH_OVERRIDES_PATH = DATA_DIR / "user_submitted_opportunity_research.csv"
 SUBMISSION_COLUMNS = [
     "submission_id", "submitted_at", "linkedin_url", "company_url", "job_url",
     "title", "company", "canonical_company_id", "company_category", "location",
@@ -223,22 +224,44 @@ def _company_context(company: str, domain: str) -> tuple[str, str, str]:
     return _slug(inferred), inferred, "Unclassified"
 
 
+def _apply_research_overrides(saved: pd.DataFrame) -> pd.DataFrame:
+    """Overlay human/researched enrichment without overwriting user feedback fields."""
+    if saved.empty or not RESEARCH_OVERRIDES_PATH.exists():
+        return saved
+    try:
+        research = pd.read_csv(RESEARCH_OVERRIDES_PATH).fillna("")
+    except Exception:
+        return saved
+    if research.empty or "submission_id" not in research.columns:
+        return saved
+
+    research = research.drop_duplicates("submission_id", keep="last").set_index("submission_id")
+    out = saved.copy()
+    enrichment_cols = [
+        "title", "company", "canonical_company_id", "company_category", "location",
+        "country", "topic", "role_summary_en", "company_profile", "role_profile",
+        "salary_research", "salary_range", "targeting_scope", "review_status",
+    ]
+    for col in enrichment_cols:
+        if col not in out.columns or col not in research.columns:
+            continue
+        mapped = out["submission_id"].map(research[col]).fillna("")
+        out[col] = mapped.where(mapped.ne(""), out[col].fillna(""))
+    return out
+
+
 def render_add_opportunity() -> None:
     st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
     st.title("Add Opportunity")
     st.caption(
         "Paste a LinkedIn link and/or the company's own job page (one is enough). "
-        "It is saved for enrichment -- Claude then builds the company and role profile "
-        "and a salary read; you just rate it afterwards."
+        "The role is saved immediately; researched company/role context and salary reads are overlaid below when available."
     )
     with st.expander("How this works"):
         st.write(
-            "The app does not read the page itself (LinkedIn and many career sites are "
-            "login-gated). It stores your link(s); an assistant run then fills in the "
-            "company profile, role profile and a market salary read, assigns the company "
-            "category, and marks it ready for your rating. Your rating becomes a positive "
-            "(or negative) example for the relevant targeting hypothesis -- it never becomes "
-            "a hard rule or excludes exploratory roles."
+            "The app first tries to read the company's own job page and saves the opportunity even when a site cannot be parsed. "
+            "A researched enrichment layer can then add the company profile, role profile and a role-specific salary read without "
+            "overwriting your rating or comment. Your rating becomes a positive or negative example for the relevant targeting hypothesis."
         )
 
     linkedin_url = st.text_input(
@@ -260,8 +283,6 @@ def render_add_opportunity() -> None:
             st.error("GitHub saving is not configured for this app.")
         else:
             primary_url = company_url.strip() or linkedin_url.strip()
-            # Best-effort read of a company career page only (never LinkedIn) to
-            # pre-fill a few fields; enrichment fills the rest either way.
             draft: dict[str, str] = {
                 "title": "", "company": "", "location": "", "description": "",
                 "source_domain": urlparse(primary_url).hostname or "",
@@ -276,7 +297,6 @@ def render_add_opportunity() -> None:
                     draft["company"].strip(), draft.get("source_domain", "")
                 )
             else:
-                # No company scraped (e.g. LinkedIn-only): leave blank for enrichment.
                 canonical_id, canonical_company, category = "", "", ""
             now = datetime.now(timezone.utc).isoformat()
             identifier = hashlib.sha256(primary_url.encode("utf-8")).hexdigest()[:16]
@@ -309,8 +329,7 @@ def render_add_opportunity() -> None:
                 st.error("Saving failed. Refresh the page and try again.")
             else:
                 st.success(
-                    "Saved. Claude will enrich it with the company/role profile and a "
-                    "salary read, then it is ready for you to rate below."
+                    "Saved. If researched enrichment is already available for this opportunity, it will appear in the table below."
                 )
 
     st.divider()
@@ -319,6 +338,7 @@ def render_add_opportunity() -> None:
         saved, saved_sha = load_csv_file(token, SUBMISSIONS_PATH, SUBMISSION_COLUMNS)
     except Exception:
         saved, saved_sha = pd.DataFrame(columns=SUBMISSION_COLUMNS), None
+    saved = _apply_research_overrides(saved)
     if saved.empty:
         st.info("No opportunities yet. Paste a link above to add your first one.")
         return

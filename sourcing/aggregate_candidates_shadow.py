@@ -1,18 +1,14 @@
 """Shadow G candidate aggregator.
 
-This module is intentionally NOT wired into the live application or any workflow.
-It exists to validate the target G architecture in parallel with the current
-production pipeline.
+This module is intentionally NOT wired into the live application. It validates
+our target G architecture in parallel with the current production pipeline.
 
-Safety invariant:
+Safety invariants:
 - reads only explicitly supplied staging CSVs;
-- writes only the explicitly supplied shadow output path;
+- writes only explicitly supplied shadow output / diagnostics paths;
 - never writes jobs_board_staging.csv, semantic_fit.csv, j_curated_shortlist.csv,
-  opportunity_history.csv, or any other current live store.
-
-The source-specific scrapers remain unchanged. This layer only normalizes and
-cross-source deduplicates their outputs into one candidate pool that can later be
-compared with the existing G -> C flow before any consumer is switched.
+  opportunity_history.csv, or any other live store;
+- prefers false negatives in deduplication over false-positive merges.
 """
 from __future__ import annotations
 
@@ -20,10 +16,27 @@ import argparse
 import hashlib
 import re
 from pathlib import Path
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import pandas as pd
 
+
+TARGET_COUNTRIES = {
+    "Czechia": ["czechia", "czech republic", "praha", "prague", " cz"],
+    "Germany": ["germany", "deutschland", "berlin", "frankfurt", "munich", "münchen", "hamburg", "cologne", "köln", " düsseldorf", " stuttgart", " de"],
+    "Austria": ["austria", "österreich", "vienna", "wien", "salzburg", "linz", "graz", " at"],
+    "Switzerland": ["switzerland", "schweiz", "suisse", "zurich", "zürich", "geneva", "genève", "basel", " ch"],
+    "United Kingdom": ["united kingdom", " uk", "london", "england", "scotland", "wales", "manchester", "birmingham"],
+    "Sweden": ["sweden", "sverige", "stockholm", "gothenburg", "göteborg", " se"],
+    "Norway": ["norway", "norge", "oslo", " no"],
+    "Denmark": ["denmark", "danmark", "copenhagen", "københavn", " dk"],
+    "Finland": ["finland", "helsinki", "suomi", " fi"],
+}
+
+TRACKING_QUERY_KEYS = {
+    "source", "src", "ref", "referrer", "campaign", "tracking", "trk",
+    "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
+}
 
 OUTPUT_COLUMNS = [
     "candidate_id",
@@ -36,6 +49,7 @@ OUTPUT_COLUMNS = [
     "translation_status",
     "market",
     "location",
+    "country_bucket",
     "priority_locations",
     "job_url",
     "source_url",
@@ -55,6 +69,8 @@ OUTPUT_COLUMNS = [
     "source_count",
 ]
 
+DIAGNOSTIC_COLUMNS = ["dimension", "value", "raw_rows", "candidate_count", "share_of_candidates"]
+
 
 def _text(value: object) -> str:
     if value is None or (isinstance(value, float) and pd.isna(value)):
@@ -67,6 +83,7 @@ def _norm_text(value: object) -> str:
 
 
 def _normalise_url(value: object) -> str:
+    """Normalise tracking noise without dropping job-identifying query params."""
     raw = _text(value)
     if not raw:
         return ""
@@ -76,8 +93,27 @@ def _normalise_url(value: object) -> str:
         return raw.rstrip("/")
     if not parts.scheme or not parts.netloc:
         return raw.rstrip("/")
+    kept_query = []
+    for key, val in parse_qsl(parts.query, keep_blank_values=True):
+        lower = key.lower()
+        if lower.startswith("utm_") or lower in TRACKING_QUERY_KEYS:
+            continue
+        kept_query.append((key, val))
     path = parts.path.rstrip("/") or "/"
-    return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), path, "", ""))
+    return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), path, urlencode(kept_query), ""))
+
+
+def _country_bucket(row: pd.Series) -> str:
+    market = _text(row.get("market", ""))
+    if market in TARGET_COUNTRIES:
+        return market
+    haystack = f" {market} {_text(row.get('location', ''))} ".lower()
+    for country, patterns in TARGET_COUNTRIES.items():
+        if any(pattern in haystack for pattern in patterns):
+            return country
+    if market and market.lower() not in {"multi-region", "remote", "unknown", "n/a"}:
+        return market
+    return "Other / Unresolved"
 
 
 def _candidate_key(row: pd.Series) -> str:
@@ -87,8 +123,8 @@ def _candidate_key(row: pd.Series) -> str:
     2. Existing job_id when URL is unavailable.
     3. Company + title + location fingerprint as a last resort.
 
-    We deliberately do not merge two different URLs solely because their titles
-    look similar; that would be too aggressive for a shadow migration layer.
+    Different non-tracking URLs are deliberately NOT merged just because their
+    titles look similar. That is safer while the new pipeline is in shadow mode.
     """
     url = _normalise_url(row.get("job_url", "") or row.get("source_url", ""))
     if url:
@@ -113,7 +149,8 @@ def _latest(values: pd.Series) -> str:
         return ""
     parsed = pd.to_datetime(pd.Series(items), errors="coerce", utc=True)
     if parsed.notna().any():
-        return items[int(parsed.fillna(pd.Timestamp.min.tz_localize("UTC")).argmax())]
+        safe = parsed.fillna(pd.Timestamp.min.tz_localize("UTC"))
+        return items[int(safe.argmax())]
     return max(items)
 
 
@@ -143,6 +180,7 @@ def _prepare(frame: pd.DataFrame, stream: str) -> pd.DataFrame:
         if col not in out.columns:
             out[col] = ""
     out["source_streams"] = stream
+    out["country_bucket"] = out.apply(_country_bucket, axis=1)
     out["_candidate_key"] = out.apply(_candidate_key, axis=1)
     return out
 
@@ -175,7 +213,7 @@ def aggregate_frames(frames: list[tuple[str, pd.DataFrame]]) -> pd.DataFrame:
                 urls = list(series)
                 urls += list(group.get("job_url", pd.Series(dtype=object)))
                 row[col] = _unique_join(pd.Series(urls))
-            elif col in {"duplicate_count", "source_count"}:
+            elif col in {"duplicate_count", "source_count", "country_bucket"}:
                 continue
             else:
                 row[col] = _first_nonblank(series)
@@ -183,6 +221,7 @@ def aggregate_frames(frames: list[tuple[str, pd.DataFrame]]) -> pd.DataFrame:
         source_streams = [x.strip() for x in _text(row.get("source_streams", "")).split(";") if x.strip()]
         row["source_count"] = len(source_streams)
         row["duplicate_count"] = max(0, len(group) - 1)
+        row["country_bucket"] = _country_bucket(pd.Series(row))
         row["candidate_id"] = hashlib.sha256(str(key).encode("utf-8")).hexdigest()[:16]
         rows.append(row)
 
@@ -190,6 +229,51 @@ def aggregate_frames(frames: list[tuple[str, pd.DataFrame]]) -> pd.DataFrame:
     out["_sort_date"] = pd.to_datetime(out["last_seen_at"], errors="coerce", utc=True)
     out = out.sort_values(["_sort_date", "company", "title"], ascending=[False, True, True], na_position="last")
     return out.drop(columns="_sort_date").reset_index(drop=True)
+
+
+def build_diagnostics(frames: list[tuple[str, pd.DataFrame]], candidates: pd.DataFrame) -> pd.DataFrame:
+    """Long-form source/country diagnostics for shadow comparison and G coverage."""
+    records: list[dict[str, object]] = []
+    total = len(candidates)
+
+    def add(dimension: str, value: str, *, raw_rows: int = 0, candidate_count: int = 0) -> None:
+        records.append({
+            "dimension": dimension,
+            "value": value,
+            "raw_rows": int(raw_rows),
+            "candidate_count": int(candidate_count),
+            "share_of_candidates": round(candidate_count / total, 4) if total else 0.0,
+        })
+
+    add("overall", "all_candidates", raw_rows=sum(len(frame) for _, frame in frames), candidate_count=total)
+    add(
+        "overall",
+        "cross_source_candidates",
+        candidate_count=int(pd.to_numeric(candidates.get("source_count", 0), errors="coerce").fillna(0).gt(1).sum()) if total else 0,
+    )
+
+    for stream, frame in frames:
+        if frame.empty:
+            add("source", stream, raw_rows=0, candidate_count=0)
+            continue
+        present = candidates["source_streams"].astype(str).apply(
+            lambda value: stream in [x.strip() for x in value.split(";") if x.strip()]
+        ) if total else pd.Series(dtype=bool)
+        add("source", stream, raw_rows=len(frame), candidate_count=int(present.sum()) if total else 0)
+
+    if total:
+        for country, count in candidates["country_bucket"].replace("", "Other / Unresolved").value_counts().items():
+            add("country", str(country), candidate_count=int(count))
+        for status, count in candidates["status"].replace("", "Unknown").value_counts().items():
+            add("status", str(status), candidate_count=int(count))
+        for stream in sorted({x.strip() for v in candidates["source_streams"] for x in str(v).split(";") if x.strip()}):
+            mask = candidates["source_streams"].astype(str).apply(
+                lambda value: stream in [x.strip() for x in value.split(";") if x.strip()]
+            )
+            for country, count in candidates.loc[mask, "country_bucket"].replace("", "Other / Unresolved").value_counts().items():
+                add("source_country", f"{stream} | {country}", candidate_count=int(count))
+
+    return pd.DataFrame(records).reindex(columns=DIAGNOSTIC_COLUMNS, fill_value="")
 
 
 def _read_input(spec: str) -> tuple[str, pd.DataFrame]:
@@ -202,7 +286,10 @@ def _read_input(spec: str) -> tuple[str, pd.DataFrame]:
         raise ValueError("input stream name cannot be blank")
     if not path.exists() or path.stat().st_size == 0:
         return stream, pd.DataFrame()
-    return stream, pd.read_csv(path).fillna("")
+    try:
+        return stream, pd.read_csv(path).fillna("")
+    except (pd.errors.EmptyDataError, pd.errors.ParserError):
+        return stream, pd.DataFrame()
 
 
 def main() -> None:
@@ -215,6 +302,7 @@ def main() -> None:
         help="Repeat for every staging source to merge.",
     )
     parser.add_argument("--out", required=True, help="Shadow output path; no live default is provided intentionally.")
+    parser.add_argument("--diagnostics-out", help="Optional shadow diagnostics CSV path.")
     args = parser.parse_args()
 
     frames = [_read_input(spec) for spec in args.input]
@@ -223,6 +311,13 @@ def main() -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     result.to_csv(out_path, index=False)
     print(f"shadow aggregator wrote {len(result)} candidates to {out_path}")
+
+    if args.diagnostics_out:
+        diagnostics = build_diagnostics(frames, result)
+        diag_path = Path(args.diagnostics_out)
+        diag_path.parent.mkdir(parents=True, exist_ok=True)
+        diagnostics.to_csv(diag_path, index=False)
+        print(f"shadow aggregator wrote {len(diagnostics)} diagnostics rows to {diag_path}")
 
 
 if __name__ == "__main__":

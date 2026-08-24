@@ -67,18 +67,18 @@ def _render_detail(selected_id: str | None) -> None:
         "🟠 **PARTIAL** — some plumbing works, target flow is incomplete  \n"
         "⚪ **PLANNED** — target architecture only"
     )
-    st.caption("Solid = concrete candidate/data flow. Dashed = context, learning feedback or planned relation.")
+    st.caption("Solid = concrete core candidate/data flow. Dashed = context, learning feedback, secondary lane or planned relation.")
 
     st.divider()
-    st.markdown("#### Core logic")
+    st.markdown("#### Architecture")
     st.code(
-        "A → G sourcing context\n"
-        "G / D / E → C candidate roles → J → I\n"
-        "B → I (Interested immediately)\n"
-        "I → A company feedback · I → C role learning · I → H outcomes\n"
+        "CORE: A + C → G → C → J → I → H\n"
+        "MANUAL: B → I (Interested immediately)\n"
+        "LEARNING: I → A company feedback · I → C role learning\n"
+        "SECONDARY: D/E → C optional candidates · F → A/access context\n"
         "C → G future search intelligence"
     )
-    st.caption("H measures attainability separately and does not change C semantic role fit.")
+    st.caption("D/E/F are optional lanes. The core engine should work well even if they are inactive.")
 
 
 def render_system_flow() -> None:
@@ -94,8 +94,8 @@ def render_system_flow() -> None:
     st.markdown('<div class="eyebrow">System architecture</div>', unsafe_allow_html=True)
     st.title("A–J System Flow")
     st.caption(
-        "Interactive map of the opportunity engine. Drag nodes, zoom/pan, and click nodes or connections. "
-        "Connection colour shows whether the intended flow is LIVE, PARTIAL or PLANNED."
+        "CORE = A/B/C/G/J/I/H. D/E/F are optional secondary lanes. Drag nodes, zoom/pan, "
+        "and click nodes or connections; colour shows LIVE, PARTIAL or PLANNED."
     )
 
     c1, c2, spacer, c4 = st.columns([1.2, 1.3, 5.5, 1.2])
@@ -122,7 +122,7 @@ def render_system_flow() -> None:
 
     with canvas:
         st.session_state[FLOW_STATE_KEY] = streamlit_flow(
-            "professional_dashboard_system_flow_focus_v3",
+            "professional_dashboard_system_flow_focus_v4",
             st.session_state[FLOW_STATE_KEY],
             fit_view=True,
             height=1040,

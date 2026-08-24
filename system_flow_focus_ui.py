@@ -4,6 +4,7 @@ import streamlit as st
 from streamlit_flow import streamlit_flow
 
 from system_flow_ui import (
+    EDGE_DETAILS,
     FLOW_STATE_KEY,
     SUPPORT_DETAILS,
     WORKSTREAM_DETAILS,
@@ -37,31 +38,47 @@ def _focus_css() -> None:
     )
 
 
-def _render_detail(info: dict | None) -> None:
-    st.subheader("Selected node")
-    if info:
-        st.markdown(f"### {info['title']}")
-        st.caption(info["status"])
-        st.markdown(info["purpose"])
-        st.markdown(f"**Inputs**  \n{info['inputs']}")
-        st.markdown(f"**Outputs**  \n{info['outputs']}")
-        st.markdown(f"**Outstanding**  \n{info['outstanding']}")
+def _render_detail(selected_id: str | None) -> None:
+    edge = EDGE_DETAILS.get(selected_id or "")
+    if edge:
+        st.subheader("Selected connection")
+        st.markdown(f"### {selected_id}")
+        st.markdown(f"**{edge['status']}**")
+        st.markdown(edge["flow"])
+        if edge["missing"]:
+            st.markdown(f"**Missing:** {edge['missing']}")
     else:
-        st.info("Click any A–J node to see its purpose, inputs, outputs and outstanding work.")
+        info = WORKSTREAM_DETAILS.get(selected_id or "") or SUPPORT_DETAILS.get(selected_id or "")
+        st.subheader("Selected node")
+        if info:
+            st.markdown(f"### {info['title']}")
+            st.caption(info["status"])
+            st.markdown(info["purpose"])
+            st.markdown(f"**Inputs**  \n{info['inputs']}")
+            st.markdown(f"**Outputs**  \n{info['outputs']}")
+            st.markdown(f"**Outstanding**  \n{info['outstanding']}")
+        else:
+            st.info("Click any node or connection to inspect its purpose and implementation status.")
 
     st.divider()
-    st.markdown("#### Legend")
+    st.markdown("#### Connection health")
     st.markdown(
-        "**Solid arrow** — data / opportunity flow  \n"
-        "**Dashed blue** — country guidance  \n"
-        "**Dashed pink/purple** — feedback / context  \n"
-        "**🟢** working  ·  **🟡** needs work  ·  **⚪** deferred"
+        "🟢 **LIVE** — intended flow is implemented  \n"
+        "🟠 **PARTIAL** — some plumbing works, target flow is incomplete  \n"
+        "⚪ **PLANNED** — target architecture only"
     )
+    st.caption("Solid = concrete candidate/data flow. Dashed = context, learning feedback or planned relation.")
 
     st.divider()
-    st.markdown("#### Core loop")
-    st.code("A + C → G → C → J → I → H\nB → enrichment → I\nI/H → feedback → A + C")
-    st.caption("B does not need to re-enter J: it is already a manually selected opportunity.")
+    st.markdown("#### Core logic")
+    st.code(
+        "A → G sourcing context\n"
+        "G / D / E → C candidate roles → J → I\n"
+        "B → I (Interested immediately)\n"
+        "I → A company feedback · I → C role learning · I → H outcomes\n"
+        "C → G future search intelligence"
+    )
+    st.caption("H measures attainability separately and does not change C semantic role fit.")
 
 
 def render_system_flow() -> None:
@@ -77,8 +94,8 @@ def render_system_flow() -> None:
     st.markdown('<div class="eyebrow">System architecture</div>', unsafe_allow_html=True)
     st.title("A–J System Flow")
     st.caption(
-        "Interactive map of the opportunity engine. Drag nodes, zoom/pan the canvas, "
-        "and optionally open the detail panel for a selected workstream."
+        "Interactive map of the opportunity engine. Drag nodes, zoom/pan, and click nodes or connections. "
+        "Connection colour shows whether the intended flow is LIVE, PARTIAL or PLANNED."
     )
 
     c1, c2, spacer, c4 = st.columns([1.2, 1.3, 5.5, 1.2])
@@ -91,7 +108,6 @@ def render_system_flow() -> None:
             _reset_flow()
             st.rerun()
 
-    # The toggle itself triggers a rerun; this keeps the CSS state visually in sync.
     if new_focus != focus_mode:
         st.rerun()
 
@@ -106,7 +122,7 @@ def render_system_flow() -> None:
 
     with canvas:
         st.session_state[FLOW_STATE_KEY] = streamlit_flow(
-            "professional_dashboard_system_flow_focus",
+            "professional_dashboard_system_flow_focus_v3",
             st.session_state[FLOW_STATE_KEY],
             fit_view=True,
             height=1040,
@@ -118,12 +134,11 @@ def render_system_flow() -> None:
             enable_edge_menu=False,
             enable_pane_menu=False,
             get_node_on_click=True,
-            get_edge_on_click=False,
+            get_edge_on_click=True,
             min_zoom=0.2,
         )
 
     if detail is not None:
         selected_id = getattr(st.session_state[FLOW_STATE_KEY], "selected_id", None)
-        info = WORKSTREAM_DETAILS.get(selected_id) or SUPPORT_DETAILS.get(selected_id)
         with detail:
-            _render_detail(info)
+            _render_detail(selected_id)

@@ -6,8 +6,8 @@ from streamlit_flow.elements import StreamlitFlowEdge, StreamlitFlowNode
 from streamlit_flow.state import StreamlitFlowState
 
 
-# v4 resets the browser layout after separating core and secondary lanes.
-FLOW_STATE_KEY = "professional_dashboard_system_flow_state_v4"
+# v5 resets the browser layout after the agreed H attainability-flow cleanup.
+FLOW_STATE_KEY = "professional_dashboard_system_flow_state_v5"
 
 
 WORKSTREAM_DETAILS = {
@@ -20,8 +20,8 @@ WORKSTREAM_DETAILS = {
         ),
         "inputs": (
             "User → explicit A/B/C/Exclude + notes; B → newly discovered employer identity/context; "
-            "G → newly discovered employers; I → historical company feedback; H → later hiring outcomes; "
-            "F → optional network/access signal."
+            "G → newly discovered employers; I → historical company preference feedback; "
+            "H → employer attainability context from actual hiring outcomes; F → optional network/access signal."
         ),
         "outputs": (
             "A → G: company universe, priority, career URLs and category for sourcing. "
@@ -30,7 +30,7 @@ WORKSTREAM_DETAILS = {
         ),
         "outstanding": (
             "Add Suggested A/B/C/Exclude from historical company evidence and ingest newly discovered employers "
-            "from G/B without overwriting explicit user ratings."
+            "from G/B without overwriting explicit user ratings; later display H attainability separately from A preference."
         ),
     },
     "B": {
@@ -53,8 +53,9 @@ WORKSTREAM_DETAILS = {
         ),
         "inputs": (
             "Core candidate flow: G → concrete new roles to classify. Optional candidate lanes: D/E → remote or project roles. "
-            "Context: A → company identity/rating only, never a hard gate. Learning flow: I → historical role feedback from both B and J. "
-            "H, salary, geography, language and link health do NOT determine semantic fit."
+            "Context: A → company identity/rating only. Learning flow: I → historical role feedback from both B and J. "
+            "H may add separate role-type/seniority attainability context, but it must never change Strong/Moderate/Weak. "
+            "Salary, geography, language and link health do NOT determine semantic fit."
         ),
         "outputs": (
             "C → J: semantic judgement for already-discovered current roles. "
@@ -93,33 +94,53 @@ WORKSTREAM_DETAILS = {
         "title": "G — Sourcing Engine",
         "status": "🟡 Core; sources run but integration incomplete",
         "purpose": "Aggregate company, PE, consulting, sector and country-board sourcing into one broad candidate pool.",
-        "inputs": "A company universe + C role/search intelligence + country weights + configured boards/career sites.",
+        "inputs": (
+            "A company universe + C role/search intelligence + country weights + configured boards/career sites. "
+            "Later, H may softly reweight search effort toward segments with better empirical attainability while preserving aspirational exploration."
+        ),
         "outputs": "Deduplicated candidate roles → C; newly discovered employers → A (target state).",
         "outstanding": "Unify separate staging branches and repair/verify the daily country-board run so all core sourcing can reach C/J.",
     },
     "H": {
         "title": "H — Attainability",
-        "status": "🟡 Core / early and data-limited",
-        "purpose": "Infer realistic chance of landing similar roles from actual application outcomes, separately from preference fit.",
-        "inputs": "Application stages and outcomes from I.",
-        "outputs": "Attainability evidence → future employer/opportunity context; it does not change C semantic fit.",
-        "outstanding": "Accumulate enough interviews/rejections/cases/offers before making model-like inferences.",
+        "status": "🟡 Core / evidence input works; inference is data-limited",
+        "purpose": (
+            "Learn how realistic it is to land similar roles from actual application outcomes. "
+            "Attainability is separate from company preference (A) and semantic role fit (C)."
+        ),
+        "inputs": (
+            "I → actual application lifecycle and outcomes only: Applied, rejected pre-screen, interview, case, final, offer, withdrawal, "
+            "plus the role/company/seniority/geography context needed to group comparable outcomes."
+        ),
+        "outputs": (
+            "H → A: employer/employer-type attainability context without changing A/B/C/Exclude preference. "
+            "H → C: role-family/seniority attainability context without changing Strong/Moderate/Weak. "
+            "H → G: soft search-effort signal, never a hard exclusion. "
+            "H → J: soft application priority/context among otherwise actionable roles."
+        ),
+        "outstanding": (
+            "Accumulate enough interviews/rejections/cases/finals/offers, add confidence/sample-size handling, then build grouped attainability estimates "
+            "and expose them separately in A/C/J plus a soft sourcing-weight signal to G."
+        ),
     },
     "I": {
         "title": "I — Opportunity & Application History",
         "status": "🟢 Core / working",
         "purpose": "Single factual memory and central feedback hub for manual and sourced opportunities.",
         "inputs": "B Interested opportunities; J Apply/Maybe/Skip + role/company feedback; later application-stage updates.",
-        "outputs": "Company feedback → A; role-content feedback → C; application stages/outcomes → H.",
+        "outputs": "Company preference feedback → A; role-content feedback → C; actual application stages/outcomes → H.",
         "outstanding": "Close the A/C learning loops while keeping factual history separate from inferred models.",
     },
     "J": {
         "title": "J — Apply Shortlist",
         "status": "🟢 Core / working; selection logic still evolving",
         "purpose": "Final working queue of genuinely actionable roles, with salary context, links and feedback controls.",
-        "inputs": "Current-role semantic judgement from C + company context from A + country/actionability guidance + salary research.",
-        "outputs": "Apply/Maybe/Skip + company/role feedback → I. I then routes preference learning to A/C and outcomes to H.",
-        "outstanding": "Move to Strong-only, integrate country weights jointly with quality, and add link-health checks.",
+        "inputs": (
+            "Current-role semantic judgement from C + company context from A + country/actionability guidance + salary research. "
+            "Later H adds separate empirical attainability context/priority; low H must not automatically remove a Strong role."
+        ),
+        "outputs": "Apply/Maybe/Skip + company/role feedback → I. I then routes preference learning to A/C and actual outcomes to H.",
+        "outstanding": "Move to Strong-only, integrate country weights jointly with quality, add link-health checks and later show H attainability context.",
     },
 }
 
@@ -152,20 +173,23 @@ EDGE_DETAILS = {
     "A-F": {"status": "LIVE", "flow": "Canonical company IDs/aliases are available for the optional F network-matching lane.", "missing": "F is deferred and currently has no uploaded connection data."},
     "F-A": {"status": "PARTIAL", "flow": "If activated, matched contacts can provide an optional employer access signal.", "missing": "Secondary/deferred lane; no network data loaded."},
     "B-A": {"status": "PARTIAL", "flow": "A manually submitted role can expose a previously unknown employer identity/context to A.", "missing": "No systematic B → A new-employer ingestion yet; preference feedback itself goes B → I → A."},
-    "I-A": {"status": "PARTIAL", "flow": "Company feedback from both B/J history is prepared as company-level evidence for A.", "missing": "Evidence is not yet automatically converted into Suggested A/B/C/Exclude."},
-    "H-A": {"status": "PLANNED", "flow": "Hiring outcomes may later inform employer attainability context in A without changing intrinsic company preference.", "missing": "Too little outcome data and no A calibration loop yet."},
+    "I-A": {"status": "PARTIAL", "flow": "Company preference feedback from both B/J history is prepared as company-level evidence for A.", "missing": "Evidence is not yet automatically converted into Suggested A/B/C/Exclude."},
+    "H-A": {"status": "PLANNED", "flow": "H should add empirical employer/employer-type attainability context to A while leaving intrinsic company preference unchanged.", "missing": "No grouped H model/context field yet; outcome sample is still small."},
     "C-G": {"status": "PARTIAL", "flow": "C role thesis/concepts guide future G search vocabulary and search effort.", "missing": "Current targeting concepts are used, but I-driven C learning does not yet automatically update G search intelligence."},
     "G-C": {"status": "PARTIAL", "flow": "G sends concrete newly discovered candidate roles to C for Strong/Moderate/Weak classification.", "missing": "Country-board roles reach C, but several company/sector staging streams are not yet unified into the same candidate flow."},
     "D-C": {"status": "PARTIAL", "flow": "Optional D remote roles can be sent to C for the same semantic classification.", "missing": "Secondary lane; remote staging is not fully integrated into canonical C and is not a current core priority."},
     "E-C": {"status": "PARTIAL", "flow": "Optional E project/interim roles can be sent to C for the same semantic classification.", "missing": "Secondary lane; pool is sparse and not fully integrated into canonical C."},
     "I-C": {"status": "PARTIAL", "flow": "I sends historical role-content preference evidence from both B and J into C calibration; this is learning feedback, not a new candidate-role flow.", "missing": "Feedback batch/evidence exists, but does not yet close the loop into the canonical C thesis/store automatically."},
+    "H-C": {"status": "PLANNED", "flow": "H should add empirical attainability context for comparable role families/seniority bands without changing the C semantic-fit rating.", "missing": "No grouped H model/context field yet; outcome sample is still small."},
     "C-J": {"status": "PARTIAL", "flow": "For an already-discovered current role, C sends its semantic judgement directly toward J; it does not need to go back through G first.", "missing": "J still contains parallel curated semantic truth and can include curated Moderate roles; target is canonical C + actionability + Strong-only."},
+    "H-G": {"status": "PLANNED", "flow": "H may softly reweight future G sourcing toward empirically attainable segments while retaining exploration and aspirational roles.", "missing": "No attainability model or soft sourcing-weight integration yet."},
+    "H-J": {"status": "PLANNED", "flow": "H should provide a separate attainability/confidence signal for J prioritisation; low attainability is context, not an automatic exclusion.", "missing": "No H score/context is currently displayed or used in J."},
     "COUNTRY-G": {"status": "LIVE", "flow": "Country weights guide sourcing effort across target markets.", "missing": ""},
     "COUNTRY-J": {"status": "PARTIAL", "flow": "Country mix influences J replenishment/diversification after semantic quality is known.", "missing": "Weights are not yet a joint objective with semantic quality."},
     "QUALITY-J": {"status": "PLANNED", "flow": "Link health, language/actionability and required enrichment should gate roles before J.", "missing": "Unified actionability/link validation gate is not built."},
     "B-I": {"status": "LIVE", "flow": "Every manually added B opportunity is Interested and enters the unified opportunity/application history immediately.", "missing": ""},
     "J-I": {"status": "LIVE", "flow": "J actions, role/company feedback and comments auto-save into I; I is the feedback hub for downstream learning.", "missing": ""},
-    "I-H": {"status": "LIVE", "flow": "Application stages/outcomes are the factual input for H attainability evidence.", "missing": "H inference is intentionally still data-limited."},
+    "I-H": {"status": "LIVE", "flow": "Actual application stages/outcomes in I are the factual input for H evidence; preference actions alone are not attainability evidence.", "missing": "H inference is intentionally still data-limited."},
 }
 
 
@@ -220,18 +244,18 @@ def _edge(edge_id: str, source: str, target: str, label: str, status: str, *, ki
 
 def _initial_state() -> StreamlitFlowState:
     nodes = [
-        _node("A", (70, 40), "### A — Company Intelligence\n🟡 **CORE / learning TODO**\nEmployer universe + priority\n\nRole fit stays separate", "green"),
+        _node("A", (70, 40), "### A — Company Intelligence\n🟡 **CORE / learning TODO**\nEmployer universe + priority\n\nPreference ≠ attainability", "green"),
         _node("B", (345, 40), "### B — Manual Intake\n🟢 **CORE / LIVE**\nManual role = Interested → I\n\nZero-cost salary research", "blue"),
         _node("D", (720, 20), "### D — Remote\n⚪ **SECONDARY / PARTIAL**\nOptional remote candidate lane", "slate"),
         _node("E", (995, 20), "### E — Projects / Interim\n⚪ **SECONDARY / SPARSE**\nOptional project candidate lane", "slate"),
         _node("F", (1270, 20), "### F — People / Network\n⚪ **SECONDARY / DEFERRED**\nOptional access signal", "slate"),
         _node("G", (320, 300), "## G — Aggregated Sourcing Engine\n🟡 **CORE / PARTIAL integration**\nCompany + PE + consulting + sectors + boards\n\nNew candidate roles → C", "amber", width=800, min_height=150),
-        _node("C", (500, 550), "## C — Semantic Role Fit\n🟡 **CORE / integration TODO**\nJob content only: Strong / Moderate / Weak\n\nCandidate flow ≠ learning feedback", "green", width=430, min_height=160),
+        _node("C", (500, 550), "## C — Semantic Role Fit\n🟡 **CORE / integration TODO**\nJob content only: Strong / Moderate / Weak\n\nH context never changes fit", "green", width=430, min_height=160),
         _node("COUNTRY", (70, 700), "#### Country Targeting\nSoft weights\n\nSearch effort + diversification\nNever semantic fit", "blue", width=240, min_height=120, source_position="right", target_position="right"),
-        _node("J", (500, 785), "## J — Apply Shortlist\n🟢 **CORE / LIVE**\nActionable roles + salary + links\n\nFeedback → I, not directly C", "blue", width=430, min_height=150),
+        _node("J", (500, 785), "## J — Apply Shortlist\n🟢 **CORE / LIVE**\nActionable roles + salary + links\n\nLater: H attainability context", "blue", width=430, min_height=150),
         _node("QUALITY", (1040, 780), "#### Actionability / Quality\n⚪ **NOT BUILT**\nLanguage + geo + link + enrichment gate", "slate", width=250, min_height=120, source_position="left", target_position="left"),
-        _node("I", (390, 1035), "## I — History + Feedback Hub\n🟢 **CORE / LIVE store**\nB + J decisions / feedback / stages\n\nRole feedback → C · outcomes → H", "rose", width=440, min_height=155),
-        _node("H", (920, 1035), "## H — Attainability\n🟡 **CORE / early**\nInterview → case → final → offer\n\nDoes NOT change C fit", "teal", width=360, min_height=150),
+        _node("I", (390, 1035), "## I — History + Feedback Hub\n🟢 **CORE / LIVE store**\nB + J decisions / feedback / stages\n\nActual outcomes → H", "rose", width=440, min_height=155),
+        _node("H", (920, 1035), "## H — Attainability\n🟡 **CORE / evidence LIVE, model early**\nInterview → case → final → offer\n\nContext → A / C / G / J", "teal", width=380, min_height=165),
     ]
 
     edges = [
@@ -242,20 +266,23 @@ def _initial_state() -> StreamlitFlowState:
         _edge("A-F", "A", "F", "canonical companies", "LIVE", kind="context"),
         _edge("F-A", "F", "A", "optional access signal", "PARTIAL", kind="feedback"),
         _edge("B-A", "B", "A", "new employer identity", "PARTIAL", kind="context"),
-        _edge("I-A", "I", "A", "company feedback", "PARTIAL", kind="feedback"),
-        _edge("H-A", "H", "A", "employer outcomes", "PLANNED", kind="feedback"),
+        _edge("I-A", "I", "A", "company preference feedback", "PARTIAL", kind="feedback"),
+        _edge("H-A", "H", "A", "employer attainability context", "PLANNED", kind="feedback"),
         _edge("C-G", "C", "G", "future search intelligence", "PARTIAL", kind="feedback"),
         _edge("G-C", "G", "C", "candidate roles", "PARTIAL"),
         _edge("D-C", "D", "C", "optional remote roles", "PARTIAL", kind="context"),
         _edge("E-C", "E", "C", "optional project roles", "PARTIAL", kind="context"),
         _edge("I-C", "I", "C", "role preference learning", "PARTIAL", kind="feedback"),
+        _edge("H-C", "H", "C", "role attainability context", "PLANNED", kind="feedback"),
         _edge("C-J", "C", "J", "current-role semantic fit", "PARTIAL"),
+        _edge("H-G", "H", "G", "soft search effort", "PLANNED", kind="feedback"),
+        _edge("H-J", "H", "J", "attainability / priority context", "PLANNED", kind="feedback"),
         _edge("COUNTRY-G", "COUNTRY", "G", "search weights", "LIVE", kind="context"),
         _edge("COUNTRY-J", "COUNTRY", "J", "diversification", "PARTIAL", kind="context"),
         _edge("QUALITY-J", "QUALITY", "J", "actionability gate", "PLANNED"),
         _edge("B-I", "B", "I", "Interested opportunity", "LIVE"),
         _edge("J-I", "J", "I", "decision + feedback", "LIVE"),
-        _edge("I-H", "I", "H", "stages + outcomes", "LIVE"),
+        _edge("I-H", "I", "H", "actual stages + outcomes", "LIVE"),
     ]
     return StreamlitFlowState(nodes, edges)
 
@@ -324,7 +351,7 @@ def render_system_flow() -> None:
 
     with canvas:
         st.session_state[FLOW_STATE_KEY] = streamlit_flow(
-            "professional_dashboard_system_flow_v4",
+            "professional_dashboard_system_flow_v5",
             st.session_state[FLOW_STATE_KEY],
             fit_view=True,
             height=1080 if focus else 980,

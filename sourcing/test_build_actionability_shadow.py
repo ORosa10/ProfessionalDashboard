@@ -61,6 +61,15 @@ class ActionabilityShadowTests(unittest.TestCase):
         self.assertFalse(bool(row["actionable"]))
         self.assertIn("geography:Poland", row["blockers"])
 
+    def test_structured_outside_iso_code_blocks_but_prose_in_does_not(self) -> None:
+        outside = self._evaluate({"country_bucket": "Other / Unresolved", "market": "Multi-region", "location": "Warsaw, Europe, PL"})
+        self.assertFalse(bool(outside["actionable"]))
+        self.assertIn("geography:PL", outside["blockers"])
+
+        prose = self._evaluate({"country_bucket": "Other / Unresolved", "market": "Remote", "location": "Remote in Europe"})
+        self.assertTrue(bool(prose["actionable"]))
+        self.assertIn("geography:needs_resolution", prose["warnings"])
+
     def test_unresolved_geography_warns_but_does_not_block(self) -> None:
         row = self._evaluate({"country_bucket": "Other / Unresolved", "market": "Multi-region", "location": ""})
         self.assertTrue(bool(row["actionable"]))

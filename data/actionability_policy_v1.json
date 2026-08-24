@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "status": "shadow_only",
+  "purpose": "Objective pre-J feasibility policy. It must never change C semantic fit.",
+  "target_geographies": [
+    "Czechia",
+    "Germany",
+    "Austria",
+    "Switzerland",
+    "United Kingdom",
+    "Sweden",
+    "Norway",
+    "Denmark",
+    "Finland"
+  ],
+  "language": {
+    "always_feasible": ["English", "Czech"],
+    "german": {
+      "hard_block_only_if_explicit": [
+        "C1",
+        "C2",
+        "fluent",
+        "fließend",
+        "verhandlungssicher",
+        "native",
+        "mother-tongue equivalent"
+      ],
+      "not_hard_blockers": ["B1", "B2", "good German", "working knowledge", "generic German mention"]
+    },
+    "other_languages": {
+      "hard_block_if_explicitly_mandatory_or_fluent": true,
+      "preferred_advantage_plus_is_not_a_blocker": true
+    }
+  },
+  "hard_blockers": {
+    "explicit_vacancy_status": ["Closed", "Expired", "Removed"],
+    "missing_job_url": true,
+    "confirmed_dead_link": ["404", "410", "dead"],
+    "explicit_language_blocker": true,
+    "explicit_outside_target_geography": true
+  },
+  "warnings_not_blockers": {
+    "unresolved_geography": true,
+    "link_not_revalidated": true,
+    "work_authorization_or_sponsorship_unclear": true,
+    "salary_missing": true,
+    "seniority_stretch": true,
+    "low_or_unknown_h_attainability": true,
+    "old_posting_days": 45,
+    "stale_last_seen_days": 7
+  },
+  "explicit_non_inputs": [
+    "company A/B/C preference except separate Exclude handling in J",
+    "salary level",
+    "H attainability score",
+    "C semantic-fit value itself",
+    "seniority stretch"
+  ],
+  "notes": [
+    "A role may be C=Strong and actionability=false; C remains Strong.",
+    "Unknown work authorization is a warning because user eligibility is not inferred.",
+    "A stale or old posting is revalidation/urgency context, not proof that the vacancy is closed.",
+    "Country rules are for core permanent sourcing. D Remote can later define separate remote-employability rules."
+  ]
+}

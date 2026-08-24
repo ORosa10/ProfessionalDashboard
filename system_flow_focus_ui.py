@@ -72,13 +72,17 @@ def _render_detail(selected_id: str | None) -> None:
     st.divider()
     st.markdown("#### Architecture")
     st.code(
-        "CORE: A + C → G → C → J → I → H\n"
+        "CORE DISCOVERY: A + C → G → C → J → I\n"
         "MANUAL: B → I (Interested immediately)\n"
-        "LEARNING: I → A company feedback · I → C role learning\n"
+        "PREFERENCE LEARNING: I → A company feedback · I → C role learning\n"
+        "OUTCOME LEARNING: I → H → A/C/G/J as attainability context\n"
         "SECONDARY: D/E → C optional candidates · F → A/access context\n"
         "C → G future search intelligence"
     )
-    st.caption("D/E/F are optional lanes. The core engine should work well even if they are inactive.")
+    st.caption(
+        "H never overwrites A preference or C semantic fit: it adds empirical attainability context, "
+        "soft sourcing guidance and J prioritisation. D/E/F remain optional lanes."
+    )
 
 
 def render_system_flow() -> None:
@@ -122,7 +126,7 @@ def render_system_flow() -> None:
 
     with canvas:
         st.session_state[FLOW_STATE_KEY] = streamlit_flow(
-            "professional_dashboard_system_flow_focus_v4",
+            "professional_dashboard_system_flow_focus_v5",
             st.session_state[FLOW_STATE_KEY],
             fit_view=True,
             height=1040,

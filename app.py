@@ -12,6 +12,7 @@ from company_targeting_ui import render_company_targeting_feedback
 from opportunity_history_ui import render_opportunity_history
 from people_ui import render_people
 from cost_of_living_ui import render_cost_of_living
+from system_flow_ui import render_system_flow
 from github_storage import RATING_COLUMNS, github_token, load_ratings, save_ratings
 from jobs_ui import (
     render_board_sweep,
@@ -342,6 +343,10 @@ def sources_page() -> None:
     render_sources()
 
 
+def system_flow_page() -> None:
+    render_system_flow()
+
+
 with st.sidebar:
     st.title("🧭 Professional Dashboard")
     st.caption("Personal opportunity intelligence")
@@ -362,7 +367,10 @@ navigation = st.navigation(
             st.Page(cost_of_living_page, title="Cost of Living"),
         ],
         "Workspace": [st.Page(pipeline_page, title="Applications / History"), st.Page(ideas_page, title="Ideas & Projects")],
-        "System": [st.Page(sources_page, title="Sources / Radar")],
+        "System": [
+            st.Page(system_flow_page, title="A–J System Flow"),
+            st.Page(sources_page, title="Sources / Radar"),
+        ],
     }
 )
 

@@ -99,6 +99,15 @@ class ShadowAggregatorTests(unittest.TestCase):
         result = aggregate_frames([("board", left), ("company", right)])
         self.assertEqual(len(result), 2)
 
+    def test_iso_country_tokens_do_not_cross_match(self) -> None:
+        frame = pd.DataFrame([
+            {"job_id": "dk", "company": "D", "title": "Treasury", "market": "Multi-region", "location": "Copenhagen, Europe, DK"},
+            {"job_id": "de", "company": "G", "title": "Risk", "market": "Multi-region", "location": "Frankfurt am Main, Europe, DE"},
+        ])
+        result = aggregate_frames([("test", frame)]).set_index("job_id")
+        self.assertEqual(result.loc["dk", "country_bucket"], "Denmark")
+        self.assertEqual(result.loc["de", "country_bucket"], "Germany")
+
     def test_rows_without_company_or_title_are_not_candidates(self) -> None:
         frame = pd.DataFrame([
             {"job_id": "good", "company": "Example", "title": "Risk Analyst"},

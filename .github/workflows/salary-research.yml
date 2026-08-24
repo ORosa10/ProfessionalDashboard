@@ -34,7 +34,7 @@ jobs:
         run: pip install pandas ddgs
 
       - name: Research pending salary requests
-        run: python -m sourcing.salary_research_free --max-items 10
+        run: python -m sourcing.run_salary_research_free --max-items 10
 
       - name: Commit salary research
         shell: bash

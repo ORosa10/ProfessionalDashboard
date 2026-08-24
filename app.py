@@ -12,7 +12,7 @@ from company_targeting_ui import render_company_targeting_feedback
 from opportunity_history_ui import render_opportunity_history
 from people_ui import render_people
 from cost_of_living_ui import render_cost_of_living
-from system_flow_ui import render_system_flow
+from system_flow_focus_ui import render_system_flow
 from github_storage import RATING_COLUMNS, github_token, load_ratings, save_ratings
 from jobs_ui import (
     render_board_sweep,

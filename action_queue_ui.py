@@ -220,6 +220,29 @@ def _current_shortlist() -> tuple[pd.DataFrame, pd.DataFrame, str | None]:
     return _salary_context(shortlist), history, sha
 
 
+def _decision_changed(edited: pd.DataFrame, source: pd.DataFrame) -> bool:
+    src = source.set_index("job_id")
+    for oid, row in edited.iterrows():
+        if oid not in src.index:
+            continue
+        original = src.loc[oid]
+        current = (
+            str(row.get("action", "New")),
+            str(row.get("company_feedback", "Not rated")),
+            str(row.get("role_feedback", "Not rated")),
+            str(row.get("user_comment", "")),
+        )
+        prior = (
+            str(original.get("prior_action", "") or "New"),
+            str(original.get("prior_company_feedback", "") or "Not rated"),
+            str(original.get("prior_role_feedback", "") or "Not rated"),
+            str(original.get("prior_comment", "")),
+        )
+        if current != prior:
+            return True
+    return False
+
+
 def _upsert_history(history: pd.DataFrame, edited: pd.DataFrame, source: pd.DataFrame) -> pd.DataFrame:
     now = datetime.now(timezone.utc).isoformat()
     current = history.reindex(columns=HISTORY_COLUMNS, fill_value="").copy()
@@ -227,6 +250,8 @@ def _upsert_history(history: pd.DataFrame, edited: pd.DataFrame, source: pd.Data
     by_id.index.name = "opportunity_id"
     source = source.set_index("job_id")
     for oid, row in edited.iterrows():
+        if oid not in source.index:
+            continue
         action = str(row.get("action", "New"))
         cf = str(row.get("company_feedback", "Not rated"))
         rf = str(row.get("role_feedback", "Not rated"))
@@ -264,11 +289,12 @@ def _upsert_history(history: pd.DataFrame, edited: pd.DataFrame, source: pd.Data
 def render_action_queue() -> None:
     st.markdown('<div class="eyebrow">Workstream J</div>', unsafe_allow_html=True)
     st.title("Apply Shortlist")
-    st.caption("Only reviewed, actionable roles. Quality first; country mix is soft; role families have no quotas.")
+    st.caption("Only reviewed, actionable roles. Quality first; country mix is soft; role families have no quotas. Decisions and feedback auto-save.")
     shortlist, history, history_sha = _current_shortlist()
     if shortlist.empty:
         st.info("No actionable reviewed roles are ready. Source/review more in G/C rather than lowering the J bar.")
         return
+
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Actionable roles", len(shortlist))
     m2.metric("Companies", shortlist["company"].nunique())
@@ -285,39 +311,53 @@ def render_action_queue() -> None:
     display["company_feedback"] = display["prior_company_feedback"].replace("", "Not rated")
     display["role_feedback"] = display["prior_role_feedback"].replace("", "Not rated")
     display["user_comment"] = display["prior_comment"]
-    display["fit"] = display.apply(lambda r: f"{r.get('semantic_fit')} · {r.get('semantic_reasoning')}" if r.get("semantic_reasoning") else str(r.get("semantic_fit", "")), axis=1)
-    cols = ["company", "title", "role_family", "market", "location", "salary_range", "fit", "job_url", "action", "company_feedback", "role_feedback", "user_comment"]
-    with st.form("action_queue_form"):
-        edited = st.data_editor(
-            display[cols], hide_index=True, width="stretch", height=720, row_height=95,
-            disabled=[c for c in cols if c not in {"action", "company_feedback", "role_feedback", "user_comment"}],
-            column_config={
-                "company": st.column_config.TextColumn("Company", width="small"),
-                "title": st.column_config.TextColumn("Role", width="medium"),
-                "role_family": st.column_config.TextColumn("Bucket", width="small"),
-                "market": st.column_config.TextColumn("Country", width="small"),
-                "location": st.column_config.TextColumn("Location", width="small"),
-                "salary_range": st.column_config.TextColumn("Salary", width="medium"),
-                "fit": st.column_config.TextColumn("C — semantic fit", width="large"),
-                "job_url": st.column_config.LinkColumn("Job page", display_text="Open"),
-                "action": st.column_config.SelectboxColumn("Your action", options=ACTION_OPTIONS, required=True),
-                "company_feedback": st.column_config.SelectboxColumn("Company", options=FEEDBACK_OPTIONS, required=True),
-                "role_feedback": st.column_config.SelectboxColumn("Role", options=FEEDBACK_OPTIONS, required=True),
-                "user_comment": st.column_config.TextColumn("Comment", width="medium"),
-            },
-        )
-        save = st.form_submit_button("Save decisions", type="primary")
-    if save:
+    display["fit"] = display.apply(
+        lambda r: f"{r.get('semantic_fit')} · {r.get('semantic_reasoning')}" if r.get("semantic_reasoning") else str(r.get("semantic_fit", "")),
+        axis=1,
+    )
+    cols = [
+        "company", "title", "role_family", "market", "location", "salary_range", "fit", "job_url",
+        "action", "company_feedback", "role_feedback", "user_comment",
+    ]
+    edited = st.data_editor(
+        display[cols],
+        hide_index=True,
+        width="stretch",
+        height=720,
+        row_height=95,
+        disabled=[c for c in cols if c not in {"action", "company_feedback", "role_feedback", "user_comment"}],
+        column_config={
+            "company": st.column_config.TextColumn("Company", width="small"),
+            "title": st.column_config.TextColumn("Role", width="medium"),
+            "role_family": st.column_config.TextColumn("Bucket", width="small"),
+            "market": st.column_config.TextColumn("Country", width="small"),
+            "location": st.column_config.TextColumn("Location", width="small"),
+            "salary_range": st.column_config.TextColumn("Salary", width="medium"),
+            "fit": st.column_config.TextColumn("C — semantic fit", width="large"),
+            "job_url": st.column_config.LinkColumn("Job page", display_text="Open"),
+            "action": st.column_config.SelectboxColumn("Your action", options=ACTION_OPTIONS, required=True),
+            "company_feedback": st.column_config.SelectboxColumn("Company", options=FEEDBACK_OPTIONS, required=True),
+            "role_feedback": st.column_config.SelectboxColumn("Role", options=FEEDBACK_OPTIONS, required=True),
+            "user_comment": st.column_config.TextColumn("Comment", width="medium"),
+        },
+        key="j_action_queue_editor",
+    )
+
+    if _decision_changed(edited, shortlist):
         token = github_token()
         if not token:
-            st.error("GitHub saving is not configured for this app.")
+            st.error("GitHub saving is not configured for this app, so this edit could not be saved.")
             return
         try:
-            save_csv_file(token, HISTORY_PATH, _upsert_history(history, edited, shortlist), history_sha, "Save J shortlist decisions")
-        except Exception:
-            st.error("Saving decisions failed. Refresh and try again.")
+            updated = _upsert_history(history, edited, shortlist)
+            save_csv_file(token, HISTORY_PATH, updated, history_sha, "Auto-save J shortlist decision")
+        except Exception as exc:
+            st.error(f"Auto-save failed: {exc}")
         else:
-            st.success("Saved to I — Opportunity History. Apply/Skip will leave this shortlist on refresh.")
+            st.toast("Saved", icon="✅")
             st.rerun()
+    else:
+        st.caption("Feedback and actions are saved automatically after each edit.")
+
     with st.expander("How J is built"):
         st.write("G sources broadly. C reviews semantic fit. Reviewed J choices come first; country targets only guide replenishment. There is no role-family quota.")

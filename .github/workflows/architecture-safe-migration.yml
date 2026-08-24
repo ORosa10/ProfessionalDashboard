@@ -9,6 +9,10 @@ on:
       - "sourcing/test_aggregate_candidates_shadow.py"
       - "sourcing/compare_shadow_g.py"
       - "sourcing/test_compare_shadow_g.py"
+      - "sourcing/build_semantic_fit_shadow.py"
+      - "sourcing/test_build_semantic_fit_shadow.py"
+      - "sourcing/build_semantic_fit_queue_shadow.py"
+      - "sourcing/test_build_semantic_fit_queue_shadow.py"
       - ".github/workflows/architecture-safe-migration.yml"
   workflow_dispatch:
 
@@ -20,7 +24,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  shadow-aggregator-tests:
+  shadow-migration-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -33,10 +37,12 @@ jobs:
         run: |
           python -m unittest \
             sourcing.test_aggregate_candidates_shadow \
-            sourcing.test_compare_shadow_g
+            sourcing.test_compare_shadow_g \
+            sourcing.test_build_semantic_fit_shadow \
+            sourcing.test_build_semantic_fit_queue_shadow
 
-  shadow-aggregate-snapshots:
-    needs: shadow-aggregator-tests
+  shadow-snapshot-build:
+    needs: shadow-migration-tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -50,9 +56,9 @@ jobs:
 
       - name: Fetch source snapshots read-only
         run: |
-          # Read every current staging branch without checking it out or writing
-          # anything back. Missing/empty sources are allowed and are diagnostic
-          # information rather than a workflow failure.
+          # Read current source/reference branches without checking them out or
+          # writing anything back. Missing/empty source files are diagnostics,
+          # not permission to mutate production.
           git fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*'
           mkdir -p /tmp/g-shadow-inputs /tmp/g-shadow-output
 
@@ -79,10 +85,14 @@ jobs:
           extract origin/investment-banking-sourcing-staging data/jobs_investment-banking_staging.csv investment-banking.csv
           extract origin/public-markets-sourcing-staging data/jobs_public-markets_staging.csv public-markets.csv
           extract origin/specialist-funds-sourcing-staging data/jobs_specialist-funds_staging.csv specialist-funds.csv
+
+          # Live references are read-only migration baselines, never source inputs.
           extract origin/main data/j_curated_shortlist.csv live-j.csv
           extract origin/main data/country_sourcing_weights.json country-targets.json
+          extract origin/main data/semantic_fit.csv semantic-live.csv
+          extract origin/main data/opportunity_history.csv history-live.csv
 
-      - name: Build read-only shadow candidate pool
+      - name: Build read-only shadow G candidate pool
         run: |
           python -m sourcing.aggregate_candidates_shadow \
             --input board=/tmp/g-shadow-inputs/board.csv \
@@ -107,17 +117,33 @@ jobs:
             --reference-out /tmp/g-shadow-output/live_j_coverage.csv \
             --country-out /tmp/g-shadow-output/country_raw_supply.csv
 
+      - name: Build canonical semantic shadow store
+        run: |
+          python -m sourcing.build_semantic_fit_shadow \
+            --canonical /tmp/g-shadow-inputs/semantic-live.csv \
+            --curated-j /tmp/g-shadow-inputs/live-j.csv \
+            --out /tmp/g-shadow-output/semantic_fit_shadow.csv
+
+      - name: Build shadow C review queue
+        run: |
+          python -m sourcing.build_semantic_fit_queue_shadow \
+            --candidates /tmp/g-shadow-output/candidates_shadow.csv \
+            --semantic /tmp/g-shadow-output/semantic_fit_shadow.csv \
+            --history /tmp/g-shadow-inputs/history-live.csv \
+            --out /tmp/g-shadow-output/semantic_fit_queue_shadow.csv \
+            --limit 160
+
       - name: Print compact diagnostics
         run: |
           python - <<'PY'
           import pandas as pd
 
           d = pd.read_csv('/tmp/g-shadow-output/g_shadow_diagnostics.csv')
-          print('\n=== OVERALL ===')
+          print('\n=== G OVERALL ===')
           print(d[d.dimension.eq('overall')].to_string(index=False))
-          print('\n=== SOURCES ===')
+          print('\n=== G SOURCES ===')
           print(d[d.dimension.eq('source')].to_string(index=False))
-          print('\n=== COUNTRIES ===')
+          print('\n=== G COUNTRIES ===')
           print(d[d.dimension.eq('country')].to_string(index=False))
 
           ref = pd.read_csv('/tmp/g-shadow-output/live_j_coverage.csv')
@@ -131,15 +157,27 @@ jobs:
           country = pd.read_csv('/tmp/g-shadow-output/country_raw_supply.csv')
           print('\n=== RAW COUNTRY SUPPLY VS CONFIGURED TARGETS ===')
           print(country.to_string(index=False))
+
+          sem = pd.read_csv('/tmp/g-shadow-output/semantic_fit_shadow.csv')
+          if len(sem):
+            print('\n=== C SEMANTIC SHADOW SOURCES ===')
+            print(sem['semantic_source'].value_counts().to_string())
+
+          queue = pd.read_csv('/tmp/g-shadow-output/semantic_fit_queue_shadow.csv')
+          print(f"\n=== PENDING SHADOW C QUEUE: {len(queue)} ===")
+          if len(queue):
+            print(queue['country_bucket'].replace('', 'Other / Unresolved').value_counts().to_string())
           PY
 
       - name: Upload shadow diagnostics artifact
         uses: actions/upload-artifact@v4
         with:
-          name: g-shadow-snapshot
+          name: architecture-shadow-snapshot
           path: |
             /tmp/g-shadow-output/candidates_shadow.csv
             /tmp/g-shadow-output/g_shadow_diagnostics.csv
             /tmp/g-shadow-output/live_j_coverage.csv
             /tmp/g-shadow-output/country_raw_supply.csv
+            /tmp/g-shadow-output/semantic_fit_shadow.csv
+            /tmp/g-shadow-output/semantic_fit_queue_shadow.csv
           retention-days: 7

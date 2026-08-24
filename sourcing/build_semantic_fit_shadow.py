@@ -53,6 +53,7 @@ def build_semantic_shadow(canonical: pd.DataFrame, curated_j: pd.DataFrame) -> p
 
     if not curated_j.empty and "job_id" in curated_j.columns:
         curated_j = curated_j.fillna("").drop_duplicates("job_id", keep="first")
+        migration_date = date.today().isoformat()
         for _, row in curated_j.iterrows():
             oid = str(row.get("job_id", "")).strip()
             fit = str(row.get("semantic_fit", "")).strip()
@@ -62,7 +63,7 @@ def build_semantic_shadow(canonical: pd.DataFrame, curated_j: pd.DataFrame) -> p
                 "opportunity_id": oid,
                 "fit": fit,
                 "reasoning": str(row.get("semantic_reasoning", "")).strip(),
-                "generated_at": str(row.get("date_posted", "")).strip() or date.today().isoformat(),
+                "generated_at": migration_date,
                 "semantic_source": "curated_j_backfill",
             })
             seen.add(oid)

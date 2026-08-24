@@ -82,6 +82,20 @@ def _append_unique(items: list[str], value: str) -> None:
         items.append(value)
 
 
+def _structured_country_codes(raw: str) -> set[str]:
+    """Read ISO-like codes only from delimiter-separated location positions.
+
+    Examples that should match: `Europe, PL`, `North America, US`, `DE`.
+    Ordinary prose such as `remote in Europe` must NOT turn the word `in` into
+    the India country code.
+    """
+    upper = str(raw or "").upper().strip()
+    codes = set(re.findall(r"(?:^|[,·/|]\s*)([A-Z]{2})(?=$|[\s,·/|])", upper))
+    if re.fullmatch(r"[A-Z]{2}", upper):
+        codes.add(upper)
+    return codes
+
+
 def _explicit_outside_geography(row: pd.Series, target_geographies: set[str]) -> tuple[bool, str]:
     country = str(row.get("country_bucket", "") or "").strip()
     if country in target_geographies:
@@ -90,7 +104,7 @@ def _explicit_outside_geography(row: pd.Series, target_geographies: set[str]) ->
         return True, country
 
     raw = f"{row.get('market', '')} {row.get('location', '')}".strip()
-    tokens = set(re.findall(r"\b[A-Z]{2}\b", raw.upper()))
+    tokens = _structured_country_codes(raw)
     target_codes = set(TARGET_CODE_MAP)
     outside_codes = tokens & COMMON_OUTSIDE_CODES
     if outside_codes and not (tokens & target_codes):
@@ -120,6 +134,13 @@ def _age_days(value: object, as_of: pd.Timestamp) -> int | None:
     if pd.isna(parsed):
         return None
     return max(0, int((as_of - parsed).total_seconds() // 86400))
+
+
+def _as_utc_timestamp(value: str | None) -> pd.Timestamp:
+    parsed = pd.Timestamp(value or date.today().isoformat())
+    if parsed.tzinfo is None:
+        return parsed.tz_localize("UTC")
+    return parsed.tz_convert("UTC")
 
 
 def evaluate_actionability(
@@ -155,7 +176,7 @@ def evaluate_actionability(
     dead_links = {str(x).lower() for x in policy.get("hard_blockers", {}).get("confirmed_dead_link", [])}
     old_days = int(policy.get("warnings_not_blockers", {}).get("old_posting_days", 45))
     stale_days = int(policy.get("warnings_not_blockers", {}).get("stale_last_seen_days", 7))
-    eval_ts = pd.Timestamp(as_of or date.today().isoformat(), tz="UTC")
+    eval_ts = _as_utc_timestamp(as_of)
 
     rows: list[dict[str, object]] = []
     for _, row in frame.iterrows():

@@ -1,0 +1,31 @@
+name: Architecture safe migration checks
+
+on:
+  push:
+    branches:
+      - architecture-safe-migration
+    paths:
+      - "sourcing/aggregate_candidates_shadow.py"
+      - "sourcing/test_aggregate_candidates_shadow.py"
+      - ".github/workflows/architecture-safe-migration.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: architecture-safe-migration-checks
+  cancel-in-progress: true
+
+jobs:
+  shadow-aggregator-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+      - name: Run shadow aggregator tests
+        run: python -m unittest sourcing.test_aggregate_candidates_shadow

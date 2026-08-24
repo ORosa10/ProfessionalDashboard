@@ -20,7 +20,6 @@ from github_storage import github_token, load_csv_file, save_csv_file
 
 DATA_DIR = Path(__file__).parent / "data"
 SUBMISSIONS_PATH = "data/user_submitted_opportunities.csv"
-COMPANIES_PATH = "data/user_submitted_companies.csv"
 RESEARCH_OVERRIDES_PATH = DATA_DIR / "user_submitted_opportunity_research.csv"
 SUBMISSION_COLUMNS = [
     "submission_id", "submitted_at", "linkedin_url", "company_url", "job_url",
@@ -28,23 +27,6 @@ SUBMISSION_COLUMNS = [
     "country", "topic", "role_summary_en", "company_profile", "role_profile",
     "salary_research", "salary_range", "user_comment", "feedback", "calibration_signal",
     "targeting_scope", "review_status", "source_domain",
-]
-
-FEEDBACK_OPTIONS = ["Unrated", "Interested", "Maybe", "Pass"]
-COMPANY_COLUMNS = [
-    "canonical_company_id", "company", "company_category", "source_domain",
-    "first_submitted_at", "latest_job_url", "review_status",
-]
-TOPICS = [
-    "Transactions / M&A / Deals",
-    "Corporate finance / valuation",
-    "Restructuring / turnaround",
-    "Treasury / financial risk / markets",
-    "FP&A / controlling / performance management",
-    "Finance-linked strategy and transformation",
-    "Finance-linked data and analytics",
-    "Private equity / investments",
-    "Other / needs review",
 ]
 
 
@@ -69,8 +51,7 @@ def _public_http_url(value: str) -> str:
     except socket.gaierror as exc:
         raise ValueError("The job website could not be found.") from exc
     for address in addresses:
-        ip = ipaddress.ip_address(address)
-        if not ip.is_global:
+        if not ipaddress.ip_address(address).is_global:
             raise ValueError("Only public job websites can be loaded.")
     return parsed.geturl()
 
@@ -91,9 +72,7 @@ def _json_job_postings(value: object) -> list[dict]:
 
 
 def _organization_name(value: object) -> str:
-    if isinstance(value, dict):
-        return _normalize(value.get("name"))
-    return _normalize(value)
+    return _normalize(value.get("name")) if isinstance(value, dict) else _normalize(value)
 
 
 def _location_text(value: object) -> str:
@@ -123,7 +102,7 @@ def _focused_description(raw: object) -> str:
     starts = [lower.find(marker) for marker in markers if lower.find(marker) >= 0]
     if starts:
         text = text[min(starts):]
-    return text[:2400]
+    return text[:5000]
 
 
 def extract_job_page(url: str) -> dict[str, str]:
@@ -225,7 +204,6 @@ def _company_context(company: str, domain: str) -> tuple[str, str, str]:
 
 
 def _apply_research_overrides(saved: pd.DataFrame) -> pd.DataFrame:
-    """Overlay human/researched enrichment without overwriting user feedback fields."""
     if saved.empty or not RESEARCH_OVERRIDES_PATH.exists():
         return saved
     try:
@@ -234,7 +212,6 @@ def _apply_research_overrides(saved: pd.DataFrame) -> pd.DataFrame:
         return saved
     if research.empty or "submission_id" not in research.columns:
         return saved
-
     research = research.drop_duplicates("submission_id", keep="last").set_index("submission_id")
     out = saved.copy()
     enrichment_cols = [
@@ -251,17 +228,17 @@ def _apply_research_overrides(saved: pd.DataFrame) -> pd.DataFrame:
 
 
 def render_add_opportunity() -> None:
-    st.markdown('<div class="eyebrow">Opportunity Radar</div>', unsafe_allow_html=True)
+    st.markdown('<div class="eyebrow">Workstream B</div>', unsafe_allow_html=True)
     st.title("Add Opportunity")
     st.caption(
-        "Paste a LinkedIn link and/or the company's own job page (one is enough). "
-        "The role is saved immediately; researched company/role context and salary reads are overlaid below when available."
+        "Paste a role you found yourself. Saving it means Interested: it enters I immediately, "
+        "while automatic enrichment researches the company, role and salary in the background."
     )
     with st.expander("How this works"):
         st.write(
-            "The app first tries to read the company's own job page and saves the opportunity even when a site cannot be parsed. "
-            "A researched enrichment layer can then add the company profile, role profile and a role-specific salary read without "
-            "overwriting your rating or comment. Your rating becomes a positive or negative example for the relevant targeting hypothesis."
+            "B is an intentional manual-intake lane. A role you actively add is automatically treated as Interested, "
+            "so there is no second preference-rating step and it never needs to pass through J. The app stores the raw link first; "
+            "the enrichment workflow then researches current company/role context and a role-specific salary range and expectation."
         )
 
     linkedin_url = st.text_input(
@@ -274,10 +251,10 @@ def render_add_opportunity() -> None:
     )
     comment = st.text_area(
         "Why this role is interesting to you (optional)",
-        placeholder="Especially useful when the reason is not obvious from the job description.",
+        placeholder="Useful when the reason is not obvious from the job description.",
     )
     has_link = bool(linkedin_url.strip() or company_url.strip())
-    if st.button("Save for enrichment", type="primary", disabled=not has_link):
+    if st.button("Add as Interested", type="primary", disabled=not has_link):
         token = github_token()
         if not token:
             st.error("GitHub saving is not configured for this app.")
@@ -315,89 +292,79 @@ def render_add_opportunity() -> None:
                 "location": draft.get("location", ""),
                 "role_summary_en": draft.get("description", ""),
                 "user_comment": comment.strip(),
-                "feedback": "Unrated",
-                "calibration_signal": "",
+                "feedback": "Interested",
+                "calibration_signal": "User-supplied positive example",
                 "targeting_scope": category if category != "Unclassified" else "General",
-                "review_status": "Needs enrichment",
+                "review_status": "Needs automatic enrichment",
                 "source_domain": draft.get("source_domain", ""),
             })
             opportunities = pd.concat([opportunities, pd.DataFrame([row])], ignore_index=True)
             opportunities = opportunities.drop_duplicates("submission_id", keep="last")
             try:
-                save_csv_file(token, SUBMISSIONS_PATH, opportunities, opp_sha, "Save opportunity for enrichment")
+                save_csv_file(token, SUBMISSIONS_PATH, opportunities, opp_sha, "Add Interested opportunity for enrichment")
             except Exception:
                 st.error("Saving failed. Refresh the page and try again.")
             else:
-                st.success(
-                    "Saved. If researched enrichment is already available for this opportunity, it will appear in the table below."
-                )
+                st.success("Saved as Interested and sent to I. Automatic company/role/salary enrichment is queued.")
 
     st.divider()
     token = github_token()
     try:
-        saved, saved_sha = load_csv_file(token, SUBMISSIONS_PATH, SUBMISSION_COLUMNS)
+        raw_saved, saved_sha = load_csv_file(token, SUBMISSIONS_PATH, SUBMISSION_COLUMNS)
     except Exception:
-        saved, saved_sha = pd.DataFrame(columns=SUBMISSION_COLUMNS), None
-    saved = _apply_research_overrides(saved)
+        raw_saved, saved_sha = pd.DataFrame(columns=SUBMISSION_COLUMNS), None
+    saved = _apply_research_overrides(raw_saved)
     if saved.empty:
         st.info("No opportunities yet. Paste a link above to add your first one.")
         return
 
-    st.subheader("Your opportunities")
-    st.caption(
-        "Rate each one (Interested / Maybe / Pass) once it has been enriched. "
-        "Ratings feed the relevant targeting hypothesis."
-    )
+    st.subheader("Your manually added opportunities")
+    st.caption("Intent is always Interested. Company/role/salary research fills automatically; only your comment remains editable here.")
     saved = saved.sort_values("submitted_at", ascending=False).reset_index(drop=True)
     display_cols = [
         "title", "company", "company_category", "review_status", "feedback",
         "company_profile", "role_profile", "salary_range", "salary_research", "user_comment", "job_url",
     ]
     editor = saved.set_index("submission_id")[display_cols]
-    with st.form("rate_opportunities_form"):
+    with st.form("manual_opportunity_comments_form"):
         edited = st.data_editor(
             editor,
             hide_index=True,
             width="stretch",
-            height=520,
-            disabled=[c for c in display_cols if c not in {"feedback", "user_comment"}],
+            height=560,
+            disabled=[c for c in display_cols if c != "user_comment"],
             column_config={
                 "title": st.column_config.TextColumn("Role", width="medium"),
                 "company": st.column_config.TextColumn("Company", width="small"),
                 "company_category": st.column_config.TextColumn("Category", width="small"),
                 "review_status": st.column_config.TextColumn("Status", width="small"),
-                "feedback": st.column_config.SelectboxColumn(
-                    "Your rating", options=FEEDBACK_OPTIONS, required=True, width="small"
-                ),
+                "feedback": st.column_config.TextColumn("Intent", width="small"),
                 "company_profile": st.column_config.TextColumn("Company profile", width="large"),
                 "role_profile": st.column_config.TextColumn("Role profile", width="large"),
-                "salary_range": st.column_config.TextColumn("Salary range", width="small"),
-                "salary_research": st.column_config.TextColumn("Salary read", width="large"),
+                "salary_range": st.column_config.TextColumn("Salary range", width="medium"),
+                "salary_research": st.column_config.TextColumn("Salary research / expectation", width="large"),
                 "user_comment": st.column_config.TextColumn("Your comment", width="medium"),
                 "job_url": st.column_config.LinkColumn("Link", display_text="Open", width="small"),
             },
             key="submitted_opportunity_editor",
         )
-        save_ratings = st.form_submit_button("Save my ratings", type="primary")
-    if save_ratings:
+        save_comments = st.form_submit_button("Save comments")
+    if save_comments:
         if not token:
             st.error("GitHub saving is not configured for this app.")
         else:
-            updated = saved.set_index("submission_id")
-            updated.loc[edited.index, "feedback"] = edited["feedback"]
-            updated.loc[edited.index, "user_comment"] = edited["user_comment"]
-            rated = updated["feedback"].isin(["Interested", "Maybe", "Pass"])
-            updated.loc[rated, "calibration_signal"] = updated.loc[rated, "feedback"].map(
-                {"Interested": "User-supplied positive example",
-                 "Maybe": "User-supplied borderline example",
-                 "Pass": "User-supplied negative example"}
-            )
+            updated = raw_saved.set_index("submission_id")
+            shared = updated.index.intersection(edited.index)
+            updated.loc[shared, "user_comment"] = edited.loc[shared, "user_comment"]
+            # New B semantics: any manually added item is an Interested signal.
+            updated.loc[shared, "feedback"] = "Interested"
+            updated.loc[shared, "calibration_signal"] = "User-supplied positive example"
             try:
                 save_csv_file(
                     token, SUBMISSIONS_PATH, updated.reset_index(), saved_sha,
-                    "Update opportunity ratings",
+                    "Update manual opportunity comments",
                 )
             except Exception:
                 st.error("Saving failed. Refresh the page and try again.")
             else:
-                st.success("Ratings saved.")
+                st.success("Comments saved.")

@@ -1,0 +1,51 @@
+name: Zero-cost salary research
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/salary_research_requests.csv'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: salary-research-main
+  cancel-in-progress: false
+
+jobs:
+  research:
+    # The bot commit that marks a request complete would otherwise trigger a second run.
+    if: github.event_name == 'workflow_dispatch' || github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install zero-cost research dependencies
+        run: pip install pandas ddgs
+
+      - name: Research pending salary requests
+        run: python -m sourcing.salary_research_free --max-items 10
+
+      - name: Commit salary research
+        shell: bash
+        run: |
+          if git diff --quiet -- data/user_submitted_opportunity_research.csv data/salary_research_requests.csv; then
+            echo "No salary research changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/user_submitted_opportunity_research.csv data/salary_research_requests.csv
+          git commit -m "Research submitted opportunity salary (zero-cost web)"
+          git pull --rebase origin main
+          git push origin HEAD:main

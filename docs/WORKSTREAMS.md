@@ -38,6 +38,7 @@ A udržuje universe firem a jejich relevanci vůči uživatelské company thesis
 - Výstup nemá být binární hard filter. Firma může mít např. vyšší / střední / nižší company relevance; neznámá nebo slabší firma nesmí automaticky skrýt výbornou roli.
 - Pokud už firma v A existuje, G/B/C reuse její existující profil a signály místo vytváření duplicity.
 - Stav: ✅ company discovery běží ručně i automaticky. **Otevřené (na systému):** formalizovat a uložit automatické semantické company relevance skóre/reasoning, které lze použít i pro firmy objevené přes G.
+- [2026-08-24] A: added 42 companies across Consulting, Corporate, Banking & Financial Services, Holding & Conglomerate, Private Equity & Private Markets, Investment Banking, Public Markets & Asset Management, Specialist & Boutique Funds
 
 ## B — Ručně vkládané opportunity (stránka Add Opportunity)
 Vstup: LinkedIn/job link + firemní stránka → `data/user_submitted_opportunities.csv`. Vlastní stránka (ne v Jobs inboxu).

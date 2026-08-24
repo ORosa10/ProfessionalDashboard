@@ -20,6 +20,7 @@ from github_storage import github_token, load_csv_file, save_csv_file
 
 DATA_DIR = Path(__file__).parent / "data"
 SUBMISSIONS_PATH = "data/user_submitted_opportunities.csv"
+SALARY_REQUESTS_PATH = "data/salary_research_requests.csv"
 RESEARCH_OVERRIDES_PATH = DATA_DIR / "user_submitted_opportunity_research.csv"
 SUBMISSION_COLUMNS = [
     "submission_id", "submitted_at", "linkedin_url", "company_url", "job_url",
@@ -28,6 +29,7 @@ SUBMISSION_COLUMNS = [
     "salary_research", "salary_range", "user_comment", "feedback", "calibration_signal",
     "targeting_scope", "review_status", "source_domain",
 ]
+SALARY_REQUEST_COLUMNS = ["submission_id", "requested_at", "status", "completed_at", "message"]
 
 
 def _normalize(value: object) -> str:
@@ -227,18 +229,34 @@ def _apply_research_overrides(saved: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def _queue_salary_research(token: str, submission_id: str) -> None:
+    queue, queue_sha = load_csv_file(token, SALARY_REQUESTS_PATH, SALARY_REQUEST_COLUMNS)
+    now = datetime.now(timezone.utc).isoformat()
+    row = {
+        "submission_id": submission_id,
+        "requested_at": now,
+        "status": "queued",
+        "completed_at": "",
+        "message": "",
+    }
+    queue = pd.concat([queue, pd.DataFrame([row])], ignore_index=True)
+    queue = queue.drop_duplicates("submission_id", keep="last")
+    save_csv_file(token, SALARY_REQUESTS_PATH, queue, queue_sha, "Queue zero-cost salary research")
+
+
 def render_add_opportunity() -> None:
     st.markdown('<div class="eyebrow">Workstream B</div>', unsafe_allow_html=True)
     st.title("Add Opportunity")
     st.caption(
-        "Paste a role you found yourself. Saving it means Interested: it enters I immediately, "
-        "while automatic enrichment researches the company, role and salary in the background."
+        "Paste a role you found yourself. Saving it means Interested: it enters I immediately. "
+        "A zero-cost public-web salary search is queued automatically; no paid model API is used."
     )
     with st.expander("How this works"):
         st.write(
             "B is an intentional manual-intake lane. A role you actively add is automatically treated as Interested, "
-            "so there is no second preference-rating step and it never needs to pass through J. The app stores the raw link first; "
-            "the enrichment workflow then researches current company/role context and a role-specific salary range and expectation."
+            "so there is no second preference-rating step and it never needs to pass through J. The app stores the raw link first "
+            "and parses the company job page when possible. Salary research runs separately using public web-search results only; "
+            "weak evidence is explicitly flagged for ChatGPT review instead of inventing a number."
         )
 
     linkedin_url = st.text_input(
@@ -295,17 +313,25 @@ def render_add_opportunity() -> None:
                 "feedback": "Interested",
                 "calibration_signal": "User-supplied positive example",
                 "targeting_scope": category if category != "Unclassified" else "General",
-                "review_status": "Needs automatic enrichment",
+                "review_status": "Needs enrichment",
                 "source_domain": draft.get("source_domain", ""),
             })
             opportunities = pd.concat([opportunities, pd.DataFrame([row])], ignore_index=True)
             opportunities = opportunities.drop_duplicates("submission_id", keep="last")
             try:
-                save_csv_file(token, SUBMISSIONS_PATH, opportunities, opp_sha, "Add Interested opportunity for enrichment")
+                save_csv_file(token, SUBMISSIONS_PATH, opportunities, opp_sha, "Add Interested opportunity")
             except Exception:
                 st.error("Saving failed. Refresh the page and try again.")
             else:
-                st.success("Saved as Interested and sent to I. Automatic company/role/salary enrichment is queued.")
+                try:
+                    _queue_salary_research(token, identifier)
+                except Exception:
+                    st.warning(
+                        "Opportunity was saved and sent to I, but salary research could not be queued. "
+                        "Use the Research / refresh salary button below."
+                    )
+                else:
+                    st.success("Saved as Interested and sent to I. Zero-cost salary research is queued.")
 
     st.divider()
     token = github_token()
@@ -318,9 +344,48 @@ def render_add_opportunity() -> None:
         st.info("No opportunities yet. Paste a link above to add your first one.")
         return
 
-    st.subheader("Your manually added opportunities")
-    st.caption("Intent is always Interested. Company/role/salary research fills automatically; only your comment remains editable here.")
     saved = saved.sort_values("submitted_at", ascending=False).reset_index(drop=True)
+
+    st.subheader("Salary research")
+    st.caption(
+        "Every new B opportunity is queued automatically. Use this button to retry or refresh the current market read. "
+        "The workflow uses public web search only and has no metered/paid API fallback."
+    )
+    labels: dict[str, str] = {}
+    for _, item in saved.iterrows():
+        sid = str(item.get("submission_id", ""))
+        company = _normalize(item.get("company")) or "Unknown company"
+        title = _normalize(item.get("title")) or "Unknown role"
+        labels[sid] = f"{company} — {title}"
+    selected_salary_id = st.selectbox(
+        "Opportunity",
+        list(labels),
+        format_func=lambda sid: labels.get(sid, sid),
+        key="salary_research_submission",
+    )
+
+    try:
+        salary_queue, _ = load_csv_file(token, SALARY_REQUESTS_PATH, SALARY_REQUEST_COLUMNS)
+    except Exception:
+        salary_queue = pd.DataFrame(columns=SALARY_REQUEST_COLUMNS)
+    latest_queue = salary_queue.drop_duplicates("submission_id", keep="last").set_index("submission_id") if not salary_queue.empty else pd.DataFrame()
+    if selected_salary_id and not latest_queue.empty and selected_salary_id in latest_queue.index:
+        q = latest_queue.loc[selected_salary_id]
+        status = _normalize(q.get("status")) or "unknown"
+        message = _normalize(q.get("message"))
+        st.caption(f"Last request: **{status}**" + (f" — {message}" if message else ""))
+
+    if st.button("Research / refresh salary (free web)", disabled=not bool(token)):
+        try:
+            _queue_salary_research(token, selected_salary_id)
+        except Exception as exc:
+            st.error(f"Could not queue salary research: {type(exc).__name__}")
+        else:
+            st.success("Queued. The result will appear after the GitHub workflow commits it; refresh the page shortly.")
+
+    st.divider()
+    st.subheader("Your manually added opportunities")
+    st.caption("Intent is always Interested. Salary research is read-only here; only your comment remains editable.")
     display_cols = [
         "title", "company", "company_category", "review_status", "feedback",
         "company_profile", "role_profile", "salary_range", "salary_research", "user_comment", "job_url",
@@ -356,7 +421,6 @@ def render_add_opportunity() -> None:
             updated = raw_saved.set_index("submission_id")
             shared = updated.index.intersection(edited.index)
             updated.loc[shared, "user_comment"] = edited.loc[shared, "user_comment"]
-            # New B semantics: any manually added item is an Interested signal.
             updated.loc[shared, "feedback"] = "Interested"
             updated.loc[shared, "calibration_signal"] = "User-supplied positive example"
             try:

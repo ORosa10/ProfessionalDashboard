@@ -7,6 +7,8 @@ on:
     paths:
       - "sourcing/aggregate_candidates_shadow.py"
       - "sourcing/test_aggregate_candidates_shadow.py"
+      - "sourcing/compare_shadow_g.py"
+      - "sourcing/test_compare_shadow_g.py"
       - ".github/workflows/architecture-safe-migration.yml"
   workflow_dispatch:
 
@@ -27,8 +29,11 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pandas
-      - name: Run shadow aggregator tests
-        run: python -m unittest sourcing.test_aggregate_candidates_shadow
+      - name: Run shadow migration tests
+        run: |
+          python -m unittest \
+            sourcing.test_aggregate_candidates_shadow \
+            sourcing.test_compare_shadow_g
 
   shadow-aggregate-snapshots:
     needs: shadow-aggregator-tests
@@ -74,6 +79,8 @@ jobs:
           extract origin/investment-banking-sourcing-staging data/jobs_investment-banking_staging.csv investment-banking.csv
           extract origin/public-markets-sourcing-staging data/jobs_public-markets_staging.csv public-markets.csv
           extract origin/specialist-funds-sourcing-staging data/jobs_specialist-funds_staging.csv specialist-funds.csv
+          extract origin/main data/j_curated_shortlist.csv live-j.csv
+          extract origin/main data/country_sourcing_weights.json country-targets.json
 
       - name: Build read-only shadow candidate pool
         run: |
@@ -91,18 +98,39 @@ jobs:
             --out /tmp/g-shadow-output/candidates_shadow.csv \
             --diagnostics-out /tmp/g-shadow-output/g_shadow_diagnostics.csv
 
+      - name: Compare shadow G with current live references
+        run: |
+          python -m sourcing.compare_shadow_g \
+            --shadow /tmp/g-shadow-output/candidates_shadow.csv \
+            --live-reference /tmp/g-shadow-inputs/live-j.csv \
+            --country-targets /tmp/g-shadow-inputs/country-targets.json \
+            --reference-out /tmp/g-shadow-output/live_j_coverage.csv \
+            --country-out /tmp/g-shadow-output/country_raw_supply.csv
+
       - name: Print compact diagnostics
         run: |
           python - <<'PY'
           import pandas as pd
-          p = '/tmp/g-shadow-output/g_shadow_diagnostics.csv'
-          d = pd.read_csv(p)
+
+          d = pd.read_csv('/tmp/g-shadow-output/g_shadow_diagnostics.csv')
           print('\n=== OVERALL ===')
           print(d[d.dimension.eq('overall')].to_string(index=False))
           print('\n=== SOURCES ===')
           print(d[d.dimension.eq('source')].to_string(index=False))
           print('\n=== COUNTRIES ===')
           print(d[d.dimension.eq('country')].to_string(index=False))
+
+          ref = pd.read_csv('/tmp/g-shadow-output/live_j_coverage.csv')
+          if len(ref):
+            found = ref['found_in_shadow'].astype(str).str.lower().eq('true')
+            print(f"\n=== LIVE J REFERENCE COVERAGE: {int(found.sum())}/{len(ref)} ===")
+            missing = ref[~found][['curated_rank', 'company', 'title', 'market']]
+            if len(missing):
+              print(missing.to_string(index=False))
+
+          country = pd.read_csv('/tmp/g-shadow-output/country_raw_supply.csv')
+          print('\n=== RAW COUNTRY SUPPLY VS CONFIGURED TARGETS ===')
+          print(country.to_string(index=False))
           PY
 
       - name: Upload shadow diagnostics artifact
@@ -112,4 +140,6 @@ jobs:
           path: |
             /tmp/g-shadow-output/candidates_shadow.csv
             /tmp/g-shadow-output/g_shadow_diagnostics.csv
+            /tmp/g-shadow-output/live_j_coverage.csv
+            /tmp/g-shadow-output/country_raw_supply.csv
           retention-days: 7

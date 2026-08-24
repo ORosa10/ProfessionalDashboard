@@ -22,15 +22,27 @@ import pandas as pd
 
 
 TARGET_COUNTRIES = {
-    "Czechia": ["czechia", "czech republic", "praha", "prague", " cz"],
-    "Germany": ["germany", "deutschland", "berlin", "frankfurt", "munich", "münchen", "hamburg", "cologne", "köln", " düsseldorf", " stuttgart", " de"],
-    "Austria": ["austria", "österreich", "vienna", "wien", "salzburg", "linz", "graz", " at"],
-    "Switzerland": ["switzerland", "schweiz", "suisse", "zurich", "zürich", "geneva", "genève", "basel", " ch"],
-    "United Kingdom": ["united kingdom", " uk", "london", "england", "scotland", "wales", "manchester", "birmingham"],
-    "Sweden": ["sweden", "sverige", "stockholm", "gothenburg", "göteborg", " se"],
-    "Norway": ["norway", "norge", "oslo", " no"],
-    "Denmark": ["denmark", "danmark", "copenhagen", "københavn", " dk"],
-    "Finland": ["finland", "helsinki", "suomi", " fi"],
+    "Czechia": ["czechia", "czech republic", "praha", "prague"],
+    "Germany": ["germany", "deutschland", "berlin", "frankfurt", "munich", "münchen", "hamburg", "cologne", "köln", "düsseldorf", "stuttgart"],
+    "Austria": ["austria", "österreich", "vienna", "wien", "salzburg", "linz", "graz"],
+    "Switzerland": ["switzerland", "schweiz", "suisse", "zurich", "zürich", "geneva", "genève", "basel"],
+    "United Kingdom": ["united kingdom", "london", "england", "scotland", "wales", "manchester", "birmingham"],
+    "Sweden": ["sweden", "sverige", "stockholm", "gothenburg", "göteborg"],
+    "Norway": ["norway", "norge", "oslo"],
+    "Denmark": ["denmark", "danmark", "copenhagen", "københavn"],
+    "Finland": ["finland", "helsinki", "suomi"],
+}
+
+COUNTRY_CODES = {
+    "Czechia": {"CZ"},
+    "Germany": {"DE"},
+    "Austria": {"AT"},
+    "Switzerland": {"CH"},
+    "United Kingdom": {"GB", "UK"},
+    "Sweden": {"SE"},
+    "Norway": {"NO"},
+    "Denmark": {"DK"},
+    "Finland": {"FI"},
 }
 
 TRACKING_QUERY_KEYS = {
@@ -107,10 +119,19 @@ def _country_bucket(row: pd.Series) -> str:
     market = _text(row.get("market", ""))
     if market in TARGET_COUNTRIES:
         return market
-    haystack = f" {market} {_text(row.get('location', ''))} ".lower()
+
+    location = _text(row.get("location", ""))
+    haystack = f" {market} {location} ".lower()
     for country, patterns in TARGET_COUNTRIES.items():
         if any(pattern in haystack for pattern in patterns):
             return country
+
+    token_source = f" {market} {location} ".upper()
+    tokens = set(re.findall(r"\b[A-Z]{2}\b", token_source))
+    for country, codes in COUNTRY_CODES.items():
+        if tokens & codes:
+            return country
+
     if market and market.lower() not in {"multi-region", "remote", "unknown", "n/a"}:
         return market
     return "Other / Unresolved"

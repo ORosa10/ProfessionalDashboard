@@ -283,7 +283,6 @@ def render_system_flow() -> None:
             get_node_on_click=True,
             get_edge_on_click=False,
             min_zoom=0.2,
-            max_zoom=1.6,
         )
 
     selected_id = getattr(st.session_state[FLOW_STATE_KEY], "selected_id", None)

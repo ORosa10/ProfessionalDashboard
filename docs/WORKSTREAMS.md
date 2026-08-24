@@ -45,6 +45,7 @@ Vstup: LinkedIn/job link + firemní stránka → `data/user_submitted_opportunit
 - **B2 do kontextu**: Fáze 2 — Interested/Maybe → firma do Universe + `job_sources_<sektor>.csv` (task sám zjistí ATS adaptér), rating → hypotéza. ✅ postaveno, ověřeno ručně (Evotec → Workday).
 - **Aktuální uživatelský workflow:** pro pozitivní role stačí rating `Interested`; důvod lze ve většině případů inferovat z role/profile textu. Uživatel už začal doplňovat ratingy i outcome typu `Lost` pro role, kde reálně neprošel.
 - **Otevřené (na systému):** automatická Fáze 2 musí spolehlivě zpracovat nové reálné ratingy; nové outcome signály `Lost` se nemají míchat do preference fitu, ale přejdou do H.
+- [2026-08-24] B: enriched 5 (StepStone Group, Albedis/Basel, ING Frankfurt, ETL International, W&W Informatik), onboarded 0 companies to sourcing (no newly rated submissions).
 
 ## C — Kalibrace + shortlisty (jádro)
 - **`data/calibration_rules.json`** = učené skórovací pravidlo (positive/caution termy + váhy). `calibrate_jobs` ho čte. Jen mění pořadí, NIKDY tvrdé vyloučení; drží exploration.

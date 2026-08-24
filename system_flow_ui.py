@@ -6,8 +6,8 @@ from streamlit_flow.elements import StreamlitFlowEdge, StreamlitFlowNode
 from streamlit_flow.state import StreamlitFlowState
 
 
-# v5 resets the browser layout after the agreed H attainability-flow cleanup.
-FLOW_STATE_KEY = "professional_dashboard_system_flow_state_v5"
+# v6 resets the browser layout after the agreed I canonical-history cleanup.
+FLOW_STATE_KEY = "professional_dashboard_system_flow_state_v6"
 
 
 WORKSTREAM_DETAILS = {
@@ -125,11 +125,24 @@ WORKSTREAM_DETAILS = {
     },
     "I": {
         "title": "I — Opportunity & Application History",
-        "status": "🟢 Core / working",
-        "purpose": "Single factual memory and central feedback hub for manual and sourced opportunities.",
-        "inputs": "B Interested opportunities; J Apply/Maybe/Skip + role/company feedback; later application-stage updates.",
-        "outputs": "Company preference feedback → A; role-content feedback → C; actual application stages/outcomes → H.",
-        "outstanding": "Close the A/C learning loops while keeping factual history separate from inferred models.",
+        "status": "🟡 Core / UI works; canonical-store cleanup needed",
+        "purpose": (
+            "Be the single canonical factual memory of every opportunity, user decision, preference feedback and application lifecycle event. "
+            "I records what happened; it does not infer company quality, role fit or attainability."
+        ),
+        "inputs": (
+            "B → every manually added Interested opportunity must be persisted directly as a canonical I record. "
+            "J → Apply/Maybe/Skip plus separate company feedback, role feedback and comments. "
+            "User → later application-stage/outcome updates."
+        ),
+        "outputs": (
+            "I → A: company preference evidence. I → C: role-content preference evidence. "
+            "I → H: factual application stages/outcomes only. Snapshots of A/C at decision time remain historical facts."
+        ),
+        "outstanding": (
+            "Persist B directly into opportunity_history.csv rather than only merging it into the I view; "
+            "add an append-only opportunity event log alongside the latest-state table; then close the A/C learning loops from canonical I data."
+        ),
     },
     "J": {
         "title": "J — Apply Shortlist",
@@ -179,7 +192,7 @@ EDGE_DETAILS = {
     "G-C": {"status": "PARTIAL", "flow": "G sends concrete newly discovered candidate roles to C for Strong/Moderate/Weak classification.", "missing": "Country-board roles reach C, but several company/sector staging streams are not yet unified into the same candidate flow."},
     "D-C": {"status": "PARTIAL", "flow": "Optional D remote roles can be sent to C for the same semantic classification.", "missing": "Secondary lane; remote staging is not fully integrated into canonical C and is not a current core priority."},
     "E-C": {"status": "PARTIAL", "flow": "Optional E project/interim roles can be sent to C for the same semantic classification.", "missing": "Secondary lane; pool is sparse and not fully integrated into canonical C."},
-    "I-C": {"status": "PARTIAL", "flow": "I sends historical role-content preference evidence from both B and J into C calibration; this is learning feedback, not a new candidate-role flow.", "missing": "Feedback batch/evidence exists, but does not yet close the loop into the canonical C thesis/store automatically."},
+    "I-C": {"status": "PARTIAL", "flow": "Canonical I sends historical role-content preference evidence from both B and J into C calibration; this is learning feedback, not a new candidate-role flow.", "missing": "Feedback batch/evidence exists, but B persistence and the closed-loop C update still need cleanup."},
     "H-C": {"status": "PLANNED", "flow": "H should add empirical attainability context for comparable role families/seniority bands without changing the C semantic-fit rating.", "missing": "No grouped H model/context field yet; outcome sample is still small."},
     "C-J": {"status": "PARTIAL", "flow": "For an already-discovered current role, C sends its semantic judgement directly toward J; it does not need to go back through G first.", "missing": "J still contains parallel curated semantic truth and can include curated Moderate roles; target is canonical C + actionability + Strong-only."},
     "H-G": {"status": "PLANNED", "flow": "H may softly reweight future G sourcing toward empirically attainable segments while retaining exploration and aspirational roles.", "missing": "No attainability model or soft sourcing-weight integration yet."},
@@ -187,8 +200,8 @@ EDGE_DETAILS = {
     "COUNTRY-G": {"status": "LIVE", "flow": "Country weights guide sourcing effort across target markets.", "missing": ""},
     "COUNTRY-J": {"status": "PARTIAL", "flow": "Country mix influences J replenishment/diversification after semantic quality is known.", "missing": "Weights are not yet a joint objective with semantic quality."},
     "QUALITY-J": {"status": "PLANNED", "flow": "Link health, language/actionability and required enrichment should gate roles before J.", "missing": "Unified actionability/link validation gate is not built."},
-    "B-I": {"status": "LIVE", "flow": "Every manually added B opportunity is Interested and enters the unified opportunity/application history immediately.", "missing": ""},
-    "J-I": {"status": "LIVE", "flow": "J actions, role/company feedback and comments auto-save into I; I is the feedback hub for downstream learning.", "missing": ""},
+    "B-I": {"status": "PARTIAL", "flow": "B opportunities appear in the unified I view immediately and are treated as Interested.", "missing": "They are currently merged into I dynamically from user_submitted_opportunities.csv instead of being persisted directly into the canonical opportunity_history.csv store."},
+    "J-I": {"status": "LIVE", "flow": "J actions, separate role/company feedback and comments auto-save into canonical I history with A/C snapshots at decision time.", "missing": ""},
     "I-H": {"status": "LIVE", "flow": "Actual application stages/outcomes in I are the factual input for H evidence; preference actions alone are not attainability evidence.", "missing": "H inference is intentionally still data-limited."},
 }
 
@@ -254,7 +267,7 @@ def _initial_state() -> StreamlitFlowState:
         _node("COUNTRY", (70, 700), "#### Country Targeting\nSoft weights\n\nSearch effort + diversification\nNever semantic fit", "blue", width=240, min_height=120, source_position="right", target_position="right"),
         _node("J", (500, 785), "## J — Apply Shortlist\n🟢 **CORE / LIVE**\nActionable roles + salary + links\n\nLater: H attainability context", "blue", width=430, min_height=150),
         _node("QUALITY", (1040, 780), "#### Actionability / Quality\n⚪ **NOT BUILT**\nLanguage + geo + link + enrichment gate", "slate", width=250, min_height=120, source_position="left", target_position="left"),
-        _node("I", (390, 1035), "## I — History + Feedback Hub\n🟢 **CORE / LIVE store**\nB + J decisions / feedback / stages\n\nActual outcomes → H", "rose", width=440, min_height=155),
+        _node("I", (390, 1035), "## I — Canonical History + Feedback Hub\n🟡 **CORE / store cleanup**\nLatest factual state + future event log\n\nA feedback · C feedback · H outcomes", "rose", width=440, min_height=165),
         _node("H", (920, 1035), "## H — Attainability\n🟡 **CORE / evidence LIVE, model early**\nInterview → case → final → offer\n\nContext → A / C / G / J", "teal", width=380, min_height=165),
     ]
 
@@ -280,7 +293,7 @@ def _initial_state() -> StreamlitFlowState:
         _edge("COUNTRY-G", "COUNTRY", "G", "search weights", "LIVE", kind="context"),
         _edge("COUNTRY-J", "COUNTRY", "J", "diversification", "PARTIAL", kind="context"),
         _edge("QUALITY-J", "QUALITY", "J", "actionability gate", "PLANNED"),
-        _edge("B-I", "B", "I", "Interested opportunity", "LIVE"),
+        _edge("B-I", "B", "I", "Interested opportunity", "PARTIAL"),
         _edge("J-I", "J", "I", "decision + feedback", "LIVE"),
         _edge("I-H", "I", "H", "actual stages + outcomes", "LIVE"),
     ]
@@ -351,7 +364,7 @@ def render_system_flow() -> None:
 
     with canvas:
         st.session_state[FLOW_STATE_KEY] = streamlit_flow(
-            "professional_dashboard_system_flow_v5",
+            "professional_dashboard_system_flow_v6",
             st.session_state[FLOW_STATE_KEY],
             fit_view=True,
             height=1080 if focus else 980,

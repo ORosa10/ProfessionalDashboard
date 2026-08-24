@@ -16,6 +16,8 @@ on:
       - "sourcing/test_build_semantic_fit_queue_shadow.py"
       - "sourcing/build_actionability_shadow.py"
       - "sourcing/test_build_actionability_shadow.py"
+      - "sourcing/build_j_shortlist_shadow.py"
+      - "sourcing/test_build_j_shortlist_shadow.py"
       - ".github/workflows/architecture-safe-migration.yml"
   workflow_dispatch:
 
@@ -43,7 +45,8 @@ jobs:
             sourcing.test_compare_shadow_g \
             sourcing.test_build_semantic_fit_shadow \
             sourcing.test_build_semantic_fit_queue_shadow \
-            sourcing.test_build_actionability_shadow
+            sourcing.test_build_actionability_shadow \
+            sourcing.test_build_j_shortlist_shadow
 
   shadow-snapshot-build:
     needs: shadow-migration-tests
@@ -145,6 +148,18 @@ jobs:
             --policy data/actionability_policy_v1.json \
             --out /tmp/g-shadow-output/actionability_shadow.csv
 
+      - name: Build Strong-only quota J shadow shortlist
+        run: |
+          python -m sourcing.build_j_shortlist_shadow \
+            --candidates /tmp/g-shadow-output/candidates_shadow.csv \
+            --semantic /tmp/g-shadow-output/semantic_fit_shadow.csv \
+            --actionability /tmp/g-shadow-output/actionability_shadow.csv \
+            --history /tmp/g-shadow-inputs/history-live.csv \
+            --country-targets /tmp/g-shadow-inputs/country-targets.json \
+            --out /tmp/g-shadow-output/j_shortlist_shadow.csv \
+            --quota-out /tmp/g-shadow-output/j_country_quota_shadow.csv \
+            --limit 20
+
       - name: Print compact diagnostics
         run: |
           python - <<'PY'
@@ -187,6 +202,15 @@ jobs:
             blockers = act.loc[~actionable, 'blockers'].replace('', 'unspecified')
             if len(blockers):
               print(blockers.value_counts().head(20).to_string())
+
+          j = pd.read_csv('/tmp/g-shadow-output/j_shortlist_shadow.csv')
+          print(f"\n=== J SHADOW STRONG/ACTIONABLE: {len(j)} ===")
+          if len(j):
+            print(j[['priority_order', 'company', 'title', 'company_rating', 'country_bucket', 'selection_origin']].to_string(index=False))
+
+          quotas = pd.read_csv('/tmp/g-shadow-output/j_country_quota_shadow.csv')
+          print('\n=== J COUNTRY QUOTAS ===')
+          print(quotas.to_string(index=False))
           PY
 
       - name: Upload shadow diagnostics artifact
@@ -201,4 +225,6 @@ jobs:
             /tmp/g-shadow-output/semantic_fit_shadow.csv
             /tmp/g-shadow-output/semantic_fit_queue_shadow.csv
             /tmp/g-shadow-output/actionability_shadow.csv
+            /tmp/g-shadow-output/j_shortlist_shadow.csv
+            /tmp/g-shadow-output/j_country_quota_shadow.csv
           retention-days: 7

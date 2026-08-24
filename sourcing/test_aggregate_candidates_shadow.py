@@ -4,7 +4,7 @@ import unittest
 
 import pandas as pd
 
-from sourcing.aggregate_candidates_shadow import OUTPUT_COLUMNS, aggregate_frames
+from sourcing.aggregate_candidates_shadow import OUTPUT_COLUMNS, aggregate_frames, build_diagnostics
 
 
 class ShadowAggregatorTests(unittest.TestCase):
@@ -13,13 +13,13 @@ class ShadowAggregatorTests(unittest.TestCase):
         self.assertTrue(result.empty)
         self.assertEqual(list(result.columns), OUTPUT_COLUMNS)
 
-    def test_same_url_across_streams_is_merged(self) -> None:
+    def test_same_url_across_streams_is_merged_after_tracking_cleanup(self) -> None:
         board = pd.DataFrame([
             {
                 "job_id": "board-1",
                 "company": "Example AG",
                 "title": "Treasury Analyst",
-                "location": "Zurich",
+                "location": "Zurich, Switzerland",
                 "job_url": "https://example.com/jobs/123?utm_source=board",
                 "description_en": "Short description",
                 "source_id": "board-x",
@@ -33,7 +33,7 @@ class ShadowAggregatorTests(unittest.TestCase):
                 "canonical_company_id": "example-ag",
                 "company": "Example AG",
                 "title": "Treasury Analyst",
-                "location": "Zurich",
+                "location": "Zurich, Switzerland",
                 "job_url": "https://example.com/jobs/123",
                 "description_en": "A much richer description of the treasury analyst vacancy.",
                 "source_id": "example-careers",
@@ -52,6 +52,29 @@ class ShadowAggregatorTests(unittest.TestCase):
         self.assertIn("company", row["source_streams"])
         self.assertEqual(row["description_en"], "A much richer description of the treasury analyst vacancy.")
         self.assertEqual(row["last_seen_at"], "2026-08-24T10:00:00+00:00")
+        self.assertEqual(row["country_bucket"], "Switzerland")
+
+    def test_job_identifying_query_parameter_is_not_dropped(self) -> None:
+        left = pd.DataFrame([
+            {
+                "job_id": "a",
+                "company": "Example AG",
+                "title": "Treasury Analyst",
+                "location": "Zurich",
+                "job_url": "https://example.com/job?jobId=111&utm_source=feed",
+            }
+        ])
+        right = pd.DataFrame([
+            {
+                "job_id": "b",
+                "company": "Example AG",
+                "title": "Treasury Analyst",
+                "location": "Zurich",
+                "job_url": "https://example.com/job?jobId=222&utm_source=feed",
+            }
+        ])
+        result = aggregate_frames([("left", left), ("right", right)])
+        self.assertEqual(len(result), 2)
 
     def test_different_urls_are_not_aggressively_merged(self) -> None:
         left = pd.DataFrame([
@@ -85,6 +108,25 @@ class ShadowAggregatorTests(unittest.TestCase):
         result = aggregate_frames([("test", frame)])
         self.assertEqual(len(result), 1)
         self.assertEqual(result.iloc[0]["job_id"], "good")
+
+    def test_diagnostics_report_raw_source_and_country_coverage(self) -> None:
+        de = pd.DataFrame([
+            {"job_id": "de1", "company": "A", "title": "Treasury Analyst", "location": "Frankfurt, Germany"},
+            {"job_id": "de2", "company": "B", "title": "Risk Analyst", "location": "Munich, Germany"},
+        ])
+        uk = pd.DataFrame([
+            {"job_id": "uk1", "company": "C", "title": "Investment Analyst", "location": "London, United Kingdom"},
+        ])
+        frames = [("corporate", de), ("board", uk)]
+        candidates = aggregate_frames(frames)
+        diagnostics = build_diagnostics(frames, candidates)
+
+        source = diagnostics[diagnostics["dimension"].eq("source")].set_index("value")
+        country = diagnostics[diagnostics["dimension"].eq("country")].set_index("value")
+        self.assertEqual(int(source.loc["corporate", "raw_rows"]), 2)
+        self.assertEqual(int(source.loc["board", "candidate_count"]), 1)
+        self.assertEqual(int(country.loc["Germany", "candidate_count"]), 2)
+        self.assertEqual(int(country.loc["United Kingdom", "candidate_count"]), 1)
 
 
 if __name__ == "__main__":

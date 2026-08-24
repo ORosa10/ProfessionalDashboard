@@ -18,6 +18,8 @@ on:
       - "sourcing/test_build_actionability_shadow.py"
       - "sourcing/build_j_shortlist_shadow.py"
       - "sourcing/test_build_j_shortlist_shadow.py"
+      - "sourcing/compare_shadow_j.py"
+      - "sourcing/test_compare_shadow_j.py"
       - ".github/workflows/architecture-safe-migration.yml"
   workflow_dispatch:
 
@@ -46,7 +48,8 @@ jobs:
             sourcing.test_build_semantic_fit_shadow \
             sourcing.test_build_semantic_fit_queue_shadow \
             sourcing.test_build_actionability_shadow \
-            sourcing.test_build_j_shortlist_shadow
+            sourcing.test_build_j_shortlist_shadow \
+            sourcing.test_compare_shadow_j
 
   shadow-snapshot-build:
     needs: shadow-migration-tests
@@ -160,6 +163,18 @@ jobs:
             --quota-out /tmp/g-shadow-output/j_country_quota_shadow.csv \
             --limit 20
 
+      - name: Audit live J versus shadow J
+        run: |
+          python -m sourcing.compare_shadow_j \
+            --live-j /tmp/g-shadow-inputs/live-j.csv \
+            --candidates /tmp/g-shadow-output/candidates_shadow.csv \
+            --semantic /tmp/g-shadow-output/semantic_fit_shadow.csv \
+            --actionability /tmp/g-shadow-output/actionability_shadow.csv \
+            --history /tmp/g-shadow-inputs/history-live.csv \
+            --shadow-j /tmp/g-shadow-output/j_shortlist_shadow.csv \
+            --live-report-out /tmp/g-shadow-output/live_j_to_shadow_audit.csv \
+            --new-report-out /tmp/g-shadow-output/shadow_j_new_roles.csv
+
       - name: Print compact diagnostics
         run: |
           python - <<'PY'
@@ -211,6 +226,16 @@ jobs:
           quotas = pd.read_csv('/tmp/g-shadow-output/j_country_quota_shadow.csv')
           print('\n=== J COUNTRY QUOTAS ===')
           print(quotas.to_string(index=False))
+
+          audit = pd.read_csv('/tmp/g-shadow-output/live_j_to_shadow_audit.csv')
+          print('\n=== LIVE J -> SHADOW J AUDIT ===')
+          if len(audit):
+            print(audit[['company', 'title', 'live_semantic_fit', 'shadow_semantic_fit', 'in_shadow_j', 'explanation']].to_string(index=False))
+
+          new = pd.read_csv('/tmp/g-shadow-output/shadow_j_new_roles.csv')
+          print(f"\n=== NEW SHADOW J ROLES: {len(new)} ===")
+          if len(new):
+            print(new.to_string(index=False))
           PY
 
       - name: Upload shadow diagnostics artifact
@@ -227,4 +252,6 @@ jobs:
             /tmp/g-shadow-output/actionability_shadow.csv
             /tmp/g-shadow-output/j_shortlist_shadow.csv
             /tmp/g-shadow-output/j_country_quota_shadow.csv
+            /tmp/g-shadow-output/live_j_to_shadow_audit.csv
+            /tmp/g-shadow-output/shadow_j_new_roles.csv
           retention-days: 7

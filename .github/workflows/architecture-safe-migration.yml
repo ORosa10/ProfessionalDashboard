@@ -5,6 +5,7 @@ on:
     branches:
       - architecture-safe-migration
     paths:
+      - "data/actionability_policy_v1.json"
       - "sourcing/aggregate_candidates_shadow.py"
       - "sourcing/test_aggregate_candidates_shadow.py"
       - "sourcing/compare_shadow_g.py"
@@ -13,6 +14,8 @@ on:
       - "sourcing/test_build_semantic_fit_shadow.py"
       - "sourcing/build_semantic_fit_queue_shadow.py"
       - "sourcing/test_build_semantic_fit_queue_shadow.py"
+      - "sourcing/build_actionability_shadow.py"
+      - "sourcing/test_build_actionability_shadow.py"
       - ".github/workflows/architecture-safe-migration.yml"
   workflow_dispatch:
 
@@ -39,7 +42,8 @@ jobs:
             sourcing.test_aggregate_candidates_shadow \
             sourcing.test_compare_shadow_g \
             sourcing.test_build_semantic_fit_shadow \
-            sourcing.test_build_semantic_fit_queue_shadow
+            sourcing.test_build_semantic_fit_queue_shadow \
+            sourcing.test_build_actionability_shadow
 
   shadow-snapshot-build:
     needs: shadow-migration-tests
@@ -133,6 +137,14 @@ jobs:
             --out /tmp/g-shadow-output/semantic_fit_queue_shadow.csv \
             --limit 160
 
+      - name: Evaluate explicit pre-J actionability in shadow mode
+        run: |
+          python -m sourcing.build_actionability_shadow \
+            --candidates /tmp/g-shadow-output/candidates_shadow.csv \
+            --semantic /tmp/g-shadow-output/semantic_fit_shadow.csv \
+            --policy data/actionability_policy_v1.json \
+            --out /tmp/g-shadow-output/actionability_shadow.csv
+
       - name: Print compact diagnostics
         run: |
           python - <<'PY'
@@ -167,6 +179,14 @@ jobs:
           print(f"\n=== PENDING SHADOW C QUEUE: {len(queue)} ===")
           if len(queue):
             print(queue['country_bucket'].replace('', 'Other / Unresolved').value_counts().to_string())
+
+          act = pd.read_csv('/tmp/g-shadow-output/actionability_shadow.csv')
+          if len(act):
+            actionable = act['actionable'].astype(str).str.lower().eq('true')
+            print(f"\n=== ACTIONABILITY: {int(actionable.sum())}/{len(act)} PASS ===")
+            blockers = act.loc[~actionable, 'blockers'].replace('', 'unspecified')
+            if len(blockers):
+              print(blockers.value_counts().head(20).to_string())
           PY
 
       - name: Upload shadow diagnostics artifact
@@ -180,4 +200,5 @@ jobs:
             /tmp/g-shadow-output/country_raw_supply.csv
             /tmp/g-shadow-output/semantic_fit_shadow.csv
             /tmp/g-shadow-output/semantic_fit_queue_shadow.csv
+            /tmp/g-shadow-output/actionability_shadow.csv
           retention-days: 7

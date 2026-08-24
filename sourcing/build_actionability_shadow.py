@@ -51,6 +51,26 @@ WORK_AUTH_PATTERNS = [
     r"not able to sponsor",
 ]
 
+LANGUAGE_PREFERENCE_PATTERNS = [
+    r"\bpreferred\b",
+    r"\badvantage(?:ous)?\b",
+    r"\ba plus\b",
+    r"\bnice to have\b",
+    r"\bdesirable\b",
+    r"\boptional\b",
+    r"\bnot required\b",
+    r"\bnot mandatory\b",
+    r"\bnot essential\b",
+]
+
+POSITIVE_REQUIREMENT_PATTERNS = [
+    r"(?<!not )\brequired\b",
+    r"(?<!not )\bmandatory\b",
+    r"(?<!not )\bessential\b",
+    r"\bprerequisite\b",
+    r"\bmust\b",
+]
+
 
 def _read_csv(path: Path) -> pd.DataFrame:
     if not path.exists() or path.stat().st_size == 0:
@@ -75,6 +95,36 @@ def _text(row: pd.Series) -> str:
         str(row.get(col, "") or "")
         for col in ["title", "description_en", "description", "calibration_note"]
     )
+
+
+def _language_sentences(text: str) -> list[str]:
+    return [s.strip() for s in re.split(r"[\n\r•;.!?]+", str(text or "")) if s.strip()]
+
+
+def _explicitly_non_blocking_language_sentence(sentence: str) -> bool:
+    """Return True for preference/negation wording without a positive mandate.
+
+    The existing live parser intentionally remains unchanged during migration.
+    Shadow actionability is stricter about semantics such as `preferred`,
+    `advantage` or `not required`, which must not create a hard blocker.
+    """
+    lower = sentence.lower()
+    has_preference = any(re.search(pattern, lower) for pattern in LANGUAGE_PREFERENCE_PATTERNS)
+    if not has_preference:
+        return False
+    has_positive_requirement = any(re.search(pattern, lower) for pattern in POSITIVE_REQUIREMENT_PATTERNS)
+    return not has_positive_requirement
+
+
+def _shadow_language_block(text: str) -> str:
+    retained = [
+        sentence
+        for sentence in _language_sentences(text)
+        if not _explicitly_non_blocking_language_sentence(sentence)
+    ]
+    if not retained:
+        return ""
+    return blocking_language_requirement(". ".join(retained))
 
 
 def _append_unique(items: list[str], value: str) -> None:
@@ -188,7 +238,7 @@ def evaluate_actionability(
         if status_lower in hard_statuses:
             _append_unique(blockers, f"vacancy_status:{status}")
 
-        language_reason = blocking_language_requirement(_text(row))
+        language_reason = _shadow_language_block(_text(row))
         if language_reason:
             _append_unique(blockers, f"language:{language_reason}")
         elif status_lower == "pass_language":

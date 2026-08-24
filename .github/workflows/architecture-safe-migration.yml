@@ -1,9 +1,9 @@
 name: Architecture safe migration checks
 
 on:
-  push:
+  pull_request:
     branches:
-      - architecture-safe-migration
+      - main
     paths:
       - "data/actionability_policy_v1.json"
       - "sourcing/aggregate_candidates_shadow.py"

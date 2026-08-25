@@ -1,0 +1,144 @@
+name: Architecture E projects shadow checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sourcing/projects_pilot.py"
+      - "sourcing/test_projects_pilot.py"
+      - "sourcing/remote_pilot.py"
+      - "sourcing/test_remote_pilot.py"
+      - "sourcing/build_actionability_shadow.py"
+      - "sourcing/aggregate_candidates_shadow.py"
+      - "sourcing/build_semantic_fit_queue_shadow.py"
+      - ".github/workflows/architecture-projects-shadow.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: architecture-projects-shadow
+  cancel-in-progress: true
+
+jobs:
+  projects-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas requests
+
+      - name: Run E sourcing regressions
+        run: |
+          python -m unittest \
+            sourcing.test_remote_pilot \
+            sourcing.test_projects_pilot \
+            sourcing.test_build_actionability_shadow
+
+      - name: Fetch latest learning references read-only
+        run: |
+          git fetch --no-tags origin main
+          mkdir -p /tmp/projects-shadow-input /tmp/projects-shadow-output
+          extract() {
+            path="$1"
+            out="$2"
+            if git cat-file -e "origin/main:$path" 2>/dev/null; then
+              git show "origin/main:$path" > "/tmp/projects-shadow-input/$out"
+            else
+              : > "/tmp/projects-shadow-input/$out"
+            fi
+          }
+          extract data/semantic_fit.csv semantic-live.csv
+          extract data/opportunity_history.csv history-live.csv
+
+      - name: Refresh E channel 1 in tmp only
+        run: |
+          python -m sourcing.projects_pilot \
+            --out /tmp/projects-shadow-output/projects-refreshed.csv
+
+      - name: Normalize E through canonical candidate layer
+        run: |
+          python -m sourcing.aggregate_candidates_shadow \
+            --input projects=/tmp/projects-shadow-output/projects-refreshed.csv \
+            --out /tmp/projects-shadow-output/project-candidates.csv \
+            --diagnostics-out /tmp/projects-shadow-output/project-diagnostics.csv
+
+      - name: Build E to C pending semantic queue
+        run: |
+          python -m sourcing.build_semantic_fit_queue_shadow \
+            --candidates /tmp/projects-shadow-output/project-candidates.csv \
+            --semantic /tmp/projects-shadow-input/semantic-live.csv \
+            --history /tmp/projects-shadow-input/history-live.csv \
+            --out /tmp/projects-shadow-output/project-c-queue.csv \
+            --limit 160
+
+      - name: Evaluate E actionability separately from C
+        run: |
+          python -m sourcing.build_actionability_shadow \
+            --candidates /tmp/projects-shadow-output/project-candidates.csv \
+            --semantic /tmp/projects-shadow-input/semantic-live.csv \
+            --policy data/actionability_policy_v1.json \
+            --out /tmp/projects-shadow-output/project-actionability.csv
+
+      - name: Print and validate E diagnostics
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+
+          def read(path):
+              p = Path(path)
+              if not p.exists() or p.stat().st_size == 0:
+                  return pd.DataFrame()
+              try:
+                  return pd.read_csv(p).fillna('')
+              except pd.errors.EmptyDataError:
+                  return pd.DataFrame()
+
+          projects = read('/tmp/projects-shadow-output/projects-refreshed.csv')
+          candidates = read('/tmp/projects-shadow-output/project-candidates.csv')
+          queue = read('/tmp/projects-shadow-output/project-c-queue.csv')
+          action = read('/tmp/projects-shadow-output/project-actionability.csv')
+
+          print(f'\nE project/interim source rows: {len(projects)}')
+          print(f'E canonical candidates: {len(candidates)}')
+          print(f'E pending C queue: {len(queue)}')
+
+          if len(projects) and (projects['location'].astype(str) == 'Project / Interim').any():
+              raise SystemExit('E is still overwriting geography with the project-type label')
+
+          if len(candidates):
+              report = candidates[['job_id','company','title','market','location','source_id','source_streams']].merge(
+                  action[['opportunity_id','actionable','blockers','warnings']],
+                  left_on='job_id', right_on='opportunity_id', how='left'
+              )
+              print('\n=== E CANDIDATES / ACTIONABILITY ===')
+              print(report.to_string(index=False))
+
+              us_only = candidates['location'].astype(str).str.contains('Remote - US', regex=False)
+              if us_only.any():
+                  ids = set(candidates.loc[us_only, 'job_id'].astype(str))
+                  checked = action[action['opportunity_id'].astype(str).isin(ids)]
+                  bad = checked[~checked['blockers'].astype(str).str.contains('geography:remote_us_only', regex=False)]
+                  if len(bad):
+                      raise SystemExit('US-only E remote project passed employability gate')
+          PY
+
+      - name: Upload E projects shadow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: architecture-e-projects-shadow
+          path: |
+            /tmp/projects-shadow-output/projects-refreshed.csv
+            /tmp/projects-shadow-output/project-candidates.csv
+            /tmp/projects-shadow-output/project-diagnostics.csv
+            /tmp/projects-shadow-output/project-c-queue.csv
+            /tmp/projects-shadow-output/project-actionability.csv
+          retention-days: 7

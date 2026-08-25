@@ -4,6 +4,7 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - "data/semantic_fit.csv"
       - "sourcing/build_a_discovered_companies_shadow.py"
       - "sourcing/test_build_a_discovered_companies_shadow.py"
       - "sourcing/prepare_j_candidates_shadow.py"
@@ -59,7 +60,13 @@ jobs:
           extract origin/specialist-funds-sourcing-staging data/jobs_specialist-funds_staging.csv specialist-funds.csv
           extract origin/main data/jobs_remote_staging.csv remote.csv
           extract origin/main data/jobs_projects_staging.csv projects.csv
-          extract origin/main data/semantic_fit.csv semantic.csv
+          # C is the evolving migration-state truth, so use the checked-out PR
+          # version. Live decisions/B stay sourced from main below.
+          if [ -f data/semantic_fit.csv ]; then
+            cp data/semantic_fit.csv /tmp/replenish/in/semantic.csv
+          else
+            : > /tmp/replenish/in/semantic.csv
+          fi
           extract origin/main data/j_curated_shortlist.csv live-j.csv
           extract origin/main data/opportunity_history.csv history.csv
           extract origin/main data/user_submitted_opportunities.csv manual-b.csv

@@ -1,0 +1,181 @@
+name: Architecture learning evidence shadow checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sourcing/build_learning_evidence_shadow.py"
+      - "sourcing/test_build_learning_evidence_shadow.py"
+      - "sourcing/build_discovered_employers_shadow.py"
+      - "sourcing/test_build_discovered_employers_shadow.py"
+      - ".github/workflows/architecture-safe-migration-learning.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: architecture-learning-evidence-shadow
+  cancel-in-progress: true
+
+jobs:
+  learning-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+      - name: Run learning evidence tests
+        run: |
+          python -m unittest \
+            sourcing.test_build_learning_evidence_shadow \
+            sourcing.test_build_discovered_employers_shadow
+
+  learning-snapshot:
+    needs: learning-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+
+      - name: Fetch latest live/source evidence read-only
+        run: |
+          git fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*'
+          mkdir -p /tmp/learning-inputs/universes /tmp/learning-output
+
+          extract() {
+            ref="$1"
+            path="$2"
+            out="$3"
+            if git cat-file -e "$ref:$path" 2>/dev/null; then
+              git show "$ref:$path" > "$out"
+            else
+              : > "$out"
+            fi
+          }
+
+          extract origin/main data/opportunity_history.csv /tmp/learning-inputs/history-live.csv
+          extract origin/main data/user_submitted_opportunities.csv /tmp/learning-inputs/submissions-live.csv
+
+          # All current A universe waves from latest main.
+          while IFS= read -r path; do
+            [ -z "$path" ] && continue
+            out="/tmp/learning-inputs/universes/$(basename "$path")"
+            git show "origin/main:$path" > "$out"
+            echo "A universe snapshot: $path"
+          done < <(git ls-tree -r --name-only origin/main data | grep -E '^data/company_universe(_wave[^/]*)?\.csv$' || true)
+
+          # G source snapshots required only for employer discovery evidence.
+          extract origin/main data/jobs_board_staging.csv /tmp/learning-inputs/board.csv
+          extract origin/sourcing-staging data/jobs_staging.csv /tmp/learning-inputs/company.csv
+          extract origin/pe-sourcing-staging data/jobs_pe_staging.csv /tmp/learning-inputs/pe.csv
+          extract origin/consulting-sourcing-staging data/jobs_consulting_staging.csv /tmp/learning-inputs/consulting.csv
+          extract origin/corporate-sourcing-staging data/jobs_corporate_staging.csv /tmp/learning-inputs/corporate.csv
+          extract origin/financial-services-sourcing-staging data/jobs_financial-services_staging.csv /tmp/learning-inputs/financial-services.csv
+          extract origin/holdings-sourcing-staging data/jobs_holdings_staging.csv /tmp/learning-inputs/holdings.csv
+          extract origin/investment-banking-sourcing-staging data/jobs_investment-banking_staging.csv /tmp/learning-inputs/investment-banking.csv
+          extract origin/public-markets-sourcing-staging data/jobs_public-markets_staging.csv /tmp/learning-inputs/public-markets.csv
+          extract origin/specialist-funds-sourcing-staging data/jobs_specialist-funds_staging.csv /tmp/learning-inputs/specialist-funds.csv
+
+      - name: Build canonical I shadow from latest live state
+        run: |
+          python -m sourcing.build_i_canonical_shadow \
+            --history /tmp/learning-inputs/history-live.csv \
+            --submissions /tmp/learning-inputs/submissions-live.csv \
+            --history-out /tmp/learning-output/opportunity_history_shadow.csv \
+            --events-out /tmp/learning-output/opportunity_events_seed_shadow.csv
+
+      - name: Build factual I to A C H evidence tables
+        run: |
+          python -m sourcing.build_learning_evidence_shadow \
+            --history /tmp/learning-output/opportunity_history_shadow.csv \
+            --a-events-out /tmp/learning-output/a_company_feedback_events.csv \
+            --a-summary-out /tmp/learning-output/a_company_feedback_summary.csv \
+            --c-events-out /tmp/learning-output/c_role_preference_events.csv \
+            --h-events-out /tmp/learning-output/h_outcome_events.csv \
+            --h-summary-out /tmp/learning-output/h_outcome_grouped_raw.csv
+
+      - name: Rebuild G shadow for employer discovery
+        run: |
+          python -m sourcing.aggregate_candidates_shadow \
+            --input board=/tmp/learning-inputs/board.csv \
+            --input company=/tmp/learning-inputs/company.csv \
+            --input pe=/tmp/learning-inputs/pe.csv \
+            --input consulting=/tmp/learning-inputs/consulting.csv \
+            --input corporate=/tmp/learning-inputs/corporate.csv \
+            --input financial-services=/tmp/learning-inputs/financial-services.csv \
+            --input holdings=/tmp/learning-inputs/holdings.csv \
+            --input investment-banking=/tmp/learning-inputs/investment-banking.csv \
+            --input public-markets=/tmp/learning-inputs/public-markets.csv \
+            --input specialist-funds=/tmp/learning-inputs/specialist-funds.csv \
+            --out /tmp/learning-output/candidates_shadow.csv
+
+      - name: Build G and B to A discovered employer evidence
+        shell: bash
+        run: |
+          args=()
+          for f in /tmp/learning-inputs/universes/*.csv; do
+            [ -e "$f" ] || continue
+            args+=(--universe "$f")
+          done
+          if [ ${#args[@]} -eq 0 ]; then
+            echo "No company universe snapshots found" >&2
+            exit 1
+          fi
+          python -m sourcing.build_discovered_employers_shadow \
+            --candidates /tmp/learning-output/candidates_shadow.csv \
+            --submissions /tmp/learning-inputs/submissions-live.csv \
+            "${args[@]}" \
+            --out /tmp/learning-output/a_discovered_employers_shadow.csv
+
+      - name: Print compact learning diagnostics
+        run: |
+          python - <<'PY'
+          import pandas as pd
+
+          def read(path):
+              return pd.read_csv(path).fillna('')
+
+          a = read('/tmp/learning-output/a_company_feedback_summary.csv')
+          c = read('/tmp/learning-output/c_role_preference_events.csv')
+          h = read('/tmp/learning-output/h_outcome_events.csv')
+          discovered = read('/tmp/learning-output/a_discovered_employers_shadow.csv')
+
+          print(f'\nA explicit company-feedback summaries: {len(a)}')
+          if len(a): print(a.to_string(index=False))
+
+          print(f'\nC factual role-preference events: {len(c)}')
+          if len(c): print(c['c_signal'].value_counts().to_string())
+
+          print(f'\nH factual outcome events: {len(h)}')
+          if len(h): print(h['h_evidence'].value_counts().to_string())
+
+          print(f'\nA unresolved/new employer observations: {len(discovered)}')
+          if len(discovered):
+              print(discovered['discovery_status'].value_counts().to_string())
+              print('\nTop observations:')
+              print(discovered[['observed_company','discovery_status','source_streams','observation_count','markets']].head(40).to_string(index=False))
+          PY
+
+      - name: Upload learning evidence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: architecture-learning-evidence-shadow
+          path: |
+            /tmp/learning-output/a_company_feedback_events.csv
+            /tmp/learning-output/a_company_feedback_summary.csv
+            /tmp/learning-output/c_role_preference_events.csv
+            /tmp/learning-output/h_outcome_events.csv
+            /tmp/learning-output/h_outcome_grouped_raw.csv
+            /tmp/learning-output/a_discovered_employers_shadow.csv
+          retention-days: 7

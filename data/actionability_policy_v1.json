@@ -11,7 +11,8 @@
     "Sweden",
     "Norway",
     "Denmark",
-    "Finland"
+    "Finland",
+    "Nordics"
   ],
   "language": {
     "always_feasible": ["English", "Czech"],
@@ -60,6 +61,7 @@
     "A role may be C=Strong and actionability=false; C remains Strong.",
     "Unknown work authorization is a warning because user eligibility is not inferred.",
     "A stale or old posting is revalidation/urgency context, not proof that the vacancy is closed.",
+    "Nordics is a broad feasible region because Sweden, Norway, Denmark and Finland are target markets; J country quotas still operate on concrete countries where resolved.",
     "Country rules are for core permanent sourcing. D Remote can later define separate remote-employability rules."
   ]
 }

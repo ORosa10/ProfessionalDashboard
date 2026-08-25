@@ -116,10 +116,31 @@ Desired operating pattern:
 
 Do not replace this reasoning with a simplistic keyword score. Deterministic heuristics can pre-screen obvious junk, but true C classifications should remain contextual semantic judgments.
 
+## Work model / usage recommendation
+
+Current recommendation for C:
+
+- use GPT-5.6 Sol for the initial calibration/backlog because C quality is a core decision and false Strong classifications have already caused poor J batches;
+- process approximately 80–160 vacancies per task rather than one role per task, with concise structured output;
+- once C is well calibrated, test GPT-5.6 Terra for routine bulk judgments and use Sol for ambiguous cases / Strong candidates / audits;
+- GPT-5.6 Luna may be useful only for very cheap deterministic-style pre-screening of obvious junk, not as the final C authority.
+
+The actual current 160-role C queue contains roughly 344k characters / 47.6k words of role-description text, which is on the order of ~85–100k input tokens before adding compact system/context material. A concise 160-row result is likely roughly another 5–15k output tokens. This makes a single batch a reasonably sized Work task, but repeated context/tool calls can increase usage.
+
+On Plus/Pro, Work shares the agentic usage allowance with Codex and other supported agentic features. Included allowance is consumed before optional purchased credits; exact remaining allowance is account-specific and should be checked in the Usage dashboard. Work supports GPT-5.6 Sol, Terra and Luna. Do not enable auto top-up or purchase credits for this project without explicit user approval.
+
+Efficiency principles:
+
+- keep `WORKSTREAM_CONTEXT.md` compact and stable so repeated context can be cached/reused;
+- send one structured batch, not 160 separate prompts;
+- return only the canonical fields needed (`opportunity_id`, fit, concise reasoning, generated_at/source);
+- avoid browsing the web during C unless the role description itself is insufficient; actionability/link verification belongs in a separate layer;
+- after the backlog is processed, C only needs to handle newly discovered or materially changed G roles, so steady-state usage should be much lower than the initial backfill.
+
 ## Immediate next steps for a fresh chat
 
 1. Read `docs/WORKSTREAM_CONTEXT.md` and this handoff.
-2. Decide/implement the dedicated Work-agent setup for C, including model choice and usage strategy.
+2. Implement/test the dedicated Work-agent setup for C using the model/usage strategy above.
 3. Continue with C batch 2 (currently pending 160 roles), persist it, and rerun replenishment.
 4. Repeat enough C batches to build a meaningful Strong pool.
 5. Inspect generated J quality; do not manually search for replacement jobs to make it reach 20.

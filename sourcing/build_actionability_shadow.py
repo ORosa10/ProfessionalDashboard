@@ -71,6 +71,40 @@ POSITIVE_REQUIREMENT_PATTERNS = [
     r"\bmust\b",
 ]
 
+# Remote boards often collapse the structured location to just "Remote" while
+# the actual employability restriction survives only in the vacancy text. These
+# patterns are intentionally conservative: they require explicit location / base
+# / residence wording so ordinary mentions of US customers or US operations do
+# not become geography blockers.
+REMOTE_OUTSIDE_PATTERNS: list[tuple[str, str]] = [
+    (r"\b(?:headquarters|location|work location)\s*:\s*remote\s*[-–—,:()]?\s*(?:the\s+)?(?:u\.?s\.?|united states)\b", "remote_us_only"),
+    (r"\bremote\s*[-–—,:()]\s*(?:the\s+)?(?:u\.?s\.?|united states)\b", "remote_us_only"),
+    (r"\b(?:u\.?s\.?|united states)\s*[-–—,:()]\s*remote\b", "remote_us_only"),
+    (r"\b(?:u\.?s\.?|united states)\s*(?:only|based only)\b", "remote_us_only"),
+    (r"\bremote\s+(?:within|in|from)\s+(?:the\s+)?(?:u\.?s\.?|united states)\b", "remote_us_only"),
+    (r"\b(?:candidates?|applicants?|employees?)\s+(?:must|need to)\s+(?:be\s+)?(?:based|located|resident|reside)\s+(?:in|within)\s+(?:the\s+)?(?:u\.?s\.?|united states)\b", "remote_us_only"),
+    (r"\b(?:must|need to)\s+(?:be\s+)?(?:based|located|resident|reside)\s+(?:in|within)\s+(?:the\s+)?(?:u\.?s\.?|united states)\b", "remote_us_only"),
+    (r"\b(?:headquarters|location|work location)\s*:\s*remote\s*[-–—,:()]?\s*canada\b", "remote_canada_only"),
+    (r"\bremote\s*[-–—,:()]\s*canada\b", "remote_canada_only"),
+    (r"\bcanada\s*[-–—,:()]\s*remote\b", "remote_canada_only"),
+    (r"\bcanada\s*(?:only|based only)\b", "remote_canada_only"),
+    (r"\bremote\s+(?:within|in|from)\s+canada\b", "remote_canada_only"),
+    (r"\b(?:candidates?|applicants?|employees?)\s+(?:must|need to)\s+(?:be\s+)?(?:based|located|resident|reside)\s+(?:in|within)\s+canada\b", "remote_canada_only"),
+]
+
+REMOTE_FEASIBLE_PATTERNS = [
+    r"\bremote\s+(?:within|in|from)\s+(?:the\s+)?(?:eu|europe|european union|emea)\b",
+    r"\b(?:location|work location)\s*:\s*(?:remote\s*[-–—,:()]?\s*)?(?:eu|europe|emea)\b",
+    r"\b(?:candidates?|applicants?|employees?)\s+(?:may|can|must|need to)\s+(?:be\s+)?(?:based|located|resident|reside)\s+(?:in|within)\s+(?:the\s+)?(?:eu|europe|emea)\b",
+    r"\bbased\s+(?:in|within)\s+(?:the\s+)?(?:eu|europe|emea)\b",
+    r"\b(?:eu|european|emea)\s+(?:remote|timezone|time zone)\b",
+    r"\bremote\s*[-–—,:()]\s*(?:eu|europe|emea)\b",
+    r"\b(?:worldwide|global)\s+remote\b",
+    r"\bremote\s+(?:worldwide|globally)\b",
+    r"\bwork\s+from\s+anywhere\s+in\s+the\s+world\b",
+    r"\banywhere\s+in\s+the\s+world\b",
+]
+
 
 def _read_csv(path: Path) -> pd.DataFrame:
     if not path.exists() or path.stat().st_size == 0:
@@ -146,11 +180,48 @@ def _structured_country_codes(raw: str) -> set[str]:
     return codes
 
 
+def _is_remote_candidate(row: pd.Series) -> bool:
+    structured = " ".join(
+        str(row.get(col, "") or "")
+        for col in ["country_bucket", "market", "location", "priority_locations", "source_streams"]
+    ).lower()
+    return "remote" in structured or str(row.get("country_bucket", "")).strip() == "Remote"
+
+
+def _explicit_remote_scope(row: pd.Series) -> tuple[str, str]:
+    """Return (outside|feasible|unresolved, detail) for a remote vacancy.
+
+    Outside is returned only for an explicit non-target remote residency/base
+    restriction. Feasible requires explicit Europe/EMEA/worldwide wording.
+    Everything else stays unresolved and becomes a warning rather than a hard
+    pass or hard blocker.
+    """
+    structured = " ".join(
+        str(row.get(col, "") or "")
+        for col in ["market", "location", "priority_locations"]
+    )
+    # Remote feeds often put the scope at the very start of the description.
+    # Keeping the whole text also catches explicit residence requirements later
+    # in the qualifications section; the regexes themselves remain restrictive.
+    evidence = f"{structured} {_text(row)}".lower()
+
+    for pattern, detail in REMOTE_OUTSIDE_PATTERNS:
+        if re.search(pattern, evidence, flags=re.IGNORECASE):
+            return "outside", detail
+    for pattern in REMOTE_FEASIBLE_PATTERNS:
+        if re.search(pattern, evidence, flags=re.IGNORECASE):
+            return "feasible", "remote_target_or_global"
+    return "unresolved", "remote_scope_needs_resolution"
+
+
 def _explicit_outside_geography(row: pd.Series, target_geographies: set[str]) -> tuple[bool, str]:
     country = str(row.get("country_bucket", "") or "").strip()
     if country in target_geographies:
         return False, "target"
-    if country and country not in {"Other / Unresolved", "Multi-region", "Remote", "Unknown"}:
+    if country and country not in {
+        "Other / Unresolved", "Multi-region", "Remote", "Unknown", "Nordics",
+        "Europe", "EMEA",
+    }:
         return True, country
 
     raw = f"{row.get('market', '')} {row.get('location', '')}".strip()
@@ -206,8 +277,9 @@ def evaluate_actionability(
     frame = candidates.fillna("").copy()
     for col in [
         "candidate_id", "job_id", "company", "title", "country_bucket", "market",
-        "location", "status", "job_url", "description", "description_en",
-        "calibration_note", "date_posted", "last_seen_at", "link_health",
+        "location", "priority_locations", "source_streams", "status", "job_url",
+        "description", "description_en", "calibration_note", "date_posted",
+        "last_seen_at", "link_health",
     ]:
         if col not in frame.columns:
             frame[col] = ""
@@ -245,11 +317,18 @@ def evaluate_actionability(
             # Compatibility fallback while the current live G mutates board status.
             _append_unique(blockers, "language:legacy_pass_language_status")
 
-        outside, geo_detail = _explicit_outside_geography(row, target_geographies)
-        if outside:
-            _append_unique(blockers, f"geography:{geo_detail}")
-        elif geo_detail == "unresolved":
-            _append_unique(warnings, "geography:needs_resolution")
+        if _is_remote_candidate(row):
+            remote_scope, geo_detail = _explicit_remote_scope(row)
+            if remote_scope == "outside":
+                _append_unique(blockers, f"geography:{geo_detail}")
+            elif remote_scope == "unresolved":
+                _append_unique(warnings, "geography:remote_scope_needs_resolution")
+        else:
+            outside, geo_detail = _explicit_outside_geography(row, target_geographies)
+            if outside:
+                _append_unique(blockers, f"geography:{geo_detail}")
+            elif geo_detail == "unresolved":
+                _append_unique(warnings, "geography:needs_resolution")
 
         job_url = str(row.get("job_url", "") or "").strip()
         if not job_url:

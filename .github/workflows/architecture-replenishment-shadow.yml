@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "data/semantic_fit.csv"
+      - "data/semantic_fit_reviews/**"
       - "sourcing/build_a_discovered_companies_shadow.py"
       - "sourcing/test_build_a_discovered_companies_shadow.py"
       - "sourcing/prepare_j_candidates_shadow.py"
@@ -60,13 +61,31 @@ jobs:
           extract origin/specialist-funds-sourcing-staging data/jobs_specialist-funds_staging.csv specialist-funds.csv
           extract origin/main data/jobs_remote_staging.csv remote.csv
           extract origin/main data/jobs_projects_staging.csv projects.csv
-          # C is the evolving migration-state truth, so use the checked-out PR
-          # version. Live decisions/B stay sourced from main below.
-          if [ -f data/semantic_fit.csv ]; then
-            cp data/semantic_fit.csv /tmp/replenish/in/semantic.csv
-          else
-            : > /tmp/replenish/in/semantic.csv
-          fi
+
+          # C is the evolving migration-state truth. Compile the baseline
+          # semantic_fit.csv plus all approved ChatGPT review batches into one
+          # temporary canonical state. Later the review batches are squashed
+          # back into semantic_fit.csv before live cutover.
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+
+          columns = ['opportunity_id','fit','reasoning','generated_at']
+          frames = []
+          base = Path('data/semantic_fit.csv')
+          if base.exists() and base.stat().st_size:
+              frames.append(pd.read_csv(base).fillna('').reindex(columns=columns, fill_value=''))
+          for path in sorted(Path('data/semantic_fit_reviews').glob('*.csv')):
+              if path.stat().st_size:
+                  frames.append(pd.read_csv(path).fillna('').reindex(columns=columns, fill_value=''))
+          if frames:
+              semantic = pd.concat(frames, ignore_index=True).drop_duplicates('opportunity_id', keep='last')
+          else:
+              semantic = pd.DataFrame(columns=columns)
+          semantic.to_csv('/tmp/replenish/in/semantic.csv', index=False)
+          print(f'compiled C migration state: {len(semantic)} judgments')
+          PY
+
           extract origin/main data/j_curated_shortlist.csv live-j.csv
           extract origin/main data/opportunity_history.csv history.csv
           extract origin/main data/user_submitted_opportunities.csv manual-b.csv
@@ -145,9 +164,10 @@ jobs:
               f=p/n
               try: return pd.read_csv(f).fillna('')
               except Exception: return pd.DataFrame()
-          g=r('g_candidates.csv'); a=r('a_discovered_companies.csv'); c=r('c_queue.csv'); x=r('j_excluded.csv'); j=r('j_auto_shortlist.csv'); q=r('j_country_quotas.csv')
+          g=r('g_candidates.csv'); a=r('a_discovered_companies.csv'); c=r('c_queue.csv'); x=r('j_excluded.csv'); j=r('j_auto_shortlist.csv'); q=r('j_country_quotas.csv'); sem=r('c_semantic.csv')
           print(f'G candidates: {len(g)}')
           print(f'A new employer suggestions: {len(a)}')
+          print(f'C judgments compiled: {len(sem)}')
           print(f'C pending queue: {len(c)}')
           print(f'J guardrail exclusions: {len(x)}')
           if len(x): print(x.excluded_reason.value_counts().to_string())

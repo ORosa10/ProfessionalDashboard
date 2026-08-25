@@ -6,8 +6,11 @@ on:
     paths:
       - "data/semantic_fit.csv"
       - "data/semantic_fit_reviews/**"
+      - "docs/C_SEMANTIC_THESIS.md"
+      - "docs/C_WORK_CONTRACT.md"
       - "sourcing/build_a_discovered_companies_shadow.py"
-      - "sourcing/test_build_a_discovered_companies_shadow.py"
+      - "sourcing/build_semantic_fit_queue_shadow.py"
+      - "sourcing/test_build_semantic_fit_queue_shadow.py"
       - "sourcing/prepare_j_candidates_shadow.py"
       - "sourcing/test_prepare_j_candidates_shadow.py"
       - ".github/workflows/architecture-replenishment-shadow.yml"
@@ -63,9 +66,9 @@ jobs:
           extract origin/main data/jobs_projects_staging.csv projects.csv
 
           # C is the evolving migration-state truth. Compile the baseline
-          # semantic_fit.csv plus all approved ChatGPT review batches into one
-          # temporary canonical state. Later the review batches are squashed
-          # back into semantic_fit.csv before live cutover.
+          # semantic_fit.csv plus all approved ChatGPT/Work reviews into one
+          # temporary canonical state. Later the review files are squashed back
+          # into semantic_fit.csv before live cutover.
           python - <<'PY'
           from pathlib import Path
           import pandas as pd
@@ -115,7 +118,7 @@ jobs:
             --candidates /tmp/replenish/out/g_candidates.csv \
             --out /tmp/replenish/out/a_discovered_companies.csv
 
-      - name: Build canonical C state and replenished C queue
+      - name: Build canonical C state and full C Work queue
         run: |
           python -m sourcing.build_semantic_fit_shadow \
             --canonical /tmp/replenish/in/semantic.csv \
@@ -126,7 +129,44 @@ jobs:
             --semantic /tmp/replenish/out/c_semantic.csv \
             --history /tmp/replenish/in/history.csv \
             --out /tmp/replenish/out/c_queue.csv \
-            --limit 160
+            --limit 0
+
+          # C Work sees only fields needed for semantic judgment. In particular,
+          # hide company ratings, geography and calibration/keyword signals so
+          # they cannot anchor or contaminate the role-content verdict.
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+
+          src = Path('/tmp/replenish/out/c_queue.csv')
+          cols = ['opportunity_id','title','company','job_url','description_for_fit']
+          try:
+              queue = pd.read_csv(src).fillna('')
+          except Exception:
+              queue = pd.DataFrame(columns=cols)
+          for col in cols:
+              if col not in queue.columns:
+                  queue[col] = ''
+          queue = queue[cols]
+          queue.to_csv('/tmp/replenish/out/c_work_queue.csv', index=False)
+          pd.DataFrame(columns=['opportunity_id','fit','reasoning','generated_at']).to_csv(
+              '/tmp/replenish/out/c_work_output_template.csv', index=False
+          )
+          print(f'C Work unresolved backlog: {len(queue)} roles')
+          PY
+
+          cp docs/C_SEMANTIC_THESIS.md /tmp/replenish/out/C_SEMANTIC_THESIS.md
+          cp docs/C_WORK_CONTRACT.md /tmp/replenish/out/C_WORK_CONTRACT.md
+
+      - name: Build feedback evidence for future C thesis updates
+        run: |
+          python -m sourcing.build_learning_evidence_shadow \
+            --history /tmp/replenish/in/history.csv \
+            --a-events-out /tmp/replenish/out/a_learning_events.csv \
+            --a-summary-out /tmp/replenish/out/a_learning_summary.csv \
+            --c-events-out /tmp/replenish/out/c_learning_evidence.csv \
+            --h-events-out /tmp/replenish/out/h_learning_events.csv \
+            --h-summary-out /tmp/replenish/out/h_learning_summary.csv
 
       - name: Build actionability and regular-J candidate pool
         run: |
@@ -164,11 +204,11 @@ jobs:
               f=p/n
               try: return pd.read_csv(f).fillna('')
               except Exception: return pd.DataFrame()
-          g=r('g_candidates.csv'); a=r('a_discovered_companies.csv'); c=r('c_queue.csv'); x=r('j_excluded.csv'); j=r('j_auto_shortlist.csv'); q=r('j_country_quotas.csv'); sem=r('c_semantic.csv')
+          g=r('g_candidates.csv'); a=r('a_discovered_companies.csv'); c=r('c_work_queue.csv'); x=r('j_excluded.csv'); j=r('j_auto_shortlist.csv'); q=r('j_country_quotas.csv'); sem=r('c_semantic.csv')
           print(f'G candidates: {len(g)}')
           print(f'A new employer suggestions: {len(a)}')
           print(f'C judgments compiled: {len(sem)}')
-          print(f'C pending queue: {len(c)}')
+          print(f'C unresolved Work backlog: {len(c)}')
           print(f'J guardrail exclusions: {len(x)}')
           if len(x): print(x.excluded_reason.value_counts().to_string())
           print(f'J auto shortlist: {len(j)}')

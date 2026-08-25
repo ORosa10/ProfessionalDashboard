@@ -1,17 +1,17 @@
 opportunity_id,fit,reasoning,generated_at
-da0fb4654435f53b,Strong,"Deal finance & M&A at AstraZeneca (BD transactions, out-licensing, divestments) - squarely corporate-finance/transactions with real value/risk-sharing work; Manager level is accessible.",2026-08-17
+da0fb4654435f53b,Moderate,"Deal-finance/M&A content is strong, but the advertised UK Manager level is above the preferred entry point; a lower level would be Strong.",2026-08-25T23:10:00+02:00
 7ba3d67f1143d484,Strong,"Product Controller on a commodity/energy trading desk (daily P&L, exposure control) - markets/commodities/risk core; explicitly open to non-energy commodity backgrounds.",2026-08-17
-c57445208679d172,Strong,Senior Quant Risk Analyst building risk & valuation models for energy assets and options - market risk/derivatives/valuation/modelling bullseye; senior but hands-on quant.,2026-08-17
+c57445208679d172,Moderate,"Energy risk/valuation content is relevant, but the role is dominated by quantitative model development and is more quant-heavy than the preferred practical market-risk lane.",2026-08-25T23:10:00+02:00
 499a0d3021c47a24,Strong,Market-fundamentals forecasting/modelling feeding Shell's trading desk - markets + analytics on-theme; strong if you lean quantitative.,2026-08-17
-ef6d37436f1003c2,Strong,Liquidity Pricing & Strategy (deposit pricing framework) at Associate level - treasury/liquidity/markets core with an accessible seniority band.,2026-08-17
-0b02cb7fdf23f2fb,Strong,"Quant enhanced-index portfolio management - investments/quant/markets bullseye; experienced but deeply technical, not managerial.",2026-08-17
+ef6d37436f1003c2,Moderate,"Liquidity/pricing is relevant, but the role has a stronger commercial/outreach component than the preferred analytical treasury/markets profile.",2026-08-25T23:10:00+02:00
+0b02cb7fdf23f2fb,Moderate,"Portfolio-management context is relevant, but enhanced-index work is highly quantitative and sits outside the preferred balance of investment decision-making versus model-heavy implementation.",2026-08-25T23:10:00+02:00
 0333757f9781ac1d,Strong,Sector & fixed-income single-name research producing investment recommendations - markets/credit/investment analysis at Analyst level. Check the German requirement (Vienna).,2026-08-17
 14ed853f26f4a643,Strong,Specialty Finance Senior Associate (private credit/lending) at Neuberger Berman - investment/credit structuring on-theme with an accessible seniority.,2026-08-17
-a73d5bd77e62f237,Strong,"Exotic Derivatives Trader at Vontobel Zurich - derivatives/markets bullseye, genuine front-office trading.",2026-08-17
-e11b7704eeb66b68,Strong,Portfolio Manager working directly with financial markets in Munich - investments/markets core in a target geography.,2026-08-17
-5d6dce8d59477606,Strong,Alternative-data analysis generating investment perspectives at D. E. Shaw - investment analytics/modelling on-theme at a leading fund.,2026-08-17
+a73d5bd77e62f237,Moderate,"Derivatives and markets are relevant, but the exotic-trading role is substantially more quantitative/model-intensive than the preferred role mix.",2026-08-25T23:10:00+02:00
+e11b7704eeb66b68,Moderate,"Portfolio-management context is relevant, but the role lacks enough direct execution/investment-decision substance to be a core target.",2026-08-25T23:10:00+02:00
+5d6dce8d59477606,Moderate,"Investment context is attractive, but alternative-data analysis is more data/quant oriented than the preferred direct investment-decision role.",2026-08-25T23:10:00+02:00
 2ad2797ed6024cd8,Strong,DESIM Portfolio Management & Implementation Associate (active equity/multi-asset) - investments/markets core at an accessible Associate level.,2026-08-17
-812149e4788e1607,Strong,"DESIM Portfolio Strategist Associate - investments/markets on-theme, communicating portfolio insights at Associate level.",2026-08-17
+812149e4788e1607,Moderate,"Portfolio strategy is investment-adjacent, but communication/strategy around portfolios is less direct than hands-on portfolio decisions or execution.",2026-08-25T23:10:00+02:00
 f943b82aacd5a534,Moderate,"Genuine treasury work (guarantees, bank liaison, M&A closing support) at Holcim - on-theme, but flagged (Junior), likely below the 3-7y target.",2026-08-17
 9e4039584def5681,Moderate,"Data science applied to controlling at OMV - finance-adjacent analytics, but more data-science than investment/treasury substance.",2026-08-17
 3e969d190229f73a,Moderate,"CTRM trading-systems developer/BA at Vitol - commodities/risk domain, but primarily a software/IT role rather than analysis/investment.",2026-08-17
@@ -70,9 +70,185 @@ c59a91de515ec6e5,Weak,"UX/content design for Expedia's loyalty product is a prod
 f33bc6c6d40a7969,Weak,"AI/LLM QA automation and security testing is software-quality engineering; insurance context is incidental to the role.",2026-08-21T14:06:00+02:00
 86e361b20e78f7b3,Weak,"Prudential regulatory reporting, controls and PRA requirements dominate; treasury is only a supporting interface, making this reporting/compliance-heavy rather than core treasury/markets.",2026-08-21T14:06:00+02:00
 ac216dd5a6f461e2,Weak,"Selenium/API automation testing and CI/CD in banking is a technology QA role, not finance analysis or markets work.",2026-08-21T14:06:00+02:00
-daea9e85342ff14d,Strong,"Business controlling with FP&A, business cases, decision support and explicit M&A-related analysis at a 2-5 year level is a strong corporate-finance/analytical fit; Norwegian requirement needs checking.",2026-08-21T14:06:00+02:00
+daea9e85342ff14d,Moderate,"Business controlling, FP&A and business cases are analytically relevant, but this is still primarily controlling/business partnering rather than a core treasury/deals/investment role.",2026-08-25T23:10:00+02:00
 9e3b021598443c28,Weak,"Four-year academic Finance PhD programme focused on research and teaching; intellectually relevant but not aligned with the current professional-role search.",2026-08-21T14:06:00+02:00
 0ad4f38ba6fb329e,Weak,"Duplicate Finance PhD-style academic research position; relevant subject matter but outside the targeted professional job path.",2026-08-21T14:06:00+02:00
 4b62f8d2a94e0133,Strong,"Strategic Finance partnering directly with CFO/commercial leadership, unit economics, modelling, business cases and M&A at 3-6 years is a bullseye corporate-finance role; Norwegian fluency is a separate constraint.",2026-08-21T14:06:00+02:00
 b2d8a9a01c92daf8,Moderate,"Project controlling includes budgets, profitability, financial risk/opportunity analysis and stakeholder support, but invoicing/month-end/project reporting make it more controlling/finance-operations than core markets/investing.",2026-08-21T14:06:00+02:00
 30f534df2e4ed30c,Weak,"LLM agent development, RAG, APIs and Azure AI are software/AI engineering; regulated-industry context does not create meaningful finance-role fit.",2026-08-21T14:06:00+02:00
+c461cecb95a684b3,Strong,"Direct treasury-advisory fit across liquidity, cash management, financial-risk strategy, TMS and treasury transformation; closely aligned with treasury advisory work.",2026-08-25
+5dbcd46003c16276,Strong,"Direct corporate-treasury role in money markets, FX, commodities and rates, with transaction execution and a clear generalist development path.",2026-08-25
+de8ba93a9da57afa,Strong,"Exceptional treasury-advisory fit across liquidity, financial risk, cash management, treasury strategy and TMS/technology transformation. Explicit user-approved exception to the normal fluent-German blocker because the role fit is unusually strong.",2026-08-25
+d45a7ac0e1e28811,Strong,"Direct M&A execution fit: valuation, financial modelling, due diligence and transaction advisory at a sensible consultant level.",2026-08-25
+1c367a65b7ad44f1,Strong,"Strong in-house M&A role spanning target screening, DCF/valuation, due diligence, deal execution and post-merger integration; 3+ years requested.",2026-08-25
+2020857c6d02cafb,Strong,"Excellent market-risk role around energy portfolios, P&L/risk, derivatives valuation, hedging strategies and pre-execution transaction risk assessment.",2026-08-25
+4d8174f94d126980,Moderate,"Renewables portfolio work is relevant, but the role is strongly model/optimisation driven and proved too quantitative for the preferred J profile.",2026-08-25T23:10:00+02:00
+bab49a2a07881603,Strong,"Strong analytical corporate-finance/valuation role focused on derivatives and options, quantitative valuation models and transaction-related analysis.",2026-08-25
+1bcc885a71fe948e,Strong,"Direct M&A / transaction-services content across buy-side and sell-side financial due diligence, PE/corporate deals, modelling and transaction support.",2026-08-25
+5a68696d63dc6b80,Strong,"Strong deals-analytics role using financial and commercial analysis to support investor decisions, forecasts, negotiations and transaction value creation.",2026-08-25
+b1c1b759dc949048,Strong,"Strong PE/deals content across commercial due diligence, acquisition screening, market/business analysis and portfolio value-creation strategy; consultant track targets 2–4 years.",2026-08-25
+22836df63a60c592,Strong,"Strong valuation and transaction content: company valuation, fairness opinions, financial-planning models and transaction support; 3+ years requested.",2026-08-25
+0a8cdb704a14533b,Moderate,"M&A exposure is real, but the role is primarily technology due diligence/integration and technology strategy rather than financial deal analysis.",2026-08-25T23:10:00+02:00
+c2f3cd8a54330a42,Weak,"The energy context is attractive, but the actual work is commercial/business partnering and business analysis rather than core finance execution.",2026-08-25T23:10:00+02:00
+0b33d8db7c36525d,Moderate,"Risk and valuation are relevant, but the role is heavily quantitative/model-implementation oriented and therefore a secondary rather than core target.",2026-08-25T23:10:00+02:00
+e87ff12bfaba1be1,Moderate,"Quantitative-finance content is relevant, but model/statistical implementation dominates and is more technical than the preferred practical finance role.",2026-08-25T23:10:00+02:00
+615cc8c0d13ba5af,Moderate,"Treasury context is relevant, but the available description is too thin to confirm hands-on markets/risk work rather than a data/reporting role.",2026-08-25T23:10:00+02:00
+b5141706e19b0d16,Moderate,"Core FP&A analysis is relevant analytical finance, but it is generic planning/performance work rather than a primary treasury, deals or investment target.",2026-08-25T23:10:00+02:00
+9235c81dbfda9968,Weak,"Corporate treasury product knowledge is relevant, but the role is explicitly sales-led and therefore outside the preferred analytical/execution profile.",2026-08-25T23:10:00+02:00
+436776e5e11b6070,Weak,"Analytics is tied to CRM, fundraising marketing and investor data rather than finance, markets or investment decision-making.",2026-08-25T23:10:00+02:00
+489ca1b4f05350bd,Weak,"PMO/portfolio-management wording here points to programme coordination rather than investment portfolio management or finance analysis.",2026-08-25T23:10:00+02:00
+8e74decf7764a9fb,Moderate,"Valuation is relevant, but the role is real-estate focused and therefore adjacent rather than a core corporate-finance/investment target.",2026-08-25T23:10:00+02:00
+640478a836a06276,Weak,"Valuation content is relevant, but this is a junior real-estate valuation role materially below the target level.",2026-08-25T23:10:00+02:00
+1a85985ff013d516,Moderate,"The title suggests Strategy/Risk/Transactions advisory, but the retrieved description appears mismatched, so there is not enough reliable role content to call it Strong.",2026-08-25T23:10:00+02:00
+edbdf5100d38454e,Weak,"BI/data work sits in Technology Consulting and lacks substantive finance, markets, treasury or deal content.",2026-08-25T23:10:00+02:00
+d92c155576ebbe43,Weak,"Financial-services context is incidental; the role is primarily technology/business transformation rather than finance analysis or execution.",2026-08-25T23:10:00+02:00
+ce63b55c79f4845e,Weak,"Financial-services context is incidental; the role is primarily technology/business transformation rather than finance analysis or execution.",2026-08-25T23:10:00+02:00
+9f73a6ea2fd69a8b,Moderate,"FP&A management is analytically relevant, but generic planning/business partnering is a secondary lane rather than a core target.",2026-08-25T23:10:00+02:00
+5b8579c24a4f927e,Weak,"Treasury is the application domain, but Product Owner work is primarily systems/product delivery rather than treasury execution or risk analysis.",2026-08-25T23:10:00+02:00
+fbe4c39c98ba1e68,Weak,"The role is controlling/reporting-heavy and real-estate focused, with little treasury, deals or investment substance.",2026-08-25T23:10:00+02:00
+a41143054517f391,Moderate,"Group FP&A is relevant analytical finance, but remains planning/controlling rather than a primary treasury, transactions or investing role.",2026-08-25T23:10:00+02:00
+35192f395854f6bc,Moderate,"Restructuring, liquidity planning and financial modelling are strongly relevant, but the junior entry level is below the target band.",2026-08-25T23:10:00+02:00
+9c64380ade088c28,Weak,"Internal controlling/reporting is too operational and junior relative to the target analytical finance profile.",2026-08-25T23:10:00+02:00
+1633271309405d41,Weak,"Internal controlling/reporting is too operational and junior relative to the target analytical finance profile.",2026-08-25T23:10:00+02:00
+e7b21543744eb879,Moderate,"Valuation and transaction content is excellent, but Senior Manager responsibility is materially above the target seniority.",2026-08-25T23:10:00+02:00
+a29ba8bf5a2357eb,Weak,"The role is dominated by IFRS integration, closing and reporting processes rather than investment, treasury or transaction execution.",2026-08-25T23:10:00+02:00
+891d8c0d2bef5c5d,Weak,"Finance-transformation software implementation and consolidation tooling dominate the role; finance is the domain, not the core analytical work.",2026-08-25T23:10:00+02:00
+4a66d83c89730edb,Moderate,"True M&A execution is a core content fit, but the explicitly junior level is below the preferred seniority.",2026-08-25T23:10:00+02:00
+1330f350bb63d6b3,Strong,"Transactions and corporate-finance advisory are the core job: deal analysis, transaction work and strategic financial decision support at an appropriate consultant level.",2026-08-25T23:10:00+02:00
+6b79e6d4859f9a1b,Strong,"Transaction services and valuation are directly aligned with modelling, due diligence and corporate-finance execution.",2026-08-25T23:10:00+02:00
+0b1d2acd31d577f7,Moderate,"Cash, financing and restructuring work is relevant, but the role is Senior Manager level and materially finance-transformation/operations heavy.",2026-08-25T23:10:00+02:00
+8ba039650093ec40,Weak,"Bank controlling, reporting and CFO-function transformation dominate, and the Senior Manager level is above target.",2026-08-25T23:10:00+02:00
+10aed9cdb76dce47,Weak,"Pricing and business-case work is analytical but focused on digital-service monetisation rather than finance, markets, investments or transactions.",2026-08-25T23:10:00+02:00
+f505482e1fd5f3b5,Weak,"A PreMaster controlling role is below target seniority and is primarily internal performance management.",2026-08-25T23:10:00+02:00
+b261a2d047a77f2e,Strong,"Hands-on restructuring with planning, financial modelling and transaction/merger work is a direct corporate-finance fit.",2026-08-25T23:10:00+02:00
+658291f6fb38600b,Moderate,"Investment participation controlling is finance-relevant, but monitoring/control is more prominent than investment decision-making.",2026-08-25T23:10:00+02:00
+ba6d6381d9ac873d,Weak,"Capital-markets exposure is relevant, but this is an internship and the work is client sales-oriented.",2026-08-25T23:10:00+02:00
+9717692bc4fcd187,Weak,"Public-sector finance transformation, accounting systems and reporting processes are outside the core target.",2026-08-25T23:10:00+02:00
+7c88970bd43f2ca9,Weak,"Internal personnel/business controlling is reporting-oriented rather than treasury, markets, transactions or investing.",2026-08-25T23:10:00+02:00
+5a59631b442796ef,Strong,"Sell-side and buy-side M&A/transaction advisory is direct deal execution and a core target role family.",2026-08-25T23:10:00+02:00
+cb80b4633c2b79cd,Strong,"Transaction services, M&A and valuation are core deal-finance responsibilities; Manager level at this platform is still plausibly hands-on.",2026-08-25T23:10:00+02:00
+3b06c6ca2e41f6c9,Weak,"HR analytics internship is outside both the target function and seniority.",2026-08-25T23:10:00+02:00
+33d275afc1f35dc9,Strong,"Data-driven commercial/financial due diligence and value-creation work sits directly in the M&A deal lifecycle and matches the preferred analytical deal profile.",2026-08-25T23:10:00+02:00
+8dc1f8088ed0443e,Weak,"Procurement and sourcing leadership is outside finance despite commodity-price analysis.",2026-08-25T23:10:00+02:00
+235ba5cabbed3acd,Strong,"Interest-rate, FX and commodity risk, treasury accounting and trading advisory directly match treasury/markets/risk expertise.",2026-08-25T23:10:00+02:00
+f2cc30bb77ebbc2f,Strong,"Bankability analysis, financing structures and financing-process execution are directly aligned with corporate finance and funding work.",2026-08-25T23:10:00+02:00
+17bcf6e1c4868b73,Strong,"Valuation, modelling and transaction analytics are a direct corporate-finance fit.",2026-08-25T23:10:00+02:00
+d9b48a669c47fdaf,Weak,"Construction scheduling/project controls are not finance analysis despite planning/reporting terminology.",2026-08-25T23:10:00+02:00
+0e9677a03dbb489f,Strong,"Market and liquidity risk, interest-rate risk, hedging strategies, derivatives and stress testing are practical markets-linked risk work.",2026-08-25T23:10:00+02:00
+5382ca0ac72f3e83,Strong,"Portfolio-company restructuring combines liquidity, financing measures and financial modelling with hands-on execution; the content is a strong fit even though feasibility is handled separately.",2026-08-25T23:10:00+02:00
+8cafb89d75afec47,Strong,"M&A, valuation and restructuring across the transaction cycle are core target activities with hands-on analytical responsibility.",2026-08-25T23:10:00+02:00
+bdaadd389dcb59ef,Strong,"Integrated financial modelling for transactions, investments and financing decisions is directly aligned with the desired corporate-finance analytical work.",2026-08-25T23:10:00+02:00
+25107bb4b65cfe61,Weak,"Actuarial insurance modelling is quantitatively relevant but a specialist insurance lane outside the primary finance/markets target.",2026-08-25T23:10:00+02:00
+ca6252c5d8195861,Strong,"M&A, restructuring, refinancing, transaction metrics and closing-oriented execution are a direct deal-finance fit.",2026-08-25T23:10:00+02:00
+4224899b4bf8b38a,Strong,"M&A, restructuring, refinancing, transaction metrics and closing-oriented execution are a direct deal-finance fit.",2026-08-25T23:10:00+02:00
+7e0ef3503d8fc3e7,Moderate,"The deal content is strong, but Junior Consultant is below the preferred experience level.",2026-08-25T23:10:00+02:00
+b4528f26260d768b,Strong,"M&A, restructuring and financing execution are core target work; the role remains hands-on despite Manager title.",2026-08-25T23:10:00+02:00
+47bd37a361e320fe,Moderate,"Valuation/modelling/M&A content is excellent, but Senior Manager responsibility is above the preferred level.",2026-08-25T23:10:00+02:00
+3a0c31ec19a70359,Strong,"Company valuation and fairness-opinion work in live M&A contexts is core corporate-finance content at a potentially viable Manager level.",2026-08-25T23:10:00+02:00
+96a860fddbe49257,Strong,"Liquidity and market-risk analysis is directly linked to rates, risk management and financial markets; working-hours feasibility belongs outside C.",2026-08-25T23:10:00+02:00
+8954870393033603,Strong,"Group treasury markets work is a direct positive example: FX/rates/derivatives/hedging execution is exactly core target content.",2026-08-25T23:10:00+02:00
+9d97a331560be34d,Moderate,"Broad treasury exposure is relevant, but the role is junior and weighted toward cash management, payments, reporting and systems rather than markets execution.",2026-08-25T23:10:00+02:00
+96b741c1691360ff,Moderate,"Integrated planning and strategic decision support are relevant, but this is still primarily controlling/FP&A rather than core treasury/deals/investing.",2026-08-25T23:10:00+02:00
+3d203c0976896d4a,Weak,"Plant cost controlling and variance analysis are operational controlling rather than target finance work.",2026-08-25T23:10:00+02:00
+724ed35658f70334,Moderate,"Broad treasury exposure is relevant, but the role is junior and weighted toward cash management, payments, reporting and systems rather than markets execution.",2026-08-25T23:10:00+02:00
+fac44530be19fb81,Weak,"Accounting, temporary finance support and process automation dominate over analytical corporate finance.",2026-08-25T23:10:00+02:00
+fe267c085a3926c8,Weak,"The role is finance-systems/ERP implementation with an accounting focus, not core finance analysis.",2026-08-25T23:10:00+02:00
+85e325062ff9e61d,Strong,"Restructuring, transaction services, valuation and M&A are all core deal-finance lanes at an appropriate hands-on level.",2026-08-25T23:10:00+02:00
+f28022b736d31be4,Strong,"Integrated financial modelling for transactions, investments and financing decisions is directly aligned with the desired corporate-finance analytical work.",2026-08-25T23:10:00+02:00
+7987f467af237c41,Strong,"Valuation, modelling and analytics in transaction contexts are directly aligned with the target profile.",2026-08-25T23:10:00+02:00
+1f223048994236b6,Strong,"Capital advisory, restructuring and financing work are direct corporate-finance execution and strongly relevant.",2026-08-25T23:10:00+02:00
+70c2826090ff45cb,Weak,"The role is primarily direct outreach to potential M&A buyers, making business development/origination the core activity rather than analysis.",2026-08-25T23:10:00+02:00
+8b45084b8bef97b4,Weak,"Finance optimisation and automation of the finance function are transformation/process work rather than treasury, deals or investing.",2026-08-25T23:10:00+02:00
+f38c09f036db2bc7,Strong,"Deals valuation work supporting M&A and restructuring is core transaction finance; Manager level is still substantively hands-on.",2026-08-25T23:10:00+02:00
+f11c128c712ba59c,Weak,"The subject matter is relevant risk modelling, but the internship level is materially below target and heavily quant-focused.",2026-08-25T23:10:00+02:00
+62155eef5d2edcc6,Strong,"Valuation, integrated financial modelling and complex financial-instrument valuation directly combine corporate finance with derivatives expertise.",2026-08-25T23:10:00+02:00
+52d73339191526cb,Moderate,"M&A exposure is real, but the role is primarily technology due diligence/integration and technology strategy rather than financial deal analysis.",2026-08-25T23:10:00+02:00
+41c87e2827aa25f6,Strong,"Enterprise valuation, financial modelling and investment/deal decision support are direct target activities.",2026-08-25T23:10:00+02:00
+5015d69ddd1c5306,Weak,"Insurance operating-model/core-systems transformation is business/technology consulting rather than finance analysis.",2026-08-25T23:10:00+02:00
+01f19f1c1c543a80,Moderate,"FP&A and performance analysis are relevant analytical finance, but they are secondary to treasury, transactions and investment roles.",2026-08-25T23:10:00+02:00
+6b1940bd985d608d,Moderate,"FP&A and performance analysis are relevant analytical finance, but they are secondary to treasury, transactions and investment roles.",2026-08-25T23:10:00+02:00
+ec3c637aa139241d,Strong,"Treasury advisory is directly relevant, combining treasury operating models, processes and financial-risk topics with the user's prior domain.",2026-08-25T23:10:00+02:00
+b6e0d8affc72ab7a,Weak,"Fund administration, middle-office controls and investment-limit compliance dominate over investment analysis or portfolio decision-making.",2026-08-25T23:10:00+02:00
+75363387cbfc5239,Strong,"Financial modelling, valuation, FDD, financing and buy-/sell-side M&A execution are a direct corporate-finance fit.",2026-08-25T23:10:00+02:00
+06cb6893f71c13e8,Weak,"Regulatory trade/transaction reporting is compliance and operations heavy rather than markets analysis or execution.",2026-08-25T23:10:00+02:00
+6769a98f81bf15bb,Strong,"Hands-on restructuring, refinancing, strategic options and financial analysis are directly aligned with turnaround/corporate-finance work.",2026-08-25T23:10:00+02:00
+25a20e54e95ad5a8,Strong,"Hands-on restructuring, refinancing, strategic options and financial analysis are directly aligned with turnaround/corporate-finance work.",2026-08-25T23:10:00+02:00
+2717515095dc3dd7,Moderate,"M&A exposure is real, but the role is primarily technology due diligence/integration and technology strategy rather than financial deal analysis.",2026-08-25T23:10:00+02:00
+1d9df97ccf49509b,Weak,"M&A content is attractive, but the graduate internship level is materially below target.",2026-08-25T23:10:00+02:00
+6d2757ec79972126,Weak,"Transfer pricing and international tax are specialist tax work, not target treasury/deals/investment analysis.",2026-08-25T23:10:00+02:00
+4f4cc8ed6a7168dd,Weak,"SAP finance implementation is technology/process transformation rather than core analytical finance.",2026-08-25T23:10:00+02:00
+7f68328940567b77,Weak,"Non-financial/prudential regulatory risk is not the preferred market/financial-risk lane.",2026-08-25T23:10:00+02:00
+edfd8d21ab33db0a,Weak,"Reward and HR advisory are outside the target finance role families.",2026-08-25T23:10:00+02:00
+2f8d6e7e7530e9f8,Moderate,"FP&A controlling is analytically relevant, but remains generic planning/performance work rather than a core target.",2026-08-25T23:10:00+02:00
+3518a4eb9eeb380c,Weak,"The financial-markets setting is incidental; the role is a technology/data migration Business Analyst assignment.",2026-08-25T23:10:00+02:00
+7c66df9d9ff87e41,Moderate,"CCR/CVA and traded-risk work is relevant to derivatives, but the role is heavily quantitative/regulatory and less aligned with the preferred practical markets/treasury emphasis.",2026-08-25T23:10:00+02:00
+5fd160cb4dc8275a,Strong,"Transaction analytics supports live buy-/sell-side M&A, FDD and investor decisions, closely matching the preferred analytical deals profile.",2026-08-25T23:10:00+02:00
+10f588815b0d7db9,Weak,"Transaction-banking product management in a temporary product/data role is not core treasury, markets or investment analysis.",2026-08-25T23:10:00+02:00
+2167b56317778976,Weak,"The role is senior internal finance business partnering, forecasting and revenue-governance work rather than a target execution role.",2026-08-25T23:10:00+02:00
+b270ab30e7973549,Moderate,"Front-office gas structuring and valuation are relevant, but model ownership and advanced quantitative methods dominate; this is more quant-heavy than the preferred role mix.",2026-08-25T23:10:00+02:00
+b34c7e9d293e551f,Weak,"Investment Operations is middle-office/process oversight rather than investment analysis or portfolio decision-making.",2026-08-25T23:10:00+02:00
+51da5f34177d829a,Weak,"Senior finance-function transformation and operating-model redesign dominate over hands-on treasury or deal execution.",2026-08-25T23:10:00+02:00
+f75a54b61f34e2fe,Weak,"Oracle finance transformation is systems implementation rather than substantive finance analysis.",2026-08-25T23:10:00+02:00
+94ceca0500fdb253,Weak,"Treasury content is core, but Group Head responsibility is far above the target seniority and is primarily leadership.",2026-08-25T23:10:00+02:00
+86a7ddb5304608d3,Weak,"Enterprise data acquisition/governance is a data-management role rather than finance analysis.",2026-08-25T23:10:00+02:00
+26c1b18329715cf7,Weak,"Trade and transaction reporting transformation is regulatory/compliance change work, not markets analysis.",2026-08-25T23:10:00+02:00
+8e3c64fc58189547,Strong,"M&A analytics uses financial and commercial data to support transaction decisions and is directly aligned with the preferred deal-analysis lane.",2026-08-25T23:10:00+02:00
+791842fecc274c6c,Weak,"Non-life actuarial risk/capital consulting is a specialist insurance discipline outside the target profile.",2026-08-25T23:10:00+02:00
+8ac8c18c75203381,Weak,"The role is explicitly transaction-banking data-product sales, making outreach/sales central.",2026-08-25T23:10:00+02:00
+0287f19b96c89e76,Moderate,"Financial due diligence is core deal content, but the advertised Manager level in the UK is above the preferred entry point; a lower track would be Strong.",2026-08-25T23:10:00+02:00
+228cb4345879498d,Moderate,"Financial due diligence is core deal content, but the advertised Manager level in the UK is above the preferred entry point; a lower track would be Strong.",2026-08-25T23:10:00+02:00
+7709706b2ad750c5,Moderate,"Financial due diligence is core deal content, but the advertised Manager level in the UK is above the preferred entry point; a lower track would be Strong.",2026-08-25T23:10:00+02:00
+c28cb93db1ec19a6,Moderate,"Financial due diligence is core deal content, but the advertised Manager level in the UK is above the preferred entry point; a lower track would be Strong.",2026-08-25T23:10:00+02:00
+cf6fa2bd07b10ecf,Weak,"Data architecture and AI consulting are technology roles without sufficient finance-role substance.",2026-08-25T23:10:00+02:00
+85164232507118ec,Weak,"Strategy/transformation work is focused on defence technology and operations rather than finance, treasury, investments or transactions.",2026-08-25T23:10:00+02:00
+aee7cacc01d35022,Weak,"Strategy/transformation work is focused on defence technology and operations rather than finance, treasury, investments or transactions.",2026-08-25T23:10:00+02:00
+75c8695ee3d5f0e1,Strong,"Hands-on treasury combines FX, commodity and interest-rate risk, hedging, liquidity, funding and bank relationships; this is a core target role.",2026-08-25T23:10:00+02:00
+6d39d1faf7ea2c97,Moderate,"The treasury domain is relevant, but this position is explicitly back-office/system/process oriented rather than markets execution.",2026-08-25T23:10:00+02:00
+08031d923acdbfa1,Strong,"FX/commodity/rate risk, hedging, liquidity, funding and bank relationships are direct practical treasury responsibilities.",2026-08-25T23:10:00+02:00
+8798d98d50f4e080,Moderate,"Treasury and liquidity are relevant, but capital adequacy, regulatory reporting and compliance are a major part of the job.",2026-08-25T23:10:00+02:00
+ea102f74fa19a1ac,Strong,"The assignment is practical treasury execution across FX, commodities, rates, hedging, liquidity, banks and financing.",2026-08-25T23:10:00+02:00
+18c1ee9a7eaef315,Strong,"Treasury analysis, liquidity, market-data valuation and risk reporting are directly aligned with the core treasury/markets profile.",2026-08-25T23:10:00+02:00
+f91f86617cdc94e3,Strong,"Front-office treasury with FX/rates/commodity exposures, hedging execution, liquidity and market analysis is a bullseye role-content fit.",2026-08-25T23:10:00+02:00
+704191072531c59e,Strong,"Practical FX/rates/commodity risk management, hedging, liquidity and bank relationships are core treasury execution.",2026-08-25T23:10:00+02:00
+5b2fb11aee1941df,Moderate,"FP&A analysis is relevant, but planning/reporting and performance management make it a secondary lane.",2026-08-25T23:10:00+02:00
+18f91b60dac57bd2,Weak,"The role is a finance-planning technology solution architecture position rather than analytical finance.",2026-08-25T23:10:00+02:00
+050521c8e7a2e144,Moderate,"Valuation and modelling content is relevant, but the junior graduate level is below target.",2026-08-25T23:10:00+02:00
+90820cfd61de8fa5,Strong,"Fundraising, capital markets, integrated modelling, valuation and strategic financing analysis are direct corporate-finance execution.",2026-08-25T23:10:00+02:00
+1e65c1670b01aeed,Moderate,"Strategy consulting is analytical and may touch transactions, but broad growth/transformation strategy is adjacent rather than a primary finance target.",2026-08-25T23:10:00+02:00
+431130652331e7e4,Moderate,"Strategy consulting is analytical and may touch transactions, but broad growth/transformation strategy is adjacent rather than a primary finance target.",2026-08-25T23:10:00+02:00
+508f4c72b688a2ec,Weak,"Finance-function operating models, shared services and digital transformation are process/technology consulting rather than core finance execution.",2026-08-25T23:10:00+02:00
+61c1b7f50d14264e,Moderate,"Capital allocation, portfolio strategy and selected M&A are relevant, but the role is Senior Manager-level corporate strategy rather than hands-on finance execution.",2026-08-25T23:10:00+02:00
+95fb33027e0f1da1,Weak,"Document control is project administration, not financial controlling or finance analysis.",2026-08-25T23:10:00+02:00
+85c6743200ec7e19,Weak,"School leadership is outside the professional finance search.",2026-08-25T23:10:00+02:00
+c625d6225d07da63,Weak,"Teaching roles are outside the professional finance search.",2026-08-25T23:10:00+02:00
+3c996dc6e0e1eaef,Moderate,"Risk/credit analysis is finance-relevant, but credit risk is a secondary lane and the available description is too limited to establish a stronger fit.",2026-08-25T23:10:00+02:00
+96ee60a608a694ff,Weak,"The title indicates broad finance-manager/business-controller work, but there is insufficient evidence of treasury, deals or investment content.",2026-08-25T23:10:00+02:00
+22af673ea6f3cc14,Weak,"Performance management and capital allocation are relevant themes, but SVP/Head responsibility is far above target seniority.",2026-08-25T23:10:00+02:00
+7b867dc63d31f261,Weak,"CFO advisory here is dominated by finance-function operations, accounting, controls and process optimisation rather than target treasury/deal work.",2026-08-25T23:10:00+02:00
+1d72cb78b868df18,Weak,"Public-sector financial controlling and internal budget governance are outside the preferred role content.",2026-08-25T23:10:00+02:00
+69b184209c574357,Weak,"The M&A setting is relevant, but the actual job is an AI/software engineering role building tools with Python, APIs and LLMs rather than finance analysis.",2026-08-25T23:10:00+02:00
+5fe562cd0f37a183,Weak,"AI strategy consulting is technology strategy rather than finance, markets, investments or transaction analysis.",2026-08-25T23:10:00+02:00
+43a09c18d7ca412a,Weak,"The student-assistant level is below target and the work is primarily controlling/performance support.",2026-08-25T23:10:00+02:00
+16b3600392922002,Weak,"University research administration is outside the target finance role families.",2026-08-25T23:10:00+02:00
+76a5414cc7a61a6c,Weak,"Chief economist/policy-analysis leadership is outside the target finance role families and materially too senior.",2026-08-25T23:10:00+02:00
+bc165b4b8f6eeced,Weak,"Student policy/economic-analysis work is below target seniority and outside the core finance role families.",2026-08-25T23:10:00+02:00
+9455ab390548e84f,Weak,"Student policy/economic-analysis work is below target seniority and outside the core finance role families.",2026-08-25T23:10:00+02:00
+9ca2093394cac28e,Weak,"Legal leadership is outside finance.",2026-08-25T23:10:00+02:00
+2accd46900280dcb,Weak,"Student policy/economic-analysis work is below target seniority and outside the core finance role families.",2026-08-25T23:10:00+02:00
+b4a5b3ee58db44fc,Weak,"Student policy/economic-analysis work is below target seniority and outside the core finance role families.",2026-08-25T23:10:00+02:00
+74c74cbd1eb4ae27,Weak,"Resource-director leadership in an education institution is outside the target profile and too senior.",2026-08-25T23:10:00+02:00
+c6efc6faed2484be,Weak,"School finance/administration leadership is operational public-sector management rather than target analytical finance.",2026-08-25T23:10:00+02:00
+78b2b452592902b7,Weak,"NetSuite finance-process development is systems/process transformation rather than core financial analysis.",2026-08-25T23:10:00+02:00
+34ca59a79e60cd20,Weak,"Supply-chain strategy and operating-model work are outside the core finance role families despite occasional M&A integration.",2026-08-25T23:10:00+02:00
+b422b9a526972057,Weak,"Engineering/software work is outside the finance search.",2026-08-25T23:10:00+02:00
+0a031b323dc82be9,Weak,"Engineering/software work is outside the finance search.",2026-08-25T23:10:00+02:00
+42937e78c94e8bce,Weak,"The role is broad local accounting, administration and finance management rather than treasury, deals or investing.",2026-08-25T23:10:00+02:00
+1fe8574295672990,Weak,"Internal finance business partnering and controlling are generic performance-management work rather than a core target.",2026-08-25T23:10:00+02:00
+347fa232585f93a6,Weak,"Financial-services industry context is incidental; the work is business/technology transformation and process design.",2026-08-25T23:10:00+02:00
+cb7f55f385919fb9,Moderate,"The role sits in the M&A lifecycle but is primarily PMO, integration, separation and transformation execution rather than financial deal analysis.",2026-08-25T23:10:00+02:00
+f3f58fce1436a46c,Weak,"Engineering/software work is outside the finance search.",2026-08-25T23:10:00+02:00
+60373237109ac435,Weak,"AML/KYC, client acceptance and conflicts are compliance work, explicitly outside target.",2026-08-25T23:10:00+02:00
+6527d76096a15ef3,Moderate,"Restructuring, cash management, financing and modelling are relevant, but Senior Manager/Associate Director responsibility and finance-transformation content make it adjacent rather than a direct target.",2026-08-25T23:10:00+02:00
+23bf4400144eb7c4,Moderate,"Restructuring, cash management, financing and modelling are relevant, but Senior Manager/Associate Director responsibility and finance-transformation content make it adjacent rather than a direct target.",2026-08-25T23:10:00+02:00
+b4e3e2743c396ddc,Strong,"Liquidity and market-price risk, stress testing, IRRBB, cash-flow analysis and market-risk frameworks closely match treasury/financial-risk expertise at an appropriate senior level.",2026-08-25T23:10:00+02:00
+4c017480cbeb6536,Strong,"Discretionary convertible-arbitrage investing across options, bonds, equities and credit derivatives is genuine investment decision-making and markets execution; geography is handled separately.",2026-08-25T23:10:00+02:00

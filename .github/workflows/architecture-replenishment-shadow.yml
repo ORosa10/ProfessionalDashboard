@@ -65,10 +65,6 @@ jobs:
           extract origin/main data/jobs_remote_staging.csv remote.csv
           extract origin/main data/jobs_projects_staging.csv projects.csv
 
-          # C is the evolving migration-state truth. Compile the baseline
-          # semantic_fit.csv plus all approved ChatGPT/Work reviews into one
-          # temporary canonical state. Later the review files are squashed back
-          # into semantic_fit.csv before live cutover.
           python - <<'PY'
           from pathlib import Path
           import pandas as pd
@@ -118,7 +114,7 @@ jobs:
             --candidates /tmp/replenish/out/g_candidates.csv \
             --out /tmp/replenish/out/a_discovered_companies.csv
 
-      - name: Build canonical C state and full C Work queue
+      - name: Build canonical C state and Work queues
         run: |
           python -m sourcing.build_semantic_fit_shadow \
             --canonical /tmp/replenish/in/semantic.csv \
@@ -131,28 +127,72 @@ jobs:
             --out /tmp/replenish/out/c_queue.csv \
             --limit 0
 
-          # C Work sees only fields needed for semantic judgment. In particular,
-          # hide company ratings, geography and calibration/keyword signals so
-          # they cannot anchor or contaminate the role-content verdict.
           python - <<'PY'
           from pathlib import Path
           import pandas as pd
 
+          def description(row):
+              return str(row.get('description_en', '') or row.get('description', '') or '')
+
+          # Steady-state unresolved queue. Hide ratings/geography/calibration so
+          # they cannot anchor C. A tiny description-quality flag lets Work spend
+          # browser time only where role text is genuinely insufficient.
           src = Path('/tmp/replenish/out/c_queue.csv')
-          cols = ['opportunity_id','title','company','job_url','description_for_fit']
+          base_cols = ['opportunity_id','title','company','job_url','description_for_fit']
           try:
               queue = pd.read_csv(src).fillna('')
           except Exception:
-              queue = pd.DataFrame(columns=cols)
-          for col in cols:
+              queue = pd.DataFrame(columns=base_cols)
+          for col in base_cols:
               if col not in queue.columns:
                   queue[col] = ''
-          queue = queue[cols]
+          queue = queue[base_cols].copy()
+          queue['description_chars'] = queue['description_for_fit'].astype(str).str.len()
+          queue['needs_description_enrichment'] = queue['description_chars'].lt(500)
           queue.to_csv('/tmp/replenish/out/c_work_queue.csv', index=False)
+
+          # One-time v2 recalibration queue: active G roles that already have a
+          # semantic judgment. This cleans old false-Strong labels under the new
+          # stricter thesis before steady-state processing takes over.
+          try:
+              g = pd.read_csv('/tmp/replenish/out/g_candidates.csv').fillna('')
+          except Exception:
+              g = pd.DataFrame()
+          try:
+              sem = pd.read_csv('/tmp/replenish/out/c_semantic.csv').fillna('')
+          except Exception:
+              sem = pd.DataFrame(columns=['opportunity_id','fit','reasoning'])
+          if not g.empty:
+              for col in ['job_id','candidate_id','title','company','job_url','description','description_en']:
+                  if col not in g.columns:
+                      g[col] = ''
+              g['opportunity_id'] = g.apply(
+                  lambda r: str(r.get('job_id','')).strip() or str(r.get('candidate_id','')).strip(), axis=1
+              )
+              g['description_for_fit'] = g.apply(description, axis=1)
+              current = g[['opportunity_id','title','company','job_url','description_for_fit']].drop_duplicates('opportunity_id')
+              if {'opportunity_id','fit','reasoning'}.issubset(sem.columns):
+                  current = current.merge(
+                      sem[['opportunity_id','fit','reasoning']].drop_duplicates('opportunity_id', keep='last'),
+                      on='opportunity_id', how='inner'
+                  ).rename(columns={'fit':'current_fit','reasoning':'current_reasoning'})
+              else:
+                  current = pd.DataFrame(columns=[
+                      'opportunity_id','title','company','job_url','description_for_fit','current_fit','current_reasoning'
+                  ])
+          else:
+              current = pd.DataFrame(columns=[
+                  'opportunity_id','title','company','job_url','description_for_fit','current_fit','current_reasoning'
+              ])
+          current['description_chars'] = current['description_for_fit'].astype(str).str.len()
+          current['needs_description_enrichment'] = current['description_chars'].lt(500)
+          current.to_csv('/tmp/replenish/out/c_work_recalibration_queue.csv', index=False)
+
           pd.DataFrame(columns=['opportunity_id','fit','reasoning','generated_at']).to_csv(
               '/tmp/replenish/out/c_work_output_template.csv', index=False
           )
           print(f'C Work unresolved backlog: {len(queue)} roles')
+          print(f'C Work one-time active recalibration: {len(current)} roles')
           PY
 
           cp docs/C_SEMANTIC_THESIS.md /tmp/replenish/out/C_SEMANTIC_THESIS.md
@@ -204,11 +244,12 @@ jobs:
               f=p/n
               try: return pd.read_csv(f).fillna('')
               except Exception: return pd.DataFrame()
-          g=r('g_candidates.csv'); a=r('a_discovered_companies.csv'); c=r('c_work_queue.csv'); x=r('j_excluded.csv'); j=r('j_auto_shortlist.csv'); q=r('j_country_quotas.csv'); sem=r('c_semantic.csv')
+          g=r('g_candidates.csv'); a=r('a_discovered_companies.csv'); c=r('c_work_queue.csv'); rc=r('c_work_recalibration_queue.csv'); x=r('j_excluded.csv'); j=r('j_auto_shortlist.csv'); q=r('j_country_quotas.csv'); sem=r('c_semantic.csv')
           print(f'G candidates: {len(g)}')
           print(f'A new employer suggestions: {len(a)}')
           print(f'C judgments compiled: {len(sem)}')
           print(f'C unresolved Work backlog: {len(c)}')
+          print(f'C active roles for one-time recalibration: {len(rc)}')
           print(f'J guardrail exclusions: {len(x)}')
           if len(x): print(x.excluded_reason.value_counts().to_string())
           print(f'J auto shortlist: {len(j)}')

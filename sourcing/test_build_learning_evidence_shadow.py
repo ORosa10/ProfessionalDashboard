@@ -20,6 +20,7 @@ class LearningEvidenceShadowTests(unittest.TestCase):
         self.assertTrue(a_summary.empty)
         self.assertEqual(len(c_events), 1)
         self.assertEqual(c_events.iloc[0]["c_signal"], "positive")
+        self.assertEqual(c_events.iloc[0]["evidence_type"], "decision_action")
 
     def test_explicit_company_feedback_only_drives_a_evidence(self) -> None:
         history = pd.DataFrame([
@@ -41,6 +42,25 @@ class LearningEvidenceShadowTests(unittest.TestCase):
         }])
         result = build_c_evidence(history)
         self.assertEqual(result.iloc[0]["c_signal"], "neutral")
+        self.assertEqual(result.iloc[0]["evidence_type"], "explicit_role_feedback")
+
+    def test_comment_only_feedback_is_preserved_without_guessing_polarity(self) -> None:
+        history = pd.DataFrame([{
+            "opportunity_id": "x", "decision_at": "2026-08-25", "title": "Credit Analyst",
+            "company": "Example Bank", "action": "New", "role_feedback": "Not rated",
+            "user_comment": "too much credit risk",
+        }])
+        result = build_c_evidence(history)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result.iloc[0]["evidence_type"], "comment_only")
+        self.assertEqual(result.iloc[0]["c_signal"], "")
+        self.assertEqual(result.iloc[0]["user_comment"], "too much credit risk")
+
+    def test_blank_new_row_without_comment_is_not_learning_evidence(self) -> None:
+        history = pd.DataFrame([{
+            "opportunity_id": "x", "action": "New", "role_feedback": "Not rated", "user_comment": "",
+        }])
+        self.assertTrue(build_c_evidence(history).empty)
 
     def test_h_uses_application_stage_only(self) -> None:
         history = pd.DataFrame([

@@ -1,0 +1,145 @@
+name: Architecture F network shadow checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "people_ui.py"
+      - "sourcing/network_access.py"
+      - "sourcing/test_network_access.py"
+      - "data/connections.csv"
+      - ".github/workflows/architecture-network-shadow.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: architecture-network-shadow
+  cancel-in-progress: true
+
+jobs:
+  network-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+
+      - name: Run F identity and migration regressions
+        run: python -m unittest sourcing.test_network_access
+
+      - name: Fetch latest live connections and all A universe waves read-only
+        run: |
+          git fetch --no-tags origin main
+          mkdir -p /tmp/network-shadow-input/universes /tmp/network-shadow-output
+          if git cat-file -e origin/main:data/connections.csv 2>/dev/null; then
+            git show origin/main:data/connections.csv > /tmp/network-shadow-input/connections-live.csv
+          else
+            : > /tmp/network-shadow-input/connections-live.csv
+          fi
+          while IFS= read -r path; do
+            [ -z "$path" ] && continue
+            git show "origin/main:$path" > "/tmp/network-shadow-input/universes/$(basename "$path")"
+          done < <(git ls-tree -r --name-only origin/main data | grep -E '^data/company_universe(_wave[^/]*)?\.csv$' || true)
+
+      - name: Rematch legacy/current F rows using conservative canonical aliases
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+          from sourcing.network_access import (
+              ACCESS_SUMMARY_COLUMNS,
+              CONNECTIONS_COLUMNS,
+              build_access_summary,
+              build_alias_index,
+              rematch_existing_connections,
+          )
+
+          def read(path):
+              p = Path(path)
+              if not p.exists() or p.stat().st_size == 0:
+                  return pd.DataFrame()
+              try:
+                  return pd.read_csv(p).fillna('')
+              except (pd.errors.EmptyDataError, pd.errors.ParserError):
+                  return pd.DataFrame()
+
+          universes = [read(path) for path in sorted(Path('/tmp/network-shadow-input/universes').glob('*.csv'))]
+          universes = [frame for frame in universes if not frame.empty]
+          if not universes:
+              raise SystemExit('No A company universe snapshots were found for F identity matching')
+
+          live = read('/tmp/network-shadow-input/connections-live.csv')
+          index = build_alias_index(universes)
+          migrated = rematch_existing_connections(live, index)
+          access = build_access_summary(migrated)
+
+          Path('/tmp/network-shadow-output').mkdir(parents=True, exist_ok=True)
+          migrated.reindex(columns=CONNECTIONS_COLUMNS, fill_value='').to_csv(
+              '/tmp/network-shadow-output/connections-rematched.csv', index=False
+          )
+          access.reindex(columns=ACCESS_SUMMARY_COLUMNS, fill_value='').to_csv(
+              '/tmp/network-shadow-output/company-access-evidence.csv', index=False
+          )
+
+          print(f'live F rows: {len(live)}')
+          print(f'rematched F rows: {len(migrated)}')
+          print(f'companies with factual access evidence: {len(access)}')
+          if len(migrated):
+              print('\nMatch status:')
+              print(migrated['company_match_status'].replace('', 'blank').value_counts().to_string())
+          if len(access):
+              print('\nAccess evidence:')
+              print(access.to_string(index=False))
+
+          if len(live) != len(migrated):
+              raise SystemExit('F migration changed the number of connection rows')
+          forbidden = {'rating', 'score', 'semantic_fit', 'attainability'}
+          if forbidden & set(access.columns):
+              raise SystemExit(f'F access evidence contains inference fields: {forbidden & set(access.columns)}')
+          PY
+
+      - name: Verify F migration is idempotent on real snapshot
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+          from sourcing.network_access import build_alias_index, rematch_existing_connections
+
+          def read(path):
+              p = Path(path)
+              if not p.exists() or p.stat().st_size == 0:
+                  return pd.DataFrame()
+              try:
+                  return pd.read_csv(p).fillna('')
+              except pd.errors.EmptyDataError:
+                  return pd.DataFrame()
+
+          universes = [read(path) for path in sorted(Path('/tmp/network-shadow-input/universes').glob('*.csv'))]
+          universes = [frame for frame in universes if not frame.empty]
+          index = build_alias_index(universes)
+          once = read('/tmp/network-shadow-output/connections-rematched.csv')
+          twice = rematch_existing_connections(once, index)
+          pd.testing.assert_frame_equal(
+              once.reset_index(drop=True).reindex(sorted(once.columns), axis=1),
+              twice.reset_index(drop=True).reindex(sorted(twice.columns), axis=1),
+              check_dtype=False,
+          )
+          print('F real-snapshot rematch is idempotent.')
+          PY
+
+      - name: Upload F network shadow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: architecture-f-network-shadow
+          path: |
+            /tmp/network-shadow-output/connections-rematched.csv
+            /tmp/network-shadow-output/company-access-evidence.csv
+          retention-days: 7

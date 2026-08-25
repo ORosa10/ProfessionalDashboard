@@ -104,6 +104,31 @@ def _from_jsonld(item: dict) -> tuple[str, str, str, str, str]:
     return title, company or "Employer not stated", "; ".join(dict.fromkeys(locs)), desc, _clean(item.get("datePosted"))
 
 
+def extract_detail_fields(source_id: str, html: str) -> tuple[str, str, str, str, str]:
+    """Extract one vacancy detail with source-specific integrity safeguards.
+
+    Jobbland pages can contain multiple job-related structured fragments and
+    recommendation/tag text below the actual vacancy. The visible page H1 is the
+    authoritative title for the current detail URL, so prefer it over a possibly
+    misleading JSON-LD JobPosting title while retaining JSON-LD metadata for the
+    employer, location, description and date.
+    """
+    item = _jobposting(html)
+    if item:
+        title, company, location, description, date_posted = _from_jsonld(item)
+    else:
+        title, company, location, description = _fallback_detail(html)
+        date_posted = ""
+
+    if source_id == "jobbland-se":
+        soup = BeautifulSoup(html, "html.parser")
+        h1 = soup.find("h1")
+        visible_title = _clean(h1.get_text(" ") if h1 else "")
+        if visible_title:
+            title = visible_title
+    return title, company, location, description, date_posted
+
+
 def _get_listing(url: str) -> requests.Response:
     response = requests.get(url, headers=HEADERS, timeout=35); response.raise_for_status(); return response
 
@@ -130,9 +155,8 @@ def discover_catalog_board(source_id: str, queries: list[str], per_query: int, m
     jobs: list[dict] = []
     for url, matched in list(candidates.items())[:max_details]:
         try:
-            response = requests.get(url, headers=HEADERS, timeout=35); response.raise_for_status(); item = _jobposting(response.text)
-            if item: title, company, location, description, date_posted = _from_jsonld(item)
-            else: title, company, location, description = _fallback_detail(response.text); date_posted = ""
+            response = requests.get(url, headers=HEADERS, timeout=35); response.raise_for_status()
+            title, company, location, description, date_posted = extract_detail_fields(source_id, response.text)
             if not title: raise ValueError("title missing")
         except Exception as exc:
             errors.append(f"detail {url[-60:]}: {type(exc).__name__}"); continue

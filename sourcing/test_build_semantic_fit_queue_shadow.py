@@ -51,6 +51,32 @@ class SemanticQueueShadowTests(unittest.TestCase):
         self.assertEqual(result.iloc[0]["opportunity_id"], "legacy-job-id")
         self.assertEqual(result.iloc[0]["candidate_id"], "shadow-hash")
 
+    def test_zero_limit_emits_full_unresolved_backlog(self) -> None:
+        candidates = pd.DataFrame([
+            {"candidate_id": f"c{i}", "job_id": f"job-{i}", "company": "A", "title": f"Role {i}", "status": "Open", "country_bucket": "Germany"}
+            for i in range(250)
+        ])
+        result = build_shadow_queue(candidates, pd.DataFrame(), pd.DataFrame(), limit=0)
+        self.assertEqual(len(result), 250)
+        self.assertEqual(set(result["opportunity_id"]), {f"job-{i}" for i in range(250)})
+
+    def test_description_for_fit_is_not_truncated(self) -> None:
+        description = "x" * 7000 + " CORE RESPONSIBILITIES AT THE END"
+        candidates = pd.DataFrame([
+            {
+                "candidate_id": "c-long",
+                "job_id": "long",
+                "company": "Example",
+                "title": "Finance Role",
+                "status": "Open",
+                "country_bucket": "Germany",
+                "description_en": description,
+            }
+        ])
+        result = build_shadow_queue(candidates, pd.DataFrame(), pd.DataFrame(), limit=0)
+        self.assertEqual(result.iloc[0]["description_for_fit"], description)
+        self.assertTrue(result.iloc[0]["description_for_fit"].endswith("CORE RESPONSIBILITIES AT THE END"))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -34,15 +34,18 @@ class PrepareJCandidatesShadowTests(unittest.TestCase):
     def test_big_four_is_separate_batch(self) -> None:
         candidates = pd.DataFrame([
             {"candidate_id": "1", "company": "Deloitte", "title": "CDD Consultant", "job_url": "https://example.com/job/1"},
-            {"candidate_id": "2", "company": "Industrial Co", "title": "Treasury Analyst", "job_url": "https://example.com/job/2"},
+            {"candidate_id": "2", "company": "KPMG AG", "title": "Treasury Consultant", "job_url": "https://example.com/job/2"},
+            {"candidate_id": "3", "company": "EY Parthenon", "title": "M&A Consultant", "job_url": "https://example.com/job/3"},
+            {"candidate_id": "4", "company": "Industrial Co", "title": "Treasury Analyst", "job_url": "https://example.com/job/4"},
         ])
         universe = pd.DataFrame([
             {"company": "Deloitte", "aliases_entities": "", "company_category": "Big Four", "canonical_company_id": "deloitte"},
             {"company": "Industrial Co", "aliases_entities": "", "company_category": "Corporate", "canonical_company_id": "industrial-co"},
         ])
         allowed, excluded = prepare_j_candidates(candidates, pd.DataFrame(), pd.DataFrame(), universe)
-        self.assertEqual(allowed["candidate_id"].tolist(), ["2"])
-        self.assertEqual(excluded.iloc[0]["excluded_reason"], "big4_separate_batch")
+        self.assertEqual(allowed["candidate_id"].tolist(), ["4"])
+        self.assertEqual(set(excluded["excluded_reason"]), {"big4_separate_batch"})
+        self.assertEqual(set(excluded["candidate_id"]), {"1", "2", "3"})
 
 
 if __name__ == "__main__":

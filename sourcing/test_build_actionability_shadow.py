@@ -30,6 +30,8 @@ class ActionabilityShadowTests(unittest.TestCase):
             "country_bucket": "Germany",
             "market": "Germany",
             "location": "Frankfurt",
+            "priority_locations": "Frankfurt",
+            "source_streams": "board",
             "status": "Open",
             "job_url": "https://example.com/job",
             "description_en": "",
@@ -66,7 +68,7 @@ class ActionabilityShadowTests(unittest.TestCase):
         self.assertFalse(bool(outside["actionable"]))
         self.assertIn("geography:PL", outside["blockers"])
 
-        prose = self._evaluate({"country_bucket": "Other / Unresolved", "market": "Remote", "location": "Remote in Europe"})
+        prose = self._evaluate({"country_bucket": "Other / Unresolved", "market": "Multi-region", "location": "Based in Europe"})
         self.assertTrue(bool(prose["actionable"]))
         self.assertIn("geography:needs_resolution", prose["warnings"])
 
@@ -74,6 +76,70 @@ class ActionabilityShadowTests(unittest.TestCase):
         row = self._evaluate({"country_bucket": "Other / Unresolved", "market": "Multi-region", "location": ""})
         self.assertTrue(bool(row["actionable"]))
         self.assertIn("geography:needs_resolution", row["warnings"])
+
+    def test_remote_us_only_blocks_from_description_even_if_structured_location_is_remote(self) -> None:
+        row = self._evaluate({
+            "country_bucket": "Remote",
+            "market": "Remote",
+            "location": "Remote",
+            "priority_locations": "Remote",
+            "source_streams": "remote",
+            "description_en": "Headquarters: Remote - US Company Description We serve healthcare clients worldwide.",
+        })
+        self.assertFalse(bool(row["actionable"]))
+        self.assertIn("geography:remote_us_only", row["blockers"])
+        self.assertNotIn("remote_scope_needs_resolution", row["warnings"])
+
+    def test_remote_canada_only_blocks(self) -> None:
+        row = self._evaluate({
+            "country_bucket": "Remote", "market": "Remote", "location": "Remote",
+            "source_streams": "remote",
+            "description_en": "Candidates must be based in Canada. This is a fully remote role.",
+        })
+        self.assertFalse(bool(row["actionable"]))
+        self.assertIn("geography:remote_canada_only", row["blockers"])
+
+    def test_remote_europe_or_emea_is_geographically_feasible(self) -> None:
+        europe = self._evaluate({
+            "country_bucket": "Remote", "market": "Remote", "location": "Remote",
+            "source_streams": "remote", "description_en": "This role is remote within Europe.",
+        })
+        self.assertTrue(bool(europe["actionable"]))
+        self.assertNotIn("geography:", europe["blockers"])
+        self.assertNotIn("remote_scope_needs_resolution", europe["warnings"])
+
+        emea = self._evaluate({
+            "country_bucket": "Remote", "market": "Remote", "location": "Remote",
+            "source_streams": "remote", "description_en": "Location: Remote - EMEA.",
+        })
+        self.assertTrue(bool(emea["actionable"]))
+        self.assertNotIn("remote_scope_needs_resolution", emea["warnings"])
+
+    def test_worldwide_remote_is_geographically_feasible(self) -> None:
+        row = self._evaluate({
+            "country_bucket": "Remote", "market": "Remote", "location": "Remote",
+            "source_streams": "remote", "description_en": "Work from anywhere in the world.",
+        })
+        self.assertTrue(bool(row["actionable"]))
+        self.assertNotIn("remote_scope_needs_resolution", row["warnings"])
+
+    def test_generic_remote_warns_instead_of_assuming_employability(self) -> None:
+        row = self._evaluate({
+            "country_bucket": "Remote", "market": "Remote", "location": "Remote",
+            "source_streams": "remote", "description_en": "This is a remote position with flexible hours.",
+        })
+        self.assertTrue(bool(row["actionable"]))
+        self.assertIn("geography:remote_scope_needs_resolution", row["warnings"])
+
+    def test_us_customers_or_us_company_context_does_not_create_remote_block(self) -> None:
+        row = self._evaluate({
+            "country_bucket": "Remote", "market": "Remote", "location": "Remote",
+            "source_streams": "remote",
+            "description_en": "We are a US company serving U.S. customers worldwide. This is a remote position.",
+        })
+        self.assertTrue(bool(row["actionable"]))
+        self.assertNotIn("remote_us_only", row["blockers"])
+        self.assertIn("geography:remote_scope_needs_resolution", row["warnings"])
 
     def test_missing_or_confirmed_dead_link_blocks(self) -> None:
         missing = self._evaluate({"job_url": ""})

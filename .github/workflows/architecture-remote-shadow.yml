@@ -1,0 +1,127 @@
+name: Architecture D remote shadow checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sourcing/build_actionability_shadow.py"
+      - "sourcing/test_build_actionability_shadow.py"
+      - "sourcing/aggregate_candidates_shadow.py"
+      - "sourcing/build_semantic_fit_queue_shadow.py"
+      - ".github/workflows/architecture-remote-shadow.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: architecture-remote-shadow
+  cancel-in-progress: true
+
+jobs:
+  remote-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+
+      - name: Run D actionability regression tests
+        run: python -m unittest sourcing.test_build_actionability_shadow sourcing.test_aggregate_candidates_shadow
+
+      - name: Fetch latest live D and learning references read-only
+        run: |
+          git fetch --no-tags origin main
+          mkdir -p /tmp/remote-shadow-input /tmp/remote-shadow-output
+          extract() {
+            path="$1"
+            out="$2"
+            if git cat-file -e "origin/main:$path" 2>/dev/null; then
+              git show "origin/main:$path" > "/tmp/remote-shadow-input/$out"
+            else
+              : > "/tmp/remote-shadow-input/$out"
+            fi
+          }
+          extract data/jobs_remote_staging.csv remote-live.csv
+          extract data/semantic_fit.csv semantic-live.csv
+          extract data/opportunity_history.csv history-live.csv
+
+      - name: Normalize D through the canonical shadow candidate layer
+        run: |
+          python -m sourcing.aggregate_candidates_shadow \
+            --input remote=/tmp/remote-shadow-input/remote-live.csv \
+            --out /tmp/remote-shadow-output/remote-candidates.csv \
+            --diagnostics-out /tmp/remote-shadow-output/remote-diagnostics.csv
+
+      - name: Build D to C pending semantic queue
+        run: |
+          python -m sourcing.build_semantic_fit_queue_shadow \
+            --candidates /tmp/remote-shadow-output/remote-candidates.csv \
+            --semantic /tmp/remote-shadow-input/semantic-live.csv \
+            --history /tmp/remote-shadow-input/history-live.csv \
+            --out /tmp/remote-shadow-output/remote-c-queue.csv \
+            --limit 160
+
+      - name: Evaluate remote employability separately from C
+        run: |
+          python -m sourcing.build_actionability_shadow \
+            --candidates /tmp/remote-shadow-output/remote-candidates.csv \
+            --semantic /tmp/remote-shadow-input/semantic-live.csv \
+            --policy data/actionability_policy_v1.json \
+            --out /tmp/remote-shadow-output/remote-actionability.csv
+
+      - name: Verify explicit US-only remote roles cannot silently pass
+        run: |
+          python - <<'PY'
+          import re
+          import pandas as pd
+
+          candidates = pd.read_csv('/tmp/remote-shadow-output/remote-candidates.csv').fillna('')
+          actionability = pd.read_csv('/tmp/remote-shadow-output/remote-actionability.csv').fillna('')
+          queue = pd.read_csv('/tmp/remote-shadow-output/remote-c-queue.csv').fillna('')
+
+          print(f'\nD candidates: {len(candidates)}')
+          print(f'D pending C queue: {len(queue)}')
+          if len(candidates):
+              report = candidates[['job_id','company','title','market','location','source_streams']].merge(
+                  actionability[['opportunity_id','actionable','blockers','warnings']],
+                  left_on='job_id', right_on='opportunity_id', how='left'
+              )
+              print('\n=== D REMOTE ACTIONABILITY ===')
+              print(report.to_string(index=False))
+
+          explicit_us = candidates.apply(
+              lambda r: bool(re.search(
+                  r'\bremote\s*[-–—,:()]\s*(?:the\s+)?(?:u\.?s\.?|united states)\b',
+                  f"{r.get('description_en','')} {r.get('description','')}",
+                  flags=re.I,
+              )), axis=1,
+          ) if len(candidates) else pd.Series(dtype=bool)
+
+          if explicit_us.any():
+              ids = set(candidates.loc[explicit_us, 'job_id'].astype(str))
+              checked = actionability[actionability['opportunity_id'].astype(str).isin(ids)]
+              bad = checked[~checked['blockers'].astype(str).str.contains('geography:remote_us_only', regex=False)]
+              if len(bad):
+                  raise SystemExit('Explicit Remote-US role was not hard-blocked by remote employability gate')
+              print(f'\nVerified {len(checked)} explicit Remote-US role(s) are hard-blocked before J.')
+          else:
+              print('\nNo explicit Remote-US role in current live D snapshot; unit regression still covers the case.')
+          PY
+
+      - name: Upload D remote shadow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: architecture-d-remote-shadow
+          path: |
+            /tmp/remote-shadow-output/remote-candidates.csv
+            /tmp/remote-shadow-output/remote-diagnostics.csv
+            /tmp/remote-shadow-output/remote-c-queue.csv
+            /tmp/remote-shadow-output/remote-actionability.csv
+          retention-days: 7

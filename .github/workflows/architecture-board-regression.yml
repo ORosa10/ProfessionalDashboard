@@ -1,0 +1,27 @@
+name: Architecture board parser regression checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sourcing/board_catalog_adapters.py"
+      - "sourcing/test_board_catalog_adapters.py"
+      - ".github/workflows/architecture-board-regression.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  board-parser-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests beautifulsoup4
+      - name: Run board catalogue regression tests
+        run: python -m unittest sourcing.test_board_catalog_adapters

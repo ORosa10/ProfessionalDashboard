@@ -20,6 +20,10 @@ on:
       - "sourcing/test_build_j_shortlist_shadow.py"
       - "sourcing/compare_shadow_j.py"
       - "sourcing/test_compare_shadow_j.py"
+      - "sourcing/remote_pilot.py"
+      - "sourcing/test_remote_pilot.py"
+      - "sourcing/projects_pilot.py"
+      - "sourcing/test_projects_pilot.py"
       - ".github/workflows/architecture-safe-migration.yml"
   workflow_dispatch:
 
@@ -39,7 +43,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pandas
+      - run: pip install pandas requests
       - name: Run shadow migration tests
         run: |
           python -m unittest \
@@ -49,12 +53,14 @@ jobs:
             sourcing.test_build_semantic_fit_queue_shadow \
             sourcing.test_build_actionability_shadow \
             sourcing.test_build_j_shortlist_shadow \
-            sourcing.test_compare_shadow_j
+            sourcing.test_compare_shadow_j \
+            sourcing.test_remote_pilot \
+            sourcing.test_projects_pilot
 
   shadow-snapshot-build:
     needs: shadow-migration-tests
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -62,7 +68,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pandas
+      - run: pip install pandas requests
 
       - name: Fetch source snapshots read-only
         run: |
@@ -85,6 +91,7 @@ jobs:
             fi
           }
 
+          # G sourcing lanes.
           extract origin/main data/jobs_board_staging.csv board.csv
           extract origin/sourcing-staging data/jobs_staging.csv company.csv
           extract origin/pe-sourcing-staging data/jobs_pe_staging.csv pe.csv
@@ -96,13 +103,27 @@ jobs:
           extract origin/public-markets-sourcing-staging data/jobs_public-markets_staging.csv public-markets.csv
           extract origin/specialist-funds-sourcing-staging data/jobs_specialist-funds_staging.csv specialist-funds.csv
 
+          # Current live D/E snapshots are baselines only. The unified shadow run
+          # below refreshes the public remote feeds in /tmp with branch code.
+          extract origin/main data/jobs_remote_staging.csv remote-live.csv
+          extract origin/main data/jobs_projects_staging.csv projects-live.csv
+
           # Live references are read-only migration baselines, never source inputs.
           extract origin/main data/j_curated_shortlist.csv live-j.csv
           extract origin/main data/country_sourcing_weights.json country-targets.json
           extract origin/main data/semantic_fit.csv semantic-live.csv
           extract origin/main data/opportunity_history.csv history-live.csv
 
-      - name: Build read-only shadow G candidate pool
+      - name: Refresh D and route explicit project roles to E in tmp only
+        run: |
+          # One public-feed retrieval serves both D and E channel 1. Permanent
+          # remote roles stay in D; explicit contract/interim roles are routed to
+          # E. No duplicate network fetch and no writes to main.
+          python -m sourcing.remote_pilot \
+            --out /tmp/g-shadow-inputs/remote-refreshed.csv \
+            --projects-out /tmp/g-shadow-inputs/projects-refreshed.csv
+
+      - name: Build read-only unified G D E candidate pool
         run: |
           python -m sourcing.aggregate_candidates_shadow \
             --input board=/tmp/g-shadow-inputs/board.csv \
@@ -115,11 +136,16 @@ jobs:
             --input investment-banking=/tmp/g-shadow-inputs/investment-banking.csv \
             --input public-markets=/tmp/g-shadow-inputs/public-markets.csv \
             --input specialist-funds=/tmp/g-shadow-inputs/specialist-funds.csv \
+            --input remote=/tmp/g-shadow-inputs/remote-refreshed.csv \
+            --input projects=/tmp/g-shadow-inputs/projects-refreshed.csv \
             --out /tmp/g-shadow-output/candidates_shadow.csv \
             --diagnostics-out /tmp/g-shadow-output/g_shadow_diagnostics.csv
 
-      - name: Compare shadow G with current live references
+      - name: Compare sourced permanent G coverage with current live references
         run: |
+          # compare_shadow_g remains a sourcing-coverage diagnostic. D/E being
+          # present in the unified pool must not be interpreted as country-board
+          # coverage; the candidate rows retain source_streams for diagnosis.
           python -m sourcing.compare_shadow_g \
             --shadow /tmp/g-shadow-output/candidates_shadow.csv \
             --live-reference /tmp/g-shadow-inputs/live-j.csv \
@@ -134,7 +160,7 @@ jobs:
             --curated-j /tmp/g-shadow-inputs/live-j.csv \
             --out /tmp/g-shadow-output/semantic_fit_shadow.csv
 
-      - name: Build shadow C review queue
+      - name: Build unified C review queue from G D E candidates
         run: |
           python -m sourcing.build_semantic_fit_queue_shadow \
             --candidates /tmp/g-shadow-output/candidates_shadow.csv \
@@ -178,64 +204,95 @@ jobs:
       - name: Print compact diagnostics
         run: |
           python - <<'PY'
+          from pathlib import Path
           import pandas as pd
 
-          d = pd.read_csv('/tmp/g-shadow-output/g_shadow_diagnostics.csv')
-          print('\n=== G OVERALL ===')
-          print(d[d.dimension.eq('overall')].to_string(index=False))
-          print('\n=== G SOURCES ===')
-          print(d[d.dimension.eq('source')].to_string(index=False))
-          print('\n=== G COUNTRIES ===')
-          print(d[d.dimension.eq('country')].to_string(index=False))
+          def read(path):
+              p = Path(path)
+              if not p.exists() or p.stat().st_size == 0:
+                  return pd.DataFrame()
+              try:
+                  return pd.read_csv(p).fillna('')
+              except pd.errors.EmptyDataError:
+                  return pd.DataFrame()
 
-          ref = pd.read_csv('/tmp/g-shadow-output/live_j_coverage.csv')
+          d = read('/tmp/g-shadow-output/g_shadow_diagnostics.csv')
+          print('\n=== UNIFIED CANDIDATE POOL OVERALL ===')
+          if len(d):
+              print(d[d.dimension.eq('overall')].to_string(index=False))
+              print('\n=== SOURCE STREAMS ===')
+              print(d[d.dimension.eq('source')].to_string(index=False))
+              print('\n=== COUNTRIES / GEO BUCKETS ===')
+              print(d[d.dimension.eq('country')].to_string(index=False))
+
+          candidates = read('/tmp/g-shadow-output/candidates_shadow.csv')
+          if len(candidates):
+              print('\n=== CANDIDATES BY SOURCE STREAM ===')
+              print(candidates['source_streams'].replace('', 'unknown').value_counts().to_string())
+
+          remote = read('/tmp/g-shadow-inputs/remote-refreshed.csv')
+          projects = read('/tmp/g-shadow-inputs/projects-refreshed.csv')
+          print(f"\n=== D REFRESHED PERMANENT: {len(remote)} ===")
+          if len(remote):
+              print(remote[['company','title','location','source_id']].to_string(index=False))
+          print(f"\n=== E ROUTED PROJECT/INTERIM: {len(projects)} ===")
+          if len(projects):
+              print(projects[['company','title','location','source_id']].to_string(index=False))
+
+          ref = read('/tmp/g-shadow-output/live_j_coverage.csv')
           if len(ref):
-            found = ref['found_in_shadow'].astype(str).str.lower().eq('true')
-            print(f"\n=== LIVE J REFERENCE COVERAGE: {int(found.sum())}/{len(ref)} ===")
-            missing = ref[~found][['curated_rank', 'company', 'title', 'market']]
-            if len(missing):
-              print(missing.to_string(index=False))
+              found = ref['found_in_shadow'].astype(str).str.lower().eq('true')
+              print(f"\n=== LIVE J REFERENCE COVERAGE: {int(found.sum())}/{len(ref)} ===")
+              missing = ref[~found][['curated_rank', 'company', 'title', 'market']]
+              if len(missing):
+                  print(missing.to_string(index=False))
 
-          country = pd.read_csv('/tmp/g-shadow-output/country_raw_supply.csv')
+          country = read('/tmp/g-shadow-output/country_raw_supply.csv')
           print('\n=== RAW COUNTRY SUPPLY VS CONFIGURED TARGETS ===')
-          print(country.to_string(index=False))
+          if len(country):
+              print(country.to_string(index=False))
 
-          sem = pd.read_csv('/tmp/g-shadow-output/semantic_fit_shadow.csv')
+          sem = read('/tmp/g-shadow-output/semantic_fit_shadow.csv')
           if len(sem):
-            print('\n=== C SEMANTIC SHADOW SOURCES ===')
-            print(sem['semantic_source'].value_counts().to_string())
+              print('\n=== C SEMANTIC SHADOW SOURCES ===')
+              print(sem['semantic_source'].value_counts().to_string())
 
-          queue = pd.read_csv('/tmp/g-shadow-output/semantic_fit_queue_shadow.csv')
-          print(f"\n=== PENDING SHADOW C QUEUE: {len(queue)} ===")
+          queue = read('/tmp/g-shadow-output/semantic_fit_queue_shadow.csv')
+          print(f"\n=== PENDING UNIFIED C QUEUE: {len(queue)} ===")
           if len(queue):
-            print(queue['country_bucket'].replace('', 'Other / Unresolved').value_counts().to_string())
+              if 'source_streams' in queue.columns:
+                  print('\nC queue by source stream:')
+                  print(queue['source_streams'].replace('', 'unknown').value_counts().to_string())
+              print('\nC queue by geography:')
+              print(queue['country_bucket'].replace('', 'Other / Unresolved').value_counts().to_string())
 
-          act = pd.read_csv('/tmp/g-shadow-output/actionability_shadow.csv')
+          act = read('/tmp/g-shadow-output/actionability_shadow.csv')
           if len(act):
-            actionable = act['actionable'].astype(str).str.lower().eq('true')
-            print(f"\n=== ACTIONABILITY: {int(actionable.sum())}/{len(act)} PASS ===")
-            blockers = act.loc[~actionable, 'blockers'].replace('', 'unspecified')
-            if len(blockers):
-              print(blockers.value_counts().head(20).to_string())
+              actionable = act['actionable'].astype(str).str.lower().eq('true')
+              print(f"\n=== ACTIONABILITY: {int(actionable.sum())}/{len(act)} PASS ===")
+              blockers = act.loc[~actionable, 'blockers'].replace('', 'unspecified')
+              if len(blockers):
+                  print(blockers.value_counts().head(20).to_string())
 
-          j = pd.read_csv('/tmp/g-shadow-output/j_shortlist_shadow.csv')
+          j = read('/tmp/g-shadow-output/j_shortlist_shadow.csv')
           print(f"\n=== J SHADOW STRONG/ACTIONABLE: {len(j)} ===")
           if len(j):
-            print(j[['priority_order', 'company', 'title', 'company_rating', 'country_bucket', 'selection_origin']].to_string(index=False))
+              print(j[['priority_order', 'company', 'title', 'company_rating', 'country_bucket', 'selection_origin']].to_string(index=False))
 
-          quotas = pd.read_csv('/tmp/g-shadow-output/j_country_quota_shadow.csv')
+          quotas = read('/tmp/g-shadow-output/j_country_quota_shadow.csv')
           print('\n=== J COUNTRY QUOTAS ===')
-          print(quotas.to_string(index=False))
+          if len(quotas):
+              print(quotas.to_string(index=False))
 
-          audit = pd.read_csv('/tmp/g-shadow-output/live_j_to_shadow_audit.csv')
+          audit = read('/tmp/g-shadow-output/live_j_to_shadow_audit.csv')
           print('\n=== LIVE J -> SHADOW J AUDIT ===')
           if len(audit):
-            print(audit[['company', 'title', 'live_semantic_fit', 'shadow_semantic_fit', 'in_shadow_j', 'explanation']].to_string(index=False))
+              print(audit[['company', 'title', 'live_semantic_fit', 'shadow_semantic_fit', 'in_shadow_j', 'explanation']].to_string(index=False))
 
-          new = pd.read_csv('/tmp/g-shadow-output/shadow_j_new_roles.csv')
+          new = read('/tmp/g-shadow-output/shadow_j_new_roles.csv')
           print(f"\n=== NEW SHADOW J ROLES: {len(new)} ===")
           if len(new):
-            print(new.to_string(index=False))
+              print(new.to_string(index=False))
           PY
 
       - name: Upload shadow diagnostics artifact
@@ -243,6 +300,8 @@ jobs:
         with:
           name: architecture-shadow-snapshot
           path: |
+            /tmp/g-shadow-inputs/remote-refreshed.csv
+            /tmp/g-shadow-inputs/projects-refreshed.csv
             /tmp/g-shadow-output/candidates_shadow.csv
             /tmp/g-shadow-output/g_shadow_diagnostics.csv
             /tmp/g-shadow-output/live_j_coverage.csv

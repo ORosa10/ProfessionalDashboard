@@ -5,6 +5,8 @@ on:
     branches:
       - main
     paths:
+      - "sourcing/remote_pilot.py"
+      - "sourcing/test_remote_pilot.py"
       - "sourcing/build_actionability_shadow.py"
       - "sourcing/test_build_actionability_shadow.py"
       - "sourcing/aggregate_candidates_shadow.py"
@@ -22,7 +24,7 @@ concurrency:
 jobs:
   remote-shadow:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,10 +32,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pandas
+      - run: pip install pandas requests
 
-      - name: Run D actionability regression tests
-        run: python -m unittest sourcing.test_build_actionability_shadow sourcing.test_aggregate_candidates_shadow
+      - name: Run D regression tests
+        run: |
+          python -m unittest \
+            sourcing.test_remote_pilot \
+            sourcing.test_build_actionability_shadow \
+            sourcing.test_aggregate_candidates_shadow
 
       - name: Fetch latest live D and learning references read-only
         run: |
@@ -52,14 +58,26 @@ jobs:
           extract data/semantic_fit.csv semantic-live.csv
           extract data/opportunity_history.csv history-live.csv
 
-      - name: Normalize D through the canonical shadow candidate layer
+      - name: Refresh D sources with hardened branch runner in tmp only
+        run: |
+          python -m sourcing.remote_pilot \
+            --out /tmp/remote-shadow-output/remote-refreshed.csv \
+            --projects-out /tmp/remote-shadow-output/remote-projects-for-e.csv
+
+      - name: Normalize current live D for migration regression
         run: |
           python -m sourcing.aggregate_candidates_shadow \
             --input remote=/tmp/remote-shadow-input/remote-live.csv \
+            --out /tmp/remote-shadow-output/remote-live-candidates.csv
+
+      - name: Normalize refreshed D through canonical candidate layer
+        run: |
+          python -m sourcing.aggregate_candidates_shadow \
+            --input remote=/tmp/remote-shadow-output/remote-refreshed.csv \
             --out /tmp/remote-shadow-output/remote-candidates.csv \
             --diagnostics-out /tmp/remote-shadow-output/remote-diagnostics.csv
 
-      - name: Build D to C pending semantic queue
+      - name: Build refreshed D to C pending semantic queue
         run: |
           python -m sourcing.build_semantic_fit_queue_shadow \
             --candidates /tmp/remote-shadow-output/remote-candidates.csv \
@@ -68,7 +86,7 @@ jobs:
             --out /tmp/remote-shadow-output/remote-c-queue.csv \
             --limit 160
 
-      - name: Evaluate remote employability separately from C
+      - name: Evaluate refreshed D employability separately from C
         run: |
           python -m sourcing.build_actionability_shadow \
             --candidates /tmp/remote-shadow-output/remote-candidates.csv \
@@ -76,43 +94,78 @@ jobs:
             --policy data/actionability_policy_v1.json \
             --out /tmp/remote-shadow-output/remote-actionability.csv
 
+          python -m sourcing.build_actionability_shadow \
+            --candidates /tmp/remote-shadow-output/remote-live-candidates.csv \
+            --semantic /tmp/remote-shadow-input/semantic-live.csv \
+            --policy data/actionability_policy_v1.json \
+            --out /tmp/remote-shadow-output/remote-live-actionability.csv
+
       - name: Verify explicit US-only remote roles cannot silently pass
         run: |
           python - <<'PY'
           import re
+          from pathlib import Path
           import pandas as pd
 
-          candidates = pd.read_csv('/tmp/remote-shadow-output/remote-candidates.csv').fillna('')
-          actionability = pd.read_csv('/tmp/remote-shadow-output/remote-actionability.csv').fillna('')
-          queue = pd.read_csv('/tmp/remote-shadow-output/remote-c-queue.csv').fillna('')
+          def read(path):
+              p = Path(path)
+              if not p.exists() or p.stat().st_size == 0:
+                  return pd.DataFrame()
+              try:
+                  return pd.read_csv(p).fillna('')
+              except pd.errors.EmptyDataError:
+                  return pd.DataFrame()
 
-          print(f'\nD candidates: {len(candidates)}')
+          live = read('/tmp/remote-shadow-output/remote-live-candidates.csv')
+          live_action = read('/tmp/remote-shadow-output/remote-live-actionability.csv')
+          refreshed = read('/tmp/remote-shadow-output/remote-candidates.csv')
+          refreshed_action = read('/tmp/remote-shadow-output/remote-actionability.csv')
+          queue = read('/tmp/remote-shadow-output/remote-c-queue.csv')
+          projects = read('/tmp/remote-shadow-output/remote-projects-for-e.csv')
+
+          print(f'\nD refreshed permanent candidates: {len(refreshed)}')
+          print(f'D explicit project/interim candidates separated for E: {len(projects)}')
           print(f'D pending C queue: {len(queue)}')
-          if len(candidates):
-              report = candidates[['job_id','company','title','market','location','source_streams']].merge(
-                  actionability[['opportunity_id','actionable','blockers','warnings']],
+
+          if len(refreshed):
+              report = refreshed[['job_id','company','title','market','location','source_id','source_streams']].merge(
+                  refreshed_action[['opportunity_id','actionable','blockers','warnings']],
                   left_on='job_id', right_on='opportunity_id', how='left'
               )
-              print('\n=== D REMOTE ACTIONABILITY ===')
+              print('\n=== REFRESHED D REMOTE ACTIONABILITY ===')
               print(report.to_string(index=False))
 
-          explicit_us = candidates.apply(
-              lambda r: bool(re.search(
-                  r'\bremote\s*[-–—,:()]\s*(?:the\s+)?(?:u\.?s\.?|united states)\b',
-                  f"{r.get('description_en','')} {r.get('description','')}",
-                  flags=re.I,
-              )), axis=1,
-          ) if len(candidates) else pd.Series(dtype=bool)
+          if len(projects):
+              print('\n=== D -> E PROJECT CANDIDATES ===')
+              print(projects[['company','title','location','source_id']].to_string(index=False))
 
-          if explicit_us.any():
-              ids = set(candidates.loc[explicit_us, 'job_id'].astype(str))
-              checked = actionability[actionability['opportunity_id'].astype(str).isin(ids)]
+          def explicit_us_mask(frame):
+              if frame.empty:
+                  return pd.Series(dtype=bool)
+              return frame.apply(
+                  lambda r: bool(re.search(
+                      r'\bremote\s*[-–—,:()]\s*(?:the\s+)?(?:u\.?s\.?|united states)\b',
+                      f"{r.get('location','')} {r.get('description_en','')} {r.get('description','')}",
+                      flags=re.I,
+                  )), axis=1,
+              )
+
+          # The current live snapshot is a migration regression baseline. At the
+          # time this check was introduced it contained an Amwell Remote-US role.
+          for label, frame, action in [
+              ('live', live, live_action),
+              ('refreshed', refreshed, refreshed_action),
+          ]:
+              mask = explicit_us_mask(frame)
+              if not mask.any():
+                  print(f'No explicit Remote-US role in {label} D snapshot.')
+                  continue
+              ids = set(frame.loc[mask, 'job_id'].astype(str))
+              checked = action[action['opportunity_id'].astype(str).isin(ids)]
               bad = checked[~checked['blockers'].astype(str).str.contains('geography:remote_us_only', regex=False)]
               if len(bad):
-                  raise SystemExit('Explicit Remote-US role was not hard-blocked by remote employability gate')
-              print(f'\nVerified {len(checked)} explicit Remote-US role(s) are hard-blocked before J.')
-          else:
-              print('\nNo explicit Remote-US role in current live D snapshot; unit regression still covers the case.')
+                  raise SystemExit(f'Explicit Remote-US role in {label} D was not hard-blocked before J')
+              print(f'Verified {len(checked)} explicit Remote-US role(s) in {label} D are hard-blocked before J.')
           PY
 
       - name: Upload D remote shadow artifact
@@ -120,8 +173,12 @@ jobs:
         with:
           name: architecture-d-remote-shadow
           path: |
+            /tmp/remote-shadow-output/remote-refreshed.csv
+            /tmp/remote-shadow-output/remote-projects-for-e.csv
+            /tmp/remote-shadow-output/remote-live-candidates.csv
             /tmp/remote-shadow-output/remote-candidates.csv
             /tmp/remote-shadow-output/remote-diagnostics.csv
             /tmp/remote-shadow-output/remote-c-queue.csv
             /tmp/remote-shadow-output/remote-actionability.csv
+            /tmp/remote-shadow-output/remote-live-actionability.csv
           retention-days: 7

@@ -17,6 +17,15 @@ import pandas as pd
 from sourcing.aggregate_candidates_shadow import _normalise_url, _norm_text
 from sourcing.build_semantic_fit_queue import _company_maps, _load_company_universe, _norm
 
+BIG4_TOKENS = (
+    "deloitte",
+    "kpmg",
+    "pwc",
+    "pricewaterhousecoopers",
+    "eyparthenon",
+    "ernstyoung",
+)
+
 
 def _read(path: Path) -> pd.DataFrame:
     if not path.exists() or path.stat().st_size == 0:
@@ -60,6 +69,19 @@ def _reviewed_history(history: pd.DataFrame) -> pd.DataFrame:
     return h[actioned | feedback | commented | staged].copy()
 
 
+def _looks_big4(row: pd.Series, category: str) -> bool:
+    if category == "Big Four":
+        return True
+    company_key = _norm_text(row.get("canonical_company_id", "") or row.get("company", ""))
+    if any(token in company_key for token in BIG4_TOKENS):
+        return True
+    # EY is too short for a generic substring check. Restrict it to canonical
+    # company/name forms that clearly identify the firm rather than arbitrary words.
+    raw_company = str(row.get("company", "")).strip().lower()
+    canonical = _norm_text(row.get("canonical_company_id", ""))
+    return canonical in {"ey", "eyparthenon"} or raw_company in {"ey", "ey parthenon"}
+
+
 def prepare_j_candidates(
     candidates: pd.DataFrame,
     history: pd.DataFrame,
@@ -93,12 +115,13 @@ def prepare_j_candidates(
         company = _norm_text(row.get("canonical_company_id", "") or row.get("company", ""))
         title = _norm_text(row.get("title", ""))
         role_key = f"{company}:{title}" if company and title else ""
+        category = company_category(row)
         reason = ""
         if (url and url in b_urls) or (role_key and role_key in b_roles):
             reason = "manual_B_already_applied"
         elif (url and url in h_urls) or (role_key and role_key in h_roles):
             reason = "already_reviewed_history"
-        elif company_category(row) == "Big Four":
+        elif _looks_big4(row, category):
             reason = "big4_separate_batch"
         reasons.append(reason)
         keep.append(not bool(reason))

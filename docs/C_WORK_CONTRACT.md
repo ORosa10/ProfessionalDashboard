@@ -4,8 +4,6 @@
 
 Continuously drain the unresolved G opportunity backlog by assigning a high-quality semantic-fit judgment in C.
 
-Pipeline responsibility:
-
 ```text
 G unresolved opportunities
         ↓
@@ -24,18 +22,34 @@ Before every run, read `docs/C_SEMANTIC_THESIS.md` and treat it as the single au
 
 Do not derive C policy from old calibration scores, keyword weights, geography rules, company ratings or actionability logic.
 
-## Input
+## One-time v2 recalibration
 
-Primary input is the generated Work queue `c_work_queue.csv` from the architecture replenishment workflow.
+The current C thesis is materially stricter than the historical judgments that seeded J. Therefore the first C Work rollout must review `c_work_recalibration_queue.csv` once before steady-state processing.
 
-Each unresolved role should provide at minimum:
+That file contains currently active G opportunities that already have a C judgment. Re-judge them from scratch using the current thesis. The previous fit/reasoning fields are audit context only and must not anchor the new verdict.
+
+Save the recalibration results as a new file under `data/semantic_fit_reviews/`. The canonical compiler keeps the newest judgment per `opportunity_id`.
+
+After this one-time sweep, normal runs should process only `c_work_queue.csv` and must not repeatedly re-review completed IDs unless a later explicit thesis recalibration is declared.
+
+## Steady-state input
+
+Primary input is `c_work_queue.csv` from the architecture replenishment workflow.
+
+Each unresolved role provides:
 - `opportunity_id`
 - `title`
 - `company`
 - `job_url`
 - `description_for_fit`
+- `description_chars`
+- `needs_description_enrichment`
 
-Use the full role description whenever available. If the description is missing or clearly generic company boilerplate, do not invent a fit judgment from the title alone. Return `Moderate` with reasoning beginning `INSUFFICIENT_DESCRIPTION:` unless the title itself makes the role unambiguously Weak.
+Use the full role description whenever available.
+
+If `needs_description_enrichment=true`, or the supplied text is clearly generic company boilerplate rather than the vacancy responsibilities, use `job_url` only to retrieve the actual role content before judging C. Do not research salary, language feasibility, company quality or other downstream signals.
+
+If the real description still cannot be obtained, return `Moderate` with reasoning beginning `INSUFFICIENT_DESCRIPTION:` unless the title/content makes the role unambiguously Weak. Do not invent a Strong rating from a title alone.
 
 ## Required output
 
@@ -61,27 +75,28 @@ For every role:
 3. Compare those core duties with `docs/C_SEMANTIC_THESIS.md`.
 4. Decide Strong / Moderate / Weak independently of other roles in the queue.
 5. Write one short semantic reason.
-6. Continue until the unresolved queue is exhausted or Work execution limits are reached; on the next run continue from remaining unresolved IDs rather than re-reviewing completed IDs.
+6. Continue through the queue; if Work execution limits stop the run, the next run continues from remaining unresolved IDs rather than re-reviewing completed IDs.
 
 ## Speed rules
 
 - Do not write essays.
 - Do not produce scores out of 100.
 - Do not compare candidates against one another.
-- Do not spend time researching salary, language or company quality.
-- Do not re-review an `opportunity_id` already present in canonical C state unless explicitly requested for recalibration.
-- Obvious Weak roles may be decided quickly from clear responsibilities; ambiguous finance-adjacent roles deserve the deeper semantic read.
-- The queue order is review priority only and must never influence the fit label.
+- Do not spend time researching downstream actionability signals.
+- Obvious Weak roles may be decided quickly from clear responsibilities.
+- Ambiguous finance-adjacent roles deserve the deeper semantic read.
+- Only open the vacancy URL when the supplied description is insufficient or clearly boilerplate.
+- Queue order is review priority only and must never influence the fit label.
 
 ## Quality guardrails
 
 - A relevant keyword is not enough for Strong.
-- A Strong label requires target work to be central to day-to-day responsibilities.
+- Strong requires target work to be central to day-to-day responsibilities.
 - M&A mentioned incidentally inside FP&A/business partnering stays Moderate unless transaction work is genuinely core.
 - Markets-adjacent credit/control/reporting work stays Moderate/Weak unless practical markets/hedging/investment content is central.
 - Pure quant/code-heavy modelling is not promoted simply because it is mathematically sophisticated.
 - Company rating and brand are invisible to the semantic verdict.
-- Language and seniority requirements are downstream unless seniority materially changes the actual work into management rather than target execution.
+- Language and years-of-experience requirements are downstream unless seniority materially changes the actual work into management rather than target execution.
 
 ## Persistence
 
@@ -97,4 +112,4 @@ Do not overwrite historic review files. Use a new timestamped Work review file f
 
 J/I feedback is evidence for future thesis changes, not a direct override of individual C judgments.
 
-When repeated role-content feedback shows a stable pattern, propose a specific edit to `docs/C_SEMANTIC_THESIS.md`. Do not silently mutate the thesis during normal role review.
+When repeated role-content feedback shows a stable pattern, propose a specific versioned edit to `docs/C_SEMANTIC_THESIS.md`. Do not silently mutate the thesis during normal role review.

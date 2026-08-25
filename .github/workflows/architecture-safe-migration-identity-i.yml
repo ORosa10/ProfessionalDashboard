@@ -1,0 +1,171 @@
+name: Architecture identity and I shadow checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sourcing/audit_opportunity_identity_shadow.py"
+      - "sourcing/test_audit_opportunity_identity_shadow.py"
+      - "sourcing/build_i_canonical_shadow.py"
+      - "sourcing/test_build_i_canonical_shadow.py"
+      - ".github/workflows/architecture-safe-migration-identity-i.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: architecture-identity-i-shadow
+  cancel-in-progress: true
+
+jobs:
+  identity-i-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+      - name: Run identity and canonical-I tests
+        run: |
+          python -m unittest \
+            sourcing.test_audit_opportunity_identity_shadow \
+            sourcing.test_build_i_canonical_shadow
+
+  identity-i-snapshot:
+    needs: identity-i-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+
+      - name: Fetch latest live and source snapshots read-only
+        run: |
+          git fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*'
+          mkdir -p /tmp/identity-i-inputs /tmp/identity-i-output
+
+          extract() {
+            ref="$1"
+            path="$2"
+            out="$3"
+            if git cat-file -e "$ref:$path" 2>/dev/null; then
+              git show "$ref:$path" > "/tmp/identity-i-inputs/$out"
+              echo "snapshot $ref:$path -> $out ($(wc -l < /tmp/identity-i-inputs/$out) lines)"
+            else
+              : > "/tmp/identity-i-inputs/$out"
+              echo "snapshot missing: $ref:$path"
+            fi
+          }
+
+          # G source snapshots, read only.
+          extract origin/main data/jobs_board_staging.csv board.csv
+          extract origin/sourcing-staging data/jobs_staging.csv company.csv
+          extract origin/pe-sourcing-staging data/jobs_pe_staging.csv pe.csv
+          extract origin/consulting-sourcing-staging data/jobs_consulting_staging.csv consulting.csv
+          extract origin/corporate-sourcing-staging data/jobs_corporate_staging.csv corporate.csv
+          extract origin/financial-services-sourcing-staging data/jobs_financial-services_staging.csv financial-services.csv
+          extract origin/holdings-sourcing-staging data/jobs_holdings_staging.csv holdings.csv
+          extract origin/investment-banking-sourcing-staging data/jobs_investment-banking_staging.csv investment-banking.csv
+          extract origin/public-markets-sourcing-staging data/jobs_public-markets_staging.csv public-markets.csv
+          extract origin/specialist-funds-sourcing-staging data/jobs_specialist-funds_staging.csv specialist-funds.csv
+
+          # Latest live references. These may change while the user keeps using J/I.
+          extract origin/main data/j_curated_shortlist.csv live-j.csv
+          extract origin/main data/opportunity_history.csv history-live.csv
+          extract origin/main data/user_submitted_opportunities.csv submissions-live.csv
+
+      - name: Rebuild candidate shadow for identity audit
+        run: |
+          python -m sourcing.aggregate_candidates_shadow \
+            --input board=/tmp/identity-i-inputs/board.csv \
+            --input company=/tmp/identity-i-inputs/company.csv \
+            --input pe=/tmp/identity-i-inputs/pe.csv \
+            --input consulting=/tmp/identity-i-inputs/consulting.csv \
+            --input corporate=/tmp/identity-i-inputs/corporate.csv \
+            --input financial-services=/tmp/identity-i-inputs/financial-services.csv \
+            --input holdings=/tmp/identity-i-inputs/holdings.csv \
+            --input investment-banking=/tmp/identity-i-inputs/investment-banking.csv \
+            --input public-markets=/tmp/identity-i-inputs/public-markets.csv \
+            --input specialist-funds=/tmp/identity-i-inputs/specialist-funds.csv \
+            --out /tmp/identity-i-output/candidates_identity_shadow.csv
+
+      - name: Audit canonical opportunity identity
+        run: |
+          python -m sourcing.audit_opportunity_identity_shadow \
+            --candidates /tmp/identity-i-output/candidates_identity_shadow.csv \
+            --reference /tmp/identity-i-inputs/live-j.csv \
+            --reference-out /tmp/identity-i-output/identity_reference_audit.csv \
+            --duplicates-out /tmp/identity-i-output/identity_duplicate_clusters.csv
+
+      - name: Build canonical I latest state and event seed
+        run: |
+          python -m sourcing.build_i_canonical_shadow \
+            --history /tmp/identity-i-inputs/history-live.csv \
+            --submissions /tmp/identity-i-inputs/submissions-live.csv \
+            --history-out /tmp/identity-i-output/opportunity_history_shadow.csv \
+            --events-out /tmp/identity-i-output/opportunity_events_seed_shadow.csv
+
+      - name: Verify downstream I feedback routing on shadow state
+        run: |
+          python -m sourcing.build_decision_feedback_batch \
+            --history /tmp/identity-i-output/opportunity_history_shadow.csv \
+            --out /tmp/identity-i-output/decision_feedback_shadow.csv
+
+      - name: Print compact identity and I diagnostics
+        run: |
+          python - <<'PY'
+          import pandas as pd
+
+          ident = pd.read_csv('/tmp/identity-i-output/identity_reference_audit.csv').fillna('')
+          print('\n=== LIVE J IDENTITY AUDIT ===')
+          print(ident['match_status'].value_counts().to_string() if len(ident) else 'none')
+          interesting = ident[~ident['match_status'].isin(['exact_job_id'])]
+          if len(interesting):
+            print(interesting[['reference_company','reference_title','match_status','matched_company','matched_title','notes']].to_string(index=False))
+
+          dup = pd.read_csv('/tmp/identity-i-output/identity_duplicate_clusters.csv').fillna('')
+          print(f"\n=== POTENTIAL IDENTITY DUPLICATE CLUSTERS: {len(dup)} ===")
+          if len(dup):
+            print(dup[['candidate_count','companies','titles','countries','source_streams']].head(30).to_string(index=False))
+
+          hist = pd.read_csv('/tmp/identity-i-output/opportunity_history_shadow.csv').fillna('')
+          print(f"\n=== CANONICAL I SHADOW: {len(hist)} ===")
+          print(hist['source_stream'].replace('', 'Unknown').value_counts().to_string() if len(hist) else 'none')
+          print('\nActions:')
+          print(hist['action'].replace('', 'blank').value_counts().to_string() if len(hist) else 'none')
+
+          events = pd.read_csv('/tmp/identity-i-output/opportunity_events_seed_shadow.csv').fillna('')
+          print(f"\n=== EVENT SEED: {len(events)} ===")
+          print(events['event_type'].value_counts().to_string() if len(events) else 'none')
+
+          feedback = pd.read_csv('/tmp/identity-i-output/decision_feedback_shadow.csv').fillna('')
+          print(f"\n=== FEEDBACK ROUTING SHADOW: {len(feedback)} ===")
+          if len(feedback):
+            print('C signals:')
+            print(feedback['c_signal'].replace('', 'blank').value_counts().to_string())
+            print('A signals:')
+            print(feedback['a_signal'].replace('', 'blank').value_counts().to_string())
+            print('H evidence:')
+            print(feedback['h_evidence'].replace('', 'blank').value_counts().to_string())
+          PY
+
+      - name: Upload identity and I shadow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: architecture-identity-i-shadow
+          path: |
+            /tmp/identity-i-output/identity_reference_audit.csv
+            /tmp/identity-i-output/identity_duplicate_clusters.csv
+            /tmp/identity-i-output/opportunity_history_shadow.csv
+            /tmp/identity-i-output/opportunity_events_seed_shadow.csv
+            /tmp/identity-i-output/decision_feedback_shadow.csv
+          retention-days: 7

@@ -115,6 +115,31 @@ def _unified(history: pd.DataFrame) -> pd.DataFrame:
     return merged
 
 
+def _canonicalize_b(history: pd.DataFrame, history_sha: str | None) -> tuple[pd.DataFrame, str | None]:
+    """Persist missing/legacy B applications into canonical history once, without touching J decisions."""
+    token = github_token()
+    if not token:
+        return history, history_sha
+
+    canonical = history.reindex(columns=HISTORY_COLUMNS, fill_value="").fillna("").copy()
+    unified = _unified(canonical)
+    if unified.empty:
+        return canonical, history_sha
+
+    left = canonical.drop_duplicates("opportunity_id", keep="last").sort_values("opportunity_id").reset_index(drop=True)
+    right = unified.drop_duplicates("opportunity_id", keep="last").sort_values("opportunity_id").reset_index(drop=True)
+    if left.equals(right):
+        return canonical, history_sha
+
+    try:
+        save_csv_file(token, HISTORY_PATH, right, history_sha, "Reconcile manual B applications into canonical history")
+        refreshed, refreshed_sha = load_csv_file(token, HISTORY_PATH, HISTORY_COLUMNS)
+        return refreshed, refreshed_sha
+    except Exception:
+        # The view remains usable even if reconciliation races another live write.
+        return canonical, history_sha
+
+
 def _save_edits(unified: pd.DataFrame, edited: pd.DataFrame) -> pd.DataFrame:
     now = datetime.now(timezone.utc).isoformat()
     base = unified.copy().set_index("opportunity_id")
@@ -140,6 +165,7 @@ def render_opportunity_history() -> None:
     )
 
     history, history_sha = _load_history()
+    history, history_sha = _canonicalize_b(history, history_sha)
     unified = _unified(history)
     if unified.empty:
         st.info("No applications yet.")

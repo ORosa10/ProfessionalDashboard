@@ -24,7 +24,7 @@ class IdentityAuditTests(unittest.TestCase):
         self.assertEqual(report.iloc[0]["match_status"], "high_confidence_identity_match")
         self.assertEqual(report.iloc[0]["matched_job_id"], "official-1")
 
-    def test_same_job_id_with_wrong_title_is_conflict(self) -> None:
+    def test_same_job_id_with_wrong_title_is_real_conflict(self) -> None:
         candidates = pd.DataFrame([{
             "candidate_id": "c1", "job_id": "x", "company": "Danske Bank",
             "title": "sales specialist", "country_bucket": "Sweden",
@@ -36,7 +36,35 @@ class IdentityAuditTests(unittest.TestCase):
             "market": "Sweden",
         }])
         report, _ = audit_identity(candidates, reference)
-        self.assertEqual(report.iloc[0]["match_status"], "job_id_metadata_conflict")
+        self.assertEqual(report.iloc[0]["match_status"], "job_id_title_conflict")
+        self.assertIn("source-data integrity", report.iloc[0]["notes"])
+
+    def test_same_job_id_company_label_variant_is_not_real_conflict(self) -> None:
+        candidates = pd.DataFrame([{
+            "candidate_id": "c1", "job_id": "x", "company": "Sparkasse OÖ",
+            "title": "Beteiligungsrisikomanager (m/w/d)", "country_bucket": "Austria",
+            "source_streams": "board", "job_url": "https://example.com/risk",
+        }])
+        reference = pd.DataFrame([{
+            "job_id": "x", "company": "Sparkasse OÖ Investment GmbH",
+            "title": "Beteiligungsrisikomanager (m/w/d)", "market": "Austria",
+        }])
+        report, _ = audit_identity(candidates, reference)
+        self.assertEqual(report.iloc[0]["match_status"], "job_id_company_variant")
+        self.assertIn("canonical company aliases", report.iloc[0]["notes"])
+
+    def test_same_job_id_country_difference_is_real_conflict(self) -> None:
+        candidates = pd.DataFrame([{
+            "candidate_id": "c1", "job_id": "x", "company": "Example",
+            "title": "Treasury Manager", "country_bucket": "Germany",
+            "source_streams": "company", "job_url": "https://example.com/job",
+        }])
+        reference = pd.DataFrame([{
+            "job_id": "x", "company": "Example", "title": "Treasury Manager",
+            "market": "Austria",
+        }])
+        report, _ = audit_identity(candidates, reference)
+        self.assertEqual(report.iloc[0]["match_status"], "job_id_country_conflict")
 
     def test_potential_duplicates_are_reported_not_merged(self) -> None:
         candidates = pd.DataFrame([

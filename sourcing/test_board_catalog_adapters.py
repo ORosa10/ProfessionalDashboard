@@ -1,6 +1,6 @@
 import unittest
 
-from sourcing.board_catalog_adapters import extract_catalog_links
+from sourcing.board_catalog_adapters import extract_catalog_links, extract_detail_fields
 
 
 class CatalogAdapterTest(unittest.TestCase):
@@ -38,6 +38,37 @@ class CatalogAdapterTest(unittest.TestCase):
             extract_catalog_links("ledigajobb-se", html, 5),
             ["https://ledigajobb.se/jobb/c348d8/example"],
         )
+
+    def test_jobbland_visible_h1_overrides_misleading_structured_title(self):
+        html = '''
+        <html><body>
+          <script type="application/ld+json">
+          {"@type":"JobPosting","title":"sales specialist",
+           "hiringOrganization":{"name":"Danske Bank SWE"},
+           "jobLocation":{"address":{"addressLocality":"Helsingfors","addressCountry":"Finland"}},
+           "description":"Wholesale Credit Risk Management and credit analyst work.",
+           "datePosted":"2026-08-18"}
+          </script>
+          <h1>Credit Analyst - Wholesale Credit Management</h1>
+          <a>sales specialist</a>
+        </body></html>
+        '''
+        title, company, location, description, date_posted = extract_detail_fields("jobbland-se", html)
+        self.assertEqual(title, "Credit Analyst - Wholesale Credit Management")
+        self.assertEqual(company, "Danske Bank SWE")
+        self.assertIn("Helsingfors", location)
+        self.assertIn("Credit Risk", description)
+        self.assertEqual(date_posted, "2026-08-18")
+
+    def test_non_jobbland_keeps_structured_title(self):
+        html = '''
+        <script type="application/ld+json">
+        {"@type":"JobPosting","title":"Treasury Analyst","hiringOrganization":{"name":"Example"}}
+        </script>
+        <h1>Other page heading</h1>
+        '''
+        title, *_ = extract_detail_fields("jobwinner-ch", html)
+        self.assertEqual(title, "Treasury Analyst")
 
 
 if __name__ == "__main__":

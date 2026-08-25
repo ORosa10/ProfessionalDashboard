@@ -1,0 +1,112 @@
+name: Architecture G sector filter shadow audit
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sourcing/audit_sector_filter_shadow.py"
+      - "sourcing/test_audit_sector_filter_shadow.py"
+      - ".github/workflows/architecture-safe-migration-sector-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: architecture-sector-filter-shadow
+  cancel-in-progress: true
+
+jobs:
+  sector-audit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt -r sourcing/requirements.txt
+      - name: Run filter audit tests
+        run: python -m unittest sourcing.test_audit_sector_filter_shadow
+
+  sector-audit-snapshot:
+    needs: sector-audit-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt -r sourcing/requirements.txt
+
+      - name: Fetch latest sector source configs read-only
+        run: |
+          git fetch --no-tags origin main
+          mkdir -p /tmp/sector-audit-input /tmp/sector-audit-output
+          git show origin/main:data/job_sources_investment_banking.csv > /tmp/sector-audit-input/investment-banking.csv
+          git show origin/main:data/job_sources_holdings.csv > /tmp/sector-audit-input/holdings.csv
+
+      - name: Audit Citi and Bank of America pre/post sector filters
+        run: |
+          python -m sourcing.audit_sector_filter_shadow \
+            --sources /tmp/sector-audit-input/investment-banking.csv \
+            --source-id citigroup-global \
+            --source-id bank-of-america-global \
+            --max-pages 30 \
+            --jobs-out /tmp/sector-audit-output/ib_raw_jobs.csv \
+            --runs-out /tmp/sector-audit-output/ib_filter_audit.csv
+
+      - name: Test deterministic generic discovery for current holdings LLM sources
+        run: |
+          python -m sourcing.audit_sector_filter_shadow \
+            --sources /tmp/sector-audit-input/holdings.csv \
+            --source-id csg-global \
+            --source-id investor-ab-global \
+            --source-id industrivarden-global \
+            --source-id kinnevik-global \
+            --source-id exor-global \
+            --source-id porsche-se-global \
+            --source-id ap-moller-holding-global \
+            --force-generic-for-llm \
+            --max-pages 12 \
+            --jobs-out /tmp/sector-audit-output/holdings_generic_raw_jobs.csv \
+            --runs-out /tmp/sector-audit-output/holdings_generic_audit.csv
+
+      - name: Print sector audit diagnostics
+        run: |
+          python - <<'PY'
+          import pandas as pd
+
+          for label, run_path, jobs_path in [
+              ('INVESTMENT BANKING', '/tmp/sector-audit-output/ib_filter_audit.csv', '/tmp/sector-audit-output/ib_raw_jobs.csv'),
+              ('HOLDINGS GENERIC REPLACEMENT', '/tmp/sector-audit-output/holdings_generic_audit.csv', '/tmp/sector-audit-output/holdings_generic_raw_jobs.csv'),
+          ]:
+              runs = pd.read_csv(run_path).fillna('')
+              jobs = pd.read_csv(jobs_path).fillna('')
+              print(f'\n=== {label} ===')
+              print(runs.to_string(index=False) if len(runs) else 'no runs')
+              if len(jobs):
+                  print('\nRaw jobs / filter result:')
+                  print(jobs[['source_id','title','location','title_relevant','location_target','kept','rejection_reason']].to_string(index=False))
+                  print('\nReasons:')
+                  print(jobs['rejection_reason'].replace('', 'kept').value_counts().to_string())
+              else:
+                  print('no raw jobs discovered')
+          PY
+
+      - name: Upload sector audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: architecture-sector-filter-shadow
+          path: |
+            /tmp/sector-audit-output/ib_raw_jobs.csv
+            /tmp/sector-audit-output/ib_filter_audit.csv
+            /tmp/sector-audit-output/holdings_generic_raw_jobs.csv
+            /tmp/sector-audit-output/holdings_generic_audit.csv
+          retention-days: 7

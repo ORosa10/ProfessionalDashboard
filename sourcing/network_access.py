@@ -69,6 +69,18 @@ def build_alias_index(universes: list[pd.DataFrame]) -> AliasIndex:
     return AliasIndex(unique=unique, ambiguous=ambiguous)
 
 
+def _match_company_label(company_raw: str, alias_index: AliasIndex) -> tuple[str, str, str]:
+    key = norm_company(company_raw)
+    if key and key in alias_index.unique:
+        cid, company = alias_index.unique[key]
+        return cid, company, "matched_exact_alias"
+    if key and key in alias_index.ambiguous:
+        return "", "", "ambiguous_alias"
+    if company_raw:
+        return "", "", "unmatched_company"
+    return "", "", "company_missing"
+
+
 def parse_linkedin_csv(raw: bytes) -> pd.DataFrame:
     """Parse LinkedIn Connections.csv including its optional Notes preamble."""
     text = raw.decode("utf-8-sig", errors="replace")
@@ -102,19 +114,7 @@ def match_linkedin_connections(
         first = str(row.get("First Name", "")).strip()
         last = str(row.get("Last Name", "")).strip()
         company_raw = str(row.get("Company", "")).strip()
-        key = norm_company(company_raw)
-        cid = ""
-        company = ""
-        if key and key in alias_index.unique:
-            cid, company = alias_index.unique[key]
-            match_status = "matched_exact_alias"
-        elif key and key in alias_index.ambiguous:
-            match_status = "ambiguous_alias"
-        elif company_raw:
-            match_status = "unmatched_company"
-        else:
-            match_status = "company_missing"
-
+        cid, company, match_status = _match_company_label(company_raw, alias_index)
         rows.append({
             "full_name": f"{first} {last}".strip(),
             "first_name": first,
@@ -127,6 +127,39 @@ def match_linkedin_connections(
             "connected_on": str(row.get("Connected On", "")).strip(),
             "linkedin_url": str(row.get("URL", "")).strip(),
             "added_at": timestamp,
+        })
+    return pd.DataFrame(rows).reindex(columns=CONNECTIONS_COLUMNS, fill_value="").fillna("")
+
+
+def rematch_existing_connections(existing: pd.DataFrame, alias_index: AliasIndex) -> pd.DataFrame:
+    """Migrate old F rows to current identity rules without losing contact facts.
+
+    Existing canonical IDs are intentionally recomputed from company_raw. This
+    removes legacy silent/ambiguous matches and makes the migration idempotent.
+    Names, positions, dates, URLs and original added_at timestamps are preserved.
+    """
+    if existing is None or existing.empty:
+        return pd.DataFrame(columns=CONNECTIONS_COLUMNS)
+    source = existing.fillna("")
+    rows: list[dict[str, str]] = []
+    for _, row in source.iterrows():
+        company_raw = str(row.get("company_raw", "")).strip()
+        cid, company, match_status = _match_company_label(company_raw, alias_index)
+        first = str(row.get("first_name", "")).strip()
+        last = str(row.get("last_name", "")).strip()
+        full_name = str(row.get("full_name", "")).strip() or f"{first} {last}".strip()
+        rows.append({
+            "full_name": full_name,
+            "first_name": first,
+            "last_name": last,
+            "company_raw": company_raw,
+            "canonical_company_id": cid,
+            "matched_company": company,
+            "company_match_status": match_status,
+            "position": str(row.get("position", "")).strip(),
+            "connected_on": str(row.get("connected_on", "")).strip(),
+            "linkedin_url": str(row.get("linkedin_url", "")).strip(),
+            "added_at": str(row.get("added_at", "")).strip(),
         })
     return pd.DataFrame(rows).reindex(columns=CONNECTIONS_COLUMNS, fill_value="").fillna("")
 

@@ -1,0 +1,95 @@
+name: Architecture holdings deterministic shadow checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sourcing/build_holdings_deterministic_shadow.py"
+      - "sourcing/test_build_holdings_deterministic_shadow.py"
+      - "sourcing/audit_sector_filter_shadow.py"
+      - "sourcing/test_audit_sector_filter_shadow.py"
+      - "sourcing/sector_pilot.py"
+      - ".github/workflows/architecture-holdings-deterministic-shadow.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: architecture-holdings-deterministic-shadow
+  cancel-in-progress: true
+
+jobs:
+  holdings-deterministic-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt -r sourcing/requirements.txt
+
+      - name: Run deterministic holdings unit tests
+        run: |
+          python -m unittest \
+            sourcing.test_build_holdings_deterministic_shadow \
+            sourcing.test_audit_sector_filter_shadow
+
+      - name: Fetch latest live holdings registry read-only
+        run: |
+          git fetch --no-tags origin main
+          mkdir -p /tmp/holdings-shadow-input /tmp/holdings-shadow-output
+          git show origin/main:data/job_sources_holdings.csv > /tmp/holdings-shadow-input/holdings-live.csv
+
+      - name: Build zero-metered-cost deterministic source map
+        run: |
+          python -m sourcing.build_holdings_deterministic_shadow \
+            --sources /tmp/holdings-shadow-input/holdings-live.csv \
+            --out /tmp/holdings-shadow-output/holdings-deterministic.csv
+
+      - name: Audit deterministic holdings sources read-only
+        run: |
+          python -m sourcing.audit_sector_filter_shadow \
+            --sources /tmp/holdings-shadow-output/holdings-deterministic.csv \
+            --source-id csg-global \
+            --source-id cpi-property-group-global \
+            --source-id investor-ab-global \
+            --source-id industrivarden-global \
+            --source-id kinnevik-global \
+            --source-id exor-global \
+            --source-id porsche-se-global \
+            --max-pages 20 \
+            --jobs-out /tmp/holdings-shadow-output/deterministic-raw-jobs.csv \
+            --runs-out /tmp/holdings-shadow-output/deterministic-audit.csv
+
+      - name: Print deterministic holdings diagnostics
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          runs = pd.read_csv('/tmp/holdings-shadow-output/deterministic-audit.csv').fillna('')
+          jobs = pd.read_csv('/tmp/holdings-shadow-output/deterministic-raw-jobs.csv').fillna('')
+          print('\n=== HOLDINGS DETERMINISTIC SOURCE HEALTH ===')
+          print(runs.to_string(index=False))
+          if len(jobs):
+              print('\n=== DISCOVERED JOBS / FILTER RESULT ===')
+              print(jobs[['source_id','company','title','location','title_relevant','location_target','kept','rejection_reason']].to_string(index=False))
+              print('\n=== FILTER REASONS ===')
+              print(jobs['rejection_reason'].replace('', 'kept').value_counts().to_string())
+          else:
+              print('\nNo vacancy details discovered in this snapshot.')
+          PY
+
+      - name: Upload deterministic holdings artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: architecture-holdings-deterministic-shadow
+          path: |
+            /tmp/holdings-shadow-output/holdings-deterministic.csv
+            /tmp/holdings-shadow-output/deterministic-raw-jobs.csv
+            /tmp/holdings-shadow-output/deterministic-audit.csv
+          retention-days: 7

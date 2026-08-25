@@ -10,6 +10,7 @@ from sourcing.network_access import (
     deduplicate_connections,
     match_linkedin_connections,
     parse_linkedin_csv,
+    rematch_existing_connections,
 )
 
 
@@ -75,6 +76,60 @@ class NetworkAccessTests(unittest.TestCase):
         self.assertEqual(len(combined), 1)
         self.assertEqual(combined.iloc[0]["company_raw"], "New Co")
         self.assertEqual(combined.iloc[0]["position"], "Manager")
+
+    def test_legacy_connection_rematch_preserves_person_facts_and_removes_silent_match(self) -> None:
+        universes = [pd.DataFrame([
+            {"canonical_company_id": "alpha-1", "company": "Alpha Holdings", "aliases_entities": "Alpha"},
+            {"canonical_company_id": "alpha-2", "company": "Alpha Bank", "aliases_entities": "Alpha"},
+        ])]
+        index = build_alias_index(universes)
+        legacy = pd.DataFrame([{
+            "full_name": "Ada Lovelace",
+            "first_name": "Ada",
+            "last_name": "Lovelace",
+            "company_raw": "Alpha",
+            # Simulate the old first-match behaviour choosing one canonical ID.
+            "canonical_company_id": "alpha-1",
+            "matched_company": "Alpha Holdings",
+            "position": "Treasury Manager",
+            "connected_on": "01 Jan 2026",
+            "linkedin_url": "https://linkedin.example/ada",
+            "added_at": "2026-08-01T12:00:00+00:00",
+        }])
+        migrated = rematch_existing_connections(legacy, index)
+        self.assertEqual(len(migrated), 1)
+        row = migrated.iloc[0]
+        self.assertEqual(row["canonical_company_id"], "")
+        self.assertEqual(row["matched_company"], "")
+        self.assertEqual(row["company_match_status"], "ambiguous_alias")
+        self.assertEqual(row["full_name"], "Ada Lovelace")
+        self.assertEqual(row["position"], "Treasury Manager")
+        self.assertEqual(row["linkedin_url"], "https://linkedin.example/ada")
+        self.assertEqual(row["added_at"], "2026-08-01T12:00:00+00:00")
+
+    def test_legacy_rematch_is_idempotent(self) -> None:
+        universe = pd.DataFrame([{
+            "canonical_company_id": "example",
+            "company": "Example Group AG",
+            "aliases_entities": "Example",
+        }])
+        index = build_alias_index([universe])
+        legacy = pd.DataFrame([{
+            "full_name": "Ada Lovelace",
+            "first_name": "Ada",
+            "last_name": "Lovelace",
+            "company_raw": "Example",
+            "canonical_company_id": "wrong-old-id",
+            "matched_company": "Wrong old name",
+            "position": "Analyst",
+            "linkedin_url": "https://linkedin.example/ada",
+            "added_at": "2026-08-01T12:00:00+00:00",
+        }])
+        once = rematch_existing_connections(legacy, index)
+        twice = rematch_existing_connections(once, index)
+        pd.testing.assert_frame_equal(once.reset_index(drop=True), twice.reset_index(drop=True))
+        self.assertEqual(once.iloc[0]["canonical_company_id"], "example")
+        self.assertEqual(once.iloc[0]["company_match_status"], "matched_exact_alias")
 
     def test_access_summary_is_factual_only(self) -> None:
         connections = pd.DataFrame([

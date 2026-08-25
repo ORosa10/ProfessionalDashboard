@@ -21,8 +21,7 @@ HISTORY_COLUMNS = [
     "outcome_reason", "history_notes",
 ]
 
-STAGES = [
-    "Not applied",
+APPLICATION_STAGES = [
     "Applied",
     "Rejected pre-screen",
     "1st interview",
@@ -33,6 +32,10 @@ STAGES = [
     "Offer",
     "Withdrawn",
 ]
+ACTIVE_STAGES = ["Applied", "1st interview", "Case", "Final"]
+INTERVIEW_REACHED_STAGES = ["1st interview", "Lost after 1st", "Case", "Lost after case", "Final", "Offer"]
+CASE_REACHED_STAGES = ["Case", "Lost after case", "Final", "Offer"]
+FINAL_REACHED_STAGES = ["Final", "Offer"]
 
 
 def _load_history() -> tuple[pd.DataFrame, str | None]:
@@ -44,25 +47,29 @@ def _load_history() -> tuple[pd.DataFrame, str | None]:
 
 
 def _b_rows() -> pd.DataFrame:
+    """Manual B intake is factual application intake: B means Applied."""
     if not B_PATH.exists():
         return pd.DataFrame(columns=HISTORY_COLUMNS)
-    submitted = pd.read_csv(B_PATH).fillna("")
-    if submitted.empty or "feedback" not in submitted.columns:
+    try:
+        submitted = pd.read_csv(B_PATH).fillna("")
+    except Exception:
         return pd.DataFrame(columns=HISTORY_COLUMNS)
-    submitted = submitted[submitted["feedback"].isin(["Interested", "Maybe", "Pass"])].copy()
-    if submitted.empty:
+    if submitted.empty or "submission_id" not in submitted.columns:
         return pd.DataFrame(columns=HISTORY_COLUMNS)
 
     rows = []
     for _, row in submitted.iterrows():
-        feedback = str(row.get("feedback", ""))
+        submission_id = str(row.get("submission_id", "")).strip()
+        if not submission_id:
+            continue
+        submitted_at = str(row.get("submitted_at", ""))
         record = {col: "" for col in HISTORY_COLUMNS}
         record.update({
-            "opportunity_id": f"B:{row.get('submission_id', '')}",
+            "opportunity_id": f"B:{submission_id}",
             "source_stream": "B",
             "source_id": str(row.get("source_domain", "")),
-            "first_seen_at": str(row.get("submitted_at", "")),
-            "decision_at": str(row.get("submitted_at", "")),
+            "first_seen_at": submitted_at,
+            "decision_at": submitted_at,
             "title": str(row.get("title", "")),
             "company": str(row.get("company", "")),
             "canonical_company_id": str(row.get("canonical_company_id", "")),
@@ -70,21 +77,19 @@ def _b_rows() -> pd.DataFrame:
             "market": str(row.get("country", "")),
             "location": str(row.get("location", "")),
             "job_url": str(row.get("job_url", "") or row.get("company_url", "") or row.get("linkedin_url", "")),
-            "action": feedback,
-            "role_feedback": (
-                "Positive" if feedback == "Interested"
-                else "Neutral" if feedback == "Maybe"
-                else "Negative"
-            ),
+            "action": "Apply",
+            "role_feedback": "Positive",
             "user_comment": str(row.get("user_comment", "")),
             "semantic_reasoning_at_decision": str(row.get("role_profile", "")),
-            "application_stage": "Not applied",
+            "application_stage": "Applied",
+            "stage_updated_at": submitted_at,
         })
         rows.append(record)
     return pd.DataFrame(rows).reindex(columns=HISTORY_COLUMNS, fill_value="")
 
 
 def _unified(history: pd.DataFrame) -> pd.DataFrame:
+    """Keep full factual history, while adding legacy B applications without destroying decisions."""
     b = _b_rows()
     if history.empty:
         merged = b
@@ -96,17 +101,28 @@ def _unified(history: pd.DataFrame) -> pd.DataFrame:
         merged = pd.concat([history, b], ignore_index=True, sort=False)
     if merged.empty:
         return pd.DataFrame(columns=HISTORY_COLUMNS)
+
     merged = merged.reindex(columns=HISTORY_COLUMNS, fill_value="").fillna("")
-    merged["application_stage"] = merged["application_stage"].replace("", "Not applied")
-    return merged.drop_duplicates("opportunity_id", keep="last")
+    merged = merged.drop_duplicates("opportunity_id", keep="last")
+
+    # B is manual application intake. Preserve any more advanced historical stage,
+    # but normalize old B rows that were previously stored as Interested/Not applied.
+    b_mask = merged["source_stream"].eq("B")
+    not_applied = merged["application_stage"].isin(["", "Not applied"])
+    merged.loc[b_mask & not_applied, "application_stage"] = "Applied"
+    merged.loc[b_mask & not_applied, "stage_updated_at"] = merged.loc[b_mask & not_applied, "decision_at"]
+    merged.loc[b_mask, "action"] = "Apply"
+    return merged
 
 
 def _save_edits(unified: pd.DataFrame, edited: pd.DataFrame) -> pd.DataFrame:
     now = datetime.now(timezone.utc).isoformat()
     base = unified.copy().set_index("opportunity_id")
     for opportunity_id, row in edited.iterrows():
-        old_stage = str(base.loc[opportunity_id].get("application_stage", "Not applied"))
-        new_stage = str(row.get("application_stage", "Not applied"))
+        if opportunity_id not in base.index:
+            continue
+        old_stage = str(base.loc[opportunity_id].get("application_stage", "Applied"))
+        new_stage = str(row.get("application_stage", "Applied"))
         base.loc[opportunity_id, "application_stage"] = new_stage
         base.loc[opportunity_id, "outcome_reason"] = str(row.get("outcome_reason", ""))
         base.loc[opportunity_id, "history_notes"] = str(row.get("history_notes", ""))
@@ -117,44 +133,54 @@ def _save_edits(unified: pd.DataFrame, edited: pd.DataFrame) -> pd.DataFrame:
 
 def render_opportunity_history() -> None:
     st.markdown('<div class="eyebrow">Workstream I</div>', unsafe_allow_html=True)
-    st.title("Opportunity & Application History")
+    st.title("Application Tracker")
     st.caption(
-        "One factual memory of what you did with opportunities from B and J. "
-        "This is the data layer that later feeds batch calibration in A/C and attainability in H."
+        "Only roles you actually applied to. B enters here directly as Applied; J enters after an Apply decision. "
+        "Update process stages and outcomes here; those factual results feed H."
     )
 
     history, history_sha = _load_history()
     unified = _unified(history)
     if unified.empty:
-        st.info("No rated or actioned opportunities yet.")
+        st.info("No applications yet.")
         return
 
-    applied_mask = unified["application_stage"].isin(
-        ["Applied", "1st interview", "Lost after 1st", "Case", "Lost after case", "Final", "Offer", "Withdrawn", "Rejected pre-screen"]
-    )
-    active_mask = unified["application_stage"].isin(["Applied", "1st interview", "Case", "Final"])
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Decisions stored", len(unified))
-    m2.metric("Applications", int(applied_mask.sum()))
-    m3.metric("Active processes", int(active_mask.sum()))
-    m4.metric("Offers", int(unified["application_stage"].eq("Offer").sum()))
+    applications = unified[unified["application_stage"].isin(APPLICATION_STAGES)].copy()
+    if applications.empty:
+        st.info("No applications yet. Add a role in B or choose Apply in J.")
+        return
 
+    applications["_sort"] = pd.to_datetime(applications["decision_at"], errors="coerce", utc=True)
+    applications = applications.sort_values("_sort", ascending=False).drop(columns="_sort")
+
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Applications", len(applications))
+    m2.metric("Active processes", int(applications["application_stage"].isin(ACTIVE_STAGES).sum()))
+    m3.metric("Reached interview", int(applications["application_stage"].isin(INTERVIEW_REACHED_STAGES).sum()))
+    m4.metric("Offers", int(applications["application_stage"].eq("Offer").sum()))
+
+    source_options = [x for x in ["B", "G"] if x in set(applications["source_stream"].astype(str))]
     source_filter = st.multiselect(
         "Source",
-        ["B", "G"],
-        default=["B", "G"],
-        help="B = manually added opportunities; G = automatically sourced jobs decided in J.",
+        source_options,
+        default=source_options,
+        format_func=lambda x: "B · Manual Add" if x == "B" else "J · Apply Shortlist",
+        help="B = manually added/application roles; J = automatically sourced roles you chose to apply to.",
     )
-    filtered = unified[unified["source_stream"].isin(source_filter)].copy()
-    filtered["_sort"] = pd.to_datetime(filtered["decision_at"], errors="coerce", utc=True)
-    filtered = filtered.sort_values("_sort", ascending=False).drop(columns="_sort")
+    filtered = applications[applications["source_stream"].isin(source_filter)].copy() if source_filter else applications.iloc[0:0].copy()
+    if filtered.empty:
+        st.info("No applications match this source filter.")
+        return
+
+    filtered["source"] = filtered["source_stream"].map({"B": "B · Manual", "G": "J · Shortlist"}).fillna(filtered["source_stream"])
+    filtered["applied_at"] = filtered["decision_at"]
 
     display_cols = [
-        "source_stream", "company", "title", "company_category", "market", "location",
-        "action", "application_stage", "outcome_reason", "history_notes", "job_url",
+        "source", "company", "title", "market", "location", "applied_at",
+        "application_stage", "outcome_reason", "history_notes", "job_url",
     ]
     editor = filtered.set_index("opportunity_id")[display_cols]
-    with st.form("history_form"):
+    with st.form("application_tracker_form"):
         edited = st.data_editor(
             editor,
             hide_index=True,
@@ -163,14 +189,15 @@ def render_opportunity_history() -> None:
             row_height=80,
             disabled=[c for c in display_cols if c not in {"application_stage", "outcome_reason", "history_notes"}],
             column_config={
-                "source_stream": st.column_config.TextColumn("Source", width="small"),
+                "source": st.column_config.TextColumn("Source", width="small"),
                 "company": st.column_config.TextColumn("Company", width="small"),
                 "title": st.column_config.TextColumn("Role", width="medium"),
-                "company_category": st.column_config.TextColumn("Category", width="small"),
                 "market": st.column_config.TextColumn("Country", width="small"),
                 "location": st.column_config.TextColumn("Location", width="small"),
-                "action": st.column_config.TextColumn("Decision", width="small"),
-                "application_stage": st.column_config.SelectboxColumn("Application stage", options=STAGES, required=True),
+                "applied_at": st.column_config.TextColumn("Applied", width="medium"),
+                "application_stage": st.column_config.SelectboxColumn(
+                    "Application stage", options=APPLICATION_STAGES, required=True
+                ),
                 "outcome_reason": st.column_config.TextColumn("Outcome / reason", width="medium"),
                 "history_notes": st.column_config.TextColumn("Notes", width="medium"),
                 "job_url": st.column_config.LinkColumn("Job", display_text="Open"),
@@ -185,25 +212,17 @@ def render_opportunity_history() -> None:
             return
         updated = _save_edits(unified, edited)
         try:
-            save_csv_file(token, HISTORY_PATH, updated, history_sha, "Update opportunity and application history")
+            save_csv_file(token, HISTORY_PATH, updated, history_sha, "Update application tracker")
         except Exception:
             st.error("Saving application history failed. Refresh and try again.")
         else:
-            st.success("Saved. These outcomes are now available to H.")
+            st.success("Saved. These factual outcomes are now available to H.")
             st.rerun()
 
     st.divider()
-    st.subheader("H input — early attainability evidence")
-    st.caption("No model inference yet; these are only factual counts from application outcomes.")
-    app = unified[applied_mask].copy()
-    if app.empty:
-        st.info("Once applications accumulate, H can estimate attainability separately from C semantic fit.")
-        return
-
-    interview_reached = app["application_stage"].isin(["1st interview", "Lost after 1st", "Case", "Lost after case", "Final", "Offer"])
-    case_reached = app["application_stage"].isin(["Case", "Lost after case", "Final", "Offer"])
-    final_reached = app["application_stage"].isin(["Final", "Offer"])
+    st.subheader("H input — attainability evidence")
+    st.caption("Factual application outcomes only; H does not change semantic fit in C.")
     h1, h2, h3 = st.columns(3)
-    h1.metric("Reached interview", int(interview_reached.sum()))
-    h2.metric("Reached case", int(case_reached.sum()))
-    h3.metric("Reached final / offer", int(final_reached.sum()))
+    h1.metric("Reached interview", int(applications["application_stage"].isin(INTERVIEW_REACHED_STAGES).sum()))
+    h2.metric("Reached case", int(applications["application_stage"].isin(CASE_REACHED_STAGES).sum()))
+    h3.metric("Reached final / offer", int(applications["application_stage"].isin(FINAL_REACHED_STAGES).sum()))

@@ -6,8 +6,9 @@ No inference happens here. In particular this module does NOT:
 - calculate an H attainability score;
 - change G sourcing weights.
 
-It only separates the factual evidence already stored in I into clean downstream
-inputs for A, C and H so later policy/model choices can be audited independently.
+It only separates factual evidence already stored in I into clean downstream
+inputs for A, C and H. Free-text user comments are preserved as C evidence even
+when no explicit polarity/action was selected; their polarity is never guessed.
 """
 from __future__ import annotations
 
@@ -28,7 +29,8 @@ A_SUMMARY_COLUMNS = [
 C_EVENT_COLUMNS = [
     "opportunity_id", "decision_at", "source_stream", "title", "company",
     "company_category", "market", "action", "role_feedback", "c_signal",
-    "user_comment", "semantic_fit_at_decision", "semantic_reasoning_at_decision",
+    "evidence_type", "user_comment", "semantic_fit_at_decision",
+    "semantic_reasoning_at_decision",
 ]
 H_EVENT_COLUMNS = [
     "opportunity_id", "company", "canonical_company_id", "company_category",
@@ -70,6 +72,16 @@ def _c_signal(action: object, role_feedback: object) -> str:
     return ""
 
 
+def _c_evidence_type(action: object, role_feedback: object, user_comment: object) -> str:
+    if _signal(role_feedback):
+        return "explicit_role_feedback"
+    if str(action or "").strip().lower() in {"apply", "interested", "maybe", "skip", "pass"}:
+        return "decision_action"
+    if str(user_comment or "").strip():
+        return "comment_only"
+    return ""
+
+
 def _h_evidence(stage: object) -> str:
     value = str(stage or "").strip()
     return {
@@ -97,12 +109,12 @@ def build_a_evidence(history: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]
     if events.empty:
         return pd.DataFrame(columns=A_EVENT_COLUMNS), pd.DataFrame(columns=A_SUMMARY_COLUMNS)
     events = events.reindex(columns=A_EVENT_COLUMNS + ["_signal"], fill_value="")
+    events["_company_key"] = events.apply(
+        lambda r: str(r.get("canonical_company_id", "")).strip()
+        or f"name:{str(r.get('company', '')).strip().lower()}", axis=1
+    )
 
     rows: list[dict[str, object]] = []
-    # Prefer canonical ID; fall back to literal company only for auditability.
-    events["_company_key"] = events.apply(
-        lambda r: str(r.get("canonical_company_id", "")).strip() or f"name:{str(r.get('company', '')).strip().lower()}", axis=1
-    )
     for _, group in events.groupby("_company_key", sort=False):
         latest = group.copy()
         latest["_dt"] = pd.to_datetime(latest["decision_at"], errors="coerce", utc=True)
@@ -127,11 +139,21 @@ def build_c_evidence(history: pd.DataFrame) -> pd.DataFrame:
     if history.empty:
         return pd.DataFrame(columns=C_EVENT_COLUMNS)
     frame = history.fillna("").copy()
-    for col in C_EVENT_COLUMNS:
-        if col not in frame.columns and col != "c_signal":
+    required = [c for c in C_EVENT_COLUMNS if c not in {"c_signal", "evidence_type"}]
+    for col in required:
+        if col not in frame.columns:
             frame[col] = ""
-    frame["c_signal"] = frame.apply(lambda r: _c_signal(r.get("action", ""), r.get("role_feedback", "")), axis=1)
-    frame = frame[frame["c_signal"].ne("")].copy()
+    frame["c_signal"] = frame.apply(
+        lambda r: _c_signal(r.get("action", ""), r.get("role_feedback", "")), axis=1
+    )
+    frame["evidence_type"] = frame.apply(
+        lambda r: _c_evidence_type(
+            r.get("action", ""), r.get("role_feedback", ""), r.get("user_comment", "")
+        ), axis=1
+    )
+    # Comment-only rows are deliberately retained with blank c_signal. The later
+    # learning layer may interpret their text, but this factual layer does not.
+    frame = frame[frame["evidence_type"].ne("")].copy()
     return frame.reindex(columns=C_EVENT_COLUMNS, fill_value="").reset_index(drop=True)
 
 
@@ -149,7 +171,9 @@ def build_h_evidence(history: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]
 
     rows: list[dict[str, object]] = []
     dimensions = {
-        "company": events["canonical_company_id"].where(events["canonical_company_id"].ne(""), events["company"]),
+        "company": events["canonical_company_id"].where(
+            events["canonical_company_id"].ne(""), events["company"]
+        ),
         "company_category": events["company_category"],
         "market": events["market"],
     }
@@ -158,9 +182,6 @@ def build_h_evidence(history: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]
         temp["_value"] = values.astype(str).str.strip()
         temp = temp[temp["_value"].ne("")]
         for value, group in temp.groupby("_value", sort=False):
-            evidence = set(group["h_evidence"].astype(str))
-            # These are factual counts by current outcome stage, not funnel-derived
-            # estimates. We intentionally do not infer missing intermediate stages.
             counts = group["h_evidence"].value_counts().to_dict()
             rows.append({
                 "dimension": dimension,
@@ -202,8 +223,9 @@ def main() -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         frame.to_csv(path, index=False)
 
+    comment_only = int((c_events.get("evidence_type", pd.Series(dtype=str)) == "comment_only").sum())
     print(f"A factual feedback events: {len(a_events)} across {len(a_summary)} companies")
-    print(f"C factual preference events: {len(c_events)}")
+    print(f"C factual preference events: {len(c_events)} ({comment_only} comment-only)")
     print(f"H factual application outcomes: {len(h_events)} across {len(h_summary)} grouped rows")
 
 

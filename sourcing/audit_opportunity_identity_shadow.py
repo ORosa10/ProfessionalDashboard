@@ -123,6 +123,30 @@ def _unique(values: pd.Series) -> str:
     return "; ".join(out)
 
 
+def _same_job_id_status(reference_company: str, reference_title: str, reference_country: str, match: pd.Series) -> tuple[str, str]:
+    """Classify same-job_id metadata differences by severity.
+
+    A company-label difference alone is common across parent/subsidiary/brand
+    names and is informational. A title or country difference is a real data
+    integrity conflict because the same source-specific ID should not describe a
+    different vacancy.
+    """
+    ref_title = _title_core(reference_title)
+    got_title = _title_core(match.get("title", ""))
+    ref_country = _country(reference_country)
+    got_country = _country(match.get("_country", ""))
+    ref_company = _company_core(reference_company)
+    got_company = _company_core(match.get("company", ""))
+
+    if ref_title and got_title and ref_title != got_title:
+        return "job_id_title_conflict", "Same job_id but substantive title differs. Treat as a source-data integrity problem."
+    if ref_country and got_country and ref_country != got_country:
+        return "job_id_country_conflict", "Same job_id but country differs. Treat as a source-data integrity problem."
+    if ref_company and got_company and ref_company != got_company:
+        return "job_id_company_variant", "Same job_id/title/country; company label differs and should be resolved through canonical company aliases."
+    return "exact_job_id", ""
+
+
 def audit_identity(candidates: pd.DataFrame, reference: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     c = candidates.fillna("").copy()
     for col in ["candidate_id", "job_id", "company", "title", "country_bucket", "market", "source_streams", "job_url"]:
@@ -164,12 +188,7 @@ def audit_identity(candidates: pd.DataFrame, reference: pd.DataFrame) -> tuple[p
 
         if not exact.empty:
             match = exact.iloc[0]
-            match_fp = str(match.get("_fp", ""))
-            if fp and match_fp and fp != match_fp:
-                status = "job_id_metadata_conflict"
-                notes = "Same job_id, but company/title/country fingerprint differs."
-            else:
-                status = "exact_job_id"
+            status, notes = _same_job_id_status(company, title, country, match)
         elif fp:
             matches = c[c["_fp"].eq(fp)]
             if len(matches) == 1:

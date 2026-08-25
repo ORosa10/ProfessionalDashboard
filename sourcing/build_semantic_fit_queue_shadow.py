@@ -4,6 +4,9 @@ The script deliberately does NOT apply language, geography/employability, salary
 link-health or attainability rules. Those belong to actionability/H, not C. The
 only operational status filter here is that an explicitly non-open vacancy is
 not worth sending for new semantic review.
+
+For C Work, ``limit <= 0`` means the full unresolved backlog. A positive limit is
+kept only as an operational/debugging option; it is never a semantic filter.
 """
 from __future__ import annotations
 
@@ -43,7 +46,7 @@ def build_shadow_queue(
     candidates: pd.DataFrame,
     semantic: pd.DataFrame,
     history: pd.DataFrame,
-    limit: int = 160,
+    limit: int = 0,
 ) -> pd.DataFrame:
     if candidates.empty:
         return pd.DataFrame(columns=QUEUE_COLUMNS)
@@ -94,8 +97,11 @@ def build_shadow_queue(
         " · ".join(part for part in [str(x.get("archetype", "")), str(x.get("why_test", ""))] if part)
         for x in found
     ]
+    # C needs the real role text. Do not truncate descriptions: truncation can
+    # remove the responsibilities/requirements that distinguish Strong from an
+    # adjacent Moderate/Weak role. Work handles its own execution chunking.
     jobs["description_for_fit"] = jobs.apply(
-        lambda row: str(row.get("description_en", "") or row.get("description", ""))[:5000],
+        lambda row: str(row.get("description_en", "") or row.get("description", "")),
         axis=1,
     )
     jobs["role_family"] = jobs.apply(
@@ -111,8 +117,13 @@ def build_shadow_queue(
         na_position="last",
     )
 
-    # Country allocation is only C-review workload balancing. It does not alter
-    # semantic judgement and never lowers the pool below the available quality.
+    # Normal Work mode: expose the whole unresolved backlog. Queue order is only
+    # an operational priority hint and must never influence the semantic verdict.
+    if limit <= 0:
+        return jobs.reindex(columns=QUEUE_COLUMNS, fill_value="").reset_index(drop=True)
+
+    # Optional bounded mode for diagnostics/tests. Country allocation balances
+    # review workload only; it never changes the semantic judgment itself.
     targets = _target_slots(limit)
     chosen: list[int] = []
     for country, target in targets.items():
@@ -140,7 +151,12 @@ def main() -> None:
     parser.add_argument("--semantic", required=True)
     parser.add_argument("--history", required=True)
     parser.add_argument("--out", required=True)
-    parser.add_argument("--limit", type=int, default=160)
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=0,
+        help="Maximum unresolved roles to emit; <=0 emits the full backlog for C Work",
+    )
     args = parser.parse_args()
 
     queue = build_shadow_queue(

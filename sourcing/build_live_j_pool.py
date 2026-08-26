@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import re
 from pathlib import Path
+from urllib.parse import urlsplit, urlunsplit
 
 import pandas as pd
 
@@ -67,6 +68,19 @@ OUTSIDE_LOCATION_MARKERS = {
     "Portugal": ("portugal", "lisbon", "lisboa"),
 }
 
+HISTORY_BLOCK_ACTIONS = {"apply", "skip", "pass"}
+TITLE_NOISE = {
+    "junior", "senior", "jr", "sr", "m", "w", "d", "f", "gn", "all", "genders",
+}
+COMPANY_NOISE = {
+    "ag", "gmbh", "ltd", "limited", "plc", "inc", "llc", "sa", "se", "group", "bank",
+    "company", "companies", "corporation", "corp",
+}
+LOCATION_NOISE = {
+    "germany", "de", "austria", "at", "switzerland", "ch", "united", "kingdom", "uk",
+    "czechia", "czech", "republic", "sweden", "norway", "denmark", "finland", "city", "stadt",
+}
+
 
 def _read(path: Path) -> pd.DataFrame:
     if not path.exists() or path.stat().st_size == 0:
@@ -116,10 +130,78 @@ def _geography_blocker(row: pd.Series) -> str:
     return ""
 
 
+def _tokens(value: object) -> list[str]:
+    return re.findall(r"[a-z0-9]+", str(value or "").lower())
+
+
+def _title_identity(value: object) -> tuple[str, ...]:
+    return tuple(t for t in _tokens(value) if t not in TITLE_NOISE)
+
+
+def _company_identity(value: object) -> set[str]:
+    return {t for t in _tokens(value) if t not in COMPANY_NOISE and len(t) > 1}
+
+
+def _location_identity(value: object) -> set[str]:
+    return {t for t in _tokens(value) if t not in LOCATION_NOISE and len(t) > 2}
+
+
+def _normalized_url(value: object) -> str:
+    raw = str(value or "").strip()
+    if not raw:
+        return ""
+    try:
+        parts = urlsplit(raw)
+        host = parts.netloc.lower().removeprefix("www.")
+        path = re.sub(r"/+", "/", parts.path).rstrip("/")
+        return urlunsplit((parts.scheme.lower() or "https", host, path, "", ""))
+    except ValueError:
+        return raw.lower().rstrip("/")
+
+
+def _history_blocker(row: pd.Series, history: pd.DataFrame) -> str:
+    if history.empty:
+        return ""
+    h = history.fillna("").copy()
+    if "action" not in h.columns:
+        return ""
+    h = h[h["action"].astype(str).str.strip().str.lower().isin(HISTORY_BLOCK_ACTIONS)]
+    if h.empty:
+        return ""
+
+    oid = str(row.get("opportunity_id", "") or "").strip()
+    if oid and "opportunity_id" in h.columns and h["opportunity_id"].astype(str).eq(oid).any():
+        return "history:exact_id"
+
+    url = _normalized_url(row.get("job_url", ""))
+    if url and "job_url" in h.columns:
+        if h["job_url"].map(_normalized_url).eq(url).any():
+            return "history:same_url"
+
+    title = _title_identity(row.get("title", ""))
+    company = _company_identity(row.get("company", ""))
+    location = _location_identity(row.get("location", ""))
+    if not title or not company:
+        return ""
+
+    for _, prior in h.iterrows():
+        if _title_identity(prior.get("title", "")) != title:
+            continue
+        prior_company = _company_identity(prior.get("company", ""))
+        if not prior_company or not company.intersection(prior_company):
+            continue
+        prior_location = _location_identity(prior.get("location", ""))
+        if location and prior_location and not location.intersection(prior_location):
+            continue
+        return "history:same_role_identity"
+    return ""
+
+
 def build_live_pool(
     candidates: pd.DataFrame,
     semantic: pd.DataFrame,
     actionability: pd.DataFrame,
+    history: pd.DataFrame | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     if candidates.empty:
         return pd.DataFrame(columns=OUTPUT_COLUMNS), pd.DataFrame(columns=EXCLUDED_COLUMNS)
@@ -163,6 +245,7 @@ def build_live_pool(
     )
 
     excluded: list[dict[str, str]] = []
+    history_frame = history if history is not None else pd.DataFrame()
 
     def reject(row: pd.Series, reason: str) -> None:
         excluded.append({
@@ -183,6 +266,10 @@ def build_live_pool(
             continue
         if _bad_company(row.get("company", "")):
             reject(row, "data_quality:invalid_company")
+            continue
+        prior = _history_blocker(row, history_frame)
+        if prior:
+            reject(row, prior)
             continue
         geography = _geography_blocker(row)
         if geography:
@@ -206,6 +293,7 @@ def main() -> None:
     parser.add_argument("--candidates", required=True)
     parser.add_argument("--semantic", required=True)
     parser.add_argument("--actionability", required=True)
+    parser.add_argument("--history", default="")
     parser.add_argument("--out", required=True)
     parser.add_argument("--excluded-out", required=True)
     args = parser.parse_args()
@@ -214,6 +302,7 @@ def main() -> None:
         _read(Path(args.candidates)),
         _read(Path(args.semantic)),
         _read(Path(args.actionability)),
+        _read(Path(args.history)) if args.history else pd.DataFrame(),
     )
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)

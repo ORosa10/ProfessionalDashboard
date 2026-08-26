@@ -12,6 +12,10 @@ on:
     paths:
       - "sourcing/board_sweep.py"
       - "sourcing/board_sweep_v2.py"
+      - "sourcing/c_to_g_guidance.py"
+      - "sourcing/test_c_to_g_guidance.py"
+      - "data/c_to_g_sourcing_guidance.csv"
+      - "docs/C_TO_G_LEARNING_CONTRACT.md"
       - "sourcing/build_semantic_fit_queue.py"
       - "sourcing/filter_language_requirements.py"
       - "sourcing/test_filter_language_requirements.py"
@@ -61,7 +65,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt -r sourcing/requirements.txt
       - name: Validate board adapter parsers
-        run: python -m unittest sourcing.test_filter_language_requirements sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_nav_no sourcing.test_board_jobbsafari_no sourcing.test_board_academicwork sourcing.test_board_thehub sourcing.test_board_official_adapters
+        run: python -m unittest sourcing.test_c_to_g_guidance sourcing.test_filter_language_requirements sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_nav_no sourcing.test_board_jobbsafari_no sourcing.test_board_academicwork sourcing.test_board_thehub sourcing.test_board_official_adapters
       - name: Deep full-country sourcing sweep
         run: python -m sourcing.board_sweep_v2 --no-translate --per-query 18 --max-details 160
       - name: Filter explicit language blockers before C and J

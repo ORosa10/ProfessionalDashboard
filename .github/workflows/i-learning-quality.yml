@@ -1,0 +1,54 @@
+name: Canonical I quality
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "sourcing/reconcile_i_learning.py"
+      - "sourcing/test_reconcile_i_learning.py"
+      - ".github/workflows/i-learning-sync.yml"
+      - ".github/workflows/i-learning-quality.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+      - name: Run canonical I tests
+        run: python -m unittest sourcing.test_reconcile_i_learning
+      - name: Dry-run reconciliation on repository data
+        run: |
+          mkdir -p /tmp/i-sync
+          python -m sourcing.reconcile_i_learning \
+            --history data/opportunity_history.csv \
+            --submissions data/user_submitted_opportunities.csv \
+            --events data/opportunity_events.csv \
+            --history-out /tmp/i-sync/opportunity_history.csv \
+            --events-out /tmp/i-sync/opportunity_events.csv \
+            --a-events-out /tmp/i-sync/a_learning_events.csv \
+            --a-summary-out /tmp/i-sync/a_learning_summary.csv \
+            --c-events-out /tmp/i-sync/c_learning_evidence.csv \
+            --h-events-out /tmp/i-sync/h_learning_events.csv \
+            --h-summary-out /tmp/i-sync/h_learning_summary.csv
+          python - <<'PY'
+          import pandas as pd
+          from pathlib import Path
+          h = pd.read_csv('/tmp/i-sync/opportunity_history.csv').fillna('')
+          e = pd.read_csv('/tmp/i-sync/opportunity_events.csv').fillna('')
+          assert h['opportunity_id'].astype(str).str.strip().ne('').all()
+          assert not h['opportunity_id'].duplicated().any()
+          assert not e['event_id'].duplicated().any()
+          b = h[h['source_stream'].eq('B')]
+          if len(b):
+              assert b['action'].eq('Apply').all()
+              assert ~b['application_stage'].isin(['', 'Not applied']).any()
+          print(f'validated {len(h)} latest-state opportunities and {len(e)} events')
+          PY

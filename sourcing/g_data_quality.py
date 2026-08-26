@@ -20,6 +20,11 @@ INVALID_TITLE_PATTERNS = [
     r"^\s*search results?\s*$",
 ]
 
+# These are deliberately stems because German/Nordic finance words are commonly
+# compounded (Finanzanalyst, finansanalytiker, økonom...). Other markers should
+# respect token boundaries so e.g. "valuation" never matches "evaluation".
+FINANCE_MARKER_STEMS = {"finanz", "finans", "økonom"}
+
 
 def invalid_company_name(value: object) -> bool:
     text = str(value or "").strip()
@@ -31,3 +36,20 @@ def invalid_job_title(value: object) -> bool:
     if not text:
         return True
     return any(re.search(pattern, text, flags=re.IGNORECASE) for pattern in INVALID_TITLE_PATTERNS)
+
+
+def finance_marker_present(text: object, marker: object) -> bool:
+    haystack = str(text or "").lower()
+    needle = str(marker or "").lower().strip()
+    if not needle:
+        return False
+    if needle in FINANCE_MARKER_STEMS:
+        return needle in haystack
+    # Permit simple plural forms while preventing substring collisions such as
+    # valuation/evaluation. This also works for phrases and markers containing &.
+    pattern = rf"(?<!\w){re.escape(needle)}(?:s|es)?(?!\w)"
+    return re.search(pattern, haystack, flags=re.IGNORECASE) is not None
+
+
+def any_finance_marker(text: object, markers: tuple[str, ...] | list[str]) -> bool:
+    return any(finance_marker_present(text, marker) for marker in markers)

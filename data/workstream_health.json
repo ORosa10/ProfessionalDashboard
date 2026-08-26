@@ -16,7 +16,7 @@
     },
     "C": {
       "health": "orange",
-      "summary": "Semantic thesis and C Work are live; the latest metadata-preservation fixes still need a clean replenishment run before C is called stable."
+      "summary": "Semantic thesis and C Work are live; the latest correction file is fixed but a clean current replenishment still needs verification before C is called stable."
     },
     "D": {
       "health": "orange",
@@ -31,8 +31,8 @@
       "summary": "Network/access lane is deferred and no live connection dataset is active."
     },
     "G": {
-      "health": "orange",
-      "summary": "Board and rated-company sourcing are live, including automatic company-source sync and parser fallback; final production revalidation of stale links is still being confirmed."
+      "health": "green",
+      "summary": "Core sourcing is live across target markets through job boards and recurring rated-company career-page scans; unstable sources are kept out of automated runs and credential-only sources are deliberately deferred."
     },
     "H": {
       "health": "orange",

@@ -1,6 +1,6 @@
 import unittest
 
-from sourcing.board_html_adapters import extract_html_search_links
+from sourcing.board_html_adapters import _fallback_detail, extract_html_search_links
 
 
 class BoardHtmlAdaptersTest(unittest.TestCase):
@@ -13,6 +13,29 @@ class BoardHtmlAdaptersTest(unittest.TestCase):
             extract_html_search_links("jobs-cz", html, 10),
             ["https://www.jobs.cz/rpd/2000999999/"],
         )
+
+    def test_jobs_cz_fallback_does_not_treat_navigation_as_company(self):
+        html = '''
+        <html><body>
+          <h1>Treasury manažer/ka</h1>
+          <div class="company-actions">Poslat nabídku na e-mail</div>
+          <h2>Práce v oboru</h2>
+          <h3>Navštivte naše sociální sítě a poznejte Trinity Bank ještě blíž</h3>
+        </body></html>
+        '''
+        item = _fallback_detail(html)
+        self.assertIsNotNone(item)
+        self.assertEqual(item["hiringOrganization"]["name"], "Employer not stated")
+
+    def test_fallback_still_keeps_credible_company(self):
+        html = '''
+        <html><body>
+          <h1>Treasury Analyst</h1>
+          <div class="company-name">Example Energy AG</div>
+        </body></html>
+        '''
+        item = _fallback_detail(html)
+        self.assertEqual(item["hiringOrganization"]["name"], "Example Energy AG")
 
     def test_prace_cz_extracts_canonical_offer_detail(self):
         html = '''

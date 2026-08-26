@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+# Regression contract for explicit A rating -> G company-source behaviour.
+
 import tempfile
 import unittest
 from pathlib import Path

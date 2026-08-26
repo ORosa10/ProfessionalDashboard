@@ -15,6 +15,7 @@ on:
       - "sourcing/filter_language_requirements.py"
       - "sourcing/test_filter_language_requirements.py"
       - "sourcing/g_data_quality.py"
+      - "sourcing/test_g_data_quality.py"
       - ".github/workflows/source-parser-quality.yml"
 
 permissions:
@@ -38,3 +39,4 @@ jobs:
           sourcing.test_board_academicwork
           sourcing.test_czech_board_identity
           sourcing.test_filter_language_requirements
+          sourcing.test_g_data_quality

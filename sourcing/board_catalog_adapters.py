@@ -14,6 +14,8 @@ from urllib.parse import quote, urljoin
 import requests
 from bs4 import BeautifulSoup
 
+from sourcing.g_data_quality import any_finance_marker
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -31,8 +33,6 @@ CONFIG = {
     "startupjobs-cz": {"market": "Czechia", "base": "https://www.startupjobs.cz", "listing": "https://www.startupjobs.cz/nabidky/finance", "patterns": (r"/nabidka/\d+/",)},
     "cocuma-cz": {"market": "Czechia", "base": "https://www.cocuma.cz", "listing": "https://www.cocuma.cz/jobs/", "patterns": (r"/job/",)},
     "jobwinner-ch": {"market": "Switzerland", "base": "https://www.jobwinner.ch", "listing": "https://www.jobwinner.ch/de/jobs?q={query}", "patterns": (r"/job/\d+",)},
-    # NZZ search/category pages also live below /job/alle-jobs*. A real vacancy
-    # detail has the stable /job/<slug>/<numeric-id> shape.
     "nzz-jobs-ch": {"market": "Switzerland", "base": "https://jobs.nzz.ch", "listing": "https://jobs.nzz.ch/job/alle-jobs", "patterns": (r"/job/[^/?#]+/\d+(?:[/?#]|$)",)},
     "jobserve-uk": {"market": "United Kingdom", "base": "https://www.jobserve.com", "listing": "https://www.jobserve.com/gb/en/search-jobs-in-Greater-London%2C-London%2C-United-Kingdom/", "patterns": (r"/search-jobs-in-.+?/[A-Z0-9-]+/", r"/job-in-.+?/")},
     "jobbland-se": {"market": "Sweden", "base": "https://jobbland.se", "listing": "https://jobbland.se/lediga-jobb/kategori/ekonomi", "patterns": (r"/jobb/",)},
@@ -54,16 +54,8 @@ def _stable_id(source_id: str, url: str) -> str:
 
 
 def _relevant(title: str, description: str = "", source_id: str = "") -> bool:
-    """Keep broad-board noise out of G while preserving downstream C judgment.
-
-    JobServe is a generalist search board. A description-only match there was
-    admitting unrelated IT, property and operations roles because their text
-    happened to mention finance/risk/banking. For that source, a target-finance
-    marker must be present in the actual title. Finance-titled ambiguous roles
-    still proceed to C for semantic judgment.
-    """
-    text = title.lower() if source_id in STRICT_TITLE_SOURCES else f"{title} {description}".lower()
-    return any(marker in text for marker in TITLE_MARKERS)
+    text = title if source_id in STRICT_TITLE_SOURCES else f"{title} {description}"
+    return any_finance_marker(text, TITLE_MARKERS)
 
 
 def _jobposting(html: str) -> dict | None:
@@ -117,14 +109,6 @@ def _from_jsonld(item: dict) -> tuple[str, str, str, str, str]:
 
 
 def extract_detail_fields(source_id: str, html: str) -> tuple[str, str, str, str, str]:
-    """Extract one vacancy detail with source-specific integrity safeguards.
-
-    Jobbland pages can contain multiple job-related structured fragments and
-    recommendation/tag text below the actual vacancy. The visible page H1 is the
-    authoritative title for the current detail URL, so prefer it over a possibly
-    misleading JSON-LD JobPosting title while retaining JSON-LD metadata for the
-    employer, location, description and date.
-    """
     item = _jobposting(html)
     if item:
         title, company, location, description, date_posted = _from_jsonld(item)

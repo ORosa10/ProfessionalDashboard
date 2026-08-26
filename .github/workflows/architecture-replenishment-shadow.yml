@@ -1,0 +1,258 @@
+name: Architecture replenishment shadow
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/semantic_fit.csv"
+      - "data/semantic_fit_reviews/**"
+      - "docs/C_SEMANTIC_THESIS.md"
+      - "docs/C_WORK_CONTRACT.md"
+      - "sourcing/build_a_discovered_companies_shadow.py"
+      - "sourcing/build_semantic_fit_queue_shadow.py"
+      - "sourcing/test_build_semantic_fit_queue_shadow.py"
+      - "sourcing/prepare_j_candidates_shadow.py"
+      - "sourcing/test_prepare_j_candidates_shadow.py"
+      - ".github/workflows/architecture-replenishment-shadow.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replenish-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas requests
+      - name: Test replenishment guardrails
+        run: |
+          python -m unittest \
+            sourcing.test_build_a_discovered_companies_shadow \
+            sourcing.test_prepare_j_candidates_shadow \
+            sourcing.test_aggregate_candidates_shadow \
+            sourcing.test_build_semantic_fit_shadow \
+            sourcing.test_build_semantic_fit_queue_shadow \
+            sourcing.test_build_actionability_shadow \
+            sourcing.test_build_j_shortlist_shadow
+
+      - name: Fetch latest G and live-state snapshots
+        run: |
+          git fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*'
+          mkdir -p /tmp/replenish/in /tmp/replenish/out
+          extract() {
+            ref="$1"; path="$2"; out="$3"
+            if git cat-file -e "$ref:$path" 2>/dev/null; then
+              git show "$ref:$path" > "/tmp/replenish/in/$out"
+            else
+              : > "/tmp/replenish/in/$out"
+            fi
+          }
+          extract origin/main data/jobs_board_staging.csv board.csv
+          extract origin/sourcing-staging data/jobs_staging.csv company.csv
+          extract origin/pe-sourcing-staging data/jobs_pe_staging.csv pe.csv
+          extract origin/consulting-sourcing-staging data/jobs_consulting_staging.csv consulting.csv
+          extract origin/corporate-sourcing-staging data/jobs_corporate_staging.csv corporate.csv
+          extract origin/financial-services-sourcing-staging data/jobs_financial-services_staging.csv financial-services.csv
+          extract origin/holdings-sourcing-staging data/jobs_holdings_staging.csv holdings.csv
+          extract origin/investment-banking-sourcing-staging data/jobs_investment-banking_staging.csv investment-banking.csv
+          extract origin/public-markets-sourcing-staging data/jobs_public-markets_staging.csv public-markets.csv
+          extract origin/specialist-funds-sourcing-staging data/jobs_specialist-funds_staging.csv specialist-funds.csv
+          extract origin/main data/jobs_remote_staging.csv remote.csv
+          extract origin/main data/jobs_projects_staging.csv projects.csv
+
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+
+          columns = ['opportunity_id','fit','reasoning','generated_at']
+          frames = []
+          base = Path('data/semantic_fit.csv')
+          if base.exists() and base.stat().st_size:
+              frames.append(pd.read_csv(base).fillna('').reindex(columns=columns, fill_value=''))
+          for path in sorted(Path('data/semantic_fit_reviews').glob('*.csv')):
+              if path.stat().st_size:
+                  frames.append(pd.read_csv(path).fillna('').reindex(columns=columns, fill_value=''))
+          if frames:
+              semantic = pd.concat(frames, ignore_index=True).drop_duplicates('opportunity_id', keep='last')
+          else:
+              semantic = pd.DataFrame(columns=columns)
+          semantic.to_csv('/tmp/replenish/in/semantic.csv', index=False)
+          print(f'compiled C migration state: {len(semantic)} judgments')
+          PY
+
+          extract origin/main data/j_curated_shortlist.csv live-j.csv
+          extract origin/main data/opportunity_history.csv history.csv
+          extract origin/main data/user_submitted_opportunities.csv manual-b.csv
+          extract origin/main data/country_sourcing_weights.json country-targets.json
+
+      - name: Build canonical G candidate pool
+        run: |
+          python -m sourcing.aggregate_candidates_shadow \
+            --input board=/tmp/replenish/in/board.csv \
+            --input company=/tmp/replenish/in/company.csv \
+            --input pe=/tmp/replenish/in/pe.csv \
+            --input consulting=/tmp/replenish/in/consulting.csv \
+            --input corporate=/tmp/replenish/in/corporate.csv \
+            --input financial-services=/tmp/replenish/in/financial-services.csv \
+            --input holdings=/tmp/replenish/in/holdings.csv \
+            --input investment-banking=/tmp/replenish/in/investment-banking.csv \
+            --input public-markets=/tmp/replenish/in/public-markets.csv \
+            --input specialist-funds=/tmp/replenish/in/specialist-funds.csv \
+            --input remote=/tmp/replenish/in/remote.csv \
+            --input projects=/tmp/replenish/in/projects.csv \
+            --out /tmp/replenish/out/g_candidates.csv \
+            --diagnostics-out /tmp/replenish/out/g_diagnostics.csv
+
+      - name: Build A discovered-employer suggestions
+        run: |
+          python -m sourcing.build_a_discovered_companies_shadow \
+            --candidates /tmp/replenish/out/g_candidates.csv \
+            --out /tmp/replenish/out/a_discovered_companies.csv
+
+      - name: Build canonical C state and Work queues
+        run: |
+          python -m sourcing.build_semantic_fit_shadow \
+            --canonical /tmp/replenish/in/semantic.csv \
+            --curated-j /tmp/replenish/in/live-j.csv \
+            --out /tmp/replenish/out/c_semantic.csv
+          python -m sourcing.build_semantic_fit_queue_shadow \
+            --candidates /tmp/replenish/out/g_candidates.csv \
+            --semantic /tmp/replenish/out/c_semantic.csv \
+            --history /tmp/replenish/in/history.csv \
+            --out /tmp/replenish/out/c_queue.csv \
+            --limit 0
+
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+
+          def description(row):
+              return str(row.get('description_en', '') or row.get('description', '') or '')
+
+          src = Path('/tmp/replenish/out/c_queue.csv')
+          base_cols = ['opportunity_id','title','company','job_url','description_for_fit']
+          try:
+              queue = pd.read_csv(src).fillna('')
+          except Exception:
+              queue = pd.DataFrame(columns=base_cols)
+          for col in base_cols:
+              if col not in queue.columns:
+                  queue[col] = ''
+          queue = queue[base_cols].copy()
+          queue['description_chars'] = queue['description_for_fit'].astype(str).str.len()
+          queue['needs_description_enrichment'] = queue['description_chars'].lt(500)
+          queue.to_csv('/tmp/replenish/out/c_work_queue.csv', index=False)
+
+          try:
+              g = pd.read_csv('/tmp/replenish/out/g_candidates.csv').fillna('')
+          except Exception:
+              g = pd.DataFrame()
+          try:
+              sem = pd.read_csv('/tmp/replenish/out/c_semantic.csv').fillna('')
+          except Exception:
+              sem = pd.DataFrame(columns=['opportunity_id','fit','reasoning'])
+          if not g.empty:
+              for col in ['job_id','candidate_id','title','company','job_url','description','description_en']:
+                  if col not in g.columns:
+                      g[col] = ''
+              g['opportunity_id'] = g.apply(
+                  lambda r: str(r.get('job_id','')).strip() or str(r.get('candidate_id','')).strip(), axis=1
+              )
+              g['description_for_fit'] = g.apply(description, axis=1)
+              current = g[['opportunity_id','title','company','job_url','description_for_fit']].drop_duplicates('opportunity_id')
+              if {'opportunity_id','fit','reasoning'}.issubset(sem.columns):
+                  current = current.merge(
+                      sem[['opportunity_id','fit','reasoning']].drop_duplicates('opportunity_id', keep='last'),
+                      on='opportunity_id', how='inner'
+                  ).rename(columns={'fit':'current_fit','reasoning':'current_reasoning'})
+              else:
+                  current = pd.DataFrame(columns=[
+                      'opportunity_id','title','company','job_url','description_for_fit','current_fit','current_reasoning'
+                  ])
+          else:
+              current = pd.DataFrame(columns=[
+                  'opportunity_id','title','company','job_url','description_for_fit','current_fit','current_reasoning'
+              ])
+          current['description_chars'] = current['description_for_fit'].astype(str).str.len()
+          current['needs_description_enrichment'] = current['description_chars'].lt(500)
+          current.to_csv('/tmp/replenish/out/c_work_recalibration_queue.csv', index=False)
+
+          pd.DataFrame(columns=['opportunity_id','fit','reasoning','generated_at']).to_csv(
+              '/tmp/replenish/out/c_work_output_template.csv', index=False
+          )
+          print(f'C Work unresolved backlog: {len(queue)} roles')
+          print(f'C Work one-time active recalibration: {len(current)} roles')
+          PY
+
+          cp docs/C_SEMANTIC_THESIS.md /tmp/replenish/out/C_SEMANTIC_THESIS.md
+          cp docs/C_WORK_CONTRACT.md /tmp/replenish/out/C_WORK_CONTRACT.md
+
+      - name: Build feedback evidence for future C thesis updates
+        run: |
+          python -m sourcing.build_learning_evidence_shadow \
+            --history /tmp/replenish/in/history.csv \
+            --a-events-out /tmp/replenish/out/a_learning_events.csv \
+            --a-summary-out /tmp/replenish/out/a_learning_summary.csv \
+            --c-events-out /tmp/replenish/out/c_learning_evidence.csv \
+            --h-events-out /tmp/replenish/out/h_learning_events.csv \
+            --h-summary-out /tmp/replenish/out/h_learning_summary.csv
+
+      - name: Build actionability and regular-J candidate pool
+        run: |
+          python -m sourcing.build_actionability_shadow \
+            --candidates /tmp/replenish/out/g_candidates.csv \
+            --semantic /tmp/replenish/out/c_semantic.csv \
+            --policy data/actionability_policy_v1.json \
+            --out /tmp/replenish/out/actionability.csv
+          python -m sourcing.prepare_j_candidates_shadow \
+            --candidates /tmp/replenish/out/g_candidates.csv \
+            --history /tmp/replenish/in/history.csv \
+            --manual-b /tmp/replenish/in/manual-b.csv \
+            --out /tmp/replenish/out/j_candidates.csv \
+            --excluded-out /tmp/replenish/out/j_excluded.csv
+
+      - name: Replenish regular J automatically from G/C/A context
+        run: |
+          python -m sourcing.build_j_shortlist_shadow \
+            --candidates /tmp/replenish/out/j_candidates.csv \
+            --semantic /tmp/replenish/out/c_semantic.csv \
+            --actionability /tmp/replenish/out/actionability.csv \
+            --history /tmp/replenish/in/history.csv \
+            --country-targets /tmp/replenish/in/country-targets.json \
+            --out /tmp/replenish/out/j_auto_shortlist.csv \
+            --quota-out /tmp/replenish/out/j_country_quotas.csv \
+            --limit 20
+
+      - name: Replenishment diagnostics
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          from pathlib import Path
+          p=Path('/tmp/replenish/out')
+          def r(n):
+              f=p/n
+              try: return pd.read_csv(f).fillna('')
+              except Exception: return pd.DataFrame()
+          g=r('g_candidates.csv'); a=r('a_discovered_companies.csv'); c=r('c_work_queue.csv'); rc=r('c_work_recalibration_queue.csv'); x=r('j_excluded.csv'); j=r('j_auto_shortlist.csv'); q=r('j_country_quotas.csv'); sem=r('c_semantic.csv')
+          print(f'G candidates: {len(g)}')
+          print(f'A new employer suggestions: {len(a)}')
+          print(f'C judgments compiled: {len(sem)}')
+          print(f'C unresolved Work backlog: {len(c)}')
+          print(f'C active roles for one-time recalibration: {len(rc)}')
+          print(f'J guardrail exclusions: {len(x)}')
+          if len(x): print(x.excluded_reason.value_counts().to_string())
+          print(f'J auto shortlist: {len(j)}')
+          if len(j): print(j[['priority_order','company','title','country_bucket','company_rating']].to_string(index=False))
+          if len(q): print('\nCountry quotas:\n'+q.to_string(index=False))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: architecture-replenishment-shadow
+          path: /tmp/replenish/out/
+          retention-days: 7

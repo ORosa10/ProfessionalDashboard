@@ -17,6 +17,10 @@ on:
       - "data/c_to_g_sourcing_guidance.csv"
       - "docs/C_TO_G_LEARNING_CONTRACT.md"
       - "sourcing/build_semantic_fit_queue.py"
+      - "sourcing/queue_selection.py"
+      - "sourcing/test_queue_selection.py"
+      - "sourcing/g_query_profiles.py"
+      - "sourcing/test_g_query_profiles.py"
       - "sourcing/opportunity_registry.py"
       - "sourcing/g_data_quality.py"
       - "sourcing/validate_g_outputs.py"
@@ -69,7 +73,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt -r sourcing/requirements.txt
       - name: Validate board adapter parsers
-        run: python -m unittest sourcing.test_c_to_g_guidance sourcing.test_filter_language_requirements sourcing.test_opportunity_registry sourcing.test_g_data_quality sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_nav_no sourcing.test_board_jobbsafari_no sourcing.test_board_academicwork sourcing.test_board_thehub sourcing.test_board_official_adapters
+        run: python -m unittest sourcing.test_c_to_g_guidance sourcing.test_filter_language_requirements sourcing.test_opportunity_registry sourcing.test_g_data_quality sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_nav_no sourcing.test_board_jobbsafari_no sourcing.test_board_academicwork sourcing.test_board_thehub sourcing.test_board_official_adapters sourcing.test_queue_selection sourcing.test_g_query_profiles
       - name: Deep full-country sourcing sweep
         run: python -m sourcing.board_sweep_v2 --no-translate --per-query 18 --max-details 160
       - name: Filter explicit language blockers before C and J

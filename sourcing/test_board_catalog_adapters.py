@@ -1,6 +1,6 @@
 import unittest
 
-from sourcing.board_catalog_adapters import _relevant, extract_catalog_links, extract_detail_fields
+from sourcing.board_catalog_adapters import CONFIG, _relevant, extract_catalog_links, extract_detail_fields
 
 
 class CatalogAdapterTest(unittest.TestCase):
@@ -19,6 +19,10 @@ class CatalogAdapterTest(unittest.TestCase):
         <a href="/job/treasury-manager-zuerich/496136">Treasury Manager</a>
         '''
         self.assertEqual(extract_catalog_links("nzz-jobs-ch", html, 5), ["https://jobs.nzz.ch/job/treasury-manager-zuerich/496136"])
+
+    def test_jobserve_uses_nationwide_finance_catalogue(self):
+        listing = CONFIG["jobserve-uk"]["listing"]
+        self.assertIn("Finance%2C-Accounting%2BBanking-sector-jobs-in-United-Kingdom", listing)
 
     def test_jobserve_requires_finance_signal_in_title(self):
         self.assertFalse(_relevant("Senior Data Architect", "Banking client with financial risk and investment systems.", "jobserve-uk"))

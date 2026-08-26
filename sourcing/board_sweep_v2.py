@@ -11,6 +11,7 @@ import pandas as pd
 
 from sourcing.big4_pilot import calibrate_jobs
 from sourcing.c_to_g_guidance import active_priority_queries
+from sourcing.g_query_profiles import queries_for_country
 from sourcing.board_academicwork import discover_academicwork
 from sourcing.board_additional_adapters import discover_additional_board
 from sourcing.board_catalog_adapters import discover_catalog_board
@@ -202,8 +203,9 @@ def main() -> None:
     started = datetime.now(timezone.utc).isoformat()
     for row in runnable.itertuples(index=False):
         board_per_query, board_max_details = budgets.get(str(row.board_id), (args.per_query, args.max_details))
+        board_queries = queries_for_country(search_queries, row.country)
         try:
-            found, errors = _run_board(row, board_per_query, board_max_details, search_queries)
+            found, errors = _run_board(row, board_per_query, board_max_details, board_queries)
         except Exception as exc:
             found, errors = [], [f"runner: {type(exc).__name__}: {exc}"]
         records.extend(found)
@@ -213,7 +215,7 @@ def main() -> None:
             "country": row.country,
             "adapter": row.adapter,
             "registry_status": row.status,
-            "queries": len(search_queries),
+            "queries": len(board_queries),
             "per_query_budget": board_per_query,
             "max_details_budget": board_max_details,
             "verified_jobs": len(found),

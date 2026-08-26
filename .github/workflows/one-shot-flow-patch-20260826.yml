@@ -23,10 +23,16 @@ jobs:
       - run: pip install pandas
       - name: Apply and validate flow patch
         run: python sourcing/one_shot_flow_patch_20260826.py
-      - name: Commit production flow changes
+      - name: Commit non-workflow production changes
         run: |
           git config user.name "professional-dashboard-bot"
           git config user.email "professional-dashboard-bot@users.noreply.github.com"
+          # GitHub Actions tokens cannot themselves push workflow-file edits.
+          # Those three YAML changes are applied separately through the GitHub API.
+          git restore \
+            .github/workflows/i-learning-sync.yml \
+            .github/workflows/i-learning-quality.yml \
+            .github/workflows/board-sourcing.yml
           git add \
             add_opportunity_ui.py \
             opportunity_history_ui.py \
@@ -36,9 +42,6 @@ jobs:
             sourcing/c_to_g_guidance.py \
             sourcing/test_c_to_g_guidance.py \
             sourcing/board_sweep_v2.py \
-            .github/workflows/i-learning-sync.yml \
-            .github/workflows/i-learning-quality.yml \
-            .github/workflows/board-sourcing.yml \
             docs/C_TO_G_LEARNING_CONTRACT.md \
             data/c_to_g_sourcing_guidance.csv \
             data/a_b_discovered_companies.csv \

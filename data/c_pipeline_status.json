@@ -1,12 +1,18 @@
 {
-  "promoted_at": "2026-08-26T07:39:46.108822+00:00",
-  "source_workflow_run_id": "32943295554",
-  "eligible_regular_j": 54,
-  "strong_in_live_pool": 54,
+  "promoted_at": "2026-08-26T19:18:37.891905+00:00",
+  "source_workflow_run_id": "33004268013",
+  "eligible_regular_j": 43,
+  "strong_in_live_pool": 43,
+  "link_status": {
+    "live": 43
+  },
+  "verified_link_records": 44,
   "production_exclusions": {
-    "not_strong": 646,
-    "actionability:language:German C1/C2/fluent/native-level requirement": 13,
-    "seniority:above_target_extreme": 8,
-    "seniority:below_target_extreme": 3
+    "not_strong": 1175,
+    "actionability:language:German C1/C2/fluent/native-level requirement": 14,
+    "seniority:above_target_extreme": 7,
+    "seniority:below_target_extreme": 3,
+    "actionability:language:Mandatory Swedish requirement": 1,
+    "link_quality:http_404": 1
   }
 }

@@ -20,6 +20,8 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import pandas as pd
 
+from sourcing.g_data_quality import invalid_company_name, invalid_job_title
+
 
 TARGET_COUNTRIES = {
     "Czechia": ["czechia", "czech republic", "praha", "prague"],
@@ -212,9 +214,13 @@ def aggregate_frames(frames: list[tuple[str, pd.DataFrame]]) -> pd.DataFrame:
         return pd.DataFrame(columns=OUTPUT_COLUMNS)
 
     combined = pd.concat(prepared, ignore_index=True, sort=False).fillna("")
+    # Canonical G is the quality boundary. Search-page/navigation artefacts are
+    # rejected here so they never become C review work, A employer suggestions,
+    # or J candidates. We deliberately prefer dropping a malformed row to
+    # inventing an employer from surrounding page chrome.
     combined = combined[
-        combined["title"].astype(str).str.strip().ne("")
-        & combined["company"].astype(str).str.strip().ne("")
+        ~combined["company"].map(invalid_company_name)
+        & ~combined["title"].map(invalid_job_title)
     ].copy()
     if combined.empty:
         return pd.DataFrame(columns=OUTPUT_COLUMNS)

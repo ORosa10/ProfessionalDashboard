@@ -33,6 +33,15 @@ class BuildADiscoveredCompaniesShadowTests(unittest.TestCase):
         self.assertEqual(row["source_streams"], "board; company")
         self.assertEqual(row["suggested_rating"], "Unrated")
 
+    def test_parser_placeholder_companies_and_search_result_titles_are_not_suggested(self) -> None:
+        candidates = pd.DataFrame([
+            {"company": "Poslat nabídku na e-mail", "title": "Treasury Manager", "country_bucket": "Czechia", "source_streams": "board"},
+            {"company": "Kantonsspital Baden KSB", "title": "105 Jobs für deine Suche", "country_bucket": "Switzerland", "source_streams": "board"},
+            {"company": "Real Employer AG", "title": "Treasury Analyst", "country_bucket": "Switzerland", "source_streams": "board"},
+        ])
+        result = build_a_suggestions(candidates, pd.DataFrame(columns=["company", "aliases_entities"]))
+        self.assertEqual(result["company"].tolist(), ["Real Employer AG"])
+
 
 if __name__ == "__main__":
     unittest.main()

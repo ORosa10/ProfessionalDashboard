@@ -1,6 +1,19 @@
 name: Architecture replenishment shadow
 
 on:
+  push:
+    branches: [architecture-safe-migration]
+    paths:
+      - "data/semantic_fit.csv"
+      - "data/semantic_fit_reviews/**"
+      - "docs/C_SEMANTIC_THESIS.md"
+      - "docs/C_WORK_CONTRACT.md"
+      - "sourcing/build_a_discovered_companies_shadow.py"
+      - "sourcing/build_semantic_fit_queue_shadow.py"
+      - "sourcing/test_build_semantic_fit_queue_shadow.py"
+      - "sourcing/prepare_j_candidates_shadow.py"
+      - "sourcing/test_prepare_j_candidates_shadow.py"
+      - ".github/workflows/architecture-replenishment-shadow.yml"
   pull_request:
     branches: [main]
     paths:

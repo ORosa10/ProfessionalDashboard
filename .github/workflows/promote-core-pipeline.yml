@@ -59,6 +59,7 @@ jobs:
             --candidates /tmp/c-pipeline/j_candidates.csv \
             --semantic /tmp/c-pipeline/c_semantic.csv \
             --actionability /tmp/c-pipeline/actionability.csv \
+            --history data/opportunity_history.csv \
             --out /tmp/j_eligible_preverify.csv \
             --excluded-out /tmp/j_live_excluded_preverify.csv
 

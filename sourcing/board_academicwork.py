@@ -44,7 +44,8 @@ def _clean(value: object) -> str:
 
 
 def _relevant(title: str, description: str = "") -> bool:
-    text = f"{title} {description[:3000]}".lower()
+    """Academic Work is broad: require a target-finance signal in the title."""
+    text = title.lower()
     return any(marker in text for marker in TITLE_MARKERS)
 
 
@@ -175,7 +176,7 @@ def discover_academicwork(source_id: str, max_details: int) -> tuple[list[dict],
             "discovered_at": now,
             "last_seen_at": now,
             "relevance_score": 1,
-            "matched_terms": "Academic Work finance catalogue",
+            "matched_terms": "Academic Work finance title",
             "verification": f"verified {source_id} vacancy detail",
             "status": "Open",
             "alternate_job_urls": "",

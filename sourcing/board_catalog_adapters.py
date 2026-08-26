@@ -26,11 +26,14 @@ TITLE_MARKERS = (
     "transaction", "private equity", "asset management", "equity research", "credit",
     "rahoitus", "talouspäällikkö", "økonomi", "økonom", "analyse", "analytiker", "regnskab",
 )
+STRICT_TITLE_SOURCES = {"jobserve-uk"}
 CONFIG = {
     "startupjobs-cz": {"market": "Czechia", "base": "https://www.startupjobs.cz", "listing": "https://www.startupjobs.cz/nabidky/finance", "patterns": (r"/nabidka/\d+/",)},
     "cocuma-cz": {"market": "Czechia", "base": "https://www.cocuma.cz", "listing": "https://www.cocuma.cz/jobs/", "patterns": (r"/job/",)},
     "jobwinner-ch": {"market": "Switzerland", "base": "https://www.jobwinner.ch", "listing": "https://www.jobwinner.ch/de/jobs?q={query}", "patterns": (r"/job/\d+",)},
-    "nzz-jobs-ch": {"market": "Switzerland", "base": "https://jobs.nzz.ch", "listing": "https://jobs.nzz.ch/", "patterns": (r"/job/",)},
+    # NZZ search/category pages also live below /job/alle-jobs*. A real vacancy
+    # detail has the stable /job/<slug>/<numeric-id> shape.
+    "nzz-jobs-ch": {"market": "Switzerland", "base": "https://jobs.nzz.ch", "listing": "https://jobs.nzz.ch/job/alle-jobs", "patterns": (r"/job/[^/?#]+/\d+(?:[/?#]|$)",)},
     "jobserve-uk": {"market": "United Kingdom", "base": "https://www.jobserve.com", "listing": "https://www.jobserve.com/gb/en/search-jobs-in-Greater-London%2C-London%2C-United-Kingdom/", "patterns": (r"/search-jobs-in-.+?/[A-Z0-9-]+/", r"/job-in-.+?/")},
     "jobbland-se": {"market": "Sweden", "base": "https://jobbland.se", "listing": "https://jobbland.se/lediga-jobb/kategori/ekonomi", "patterns": (r"/jobb/",)},
     "ledigajobb-se": {"market": "Sweden", "base": "https://ledigajobb.se", "listing": "https://ledigajobb.se/pr/finance-business-partner-jobb", "patterns": (r"/jobb/",)},
@@ -50,8 +53,17 @@ def _stable_id(source_id: str, url: str) -> str:
     return hashlib.sha256(f"{source_id}|{url}".encode()).hexdigest()[:16]
 
 
-def _relevant(title: str, description: str = "") -> bool:
-    text = f"{title} {description}".lower(); return any(marker in text for marker in TITLE_MARKERS)
+def _relevant(title: str, description: str = "", source_id: str = "") -> bool:
+    """Keep broad-board noise out of G while preserving downstream C judgment.
+
+    JobServe is a generalist search board. A description-only match there was
+    admitting unrelated IT, property and operations roles because their text
+    happened to mention finance/risk/banking. For that source, a target-finance
+    marker must be present in the actual title. Finance-titled ambiguous roles
+    still proceed to C for semantic judgment.
+    """
+    text = title.lower() if source_id in STRICT_TITLE_SOURCES else f"{title} {description}".lower()
+    return any(marker in text for marker in TITLE_MARKERS)
 
 
 def _jobposting(html: str) -> dict | None:
@@ -104,6 +116,31 @@ def _from_jsonld(item: dict) -> tuple[str, str, str, str, str]:
     return title, company or "Employer not stated", "; ".join(dict.fromkeys(locs)), desc, _clean(item.get("datePosted"))
 
 
+def extract_detail_fields(source_id: str, html: str) -> tuple[str, str, str, str, str]:
+    """Extract one vacancy detail with source-specific integrity safeguards.
+
+    Jobbland pages can contain multiple job-related structured fragments and
+    recommendation/tag text below the actual vacancy. The visible page H1 is the
+    authoritative title for the current detail URL, so prefer it over a possibly
+    misleading JSON-LD JobPosting title while retaining JSON-LD metadata for the
+    employer, location, description and date.
+    """
+    item = _jobposting(html)
+    if item:
+        title, company, location, description, date_posted = _from_jsonld(item)
+    else:
+        title, company, location, description = _fallback_detail(html)
+        date_posted = ""
+
+    if source_id == "jobbland-se":
+        soup = BeautifulSoup(html, "html.parser")
+        h1 = soup.find("h1")
+        visible_title = _clean(h1.get_text(" ") if h1 else "")
+        if visible_title:
+            title = visible_title
+    return title, company, location, description, date_posted
+
+
 def _get_listing(url: str) -> requests.Response:
     response = requests.get(url, headers=HEADERS, timeout=35); response.raise_for_status(); return response
 
@@ -130,13 +167,12 @@ def discover_catalog_board(source_id: str, queries: list[str], per_query: int, m
     jobs: list[dict] = []
     for url, matched in list(candidates.items())[:max_details]:
         try:
-            response = requests.get(url, headers=HEADERS, timeout=35); response.raise_for_status(); item = _jobposting(response.text)
-            if item: title, company, location, description, date_posted = _from_jsonld(item)
-            else: title, company, location, description = _fallback_detail(response.text); date_posted = ""
+            response = requests.get(url, headers=HEADERS, timeout=35); response.raise_for_status()
+            title, company, location, description, date_posted = extract_detail_fields(source_id, response.text)
             if not title: raise ValueError("title missing")
         except Exception as exc:
             errors.append(f"detail {url[-60:]}: {type(exc).__name__}"); continue
-        if not _relevant(title, description[:2500]): continue
+        if not _relevant(title, description[:2500], source_id): continue
         location = location or str(cfg["market"])
         jobs.append({"job_id": _stable_id(source_id, url), "canonical_company_id": "", "company": company, "title": title, "description": description, "description_en": "", "translation_status": "pending", "market": cfg["market"], "location": location, "priority_locations": location, "job_url": url, "source_url": url, "source_id": source_id, "date_posted": date_posted, "discovered_at": now, "last_seen_at": now, "relevance_score": len(matched), "matched_terms": "; ".join(sorted(matched)), "verification": f"verified {source_id} HTML detail", "status": "Open", "alternate_job_urls": "", "duplicate_count": 0, "calibration_score": "", "calibration_note": ""})
         time.sleep(0.08)

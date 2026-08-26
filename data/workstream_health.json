@@ -1,0 +1,48 @@
+{
+  "updated_at": "2026-08-26",
+  "legend": {
+    "green": "Done / working as intended",
+    "orange": "In progress / mostly working, remaining integration or cleanup",
+    "red": "Not working / not active yet"
+  },
+  "nodes": {
+    "A": {"health": "green", "summary": "Company universe, explicit ratings and G-discovered employer suggestions are live."},
+    "B": {"health": "orange", "summary": "Manual intake works and reaches the I view; canonical direct Applied persistence still needs cleanup."},
+    "C": {"health": "orange", "summary": "Semantic thesis, Work queues and production C→J bridge are live; backlog processing and closed-loop learning are still in progress."},
+    "D": {"health": "orange", "summary": "Remote sourcing lane exists but remains secondary and only partially integrated into canonical C."},
+    "E": {"health": "orange", "summary": "Projects/interim lane exists but the pool is sparse and canonical integration is incomplete."},
+    "F": {"health": "red", "summary": "Network/access lane is deferred and no live connection dataset is active."},
+    "G": {"health": "orange", "summary": "Broad sourcing is live; ingestion quality/source cleanup is being finished and verified."},
+    "H": {"health": "orange", "summary": "Outcome evidence from I works; grouped attainability inference is still data-limited and not yet feeding decisions."},
+    "I": {"health": "orange", "summary": "Application/history UI and factual lifecycle work; canonical B persistence/event-log cleanup remains."},
+    "J": {"health": "green", "summary": "Live J consumes promoted C=Strong + actionable roles with safe fallback and records user decisions."},
+    "COUNTRY": {"health": "green", "summary": "Country weights are active as soft sourcing and shortlist guidance."},
+    "QUALITY": {"health": "orange", "summary": "Language/actionability and parser quality gates work; unified live-link/enrichment checks are not complete."}
+  },
+  "edges": {
+    "A-G": "green",
+    "G-A": "green",
+    "A-C": "green",
+    "A-J": "green",
+    "A-F": "orange",
+    "F-A": "red",
+    "B-A": "orange",
+    "I-A": "orange",
+    "H-A": "red",
+    "C-G": "orange",
+    "G-C": "green",
+    "D-C": "orange",
+    "E-C": "orange",
+    "I-C": "orange",
+    "H-C": "red",
+    "C-J": "green",
+    "H-G": "red",
+    "H-J": "red",
+    "COUNTRY-G": "green",
+    "COUNTRY-J": "green",
+    "QUALITY-J": "orange",
+    "B-I": "orange",
+    "J-I": "green",
+    "I-H": "green"
+  }
+}

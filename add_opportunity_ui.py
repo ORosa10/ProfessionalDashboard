@@ -386,9 +386,11 @@ def render_add_opportunity() -> None:
     st.divider()
     st.subheader("Your manually added opportunities")
     st.caption("Application status is Applied in B. Salary research is read-only here; only your comment remains editable.")
+    # Keep the decision-critical salary fields near the left edge so they
+    # remain visible before the longer ChatGPT/company/role review fields.
     display_cols = [
         "title", "company", "company_category", "review_status", "feedback",
-        "company_profile", "role_profile", "salary_range", "salary_research", "user_comment", "job_url",
+        "salary_range", "salary_research", "company_profile", "role_profile", "user_comment", "job_url",
     ]
     # Use presentation-only column names here.  In some Streamlit versions the
     # first column named "title" can render without its header in data_editor,
@@ -399,10 +401,10 @@ def render_add_opportunity() -> None:
         "company_category": "Category",
         "review_status": "Status",
         "feedback": "Intent",
-        "company_profile": "Company profile",
-        "role_profile": "Role profile",
         "salary_range": "Salary range",
         "salary_research": "Salary research / expectation",
+        "company_profile": "ChatGPT company review",
+        "role_profile": "ChatGPT role review",
         "user_comment": "Your comment",
         "job_url": "Link",
     }
@@ -423,10 +425,10 @@ def render_add_opportunity() -> None:
                 "Category": st.column_config.TextColumn("Category", width="small"),
                 "Status": st.column_config.TextColumn("Status", width="small"),
                 "Intent": st.column_config.TextColumn("Intent", width="small"),
-                "Company profile": st.column_config.TextColumn("Company profile", width="large"),
-                "Role profile": st.column_config.TextColumn("Role profile", width="large"),
                 "Salary range": st.column_config.TextColumn("Salary range", width="medium"),
-                "Salary research / expectation": st.column_config.TextColumn("Salary research / expectation", width="large"),
+                "Salary research / expectation": st.column_config.TextColumn("Salary research / expectation", width="medium"),
+                "ChatGPT company review": st.column_config.TextColumn("ChatGPT company review", width="large"),
+                "ChatGPT role review": st.column_config.TextColumn("ChatGPT role review", width="large"),
                 "Your comment": st.column_config.TextColumn("Your comment", width="medium"),
                 "Link": st.column_config.LinkColumn("Link", display_text="Open", width="small"),
             },

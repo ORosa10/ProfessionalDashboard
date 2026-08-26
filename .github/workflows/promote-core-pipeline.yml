@@ -1,10 +1,14 @@
 name: Promote C pipeline to live J
 
 # Production bridge from the validated migration pipeline to the live dashboard.
-# Deliberately manual in steady state: one explicit promotion causes one Streamlit
-# redeploy, while C Work and shadow architecture can continue changing safely.
+# Normally manual; the temporary self-push trigger below is only for this verified
+# G/A cleanup promotion and is removed immediately after the run.
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/promote-core-pipeline.yml"
 
 permissions:
   actions: read

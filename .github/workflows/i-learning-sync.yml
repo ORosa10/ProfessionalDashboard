@@ -8,6 +8,8 @@ on:
       - "data/user_submitted_opportunities.csv"
       - "sourcing/reconcile_i_learning.py"
       - "sourcing/test_reconcile_i_learning.py"
+      - "sourcing/build_b_company_suggestions.py"
+      - "sourcing/test_b_company_suggestions.py"
       - ".github/workflows/i-learning-sync.yml"
   workflow_dispatch:
 
@@ -31,7 +33,7 @@ jobs:
           python-version: "3.12"
       - run: pip install pandas
       - name: Test canonical I guardrails
-        run: python -m unittest sourcing.test_reconcile_i_learning
+        run: python -m unittest sourcing.test_reconcile_i_learning sourcing.test_b_company_suggestions
       - name: Rebase on latest main
         run: git pull --rebase origin main
       - name: Reconcile I and downstream factual evidence
@@ -47,6 +49,8 @@ jobs:
             --c-events-out data/c_learning_evidence.csv \
             --h-events-out data/h_learning_events.csv \
             --h-summary-out data/h_learning_summary.csv
+      - name: Build B-discovered A suggestions
+        run: python -m sourcing.build_b_company_suggestions
       - name: Commit canonical I and learning outputs
         run: |
           git config user.name "professional-dashboard-bot"
@@ -58,7 +62,8 @@ jobs:
             data/a_learning_summary.csv \
             data/c_learning_evidence.csv \
             data/h_learning_events.csv \
-            data/h_learning_summary.csv
+            data/h_learning_summary.csv \
+            data/a_b_discovered_companies.csv
           if git diff --cached --quiet; then
             echo "Canonical I already synchronized."
           else

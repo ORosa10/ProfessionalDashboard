@@ -25,6 +25,10 @@ class CatalogAdapterTest(unittest.TestCase):
         self.assertTrue(_relevant("Corporate Treasury Analyst", "Technology-enabled treasury team.", "jobserve-uk"))
         self.assertTrue(_relevant("Product Owner - Lease Finance", "Product ownership role.", "jobserve-uk"))
 
+    def test_valuation_does_not_match_evaluation(self):
+        self.assertFalse(_relevant("AI Evaluation Engineer", "Model evaluation and testing.", "jobserve-uk"))
+        self.assertTrue(_relevant("Valuation Analyst", "Transaction modelling.", "jobserve-uk"))
+
     def test_non_jobserve_can_use_description_context(self):
         self.assertTrue(_relevant("Analyst", "Corporate finance and valuation responsibilities.", "jobwinner-ch"))
 

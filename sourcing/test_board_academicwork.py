@@ -21,6 +21,10 @@ class AcademicWorkAdapterTest(unittest.TestCase):
     def test_engineering_role_is_not_rescued_by_finance_in_description(self):
         self.assertFalse(_relevant("Embedded Linux Developer (Audio)", "Join a finance-sector client and support risk applications."))
 
+    def test_valuation_does_not_match_evaluation(self):
+        self.assertFalse(_relevant("AI Evaluation Engineer", "generic description"))
+        self.assertTrue(_relevant("Valuation Analyst", "generic description"))
+
     def test_finance_title_remains_candidate(self):
         self.assertTrue(_relevant("Cash Management Specialist", "generic description"))
         self.assertTrue(_relevant("Financial Controller", "generic description"))

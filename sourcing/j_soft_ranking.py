@@ -17,10 +17,9 @@ GERMAN_MARKERS = {
 }
 
 SENIORITY_SOFT_2 = re.compile(r"\b(lead|team lead|teamleiter(?:in)?|leiter(?:in)?)\b", re.IGNORECASE)
-SENIORITY_SOFT_1 = re.compile(
-    r"\b(manager|senior consultant|senior specialist|senior advisor|senior adviser)\b",
-    re.IGNORECASE,
-)
+MANAGER_PATTERN = re.compile(r"\bmanager\b", re.IGNORECASE)
+SENIOR_PATTERN = re.compile(r"\bsenior\b", re.IGNORECASE)
+SENIOR_ANALYST_PATTERN = re.compile(r"\bsenior\s+analyst\b", re.IGNORECASE)
 
 
 def looks_german_advert(text: object) -> bool:
@@ -47,7 +46,11 @@ def seniority_soft_penalty(title: object) -> int:
     value = str(title or "")
     if SENIORITY_SOFT_2.search(value):
         return 2
-    if SENIORITY_SOFT_1.search(value):
+    if MANAGER_PATTERN.search(value):
+        return 1
+    # Senior Analyst remains inside the target band; other Senior titles get a
+    # mild downgrade rather than being excluded.
+    if SENIOR_PATTERN.search(value) and not SENIOR_ANALYST_PATTERN.search(value):
         return 1
     return 0
 

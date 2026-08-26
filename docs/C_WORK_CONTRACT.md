@@ -11,7 +11,7 @@ C Work semantic judgment
         ↓
 Strong / Moderate / Weak
         ↓
-Strong only → downstream Actionability / Quality → J
+Strong only → downstream Actionability / current-vacancy checks → J
 ```
 
 C Work is the semantic evaluator. It is not a sourcing engine, actionability filter, ranking engine or application tracker.
@@ -28,9 +28,9 @@ The current C thesis is materially stricter than the historical judgments that s
 
 That file contains currently active G opportunities that already have a C judgment. Re-judge them from scratch using the current thesis. The previous fit/reasoning fields are audit context only and must not anchor the new verdict.
 
-Save the recalibration results as a new file under `data/semantic_fit_reviews/`. The canonical compiler keeps the newest judgment per `opportunity_id`.
+Save the recalibration results as a new file under `data/semantic_fit_reviews/`. The canonical compiler keeps the newest judgment by `generated_at` per `opportunity_id`.
 
-After this one-time sweep, normal runs should process only `c_work_queue.csv` and must not repeatedly re-review completed IDs unless a later explicit thesis recalibration is declared.
+After this one-time sweep, normal runs should process only `c_work_queue.csv` and must not repeatedly re-review completed IDs unless a later explicit thesis recalibration or Strong quality re-check is declared.
 
 ## Steady-state input
 
@@ -64,7 +64,7 @@ Allowed `fit` values only:
 - `Moderate`
 - `Weak`
 
-`reasoning` should be one concise sentence explaining the actual role-content judgment. Do not discuss salary, language, geography, company attractiveness, link health or attainability.
+`reasoning` should be one concise, role-specific sentence explaining the actual role-content judgment. Do not discuss salary, language, geography, company attractiveness, link health or attainability.
 
 ## Review method
 
@@ -74,8 +74,23 @@ For every role:
 2. Identify what the person would spend most of the week doing.
 3. Compare those core duties with `docs/C_SEMANTIC_THESIS.md`.
 4. Decide Strong / Moderate / Weak independently of other roles in the queue.
-5. Write one short semantic reason.
+5. Write one short semantic reason grounded in the actual duties.
 6. Continue through the queue; if Work execution limits stop the run, the next run continues from remaining unresolved IDs rather than re-reviewing completed IDs.
+
+## Mandatory Strong verification gate
+
+Before any batch is saved, re-read **every row tentatively rated Strong** from scratch and actively try to disprove the Strong verdict.
+
+A Strong verdict survives only if the actual vacancy responsibilities contain concrete evidence that target work is central to the normal working week. The verification must not rely on title resemblance or generic finance vocabulary.
+
+In particular:
+- `Portfolio Manager` must mean financial/investment portfolio decisions, not product, category, project or programme portfolio management.
+- `Treasury` roles dominated by process automation, systems, payments operations, reconciliation or regulatory reporting are not automatically Strong.
+- `Risk` roles dominated by governance, controls, regulatory frameworks or transformation are not automatically Strong.
+- `M&A` in legal, tax, outreach, sourcing or technology-support work does not make the underlying profession transaction finance.
+- `Valuation` is Strong only when the valuation/model work materially supports transactions, investments or financing decisions; accounting/control/model-production work is not automatically Strong.
+
+If the role-specific evidence is insufficient to defend Strong, downgrade it to Moderate (or Weak where clearly outside thesis) before saving. Generic repeated reasoning that could be pasted onto unrelated roles is a quality failure and must be rewritten or the verdict reconsidered.
 
 ## Speed rules
 
@@ -87,6 +102,7 @@ For every role:
 - Ambiguous finance-adjacent roles deserve the deeper semantic read.
 - Only open the vacancy URL when the supplied description is insufficient or clearly boilerplate.
 - Queue order is review priority only and must never influence the fit label.
+- Speed never overrides the mandatory Strong verification gate.
 
 ## Quality guardrails
 
@@ -104,7 +120,7 @@ Reviewed rows are appended as a new CSV under:
 
 `data/semantic_fit_reviews/`
 
-The replenishment workflow compiles `data/semantic_fit.csv` plus all review files and keeps the latest judgment per `opportunity_id`.
+The replenishment pipeline compiles `data/semantic_fit.csv` plus all review files and keeps the judgment with the newest `generated_at` per `opportunity_id`. File names are audit labels only and must not determine precedence.
 
 Do not overwrite historic review files. Use a new timestamped Work review file for each save.
 

@@ -20,7 +20,7 @@ jobs-ch,manual_fallback,jobs_ch_html,False,NO,Manual fallback,2026-08-20
 jobscout24-ch,blocked,,False,NO,Direct unattended access returned 403,2026-08-20
 jobup-ch,manual_fallback,jobup_ch_html,False,NO,Manual fallback,2026-08-20
 indeed-ch,manual_fallback,,False,NO,Aggregator/anti-bot characteristics make unattended scraping unreliable,2026-08-20
-findajob-uk,adapter_ready,findajob_uk_html,True,YES,DWP source still times out intermittently; retain for revalidation,2026-08-20
+findajob-uk,manual_fallback,findajob_uk_html,False,NO,Repeated unattended ReadTimeout/no-detail runs with zero retained roles on 2026-08-26; keep manual only,2026-08-26
 jobserve-uk,active,jobserve_uk_html,True,YES,Latest live run returned 10 verified UK roles,2026-08-20
 reed-uk,blocked,,False,NO,Previously returned 403 unattended,2026-08-20
 indeed-uk,manual_fallback,,False,NO,Large aggregator with unstable unattended access,2026-08-20

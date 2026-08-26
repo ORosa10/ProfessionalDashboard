@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import patch
 
 import pandas as pd
 
+from action_queue_ui import _select_top
 from sourcing.j_soft_ranking import add_soft_rank_columns, looks_german_advert, seniority_soft_penalty
 
 
@@ -25,6 +27,7 @@ class JSoftRankingTests(unittest.TestCase):
     def test_seniority_is_soft_not_exclusion(self) -> None:
         self.assertEqual(seniority_soft_penalty("Investment Banking Senior Analyst"), 0)
         self.assertEqual(seniority_soft_penalty("Treasury Specialist"), 0)
+        self.assertEqual(seniority_soft_penalty("Senior Treasury Specialist"), 1)
         self.assertEqual(seniority_soft_penalty("Senior Consultant M&A"), 1)
         self.assertEqual(seniority_soft_penalty("Treasury Manager"), 1)
         self.assertEqual(seniority_soft_penalty("Treasury Lead"), 2)
@@ -37,6 +40,36 @@ class JSoftRankingTests(unittest.TestCase):
             "title": "Treasury Specialist", "country_bucket": "Germany", "description": text,
         }])).iloc[0]
         self.assertEqual(row["_language_soft"], 1)
+
+    def test_quality_tier_beats_country_target(self) -> None:
+        jobs = pd.DataFrame([
+            {
+                "company": "German Co", "title": "Treasury Specialist", "country_bucket": "Germany",
+                "is_curated": False, "_seniority_soft": 0, "_language_soft": 1,
+            },
+            {
+                "company": "Swedish Co", "title": "Treasury Specialist", "country_bucket": "Sweden",
+                "is_curated": False, "_seniority_soft": 0, "_language_soft": 0,
+            },
+        ])
+        with patch("action_queue_ui._country_targets", return_value={"Germany": 1}):
+            selected = _select_top(jobs, 1)
+        self.assertEqual(selected.iloc[0]["company"], "Swedish Co")
+
+    def test_country_target_breaks_tie_inside_same_quality_tier(self) -> None:
+        jobs = pd.DataFrame([
+            {
+                "company": "Swedish Co", "title": "Treasury Specialist", "country_bucket": "Sweden",
+                "is_curated": False, "_seniority_soft": 0, "_language_soft": 0,
+            },
+            {
+                "company": "German Co", "title": "Treasury Specialist", "country_bucket": "Germany",
+                "is_curated": False, "_seniority_soft": 0, "_language_soft": 0,
+            },
+        ])
+        with patch("action_queue_ui._country_targets", return_value={"Germany": 1}):
+            selected = _select_top(jobs, 1)
+        self.assertEqual(selected.iloc[0]["company"], "German Co")
 
 
 if __name__ == "__main__":

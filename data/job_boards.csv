@@ -20,7 +20,7 @@ jobs-ch,Switzerland,jobs.ch,https://www.jobs.ch/,False,jobs_ch_html,False,manual
 jobscout24-ch,Switzerland,JobScout24.ch,https://www.jobscout24.ch/,False,,False,blocked,403 unattended
 jobup-ch,Switzerland,jobup.ch,https://www.jobup.ch/,False,jobup_ch_html,False,manual_fallback,Manual fallback
 indeed-ch,Switzerland,Indeed Switzerland,https://ch.indeed.com/,False,,False,manual_fallback,Manual fallback
-findajob-uk,United Kingdom,DWP Find a job,https://findajob.dwp.gov.uk/,False,findajob_uk_html,True,adapter_ready,Official UK source; hardened search queued
+findajob-uk,United Kingdom,DWP Find a job,https://findajob.dwp.gov.uk/,False,findajob_uk_html,False,manual_fallback,Repeated unattended timeouts and zero retained roles; keep manual only
 jobserve-uk,United Kingdom,JobServe,https://www.jobserve.com/gb/en/,True,jobserve_uk_html,True,active,Live-verified professional/finance source
 reed-uk,United Kingdom,Reed.co.uk,https://www.reed.co.uk/,False,,False,blocked,403 unattended
 indeed-uk,United Kingdom,Indeed UK,https://uk.indeed.com/,False,,False,manual_fallback,Manual fallback

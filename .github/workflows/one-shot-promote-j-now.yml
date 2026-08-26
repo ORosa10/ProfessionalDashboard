@@ -1,5 +1,6 @@
 name: One-shot promote clean C to J
 
+# Triggered once after cross-source history identity fix; delete after successful run.
 on:
   push:
     branches: [main]

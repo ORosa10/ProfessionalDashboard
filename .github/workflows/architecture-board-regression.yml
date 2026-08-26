@@ -9,6 +9,8 @@ on:
       - "sourcing/test_board_catalog_adapters.py"
       - "sourcing/board_html_adapters.py"
       - "sourcing/test_board_html_adapters.py"
+      - "sourcing/board_academicwork.py"
+      - "sourcing/test_board_academicwork.py"
       - "sourcing/czech_board_identity.py"
       - "sourcing/test_czech_board_identity.py"
       - "sourcing/g_data_quality.py"
@@ -33,4 +35,5 @@ jobs:
           python -m unittest
           sourcing.test_board_catalog_adapters
           sourcing.test_board_html_adapters
+          sourcing.test_board_academicwork
           sourcing.test_czech_board_identity

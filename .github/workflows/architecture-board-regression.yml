@@ -7,6 +7,11 @@ on:
     paths:
       - "sourcing/board_catalog_adapters.py"
       - "sourcing/test_board_catalog_adapters.py"
+      - "sourcing/board_html_adapters.py"
+      - "sourcing/test_board_html_adapters.py"
+      - "sourcing/czech_board_identity.py"
+      - "sourcing/test_czech_board_identity.py"
+      - "sourcing/g_data_quality.py"
       - ".github/workflows/architecture-board-regression.yml"
   workflow_dispatch:
 
@@ -23,5 +28,9 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install requests beautifulsoup4
-      - name: Run board catalogue regression tests
-        run: python -m unittest sourcing.test_board_catalog_adapters
+      - name: Run board parser regression tests
+        run: >-
+          python -m unittest
+          sourcing.test_board_catalog_adapters
+          sourcing.test_board_html_adapters
+          sourcing.test_czech_board_identity

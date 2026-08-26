@@ -7,6 +7,7 @@ on:
       - "company_targeting_ui.py"
       - "sourcing/g_data_quality.py"
       - "sourcing/test_g_data_quality.py"
+      - "sourcing/test_company_targeting_promotion.py"
       - ".github/workflows/a-g-quality-checks.yml"
 
 permissions:
@@ -23,6 +24,9 @@ jobs:
           python-version: "3.12"
       - run: pip install pandas streamlit requests
       - name: Unit tests
-        run: python -m unittest sourcing.test_g_data_quality
+        run: |
+          python -m unittest \
+            sourcing.test_g_data_quality \
+            sourcing.test_company_targeting_promotion
       - name: Compile A UI
         run: python -m py_compile company_targeting_ui.py sourcing/g_data_quality.py

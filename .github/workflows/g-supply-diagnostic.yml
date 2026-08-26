@@ -18,53 +18,15 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pandas
-      - name: Summarize current G to J supply
+      - name: Rebuild current C queue without scraping
         run: |
+          python -m sourcing.build_semantic_fit_queue --limit 160 --out /tmp/semantic_fit_queue.csv
           python - <<'PY'
-          from pathlib import Path
           import pandas as pd
-          from sourcing.j_soft_ranking import add_soft_rank_columns
-
-          def load(path):
-              p = Path(path)
-              return pd.read_csv(p).fillna("") if p.exists() and p.stat().st_size else pd.DataFrame()
-
-          g = load('data/jobs_board_staging.csv')
-          sem = load('data/semantic_fit.csv')
-          if not g.empty:
-              open_g = g[g['status'].eq('Open')].copy()
-              open_g = add_soft_rank_columns(open_g)
-              print('OPEN G BY MARKET')
-              print(open_g.groupby('market').size().sort_values(ascending=False).to_string())
-              print('\nOPEN G BY SOURCE')
-              print(open_g.groupby(['market','source_id']).size().sort_values(ascending=False).to_string())
-              print('\nOPEN G LOCAL-LANGUAGE SIGNAL BY MARKET')
-              print(open_g.groupby('market')['_language_soft'].agg(['count','sum']).to_string())
-
-              if not sem.empty and {'opportunity_id','fit'}.issubset(sem.columns):
-                  latest = sem.drop_duplicates('opportunity_id', keep='last')[['opportunity_id','fit']]
-                  x = open_g.merge(latest, left_on='job_id', right_on='opportunity_id', how='left')
-                  x['fit'] = x['fit'].replace('', 'Unresolved').fillna('Unresolved')
-                  x['advert_bucket'] = x['_language_soft'].map({0:'English/no-local-signal',1:'Local-language'})
-                  print('\nOPEN G C OUTCOME BY MARKET')
-                  print(pd.crosstab(x['market'], x['fit']).to_string())
-                  print('\nOPEN G C OUTCOME BY MARKET + ADVERT LANGUAGE')
-                  print(x.groupby(['market','advert_bucket','fit']).size().to_string())
-
-          q = load('data/semantic_fit_queue.csv')
-          if not q.empty:
-              print('\nCURRENT C QUEUE BY MARKET')
-              if 'market' in q.columns:
-                  print(q.groupby('market').size().sort_values(ascending=False).to_string())
-              print('C queue rows:', len(q))
-          j = load('data/j_eligible_pool.csv')
-          if not j.empty:
-              j = add_soft_rank_columns(j)
-              print('\nLIVE J POOL BY MARKET')
-              print(j.groupby('market').size().sort_values(ascending=False).to_string())
-              print('\nLIVE J POOL BY SOURCE')
-              print(j.groupby(['market','source_id']).size().sort_values(ascending=False).to_string())
-              print('\nLIVE J LOCAL-LANGUAGE SIGNAL BY MARKET')
-              print(j.groupby('market')['_language_soft'].agg(['count','sum']).to_string())
-              print('J pool rows:', len(j))
+          q = pd.read_csv('/tmp/semantic_fit_queue.csv').fillna('')
+          print('FRESH C QUEUE BY MARKET')
+          print(q.groupby('market').size().sort_values(ascending=False).to_string())
+          print('\nFRESH C QUEUE BY MARKET + ROLE FAMILY')
+          print(q.groupby(['market','role_family']).size().to_string())
+          print('rows:', len(q))
           PY

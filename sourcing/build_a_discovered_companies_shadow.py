@@ -4,6 +4,7 @@ This is deliberately conservative:
 - it never writes company ratings;
 - it never overwrites a known company;
 - it groups repeated employer sightings from G into one suggestion;
+- obvious parser/navigation artefacts are removed before they can become A suggestions;
 - the output is context for A, not a role-fit or Apply decision.
 """
 from __future__ import annotations
@@ -15,6 +16,7 @@ from pathlib import Path
 import pandas as pd
 
 from sourcing.build_semantic_fit_queue import _load_company_universe, _norm
+from sourcing.g_data_quality import invalid_company_name, invalid_job_title
 
 OUTPUT_COLUMNS = [
     "suggested_company_id", "company", "role_count", "countries", "source_streams",
@@ -53,9 +55,12 @@ def build_a_suggestions(candidates: pd.DataFrame, universe: pd.DataFrame | None 
     for col in ["company", "title", "country_bucket", "market", "source_streams", "date_posted", "last_seen_at"]:
         if col not in jobs.columns:
             jobs[col] = ""
-    jobs = jobs[jobs["company"].astype(str).str.strip().ne("")].copy()
+    jobs = jobs[
+        ~jobs["company"].map(invalid_company_name)
+        & ~jobs["title"].map(invalid_job_title)
+    ].copy()
     jobs["_company_key"] = jobs["company"].map(_norm)
-    jobs = jobs[~jobs["_company_key"].isin(known_names)].copy()
+    jobs = jobs[jobs["_company_key"].ne("") & ~jobs["_company_key"].isin(known_names)].copy()
     if jobs.empty:
         return pd.DataFrame(columns=OUTPUT_COLUMNS)
 
@@ -71,10 +76,12 @@ def build_a_suggestions(candidates: pd.DataFrame, universe: pd.DataFrame | None 
         titles = []
         for value in group["title"]:
             title = str(value).strip()
-            if title and title not in titles:
+            if title and not invalid_job_title(title) and title not in titles:
                 titles.append(title)
             if len(titles) >= 4:
                 break
+        if not titles:
+            continue
         posted = pd.to_datetime(group["date_posted"], errors="coerce", utc=True)
         seen = pd.to_datetime(group["last_seen_at"], errors="coerce", utc=True)
         first = posted.min()

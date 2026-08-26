@@ -14,6 +14,14 @@ on:
       - "sourcing/test_sector_adapter_fallback.py"
       - "sourcing/verify_live_j_links.py"
       - "sourcing/test_verify_live_j_links.py"
+      - "sourcing/board_sweep_v2.py"
+      - "sourcing/board_catalog_adapters.py"
+      - "sourcing/test_board_catalog_adapters.py"
+      - "sourcing/build_semantic_fit_queue.py"
+      - "sourcing/queue_selection.py"
+      - "sourcing/test_queue_selection.py"
+      - "sourcing/g_query_profiles.py"
+      - "sourcing/test_g_query_profiles.py"
       - "scripts/build_sector_sources.py"
       - ".github/workflows/a-g-quality-checks.yml"
       - ".github/workflows/promote-core-pipeline.yml"
@@ -39,6 +47,9 @@ jobs:
             sourcing.test_company_targeting_promotion \
             sourcing.test_sync_a_company_sources \
             sourcing.test_sector_adapter_fallback \
-            sourcing.test_verify_live_j_links
+            sourcing.test_verify_live_j_links \
+            sourcing.test_board_catalog_adapters \
+            sourcing.test_queue_selection \
+            sourcing.test_g_query_profiles
       - name: Compile A/G modules
-        run: python -m py_compile company_targeting_ui.py sourcing/g_data_quality.py sourcing/sync_a_company_sources.py sourcing/sector_pilot.py sourcing/verify_live_j_links.py scripts/build_sector_sources.py
+        run: python -m py_compile company_targeting_ui.py sourcing/g_data_quality.py sourcing/sync_a_company_sources.py sourcing/sector_pilot.py sourcing/verify_live_j_links.py sourcing/board_sweep_v2.py sourcing/board_catalog_adapters.py sourcing/build_semantic_fit_queue.py sourcing/queue_selection.py sourcing/g_query_profiles.py scripts/build_sector_sources.py

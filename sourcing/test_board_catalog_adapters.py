@@ -18,6 +18,17 @@ class CatalogAdapterTest(unittest.TestCase):
             ["https://www.jobwinner.ch/job/14645177"],
         )
 
+    def test_nzz_only_extracts_real_vacancy_details(self):
+        html = '''
+        <a href="/job/alle-jobs">all jobs</a>
+        <a href="/job/alle-jobs-berufsgruppe-finanz-treuhand-controlling-risk-steuern">finance category</a>
+        <a href="/job/treasury-manager-zuerich/496136">Treasury Manager</a>
+        '''
+        self.assertEqual(
+            extract_catalog_links("nzz-jobs-ch", html, 5),
+            ["https://jobs.nzz.ch/job/treasury-manager-zuerich/496136"],
+        )
+
     def test_jobbank(self):
         html = '<a href="/job/3067629/">Treasury Analyst</a>'
         self.assertEqual(

@@ -14,6 +14,8 @@ from urllib.parse import quote, urljoin
 import requests
 from bs4 import BeautifulSoup
 
+from sourcing.g_data_quality import invalid_company_name
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -118,11 +120,15 @@ def _fallback_detail(html: str) -> dict | None:
     if not title:
         return None
     company = ""
+    # HTML boards often contain navigation/actions with generic h2/h3 or
+    # company-like CSS classes. Never promote such UI text into employer identity.
     for selector in ("[class*=company]", "[class*=employer]", "h2", "h3"):
-        node = soup.select_one(selector)
-        candidate = _clean(node.get_text(" ", strip=True)) if node else ""
-        if candidate and candidate != title:
-            company = candidate[:180]
+        for node in soup.select(selector):
+            candidate = _clean(node.get_text(" ", strip=True))
+            if candidate and candidate != title and not invalid_company_name(candidate):
+                company = candidate[:180]
+                break
+        if company:
             break
     return {
         "title": title,
@@ -216,12 +222,15 @@ def discover_html_jsonld_board(source_id: str, market: str, queries: list[str], 
         organization = item.get("hiringOrganization") or {}
         if not isinstance(organization, dict):
             organization = {}
+        company = _clean(organization.get("name"))
+        if invalid_company_name(company):
+            company = "Employer not stated"
         identifier = item.get("identifier") or ""
         external_id = _clean(identifier.get("value")) if isinstance(identifier, dict) else _clean(identifier)
         location = _location(item, market)
         jobs.append({
             "job_id": _stable_id(source_id, external_id, url), "canonical_company_id": "",
-            "company": _clean(organization.get("name")) or "Employer not stated", "title": title,
+            "company": company or "Employer not stated", "title": title,
             "description": _description(item), "description_en": "", "translation_status": "pending",
             "market": market, "location": location, "priority_locations": location,
             "job_url": url, "source_url": url, "source_id": source_id,

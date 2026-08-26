@@ -1,0 +1,113 @@
+name: Promote C pipeline to live J
+
+# Production bridge from the validated migration pipeline to the live dashboard.
+# Deliberately manual during the first cutover: one promotion causes one Streamlit
+# redeploy, while C Work and shadow architecture can continue changing safely.
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: promote-core-pipeline
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install pandas
+
+      - name: Test production J guardrails
+        run: python -m unittest sourcing.test_build_live_j_pool
+
+      - name: Download latest successful C pipeline artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/c-pipeline
+          run_id=$(gh run list \
+            --repo "$GITHUB_REPOSITORY" \
+            --branch architecture-safe-migration \
+            --limit 50 \
+            --json databaseId,name,conclusion,headBranch,createdAt \
+            --jq '[.[] | select(.name == "Architecture replenishment shadow" and .conclusion == "success")][0].databaseId')
+          if [ -z "$run_id" ] || [ "$run_id" = "null" ]; then
+            echo "No successful architecture replenishment artifact found"
+            exit 1
+          fi
+          echo "Using architecture replenishment run $run_id"
+          gh run download "$run_id" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name architecture-replenishment-shadow \
+            --dir /tmp/c-pipeline
+          echo "$run_id" > /tmp/c-pipeline/run_id.txt
+
+      - name: Build live J eligible pool
+        run: |
+          python -m sourcing.build_live_j_pool \
+            --candidates /tmp/c-pipeline/j_candidates.csv \
+            --semantic /tmp/c-pipeline/c_semantic.csv \
+            --actionability /tmp/c-pipeline/actionability.csv \
+            --out data/j_eligible_pool.csv \
+            --excluded-out data/j_live_excluded.csv
+          if [ -s /tmp/c-pipeline/a_discovered_companies.csv ]; then
+            cp /tmp/c-pipeline/a_discovered_companies.csv data/a_discovered_companies.csv
+          fi
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          import pandas as pd
+
+          pool = pd.read_csv('data/j_eligible_pool.csv').fillna('')
+          excluded = pd.read_csv('data/j_live_excluded.csv').fillna('')
+          run_id = Path('/tmp/c-pipeline/run_id.txt').read_text().strip()
+          status = {
+              'promoted_at': datetime.now(timezone.utc).isoformat(),
+              'source_workflow_run_id': run_id,
+              'eligible_regular_j': len(pool),
+              'strong_in_live_pool': int((pool.get('semantic_fit', '') == 'Strong').sum()) if len(pool) else 0,
+              'production_exclusions': excluded['excluded_reason'].value_counts().to_dict() if len(excluded) else {},
+          }
+          Path('data/c_pipeline_status.json').write_text(json.dumps(status, indent=2), encoding='utf-8')
+          print(json.dumps(status, indent=2))
+          PY
+
+      - name: Commit promoted C/J data to main
+        run: |
+          git config user.name "professional-dashboard-bot"
+          git config user.email "professional-dashboard-bot@users.noreply.github.com"
+          git add data/j_eligible_pool.csv data/j_live_excluded.csv data/c_pipeline_status.json
+          if [ -f data/a_discovered_companies.csv ]; then
+            git add data/a_discovered_companies.csv
+          fi
+          if git diff --cached --quiet; then
+            echo "Nothing new to promote"
+            exit 0
+          fi
+          git commit -m "Promote C pipeline to live J"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort
+              echo "Live C/J promotion conflicts with newer main"
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          echo "Could not push live C/J data after three attempts"
+          exit 1

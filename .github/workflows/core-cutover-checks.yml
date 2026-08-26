@@ -1,0 +1,29 @@
+name: Core C-to-J cutover checks
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "action_queue_ui.py"
+      - "sourcing/build_live_j_pool.py"
+      - "sourcing/test_build_live_j_pool.py"
+      - ".github/workflows/promote-core-pipeline.yml"
+      - ".github/workflows/core-cutover-checks.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas streamlit
+      - name: Unit tests
+        run: python -m unittest sourcing.test_build_live_j_pool
+      - name: Compile live J UI
+        run: python -m py_compile action_queue_ui.py sourcing/build_live_j_pool.py

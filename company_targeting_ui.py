@@ -24,6 +24,12 @@ DISCOVERED_COLUMNS = [
     "suggested_company_id", "company", "role_count", "countries", "source_streams",
     "sample_titles", "first_seen_at", "last_seen_at", "suggested_rating", "evidence_source",
 ]
+DISCOVERED_UNIVERSE_PATH = "data/company_universe_wave5_discovered.csv"
+DISCOVERED_UNIVERSE_COLUMNS = [
+    "canonical_company_id", "company", "parent_company_id", "aliases_entities",
+    "region", "locations", "archetype", "why_test", "career_url",
+    "source_strategy", "rating", "notes", "company_category",
+]
 COMPANY_THESIS_SCOPES = [
     "General (all company types)",
     "Big Four",
@@ -68,6 +74,59 @@ def _usable_suggestion(row: pd.Series, known_names: set[str]) -> bool:
     return any(not invalid_job_title(title) for title in titles)
 
 
+def _discovered_universe_row(suggestion: pd.Series, rating: str) -> dict[str, object]:
+    countries = str(suggestion.get("countries", "")).strip()
+    region = countries.split(";", 1)[0].strip() if countries else "Multi-region"
+    return {
+        "canonical_company_id": str(suggestion.get("suggested_company_id", "")).strip(),
+        "company": str(suggestion.get("company", "")).strip(),
+        "parent_company_id": "",
+        "aliases_entities": "",
+        "region": region or "Multi-region",
+        "locations": countries,
+        "archetype": "G-discovered employer",
+        "why_test": str(suggestion.get("sample_titles", "")).strip(),
+        "career_url": "",
+        "source_strategy": "G discovery → explicit A review",
+        "rating": rating,
+        "notes": "Promoted from G after explicit A rating.",
+        "company_category": "Unclassified / G discovered",
+    }
+
+
+def _promote_discovered_companies(
+    token: str,
+    changes: list[tuple[str, str]],
+    discovered: pd.DataFrame,
+) -> None:
+    """Persist explicitly reviewed G employers as normal Company Universe rows.
+
+    Suggestions are read-only until the user assigns a rating. Once reviewed,
+    the employer becomes a normal A entity, so existing downstream company
+    context and J ranking/exclusion logic can consume the rating without a
+    special parallel data path.
+    """
+    promoted, promoted_sha = load_csv_file(
+        token, DISCOVERED_UNIVERSE_PATH, DISCOVERED_UNIVERSE_COLUMNS
+    )
+    promoted = promoted.reindex(columns=DISCOVERED_UNIVERSE_COLUMNS, fill_value="")
+    by_id = promoted.drop_duplicates("canonical_company_id", keep="last").set_index("canonical_company_id") if not promoted.empty else pd.DataFrame(columns=DISCOVERED_UNIVERSE_COLUMNS[1:])
+    by_id.index.name = "canonical_company_id"
+    src = discovered.set_index("suggested_company_id")
+    for suggested_id, rating in changes:
+        if suggested_id not in src.index:
+            continue
+        rec = _discovered_universe_row(src.loc[suggested_id], rating)
+        by_id.loc[suggested_id] = pd.Series({k: v for k, v in rec.items() if k != "canonical_company_id"})
+    save_csv_file(
+        token,
+        DISCOVERED_UNIVERSE_PATH,
+        by_id.reset_index().reindex(columns=DISCOVERED_UNIVERSE_COLUMNS, fill_value=""),
+        promoted_sha,
+        "Promote explicitly rated G employers into A universe",
+    )
+
+
 def render_discovered_company_suggestions() -> None:
     """Show G-discovered employers as A suggestions without auto-rating them."""
     if not DISCOVERED_COMPANIES_PATH.exists() or not DISCOVERED_COMPANIES_PATH.stat().st_size:
@@ -102,7 +161,8 @@ def render_discovered_company_suggestions() -> None:
     st.subheader("Discovered by G")
     st.caption(
         "New employers found while sourcing vacancies. They enter A only as Unrated suggestions. "
-        "Nothing changes your company thesis unless you explicitly assign A/B/C/Exclude here."
+        "Assigning A/B/C/Exclude explicitly promotes the employer into the Company Universe; "
+        "until then it cannot change your company thesis or J ranking."
     )
     st.metric("Unrated / discovered employers", int((discovered["rating"] == "Unrated").sum()))
 
@@ -132,7 +192,7 @@ def render_discovered_company_suggestions() -> None:
         key="a_discovered_company_editor",
     )
 
-    changed = []
+    changed: list[tuple[str, str]] = []
     for suggested_id, row in edited.iterrows():
         old = str(view.loc[suggested_id, "rating"] or "Unrated")
         new = str(row.get("rating", "Unrated") or "Unrated")
@@ -157,11 +217,14 @@ def render_discovered_company_suggestions() -> None:
             else:
                 current.at[suggested_id, "rating"] = new_rating
         try:
+            # Promote first. If the rating save then fails, the promoted row still
+            # carries the same explicit rating as a safe local fallback.
+            _promote_discovered_companies(token, changed, discovered)
             save_ratings(token, current.reset_index().reindex(columns=RATING_COLUMNS, fill_value=""), ratings_sha)
         except Exception as exc:
             st.error(f"Saving A rating failed: {exc}")
         else:
-            st.toast("A rating saved", icon="✅")
+            st.toast("A rating saved and employer promoted", icon="✅")
             st.rerun()
 
 

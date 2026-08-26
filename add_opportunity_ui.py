@@ -248,12 +248,12 @@ def render_add_opportunity() -> None:
     st.markdown('<div class="eyebrow">Workstream B</div>', unsafe_allow_html=True)
     st.title("Add Opportunity")
     st.caption(
-        "Paste a role you found yourself. Saving it means Interested: it enters I immediately. "
+        "Paste a role you already applied to yourself. Saving it means Applied: it enters I immediately. "
         "A zero-cost public-web salary search is queued automatically; no paid model API is used."
     )
     with st.expander("How this works"):
         st.write(
-            "B is an intentional manual-intake lane. A role you actively add is automatically treated as Interested, "
+            "B is an intentional manual-application lane. A role you add here is automatically treated as Applied, "
             "so there is no second preference-rating step and it never needs to pass through J. The app stores the raw link first "
             "and parses the company job page when possible. Salary research runs separately using public web-search results only; "
             "weak evidence is explicitly flagged for ChatGPT review instead of inventing a number."
@@ -272,7 +272,7 @@ def render_add_opportunity() -> None:
         placeholder="Useful when the reason is not obvious from the job description.",
     )
     has_link = bool(linkedin_url.strip() or company_url.strip())
-    if st.button("Add as Interested", type="primary", disabled=not has_link):
+    if st.button("Add as Applied", type="primary", disabled=not has_link):
         token = github_token()
         if not token:
             st.error("GitHub saving is not configured for this app.")
@@ -310,7 +310,7 @@ def render_add_opportunity() -> None:
                 "location": draft.get("location", ""),
                 "role_summary_en": draft.get("description", ""),
                 "user_comment": comment.strip(),
-                "feedback": "Interested",
+                "feedback": "Applied",
                 "calibration_signal": "User-supplied positive example",
                 "targeting_scope": category if category != "Unclassified" else "General",
                 "review_status": "Needs enrichment",
@@ -319,7 +319,7 @@ def render_add_opportunity() -> None:
             opportunities = pd.concat([opportunities, pd.DataFrame([row])], ignore_index=True)
             opportunities = opportunities.drop_duplicates("submission_id", keep="last")
             try:
-                save_csv_file(token, SUBMISSIONS_PATH, opportunities, opp_sha, "Add Interested opportunity")
+                save_csv_file(token, SUBMISSIONS_PATH, opportunities, opp_sha, "Add Applied opportunity")
             except Exception:
                 st.error("Saving failed. Refresh the page and try again.")
             else:
@@ -331,7 +331,7 @@ def render_add_opportunity() -> None:
                         "Use the Research / refresh salary button below."
                     )
                 else:
-                    st.success("Saved as Interested and sent to I. Zero-cost salary research is queued.")
+                    st.success("Saved as Applied and sent to I. Zero-cost salary research is queued.")
 
     st.divider()
     token = github_token()
@@ -385,7 +385,7 @@ def render_add_opportunity() -> None:
 
     st.divider()
     st.subheader("Your manually added opportunities")
-    st.caption("Intent is always Interested. Salary research is read-only here; only your comment remains editable.")
+    st.caption("Application status is Applied in B. Salary research is read-only here; only your comment remains editable.")
     display_cols = [
         "title", "company", "company_category", "review_status", "feedback",
         "company_profile", "role_profile", "salary_range", "salary_research", "user_comment", "job_url",
@@ -421,7 +421,7 @@ def render_add_opportunity() -> None:
             updated = raw_saved.set_index("submission_id")
             shared = updated.index.intersection(edited.index)
             updated.loc[shared, "user_comment"] = edited.loc[shared, "user_comment"]
-            updated.loc[shared, "feedback"] = "Interested"
+            updated.loc[shared, "feedback"] = "Applied"
             updated.loc[shared, "calibration_signal"] = "User-supplied positive example"
             try:
                 save_csv_file(

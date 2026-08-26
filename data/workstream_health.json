@@ -6,18 +6,54 @@
     "red": "Not working / not active yet"
   },
   "nodes": {
-    "A": {"health": "green", "summary": "Company universe, explicit ratings, G-discovered employers and read-only company learning from canonical I are live."},
-    "B": {"health": "green", "summary": "Manual intake is reconciled automatically into canonical I as Apply / Applied and bypasses J."},
-    "C": {"health": "orange", "summary": "Semantic thesis, Work queues and production C→J bridge are live; ongoing Work recalibration still remains a maintained process."},
-    "D": {"health": "orange", "summary": "Remote sourcing lane exists but remains secondary and only partially integrated into canonical C."},
-    "E": {"health": "orange", "summary": "Projects/interim lane exists but the pool is sparse and canonical integration is incomplete."},
-    "F": {"health": "red", "summary": "Network/access lane is deferred and no live connection dataset is active."},
-    "G": {"health": "orange", "summary": "Broad sourcing is live; ingestion quality is materially improved but some secondary boards still require timeout/404 maintenance."},
-    "H": {"health": "orange", "summary": "Canonical I event evidence and grouped factual summaries are live; confidence-aware attainability inference is still data-limited and not yet feeding decisions."},
-    "I": {"health": "green", "summary": "Canonical latest-state history, automatic B reconciliation and append-only lifecycle event log are live; A/C/H factual evidence is regenerated from I."},
-    "J": {"health": "green", "summary": "Live J consumes promoted C=Strong + actionable roles with safe fallback and records user decisions into canonical I."},
-    "COUNTRY": {"health": "green", "summary": "Country weights are active as soft sourcing and shortlist guidance."},
-    "QUALITY": {"health": "orange", "summary": "Language/actionability and parser quality gates work; unified live-link/enrichment checks are not complete."}
+    "A": {
+      "health": "green",
+      "summary": "Company universe, explicit ratings, G-discovered employers and read-only company learning from canonical I are live."
+    },
+    "B": {
+      "health": "green",
+      "summary": "Manual applications reconcile to canonical I as Apply / Applied; B-discovered employers also surface in A as Unrated suggestions."
+    },
+    "C": {
+      "health": "orange",
+      "summary": "Semantic thesis, Work queues and production C→J bridge are live; ongoing Work recalibration still remains a maintained process."
+    },
+    "D": {
+      "health": "orange",
+      "summary": "Remote sourcing lane exists but remains secondary and only partially integrated into canonical C."
+    },
+    "E": {
+      "health": "orange",
+      "summary": "Projects/interim lane exists but the pool is sparse and canonical integration is incomplete."
+    },
+    "F": {
+      "health": "red",
+      "summary": "Network/access lane is deferred and no live connection dataset is active."
+    },
+    "G": {
+      "health": "orange",
+      "summary": "Broad sourcing is live; approved C prioritize guidance can extend search coverage, while source/link quality maintenance remains in progress."
+    },
+    "H": {
+      "health": "orange",
+      "summary": "Canonical I event evidence and grouped factual summaries are live; confidence-aware attainability inference is still data-limited and not yet feeding decisions."
+    },
+    "I": {
+      "health": "green",
+      "summary": "Canonical latest-state history, automatic B reconciliation and append-only lifecycle event log are live; A/C/H factual evidence is regenerated from I."
+    },
+    "J": {
+      "health": "green",
+      "summary": "Live J consumes promoted C=Strong + actionable roles with safe fallback and records user decisions into canonical I."
+    },
+    "COUNTRY": {
+      "health": "green",
+      "summary": "Country weights are active as soft sourcing and shortlist guidance."
+    },
+    "QUALITY": {
+      "health": "orange",
+      "summary": "Language/actionability and parser quality gates work; unified live-link/enrichment checks are not complete."
+    }
   },
   "edges": {
     "A-G": "green",
@@ -26,7 +62,7 @@
     "A-J": "green",
     "A-F": "orange",
     "F-A": "red",
-    "B-A": "orange",
+    "B-A": "green",
     "I-A": "green",
     "H-A": "red",
     "C-G": "orange",

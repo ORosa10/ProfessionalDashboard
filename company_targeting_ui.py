@@ -19,7 +19,10 @@ from sourcing.g_data_quality import invalid_company_name, invalid_job_title
 
 COMPANY_TARGETING_FEEDBACK_PATH = "data/company_targeting_feedback.csv"
 COMPANY_TARGETING_FEEDBACK_COLUMNS = ["submitted_at", "scope", "feedback"]
-DISCOVERED_COMPANIES_PATH = Path(__file__).parent / "data" / "a_discovered_companies.csv"
+DISCOVERED_COMPANIES_PATHS = [
+    Path(__file__).parent / "data" / "a_discovered_companies.csv",
+    Path(__file__).parent / "data" / "a_b_discovered_companies.csv",
+]
 I_COMPANY_LEARNING_PATH = Path(__file__).parent / "data" / "a_learning_summary.csv"
 DISCOVERED_COLUMNS = [
     "suggested_company_id", "company", "role_count", "countries", "source_streams",
@@ -67,6 +70,63 @@ def _known_company_names() -> set[str]:
     return names
 
 
+
+def _split_values(value: object, separator: str) -> list[str]:
+    return [x.strip() for x in str(value or "").split(separator) if x.strip()]
+
+
+def _load_discovered_company_suggestions() -> pd.DataFrame:
+    frames: list[pd.DataFrame] = []
+    for path in DISCOVERED_COMPANIES_PATHS:
+        if not path.exists() or not path.stat().st_size:
+            continue
+        try:
+            frame = pd.read_csv(path).fillna("").reindex(columns=DISCOVERED_COLUMNS, fill_value="")
+        except Exception:
+            continue
+        if not frame.empty:
+            frames.append(frame)
+    if not frames:
+        return pd.DataFrame(columns=DISCOVERED_COLUMNS)
+
+    combined = pd.concat(frames, ignore_index=True, sort=False).fillna("")
+    rows: list[pd.Series] = []
+    for _, group in combined.groupby("suggested_company_id", sort=False):
+        ranked = group.sort_values("last_seen_at", ascending=True)
+        row = ranked.iloc[-1].copy()
+        row["role_count"] = int(pd.to_numeric(group["role_count"], errors="coerce").fillna(0).sum())
+        countries: list[str] = []
+        streams: list[str] = []
+        titles: list[str] = []
+        evidence: list[str] = []
+        for value in group["countries"]:
+            for item in _split_values(value, ";"):
+                if item not in countries:
+                    countries.append(item)
+        for value in group["source_streams"]:
+            for item in _split_values(value, ";"):
+                if item not in streams:
+                    streams.append(item)
+        for value in group["sample_titles"]:
+            for item in _split_values(value, "|"):
+                if item not in titles:
+                    titles.append(item)
+        for value in group["evidence_source"]:
+            item = str(value or "").strip()
+            if item and item not in evidence:
+                evidence.append(item)
+        row["countries"] = "; ".join(countries)
+        row["source_streams"] = "; ".join(streams)
+        row["sample_titles"] = " | ".join(titles[:6])
+        row["evidence_source"] = "; ".join(evidence)
+        first = [str(x).strip() for x in group["first_seen_at"] if str(x).strip()]
+        last = [str(x).strip() for x in group["last_seen_at"] if str(x).strip()]
+        row["first_seen_at"] = min(first) if first else ""
+        row["last_seen_at"] = max(last) if last else ""
+        row["suggested_rating"] = "Unrated"
+        rows.append(row)
+    return pd.DataFrame(rows).reindex(columns=DISCOVERED_COLUMNS, fill_value="")
+
 def _usable_suggestion(row: pd.Series, known_names: set[str]) -> bool:
     company = str(row.get("company", "")).strip()
     if invalid_company_name(company) or _norm(company) in known_names:
@@ -85,13 +145,13 @@ def _discovered_universe_row(suggestion: pd.Series, rating: str) -> dict[str, ob
         "aliases_entities": "",
         "region": region or "Multi-region",
         "locations": countries,
-        "archetype": "G-discovered employer",
+        "archetype": "Discovered employer",
         "why_test": str(suggestion.get("sample_titles", "")).strip(),
         "career_url": "",
-        "source_strategy": "G discovery → explicit A review",
+        "source_strategy": "G/B discovery → explicit A review",
         "rating": rating,
-        "notes": "Promoted from G after explicit A rating.",
-        "company_category": "Unclassified / G discovered",
+        "notes": "Promoted from discovery after explicit A rating.",
+        "company_category": "Unclassified / discovered",
     }
 
 
@@ -129,13 +189,8 @@ def _promote_discovered_companies(
 
 
 def render_discovered_company_suggestions() -> None:
-    """Show G-discovered employers as A suggestions without auto-rating them."""
-    if not DISCOVERED_COMPANIES_PATH.exists() or not DISCOVERED_COMPANIES_PATH.stat().st_size:
-        return
-    try:
-        discovered = pd.read_csv(DISCOVERED_COMPANIES_PATH).fillna("").reindex(columns=DISCOVERED_COLUMNS, fill_value="")
-    except Exception:
-        return
+    """Show G/B-discovered employers as A suggestions without auto-rating them."""
+    discovered = _load_discovered_company_suggestions()
     if discovered.empty:
         return
 
@@ -159,9 +214,9 @@ def render_discovered_company_suggestions() -> None:
     discovered["rating"] = discovered["suggested_company_id"].map(rating_map).fillna("Unrated").replace("", "Unrated")
 
     st.divider()
-    st.subheader("Discovered by G")
+    st.subheader("Discovered by G / B")
     st.caption(
-        "New employers found while sourcing vacancies. They enter A only as Unrated suggestions. "
+        "New employers found by G or through a manual B application. They enter A only as Unrated suggestions. "
         "Assigning A/B/C/Exclude explicitly promotes the employer into the Company Universe; "
         "until then it cannot change your company thesis or J ranking."
     )
@@ -185,9 +240,9 @@ def render_discovered_company_suggestions() -> None:
                 required=True,
                 help="Only an explicit change here becomes an A rating.",
             ),
-            "role_count": st.column_config.NumberColumn("G roles", width="small"),
+            "role_count": st.column_config.NumberColumn("Evidence roles", width="small"),
             "countries": st.column_config.TextColumn("Markets", width="small"),
-            "sample_titles": st.column_config.TextColumn("Why G found it", width="large"),
+            "sample_titles": st.column_config.TextColumn("Why it was found", width="large"),
             "last_seen_at": st.column_config.TextColumn("Last seen", width="medium"),
         },
         key="a_discovered_company_editor",
@@ -213,7 +268,7 @@ def render_discovered_company_suggestions() -> None:
                     "contact_strength": "None",
                     "relationship_type": "None",
                     "reference_notes": "",
-                    "notes": "G-discovered employer; explicitly rated in A.",
+                    "notes": "Discovered employer; explicitly rated in A.",
                 }
             else:
                 current.at[suggested_id, "rating"] = new_rating

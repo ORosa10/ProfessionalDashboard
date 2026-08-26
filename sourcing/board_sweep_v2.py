@@ -10,6 +10,7 @@ from pathlib import Path
 import pandas as pd
 
 from sourcing.big4_pilot import calibrate_jobs
+from sourcing.c_to_g_guidance import active_priority_queries
 from sourcing.board_academicwork import discover_academicwork
 from sourcing.board_additional_adapters import discover_additional_board
 from sourcing.board_catalog_adapters import discover_catalog_board
@@ -148,17 +149,17 @@ def _country_board_budgets(runnable: pd.DataFrame, base_per_query: int, base_max
     return budgets
 
 
-def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict], list[str]]:
+def _run_board(row: object, per_query: int, max_details: int, queries: list[str]) -> tuple[list[dict], list[str]]:
     adapter = str(getattr(row, "adapter", ""))
-    if adapter == "jobtech_api": return discover_platsbanken(SEARCH_QUERIES, per_query)
-    if adapter == "arbeitsagentur_html": return discover_arbeitsagentur(SEARCH_QUERIES, per_query, max_details)
+    if adapter == "jobtech_api": return discover_platsbanken(queries, per_query)
+    if adapter == "arbeitsagentur_html": return discover_arbeitsagentur(queries, per_query, max_details)
     if adapter == "mpsv_open_data": return discover_mpsv(max_details)
-    if adapter == "findajob_uk_html": return discover_findajob(SEARCH_QUERIES, per_query, max_details)
+    if adapter == "findajob_uk_html": return discover_findajob(queries, per_query, max_details)
     if adapter == "nav_stilling_feed": return discover_nav(max_details)
-    if adapter == "jobbsafari_no_html": return discover_jobbsafari_no(SEARCH_QUERIES, per_query, max_details)
+    if adapter == "jobbsafari_no_html": return discover_jobbsafari_no(queries, per_query, max_details)
     if adapter == "academicwork_dk_html": return discover_academicwork("academicwork-dk", max_details)
     if adapter == "academicwork_fi_html": return discover_academicwork("academicwork-fi", max_details)
-    if adapter in CATALOG_ADAPTERS: return discover_catalog_board(CATALOG_ADAPTERS[adapter], SEARCH_QUERIES, per_query, max_details)
+    if adapter in CATALOG_ADAPTERS: return discover_catalog_board(CATALOG_ADAPTERS[adapter], queries, per_query, max_details)
     html_map = {
         "jobs_cz_html": ("jobs-cz", "Czechia"), "prace_cz_html": ("prace-cz", "Czechia"),
         "stepstone_de_html": ("stepstone-de", "Germany"), "stellenanzeigen_de_html": ("stellenanzeigen-de", "Germany"),
@@ -167,10 +168,10 @@ def _run_board(row: object, per_query: int, max_details: int) -> tuple[list[dict
     }
     if adapter in html_map:
         source_id, market = html_map[adapter]
-        return discover_html_jsonld_board(source_id, market, SEARCH_QUERIES, per_query, max_details)
-    if adapter == "jobs_ch_html": return discover_jobs_ch(SEARCH_QUERIES, per_query, max_details)
-    if adapter == "jobup_ch_html": return discover_additional_board("jobup-ch", "Switzerland", SEARCH_QUERIES, per_query, max_details)
-    if adapter == "cv_library_uk_html": return discover_additional_board("cv-library-uk", "United Kingdom", SEARCH_QUERIES, per_query, max_details)
+        return discover_html_jsonld_board(source_id, market, queries, per_query, max_details)
+    if adapter == "jobs_ch_html": return discover_jobs_ch(queries, per_query, max_details)
+    if adapter == "jobup_ch_html": return discover_additional_board("jobup-ch", "Switzerland", queries, per_query, max_details)
+    if adapter == "cv_library_uk_html": return discover_additional_board("cv-library-uk", "United Kingdom", queries, per_query, max_details)
     if adapter == "jobly_fi_html": return discover_jobly(per_query, max_details)
     if adapter == "thehub_html": return discover_thehub(max_details)
     return [], [f"Unsupported adapter: {adapter}"]
@@ -195,13 +196,14 @@ def main() -> None:
         runnable = runnable[runnable["board_id"].isin(args.source_id)]
 
     budgets = _country_board_budgets(runnable, args.per_query, args.max_details)
+    search_queries = list(dict.fromkeys([*SEARCH_QUERIES, *active_priority_queries()]))
     records: list[dict] = []
     run_rows: list[dict] = []
     started = datetime.now(timezone.utc).isoformat()
     for row in runnable.itertuples(index=False):
         board_per_query, board_max_details = budgets.get(str(row.board_id), (args.per_query, args.max_details))
         try:
-            found, errors = _run_board(row, board_per_query, board_max_details)
+            found, errors = _run_board(row, board_per_query, board_max_details, search_queries)
         except Exception as exc:
             found, errors = [], [f"runner: {type(exc).__name__}: {exc}"]
         records.extend(found)
@@ -211,7 +213,7 @@ def main() -> None:
             "country": row.country,
             "adapter": row.adapter,
             "registry_status": row.status,
-            "queries": len(SEARCH_QUERIES),
+            "queries": len(search_queries),
             "per_query_budget": board_per_query,
             "max_details_budget": board_max_details,
             "verified_jobs": len(found),

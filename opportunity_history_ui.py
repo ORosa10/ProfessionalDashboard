@@ -10,6 +10,7 @@ from github_storage import github_token, load_csv_file, save_csv_file
 
 DATA_DIR = Path(__file__).parent / "data"
 HISTORY_PATH = "data/opportunity_history.csv"
+EVENT_PATH = DATA_DIR / "opportunity_events.csv"
 B_PATH = DATA_DIR / "user_submitted_opportunities.csv"
 
 HISTORY_COLUMNS = [
@@ -252,3 +253,35 @@ def render_opportunity_history() -> None:
     h1.metric("Reached interview", int(applications["application_stage"].isin(INTERVIEW_REACHED_STAGES).sum()))
     h2.metric("Reached case", int(applications["application_stage"].isin(CASE_REACHED_STAGES).sum()))
     h3.metric("Reached final / offer", int(applications["application_stage"].isin(FINAL_REACHED_STAGES).sum()))
+
+    st.divider()
+    with st.expander("Canonical I event timeline", expanded=False):
+        st.caption(
+            "Append-only audit history generated from B/J decisions and application-stage changes. "
+            "The tracker above is the current latest state; this timeline preserves how it changed."
+        )
+        if not EVENT_PATH.exists() or not EVENT_PATH.stat().st_size:
+            st.info("No canonical I events have been generated yet.")
+        else:
+            try:
+                events = pd.read_csv(EVENT_PATH).fillna("")
+            except Exception:
+                st.warning("The canonical event log could not be loaded.")
+            else:
+                if events.empty:
+                    st.info("No canonical I events have been generated yet.")
+                else:
+                    events["_sort"] = pd.to_datetime(events.get("event_at", ""), errors="coerce", utc=True)
+                    events = events.sort_values(
+                        ["_sort", "event_id"], ascending=[False, False], na_position="last"
+                    ).drop(columns="_sort")
+                    st.dataframe(
+                        events[[
+                            "event_at", "event_type", "source_stream", "action", "application_stage",
+                            "company_feedback", "role_feedback", "user_comment", "outcome_reason", "notes",
+                        ]],
+                        hide_index=True,
+                        width="stretch",
+                        height=420,
+                    )
+

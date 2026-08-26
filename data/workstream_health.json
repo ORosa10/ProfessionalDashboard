@@ -16,7 +16,7 @@
     },
     "C": {
       "health": "orange",
-      "summary": "Semantic thesis, Work queues and production C→J bridge are live; ongoing Work recalibration still remains a maintained process."
+      "summary": "Semantic thesis and C Work are live; the latest metadata-preservation fixes still need a clean replenishment run before C is called stable."
     },
     "D": {
       "health": "orange",
@@ -32,11 +32,11 @@
     },
     "G": {
       "health": "orange",
-      "summary": "Broad sourcing is live; approved C prioritize guidance can extend search coverage, while source/link quality maintenance remains in progress."
+      "summary": "Board and rated-company sourcing are live, including automatic company-source sync and parser fallback; final production revalidation of stale links is still being confirmed."
     },
     "H": {
       "health": "orange",
-      "summary": "Canonical I event evidence and grouped factual summaries are live; confidence-aware attainability inference is still data-limited and not yet feeding decisions."
+      "summary": "Canonical I event evidence and grouped factual summaries are live; attainability inference remains data-limited."
     },
     "I": {
       "health": "green",
@@ -44,15 +44,11 @@
     },
     "J": {
       "health": "green",
-      "summary": "Live J consumes promoted C=Strong + actionable roles with safe fallback and records user decisions into canonical I."
+      "summary": "Live J consumes promoted C=Strong + actionable roles with link/geography guardrails and records user decisions into canonical I."
     },
     "COUNTRY": {
       "health": "green",
       "summary": "Country weights are active as soft sourcing and shortlist guidance."
-    },
-    "QUALITY": {
-      "health": "orange",
-      "summary": "Language/actionability and parser quality gates work; unified live-link/enrichment checks are not complete."
     }
   },
   "edges": {
@@ -76,7 +72,6 @@
     "H-J": "red",
     "COUNTRY-G": "green",
     "COUNTRY-J": "green",
-    "QUALITY-J": "orange",
     "B-I": "green",
     "J-I": "green",
     "I-H": "green"

@@ -94,8 +94,6 @@ def _render_detail(selected_id: str | None) -> None:
 
 
 def render_system_flow() -> None:
-    # Keep the sidebar visible by default so the A–J letter labels remain useful
-    # for orientation. Focus mode is still available when a full-width diagram is wanted.
     if FOCUS_MODE_KEY not in st.session_state:
         st.session_state[FOCUS_MODE_KEY] = False
     if DETAIL_PANEL_KEY not in st.session_state:
@@ -142,7 +140,7 @@ def render_system_flow() -> None:
 
     with canvas:
         st.session_state[FLOW_STATE_KEY] = streamlit_flow(
-            "professional_dashboard_system_flow_focus_v7",
+            "professional_dashboard_system_flow_focus_v8",
             st.session_state[FLOW_STATE_KEY],
             fit_view=True,
             height=1040,

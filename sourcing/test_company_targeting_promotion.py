@@ -20,7 +20,7 @@ class CompanyTargetingPromotionTests(unittest.TestCase):
         self.assertEqual(row["company"], "Example Energy AG")
         self.assertEqual(row["region"], "Germany")
         self.assertEqual(row["rating"], "A")
-        self.assertEqual(row["company_category"], "Unclassified / G discovered")
+        self.assertEqual(row["company_category"], "Unclassified / discovered")
         self.assertIn("Treasury Manager", row["why_test"])
 
 

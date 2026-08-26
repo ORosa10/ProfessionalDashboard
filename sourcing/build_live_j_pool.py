@@ -32,6 +32,41 @@ HIGH_EXTREME_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+TARGET_COUNTRIES = {
+    "Czechia", "Germany", "Austria", "Switzerland", "United Kingdom",
+    "Sweden", "Norway", "Denmark", "Finland",
+}
+AMBIGUOUS_COUNTRIES = {"", "Other / Unresolved", "Multi-region", "Remote", "Unknown", "Europe", "EMEA", "Nordics"}
+TARGET_LOCATION_MARKERS = (
+    "czechia", "czech republic", "prague", "praha",
+    "germany", "berlin", "frankfurt", "munich", "münchen", "hamburg",
+    "austria", "vienna", "wien", "salzburg", "linz",
+    "switzerland", "zurich", "zürich", "geneva", "genève", "basel",
+    "united kingdom", "london", "manchester", "edinburgh",
+    "sweden", "stockholm", "göteborg", "gothenburg",
+    "norway", "oslo", "denmark", "copenhagen", "københavn",
+    "finland", "helsinki",
+)
+OUTSIDE_LOCATION_MARKERS = {
+    "Singapore": ("singapore",),
+    "United States": ("united states", "usa", "u.s."),
+    "Canada": ("canada",),
+    "India": ("india", "bengaluru", "bangalore", "mumbai", "hyderabad"),
+    "Hong Kong": ("hong kong",),
+    "United Arab Emirates": ("united arab emirates", "dubai", "abu dhabi"),
+    "Australia": ("australia", "sydney", "melbourne"),
+    "New Zealand": ("new zealand",),
+    "Poland": ("poland", "warsaw", "warszawa", "krakow", "kraków"),
+    "France": ("france", "paris"),
+    "Netherlands": ("netherlands", "amsterdam"),
+    "Belgium": ("belgium", "brussels", "bruxelles"),
+    "Ireland": ("ireland", "dublin"),
+    "Italy": ("italy", "milan", "milano", "rome", "roma"),
+    "Spain": ("spain", "madrid", "barcelona"),
+    "Luxembourg": ("luxembourg",),
+    "Portugal": ("portugal", "lisbon", "lisboa"),
+}
+
 
 def _read(path: Path) -> pd.DataFrame:
     if not path.exists() or path.stat().st_size == 0:
@@ -61,6 +96,23 @@ def _seniority_blocker(title: object) -> str:
         return "seniority:below_target_extreme"
     if HIGH_EXTREME_PATTERN.search(value):
         return "seniority:above_target_extreme"
+    return ""
+
+
+def _geography_blocker(row: pd.Series) -> str:
+    """Block only explicit non-target geography; uncertainty remains eligible."""
+    country = str(row.get("country_bucket", "") or "").strip()
+    if country in TARGET_COUNTRIES:
+        return ""
+    if country not in AMBIGUOUS_COUNTRIES:
+        return f"geography:outside_target:{country}"
+
+    raw = " ".join(str(row.get(col, "") or "") for col in ("location", "market")).lower()
+    if any(marker in raw for marker in TARGET_LOCATION_MARKERS):
+        return ""
+    for label, markers in OUTSIDE_LOCATION_MARKERS.items():
+        if any(marker in raw for marker in markers):
+            return f"geography:outside_target:{label}"
     return ""
 
 
@@ -131,6 +183,10 @@ def build_live_pool(
             continue
         if _bad_company(row.get("company", "")):
             reject(row, "data_quality:invalid_company")
+            continue
+        geography = _geography_blocker(row)
+        if geography:
+            reject(row, geography)
             continue
         seniority = _seniority_blocker(row.get("title", ""))
         if seniority:

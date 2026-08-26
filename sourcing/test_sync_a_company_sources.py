@@ -56,6 +56,14 @@ class SyncACompanySourcesTest(unittest.TestCase):
                 "career_url": "https://excluded.example/jobs",
                 "company_category": "Corporate",
             },
+            {
+                "canonical_company_id": "big4-co",
+                "company": "Big Four Co",
+                "region": "Multi-region",
+                "locations": "Prague; London",
+                "career_url": "https://big4.example/careers",
+                "company_category": "Consulting",
+            },
         ])
         universe.to_csv(self.data / "company_universe.csv", index=False)
         ratings = pd.DataFrame([
@@ -64,6 +72,7 @@ class SyncACompanySourcesTest(unittest.TestCase):
             {"canonical_company_id": "new-discovered", "rating": "B"},
             {"canonical_company_id": "missing-url", "rating": "A"},
             {"canonical_company_id": "excluded-co", "rating": "Exclude"},
+            {"canonical_company_id": "big4-co", "rating": "A"},
         ])
         ratings.to_csv(self.data / "company_ratings.csv", index=False)
 
@@ -105,6 +114,36 @@ class SyncACompanySourcesTest(unittest.TestCase):
         ], columns=SOURCE_COLUMNS)
         corporate.to_csv(self.data / "job_sources_corporate.csv", index=False)
 
+        # Simulate a generic duplicate that must be removed because the company
+        # already belongs to the dedicated Big Four multi-market registry.
+        consulting = pd.DataFrame([
+            {
+                "source_id": "big4-co-global",
+                "canonical_company_id": "big4-co",
+                "company": "Big Four Co",
+                "market": "Multi-region",
+                "priority_locations": "Prague; London",
+                "seed_url": "https://big4.example/careers",
+                "adapter": "generic",
+                "cadence_days": 7,
+                "enabled": True,
+            },
+        ], columns=SOURCE_COLUMNS)
+        consulting.to_csv(self.data / "job_sources_consulting.csv", index=False)
+        pd.DataFrame([
+            {
+                "source_id": "big4-co-cz",
+                "canonical_company_id": "big4-co",
+                "company": "Big Four Co",
+                "market": "Czechia",
+                "priority_locations": "Prague",
+                "seed_url": "https://big4.example/cz/jobs",
+                "allowed_domains": "big4.example",
+                "cadence_days": 7,
+                "enabled": True,
+            },
+        ]).to_csv(self.data / "job_sources_pilot.csv", index=False)
+
     def tearDown(self) -> None:
         self.tmp.cleanup()
 
@@ -122,8 +161,6 @@ class SyncACompanySourcesTest(unittest.TestCase):
         self.assertEqual(str(excluded["enabled"]).lower(), "false")
         self.assertEqual(excluded["adapter"], "smartrecruiters")
 
-        # Unclassified discovered employers use the corporate registry only as
-        # an operational generic bucket; their A category is not changed.
         discovered = corporate[corporate["canonical_company_id"] == "new-discovered"].iloc[0]
         self.assertEqual(int(discovered["cadence_days"]), 14)
         self.assertEqual(discovered["adapter"], "generic")
@@ -134,12 +171,16 @@ class SyncACompanySourcesTest(unittest.TestCase):
         self.assertEqual(int(new_bank["cadence_days"]), 30)
         self.assertEqual(new_bank["adapter"], "generic")
 
+        consulting = pd.read_csv(self.data / "job_sources_consulting.csv").fillna("")
+        self.assertFalse((consulting["canonical_company_id"] == "big4-co").any())
+
         statuses = dict(zip(status["canonical_company_id"], status["status"]))
         self.assertEqual(statuses["existing-co"], "active_existing_source")
         self.assertEqual(statuses["new-bank"], "active_new_source")
         self.assertEqual(statuses["new-discovered"], "active_new_source")
         self.assertEqual(statuses["missing-url"], "missing_career_url")
         self.assertEqual(statuses["excluded-co"], "disabled_exclude")
+        self.assertEqual(statuses["big4-co"], "separate_registry")
         self.assertFalse((corporate["canonical_company_id"] == "missing-url").any())
 
     def test_unrated_existing_source_is_disabled(self) -> None:

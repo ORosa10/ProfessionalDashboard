@@ -7,6 +7,8 @@ on:
       - "action_queue_ui.py"
       - "sourcing/build_live_j_pool.py"
       - "sourcing/test_build_live_j_pool.py"
+      - "sourcing/j_soft_ranking.py"
+      - "sourcing/test_j_soft_ranking.py"
       - ".github/workflows/promote-core-pipeline.yml"
       - ".github/workflows/core-cutover-checks.yml"
 
@@ -24,6 +26,6 @@ jobs:
           python-version: "3.12"
       - run: pip install pandas streamlit
       - name: Unit tests
-        run: python -m unittest sourcing.test_build_live_j_pool
+        run: python -m unittest sourcing.test_build_live_j_pool sourcing.test_j_soft_ranking
       - name: Compile live J UI
-        run: python -m py_compile action_queue_ui.py sourcing/build_live_j_pool.py
+        run: python -m py_compile action_queue_ui.py sourcing/build_live_j_pool.py sourcing/j_soft_ranking.py

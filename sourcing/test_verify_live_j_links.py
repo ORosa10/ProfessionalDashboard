@@ -64,6 +64,18 @@ class VerifyLiveJLinksTests(unittest.TestCase):
         self.assertEqual(verification.iloc[0]["link_status"], "live")
         self.assertEqual(verification.iloc[0]["verification_evidence"], "source_seen_recently")
 
+    def test_missing_url_is_unverifiable_not_dead(self) -> None:
+        pool = pd.DataFrame([{
+            "job_id": "j1",
+            "company": "Example",
+            "title": "Treasury Manager",
+            "job_url": "",
+            "last_seen_at": "",
+        }])
+        _, verification = verify_pool(pool, pd.DataFrame(), source_recent_hours=0, max_workers=1)
+        self.assertEqual(verification.iloc[0]["link_status"], "verification_failed")
+        self.assertEqual(verification.iloc[0]["verification_evidence"], "missing_job_url")
+
     def test_only_confirmed_dead_is_removed(self) -> None:
         pool = pd.DataFrame([
             {"job_id": "dead", "company": "A", "title": "Treasury", "job_url": "https://a/job"},

@@ -4,7 +4,7 @@ I is factual memory. This module never changes A ratings, C semantic fit, H scor
 or G/J selection. It only:
 - ensures manual B submissions exist in canonical I as Apply/Applied;
 - preserves one latest-state row per opportunity;
-- appends lifecycle events when a decision or application stage changes;
+- appends lifecycle events when a decision, feedback or application stage changes;
 - derives factual downstream evidence tables for A, C and H.
 """
 from __future__ import annotations
@@ -156,7 +156,12 @@ def _payload(row: pd.Series, event_type: str) -> tuple[str, ...]:
     if event_type == "decision":
         return tuple(_text(row.get(c, "")) for c in ["action", "company_feedback", "role_feedback", "user_comment"])
     if event_type == "application_stage":
-        return tuple(_text(row.get(c, "")) for c in ["application_stage", "outcome_reason", "history_notes"])
+        notes = _text(row.get("history_notes", "")) or _text(row.get("notes", ""))
+        return (
+            _text(row.get("application_stage", "")),
+            _text(row.get("outcome_reason", "")),
+            notes,
+        )
     return ()
 
 
@@ -196,6 +201,18 @@ def _make_event(row: pd.Series, event_type: str, event_at: str, note: str) -> di
     }
 
 
+def _has_feedback_or_decision(row: pd.Series) -> bool:
+    action = _text(row.get("action", "")).lower()
+    explicit_company = _text(row.get("company_feedback", "")).lower() in {"positive", "neutral", "negative"}
+    explicit_role = _text(row.get("role_feedback", "")).lower() in {"positive", "neutral", "negative"}
+    return (
+        (bool(action) and action not in {"new", "unrated"})
+        or explicit_company
+        or explicit_role
+        or bool(_text(row.get("user_comment", "")))
+    )
+
+
 def reconcile_events(history: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame:
     out = events.reindex(columns=EVENT_COLUMNS, fill_value="").fillna("").copy()
     additions: list[dict[str, str]] = []
@@ -207,8 +224,7 @@ def reconcile_events(history: pd.DataFrame, events: pd.DataFrame) -> pd.DataFram
             at = _text(row.get("first_seen_at", "")) or _text(row.get("decision_at", ""))
             if at:
                 additions.append(_make_event(row, "opportunity_created", at, "Opportunity entered canonical I"))
-        action = _text(row.get("action", ""))
-        if action and action.lower() not in {"new", "unrated"}:
+        if _has_feedback_or_decision(row):
             latest = _latest_event(pd.concat([out, pd.DataFrame(additions)], ignore_index=True), oid, "decision")
             if latest is None or _payload(latest, "decision") != _payload(row, "decision"):
                 at = _text(row.get("decision_at", "")) or _text(row.get("first_seen_at", ""))

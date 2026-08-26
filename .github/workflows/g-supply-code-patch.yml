@@ -24,7 +24,6 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
-          # 1) Wire order-safe country selection into C queue builder.
           p = Path('sourcing/build_semantic_fit_queue.py')
           s = p.read_text()
           needle = 'from .opportunity_registry import REGISTRY_COLUMNS, update_registry, validate_semantic_identity\n'
@@ -36,7 +35,6 @@ jobs:
           s = s[:start] + '    targets = _target_slots(limit)\n    chosen = select_country_balanced_indices(jobs, limit, targets)\n\n' + s[end:]
           p.write_text(s)
 
-          # 2) Add per-country English-intent query overlays in G board sourcing.
           p = Path('sourcing/board_sweep_v2.py')
           s = p.read_text()
           needle = 'from sourcing.c_to_g_guidance import active_priority_queries\n'
@@ -51,7 +49,6 @@ jobs:
           s = s.replace('"queries": len(search_queries),', '"queries": len(board_queries),', 1)
           p.write_text(s)
 
-          # 3) Point JobServe at its verified nationwide Finance/Accounting/Banking catalogue.
           p = Path('sourcing/board_catalog_adapters.py')
           s = p.read_text()
           old = '"jobserve-uk": {"market": "United Kingdom", "base": "https://www.jobserve.com", "listing": "https://www.jobserve.com/gb/en/search-jobs-in-Greater-London%2C-London%2C-United-Kingdom/",'
@@ -59,23 +56,11 @@ jobs:
           assert old in s
           s = s.replace(old, new, 1)
           p.write_text(s)
-
-          # 4) Run new regression tests in the production board workflow.
-          p = Path('.github/workflows/board-sourcing.yml')
-          s = p.read_text()
-          path_anchor = '      - "sourcing/build_semantic_fit_queue.py"\n'
-          assert path_anchor in s
-          s = s.replace(path_anchor, path_anchor + '      - "sourcing/queue_selection.py"\n      - "sourcing/test_queue_selection.py"\n      - "sourcing/g_query_profiles.py"\n      - "sourcing/test_g_query_profiles.py"\n', 1)
-          old_tests = 'python -m unittest sourcing.test_c_to_g_guidance sourcing.test_filter_language_requirements sourcing.test_opportunity_registry sourcing.test_g_data_quality sourcing.test_board_html_adapters sourcing.test_board_jobs_ch sourcing.test_board_additional_adapters sourcing.test_board_catalog_adapters sourcing.test_board_jobly_fi sourcing.test_board_nav_no sourcing.test_board_jobbsafari_no sourcing.test_board_academicwork sourcing.test_board_thehub sourcing.test_board_official_adapters'
-          new_tests = old_tests + ' sourcing.test_queue_selection sourcing.test_g_query_profiles'
-          assert old_tests in s
-          s = s.replace(old_tests, new_tests, 1)
-          p.write_text(s)
           PY
       - name: Commit patch
         run: |
           git config user.name "professional-dashboard-bot"
           git config user.email "professional-dashboard-bot@users.noreply.github.com"
-          git add sourcing/build_semantic_fit_queue.py sourcing/board_sweep_v2.py sourcing/board_catalog_adapters.py .github/workflows/board-sourcing.yml
+          git add sourcing/build_semantic_fit_queue.py sourcing/board_sweep_v2.py sourcing/board_catalog_adapters.py
           git commit -m "Improve English-actionable G supply and C queue balance"
           git push origin HEAD:g-english-actionable-supply

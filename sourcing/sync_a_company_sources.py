@@ -9,6 +9,8 @@ Rules:
 - Exclude or Unrated => existing managed source disabled; never create a source.
 - Existing source rows keep their calibrated adapter and seed URL.
 - Missing source rows are created from the Company's career_url with adapter=generic.
+- Big Four stays in its dedicated multi-market registry and is never duplicated
+  into the generic company-source registries.
 - If an explicitly active company has no usable career URL and no existing source,
   record missing_career_url rather than silently failing.
 """
@@ -48,8 +50,6 @@ CATEGORY_TO_SOURCE = {
     "Specialist & Boutique Funds": "job_sources_specialist_funds.csv",
 }
 
-# Big Four has a separate multi-market registry/schema and remains intentionally
-# outside this generic sync. The A rating still governs downstream eligibility.
 MANAGED_SOURCE_FILES = [
     "job_sources_consulting.csv",
     "job_sources_pe.csv",
@@ -60,14 +60,11 @@ MANAGED_SOURCE_FILES = [
     "job_sources_public_markets.csv",
     "job_sources_specialist_funds.csv",
 ]
+DEDICATED_BIG4_SOURCE = "job_sources_pilot.csv"
 
 
 def _clean(value: object) -> str:
     return str(value or "").strip()
-
-
-def _truthy(value: object) -> bool:
-    return _clean(value).lower() in {"1", "true", "yes", "y"}
 
 
 def _load_universe(data_dir: Path) -> pd.DataFrame:
@@ -94,12 +91,20 @@ def _load_source(path: Path) -> pd.DataFrame:
     if not path.exists() or not path.stat().st_size:
         return pd.DataFrame(columns=SOURCE_COLUMNS)
     frame = pd.read_csv(path).fillna("")
-    # Only the generic company registries are managed here. A schema mismatch is
-    # explicit rather than destructive.
     missing = [col for col in SOURCE_COLUMNS if col not in frame.columns]
     if missing:
         raise ValueError(f"{path.name} missing source columns: {', '.join(missing)}")
     return frame.reindex(columns=SOURCE_COLUMNS, fill_value="")
+
+
+def _dedicated_big4_ids(data_dir: Path) -> set[str]:
+    path = data_dir / DEDICATED_BIG4_SOURCE
+    if not path.exists() or not path.stat().st_size:
+        return set()
+    frame = pd.read_csv(path).fillna("")
+    if "canonical_company_id" not in frame.columns:
+        return set()
+    return {str(x).strip() for x in frame["canonical_company_id"] if str(x).strip()}
 
 
 def _target_source(category: str) -> str:
@@ -117,6 +122,15 @@ def _existing_locations(sources: dict[str, pd.DataFrame], company_id: str) -> li
         for idx in frame.index[frame["canonical_company_id"].astype(str).eq(company_id)]:
             hits.append((filename, int(idx)))
     return hits
+
+
+def _remove_generic_duplicates(sources: dict[str, pd.DataFrame], company_id: str) -> None:
+    for filename, frame in list(sources.items()):
+        if frame.empty:
+            continue
+        sources[filename] = frame[
+            ~frame["canonical_company_id"].astype(str).eq(company_id)
+        ].reset_index(drop=True)
 
 
 def sync_company_sources(
@@ -142,6 +156,7 @@ def sync_company_sources(
     sources: dict[str, pd.DataFrame] = {}
     for filename in MANAGED_SOURCE_FILES:
         sources[filename] = _load_source(data_dir / filename)
+    dedicated_big4 = _dedicated_big4_ids(data_dir)
 
     now = datetime.now(timezone.utc).isoformat()
     status_rows: list[dict[str, object]] = []
@@ -157,11 +172,35 @@ def sync_company_sources(
         career_url = _clean(rec.get("career_url"))
         locations = _clean(rec.get("locations"))
         region = _clean(rec.get("region")) or "Multi-region"
+
+        if company_id in dedicated_big4:
+            # The dedicated registry has one row per market and a different schema.
+            # It is intentionally managed by the Big Four sourcing lane. Remove any
+            # generic duplicate that an earlier sync may have created.
+            _remove_generic_duplicates(sources, company_id)
+            status_rows.append({
+                "synced_at": now,
+                "canonical_company_id": company_id,
+                "company": company,
+                "rating": rating,
+                "source_files": DEDICATED_BIG4_SOURCE,
+                "source_ids": "",
+                "status": "separate_registry",
+                "cadence_days": CADENCE_DAYS.get(rating, ""),
+                "career_url": career_url,
+                "note": "Big Four uses its dedicated multi-market G registry; generic duplicates removed.",
+            })
+            continue
+
         hits = _existing_locations(sources, company_id)
 
         if rating not in CADENCE_DAYS:
             for filename, idx in hits:
                 sources[filename].at[idx, "enabled"] = False
+            if hits:
+                note = "Existing managed G source disabled; no new source created."
+            else:
+                note = "No managed G source exists; no new source created."
             status_rows.append({
                 "synced_at": now,
                 "canonical_company_id": company_id,
@@ -174,7 +213,7 @@ def sync_company_sources(
                 "status": "disabled_exclude" if rating == "Exclude" else "disabled_unrated",
                 "cadence_days": "",
                 "career_url": career_url,
-                "note": "Existing managed G source disabled; no new source created.",
+                "note": note,
             })
             continue
 
@@ -185,8 +224,6 @@ def sync_company_sources(
             effective_url = career_url
             for filename, idx in hits:
                 frame = sources[filename]
-                # Preserve calibrated adapter and existing seed URL. Only fill
-                # missing metadata from A.
                 frame.at[idx, "cadence_days"] = cadence
                 frame.at[idx, "enabled"] = True
                 if not _clean(frame.at[idx, "company"]):

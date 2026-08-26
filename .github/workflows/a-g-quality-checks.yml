@@ -12,8 +12,12 @@ on:
       - "sourcing/test_sync_a_company_sources.py"
       - "sourcing/sector_pilot.py"
       - "sourcing/test_sector_adapter_fallback.py"
+      - "sourcing/verify_live_j_links.py"
+      - "sourcing/test_verify_live_j_links.py"
       - "scripts/build_sector_sources.py"
       - ".github/workflows/a-g-quality-checks.yml"
+      - ".github/workflows/promote-core-pipeline.yml"
+      - ".github/workflows/j-live-link-quality.yml"
 
 permissions:
   contents: read
@@ -34,6 +38,7 @@ jobs:
             sourcing.test_g_data_quality \
             sourcing.test_company_targeting_promotion \
             sourcing.test_sync_a_company_sources \
-            sourcing.test_sector_adapter_fallback
+            sourcing.test_sector_adapter_fallback \
+            sourcing.test_verify_live_j_links
       - name: Compile A/G modules
-        run: python -m py_compile company_targeting_ui.py sourcing/g_data_quality.py sourcing/sync_a_company_sources.py sourcing/sector_pilot.py scripts/build_sector_sources.py
+        run: python -m py_compile company_targeting_ui.py sourcing/g_data_quality.py sourcing/sync_a_company_sources.py sourcing/sector_pilot.py sourcing/verify_live_j_links.py scripts/build_sector_sources.py

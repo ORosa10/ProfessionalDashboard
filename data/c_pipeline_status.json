@@ -1,10 +1,10 @@
 {
-  "promoted_at": "2026-08-26T19:18:37.891905+00:00",
+  "promoted_at": "2026-08-26T19:38:33.416326+00:00",
   "source_workflow_run_id": "33004268013",
-  "eligible_regular_j": 43,
-  "strong_in_live_pool": 43,
+  "eligible_regular_j": 40,
+  "strong_in_live_pool": 40,
   "link_status": {
-    "live": 43
+    "live": 40
   },
   "verified_link_records": 44,
   "production_exclusions": {
@@ -12,6 +12,7 @@
     "actionability:language:German C1/C2/fluent/native-level requirement": 14,
     "seniority:above_target_extreme": 7,
     "seniority:below_target_extreme": 3,
+    "history:same_role_identity": 3,
     "actionability:language:Mandatory Swedish requirement": 1,
     "link_quality:http_404": 1
   }

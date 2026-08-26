@@ -34,7 +34,7 @@ CONFIG = {
     "cocuma-cz": {"market": "Czechia", "base": "https://www.cocuma.cz", "listing": "https://www.cocuma.cz/jobs/", "patterns": (r"/job/",)},
     "jobwinner-ch": {"market": "Switzerland", "base": "https://www.jobwinner.ch", "listing": "https://www.jobwinner.ch/de/jobs?q={query}", "patterns": (r"/job/\d+",)},
     "nzz-jobs-ch": {"market": "Switzerland", "base": "https://jobs.nzz.ch", "listing": "https://jobs.nzz.ch/job/alle-jobs", "patterns": (r"/job/[^/?#]+/\d+(?:[/?#]|$)",)},
-    "jobserve-uk": {"market": "United Kingdom", "base": "https://www.jobserve.com", "listing": "https://www.jobserve.com/gb/en/search-jobs-in-Greater-London%2C-London%2C-United-Kingdom/", "patterns": (r"/search-jobs-in-.+?/[A-Z0-9-]+/", r"/job-in-.+?/")},
+    "jobserve-uk": {"market": "United Kingdom", "base": "https://www.jobserve.com", "listing": "https://www.jobserve.com/gb/en/Finance%2C-Accounting%2BBanking-sector-jobs-in-United-Kingdom/", "patterns": (r"/search-jobs-in-.+?/[A-Z0-9-]+/", r"/job-in-.+?/")},
     "jobbland-se": {"market": "Sweden", "base": "https://jobbland.se", "listing": "https://jobbland.se/lediga-jobb/kategori/ekonomi", "patterns": (r"/jobb/",)},
     "ledigajobb-se": {"market": "Sweden", "base": "https://ledigajobb.se", "listing": "https://ledigajobb.se/pr/finance-business-partner-jobb", "patterns": (r"/jobb/",)},
     "finansavisen-no": {"market": "Norway", "base": "https://www.finansavisen.no", "listing": "https://www.finansavisen.no/stillinger", "patterns": (r"/stillinger/", r"/jobb/")},

@@ -15,6 +15,7 @@ from pathlib import Path
 import pandas as pd
 
 from .opportunity_registry import REGISTRY_COLUMNS, update_registry, validate_semantic_identity
+from .queue_selection import select_country_balanced_indices
 
 ROOT = Path(__file__).resolve().parents[1]
 JOBS_PATH = ROOT / "data" / "jobs_board_staging.csv"
@@ -207,45 +208,8 @@ def build_queue(limit: int = 80) -> pd.DataFrame:
     jobs["_posted"] = pd.to_datetime(jobs.get("date_posted", ""), errors="coerce", utc=True)
     jobs = jobs.sort_values(["calibration_score", "_posted", "last_seen_at"], ascending=[False, False, False])
 
-    # First allocate C workload by the agreed country sourcing mix. These are
-    # soft targets: if one market cannot fill its allocation, the strongest
-    # remaining roles from other countries fill the queue.
     targets = _target_slots(limit)
-    chosen: list[int] = []
-    family_counts: dict[str, int] = {}
-    country_counts: dict[str, int] = {}
-    for country, target in targets.items():
-        if target <= 0:
-            continue
-        for idx, row in jobs[jobs["market"].astype(str).eq(country)].iterrows():
-            family = str(row.get("role_family", "Other finance"))
-            if family_counts.get(family, 0) >= 18:
-                continue
-            chosen.append(idx)
-            family_counts[family] = family_counts.get(family, 0) + 1
-            country_counts[country] = country_counts.get(country, 0) + 1
-            if country_counts[country] >= target:
-                break
-
-    # Quality-first fallback for unfilled country slots or markets with sparse data.
-    if len(chosen) < min(limit, len(jobs)):
-        for idx, row in jobs.iterrows():
-            if idx in chosen:
-                continue
-            family = str(row.get("role_family", "Other finance"))
-            if family_counts.get(family, 0) >= 18:
-                continue
-            chosen.append(idx)
-            family_counts[family] = family_counts.get(family, 0) + 1
-            if len(chosen) >= limit:
-                break
-
-    if len(chosen) < min(limit, len(jobs)):
-        for idx in jobs.index:
-            if idx not in chosen:
-                chosen.append(idx)
-            if len(chosen) >= limit:
-                break
+    chosen = select_country_balanced_indices(jobs, limit, targets)
 
     queue = jobs.loc[chosen].copy()
     queue = queue.rename(columns={"job_id": "opportunity_id"})

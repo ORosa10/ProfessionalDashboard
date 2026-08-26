@@ -1,0 +1,48 @@
+name: Workflow health UI quality
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "app.py"
+      - "system_flow_ui.py"
+      - "system_flow_focus_ui.py"
+      - "data/workstream_health.json"
+      - ".github/workflows/workflow-health-ui-quality.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile Streamlit UI modules
+        run: python -m py_compile app.py system_flow_ui.py system_flow_focus_ui.py
+      - name: Validate A-J health config
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(Path('data/workstream_health.json').read_text(encoding='utf-8'))
+          valid = {'green', 'orange', 'red'}
+          nodes = payload.get('nodes', {})
+          edges = payload.get('edges', {})
+          required = set('ABCDEFGHIJ')
+          missing = required - set(nodes)
+          assert not missing, f'missing A-J nodes: {sorted(missing)}'
+          for key, row in nodes.items():
+              assert row.get('health') in valid, f'invalid node health {key}: {row.get("health")}'
+          for key, value in edges.items():
+              assert value in valid, f'invalid edge health {key}: {value}'
+          assert edges.get('G-C') == 'green', 'canonical G→C should be live'
+          assert edges.get('C-J') == 'green', 'production C→J bridge should be live'
+          assert edges.get('F-A') == 'red', 'deferred F→A should be visibly inactive'
+          print(f"health config OK: {len(nodes)} nodes, {len(edges)} edges")
+          PY

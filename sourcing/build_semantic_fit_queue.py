@@ -14,12 +14,15 @@ from pathlib import Path
 
 import pandas as pd
 
+from .opportunity_registry import REGISTRY_COLUMNS, update_registry, validate_semantic_identity
+
 ROOT = Path(__file__).resolve().parents[1]
 JOBS_PATH = ROOT / "data" / "jobs_board_staging.csv"
 SEMANTIC_PATH = ROOT / "data" / "semantic_fit.csv"
 HISTORY_PATH = ROOT / "data" / "opportunity_history.csv"
 OUT_PATH = ROOT / "data" / "semantic_fit_queue.csv"
 COUNTRY_WEIGHTS_PATH = ROOT / "data" / "country_sourcing_weights.json"
+REGISTRY_PATH = ROOT / "data" / "opportunity_registry.csv"
 
 QUEUE_COLUMNS = [
     "opportunity_id", "title", "company", "canonical_company_id", "company_category",
@@ -122,6 +125,19 @@ def _load_company_universe() -> pd.DataFrame:
     return universe.fillna("")
 
 
+def _load_all_g_metadata() -> pd.DataFrame:
+    """Load identity metadata from every G lane, not only country boards."""
+    frames: list[pd.DataFrame] = []
+    for path in sorted((ROOT / "data").glob("jobs*.csv")):
+        try:
+            frame = pd.read_csv(path).fillna("")
+        except (OSError, pd.errors.EmptyDataError, pd.errors.ParserError):
+            continue
+        if "job_id" in frame.columns:
+            frames.append(frame)
+    return pd.concat(frames, ignore_index=True, sort=False) if frames else pd.DataFrame()
+
+
 def _company_maps(universe: pd.DataFrame) -> tuple[dict[str, dict], dict[str, dict]]:
     exact: dict[str, dict] = {}
     aliases: dict[str, dict] = {}
@@ -145,6 +161,12 @@ def build_queue(limit: int = 80) -> pd.DataFrame:
         return pd.DataFrame(columns=QUEUE_COLUMNS)
     jobs = jobs[jobs.get("status", "").eq("Open")].copy()
     jobs = jobs.drop_duplicates("job_id", keep="last")
+
+    # Keep vacancy identity independently of the rolling Open staging pool.
+    # Judgments must remain joinable after G stops returning a vacancy.
+    registry = update_registry(REGISTRY_PATH, jobs)
+    REGISTRY_PATH.parent.mkdir(parents=True, exist_ok=True)
+    registry.to_csv(REGISTRY_PATH, index=False)
 
     already: set[str] = set()
     if SEMANTIC_PATH.exists() and SEMANTIC_PATH.stat().st_size > 0:
@@ -236,10 +258,22 @@ def main() -> None:
     parser.add_argument("--out", default=str(OUT_PATH))
     args = parser.parse_args()
     queue = build_queue(args.limit)
+    # The board queue is only one G lane.  Seed the durable registry from all
+    # persisted G lanes before validating semantic history.
+    all_g = _load_all_g_metadata()
+    if not all_g.empty:
+        registry = update_registry(REGISTRY_PATH, all_g)
+        REGISTRY_PATH.parent.mkdir(parents=True, exist_ok=True)
+        registry.to_csv(REGISTRY_PATH, index=False)
+    if SEMANTIC_PATH.exists() and SEMANTIC_PATH.stat().st_size > 0 and REGISTRY_PATH.exists():
+        validate_semantic_identity(
+            pd.read_csv(SEMANTIC_PATH).fillna(""),
+            pd.read_csv(REGISTRY_PATH).fillna(""),
+        )
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     queue.to_csv(out, index=False)
-    print(f"wrote {len(queue)} pending semantic-fit roles to {out}")
+    print(f"wrote {len(queue)} pending semantic-fit roles to {out}; registry={REGISTRY_PATH}")
 
 
 if __name__ == "__main__":

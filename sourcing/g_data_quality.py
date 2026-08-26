@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import re
+from urllib.parse import urlparse, urlunparse
+
+import pandas as pd
 
 INVALID_COMPANY_PATTERNS = [
     r"^\s*$",
@@ -24,6 +27,48 @@ INVALID_TITLE_PATTERNS = [
 # compounded (Finanzanalyst, finansanalytiker, økonom...). Other markers should
 # respect token boundaries so e.g. "valuation" never matches "evaluation".
 FINANCE_MARKER_STEMS = {"finanz", "finans", "økonom"}
+
+
+def normalise_vacancy_url(value: object) -> str:
+    """Return a stable URL key without tracking parameters/fragments."""
+    raw = str(value or "").strip()
+    if not raw:
+        return ""
+    parsed = urlparse(raw)
+    if not parsed.scheme or not parsed.netloc:
+        return raw.rstrip("/").lower()
+    return urlunparse((parsed.scheme.lower(), parsed.netloc.lower(), parsed.path.rstrip("/"), "", "", ""))
+
+
+def quality_flags(row: object) -> list[str]:
+    """Identify blocking identity/detail issues without changing the role."""
+    get = row.get if hasattr(row, "get") else lambda key, default="": default
+    flags: list[str] = []
+    if invalid_job_title(get("title", "")):
+        flags.append("missing_or_invalid_title")
+    if invalid_company_name(get("company", "")):
+        flags.append("missing_or_invalid_company")
+    if not normalise_vacancy_url(get("job_url", "")):
+        flags.append("missing_job_url")
+    description = str(get("description_en", "") or get("description", "") or "").strip()
+    if len(description) < 160:
+        flags.append("thin_description")
+    return flags
+
+
+def audit_g_frame(frame: pd.DataFrame) -> pd.DataFrame:
+    """Create a deterministic per-role quality report for any G lane."""
+    if frame.empty:
+        return pd.DataFrame(columns=["opportunity_id", "source_id", "quality_status", "quality_flags"])
+    out = frame.copy().fillna("")
+    if "job_id" in out.columns and "opportunity_id" not in out.columns:
+        out["opportunity_id"] = out["job_id"]
+    for col in ("opportunity_id", "source_id"):
+        if col not in out.columns:
+            out[col] = ""
+    out["quality_flags"] = out.apply(lambda row: ";".join(quality_flags(row)), axis=1)
+    out["quality_status"] = out["quality_flags"].map(lambda value: "review" if value else "ready")
+    return out[["opportunity_id", "source_id", "quality_status", "quality_flags"]]
 
 
 def invalid_company_name(value: object) -> bool:

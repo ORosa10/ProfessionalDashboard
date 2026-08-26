@@ -6,6 +6,8 @@ on:
     paths:
       - "sourcing/reconcile_i_learning.py"
       - "sourcing/test_reconcile_i_learning.py"
+      - "sourcing/build_b_company_suggestions.py"
+      - "sourcing/test_b_company_suggestions.py"
       - ".github/workflows/i-learning-sync.yml"
       - ".github/workflows/i-learning-quality.yml"
 
@@ -23,7 +25,7 @@ jobs:
           python-version: "3.12"
       - run: pip install pandas
       - name: Run canonical I tests
-        run: python -m unittest sourcing.test_reconcile_i_learning
+        run: python -m unittest sourcing.test_reconcile_i_learning sourcing.test_b_company_suggestions
       - name: Dry-run reconciliation on repository data
         run: |
           mkdir -p /tmp/i-sync
@@ -38,11 +40,12 @@ jobs:
             --c-events-out /tmp/i-sync/c_learning_evidence.csv \
             --h-events-out /tmp/i-sync/h_learning_events.csv \
             --h-summary-out /tmp/i-sync/h_learning_summary.csv
+          python -m sourcing.build_b_company_suggestions --out /tmp/i-sync/a_b_discovered_companies.csv
           python - <<'PY'
           import pandas as pd
-          from pathlib import Path
           h = pd.read_csv('/tmp/i-sync/opportunity_history.csv').fillna('')
           e = pd.read_csv('/tmp/i-sync/opportunity_events.csv').fillna('')
+          b_suggestions = pd.read_csv('/tmp/i-sync/a_b_discovered_companies.csv').fillna('')
           assert h['opportunity_id'].astype(str).str.strip().ne('').all()
           assert not h['opportunity_id'].duplicated().any()
           assert not e['event_id'].duplicated().any()
@@ -50,5 +53,8 @@ jobs:
           if len(b):
               assert b['action'].eq('Apply').all()
               assert ~b['application_stage'].isin(['', 'Not applied']).any()
-          print(f'validated {len(h)} latest-state opportunities and {len(e)} events')
+          if len(b_suggestions):
+              assert b_suggestions['suggested_rating'].eq('Unrated').all()
+              assert b_suggestions['source_streams'].eq('B').all()
+          print(f'validated {len(h)} latest-state opportunities, {len(e)} events and {len(b_suggestions)} B company suggestions')
           PY

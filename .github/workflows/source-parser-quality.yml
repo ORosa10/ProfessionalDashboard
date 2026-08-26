@@ -12,6 +12,8 @@ on:
       - "sourcing/test_board_catalog_adapters.py"
       - "sourcing/test_board_academicwork.py"
       - "sourcing/test_czech_board_identity.py"
+      - "sourcing/filter_language_requirements.py"
+      - "sourcing/test_filter_language_requirements.py"
       - "sourcing/g_data_quality.py"
       - ".github/workflows/source-parser-quality.yml"
 
@@ -27,11 +29,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install requests beautifulsoup4
-      - name: Run focused parser regressions
+      - run: pip install requests beautifulsoup4 pandas
+      - name: Run focused source-quality regressions
         run: >-
           python -m unittest
           sourcing.test_board_html_adapters
           sourcing.test_board_catalog_adapters
           sourcing.test_board_academicwork
           sourcing.test_czech_board_identity
+          sourcing.test_filter_language_requirements

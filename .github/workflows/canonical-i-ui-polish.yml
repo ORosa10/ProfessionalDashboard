@@ -1,53 +1,53 @@
-name: One-shot canonical I UI polish
+name: Canonical I UI polish
 
 on:
   push:
-    branches: [canonical-i-ui-polish]
+    branches:
+      - canonical-i-ui-polish
 
 permissions:
   contents: write
 
 jobs:
   patch:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: canonical-i-ui-polish
-      - name: Align B wording and expose I event timeline
+      - name: Patch UI
         run: |
           python - <<'PY'
           from pathlib import Path
 
-          b = Path('add_opportunity_ui.py')
-          text = b.read_text(encoding='utf-8')
-          replacements = {
-              'Paste a role you found yourself. Saving it means Interested: it enters I immediately. ': 'Paste a role you already applied to yourself. Saving it means Applied: it enters I immediately. ',
-              'B is an intentional manual-intake lane. A role you actively add is automatically treated as Interested, ': 'B is an intentional manual-application lane. A role you add here is automatically treated as Applied, ',
-              'Add as Interested': 'Add as Applied',
-              '"feedback": "Interested"': '"feedback": "Applied"',
-              '"Add Interested opportunity"': '"Add Applied opportunity"',
-              'Saved as Interested and sent to I. Zero-cost salary research is queued.': 'Saved as Applied and sent to I. Zero-cost salary research is queued.',
-              'Intent is always Interested. Salary research is read-only here; only your comment remains editable.': 'Application status is always Applied in B. Salary research is read-only here; only your comment remains editable.',
-              'updated.loc[shared, "feedback"] = "Interested"': 'updated.loc[shared, "feedback"] = "Applied"',
-          }
-          for old, new in replacements.items():
-              if old not in text:
-                  raise SystemExit(f'Missing B wording anchor: {old}')
-              text = text.replace(old, new)
-          b.write_text(text, encoding='utf-8')
+          b = Path("add_opportunity_ui.py")
+          text = b.read_text(encoding="utf-8")
+          replacements = [
+              ("Paste a role you found yourself. Saving it means Interested: it enters I immediately. ", "Paste a role you already applied to yourself. Saving it means Applied: it enters I immediately. "),
+              ("B is an intentional manual-intake lane. A role you actively add is automatically treated as Interested, ", "B is an intentional manual-application lane. A role you add here is automatically treated as Applied, "),
+              ("Add as Interested", "Add as Applied"),
+              ('"feedback": "Interested"', '"feedback": "Applied"'),
+              ('"Add Interested opportunity"', '"Add Applied opportunity"'),
+              ("Saved as Interested and sent to I. Zero-cost salary research is queued.", "Saved as Applied and sent to I. Zero-cost salary research is queued."),
+              ("Intent is always Interested. Salary research is read-only here; only your comment remains editable.", "Application status is always Applied in B. Salary research is read-only here; only your comment remains editable."),
+              ('updated.loc[shared, "feedback"] = "Interested"', 'updated.loc[shared, "feedback"] = "Applied"'),
+          ]
+          for old, new in replacements:
+              if old in text:
+                  text = text.replace(old, new)
+          b.write_text(text, encoding="utf-8")
 
-          i = Path('opportunity_history_ui.py')
-          text = i.read_text(encoding='utf-8')
-          anchor = 'HISTORY_PATH = "data/opportunity_history.csv"\nB_PATH = DATA_DIR / "user_submitted_opportunities.csv"'
-          replacement = 'HISTORY_PATH = "data/opportunity_history.csv"\nEVENT_PATH = DATA_DIR / "opportunity_events.csv"\nB_PATH = DATA_DIR / "user_submitted_opportunities.csv"'
-          if anchor not in text:
-              raise SystemExit('Missing I path anchor')
-          text = text.replace(anchor, replacement, 1)
-
-          tail = '    h3.metric("Reached final / offer", int(applications["application_stage"].isin(FINAL_REACHED_STAGES).sum()))'
-          timeline = '''    h3.metric("Reached final / offer", int(applications["application_stage"].isin(FINAL_REACHED_STAGES).sum()))
+          i = Path("opportunity_history_ui.py")
+          text = i.read_text(encoding="utf-8")
+          if "EVENT_PATH = DATA_DIR" not in text:
+              text = text.replace(
+                  'HISTORY_PATH = "data/opportunity_history.csv"\nB_PATH = DATA_DIR / "user_submitted_opportunities.csv"',
+                  'HISTORY_PATH = "data/opportunity_history.csv"\nEVENT_PATH = DATA_DIR / "opportunity_events.csv"\nB_PATH = DATA_DIR / "user_submitted_opportunities.csv"',
+                  1,
+              )
+          if "Canonical I event timeline" not in text:
+              tail = '    h3.metric("Reached final / offer", int(applications["application_stage"].isin(FINAL_REACHED_STAGES).sum()))'
+              timeline = tail + '''
 
     st.divider()
     with st.expander("Canonical I event timeline", expanded=False):
@@ -68,23 +68,31 @@ jobs:
                 else:
                     events["_sort"] = pd.to_datetime(events.get("event_at", ""), errors="coerce", utc=True)
                     events = events.sort_values(["_sort", "event_id"], ascending=[False, False], na_position="last").drop(columns="_sort")
-                    event_view = events[[
-                        "event_at", "event_type", "source_stream", "action", "application_stage",
-                        "company_feedback", "role_feedback", "user_comment", "outcome_reason", "notes",
-                    ]].copy()
-                    st.dataframe(event_view, hide_index=True, width="stretch", height=420)
+                    st.dataframe(
+                        events[[
+                            "event_at", "event_type", "source_stream", "action", "application_stage",
+                            "company_feedback", "role_feedback", "user_comment", "outcome_reason", "notes",
+                        ]],
+                        hide_index=True,
+                        width="stretch",
+                        height=420,
+                    )
 '''
-          if tail not in text:
-              raise SystemExit('Missing I timeline anchor')
-          text = text.replace(tail, timeline, 1)
-          i.write_text(text, encoding='utf-8')
+              if tail not in text:
+                  raise SystemExit("I timeline anchor missing")
+              text = text.replace(tail, timeline, 1)
+          i.write_text(text, encoding="utf-8")
           PY
       - name: Compile changed UI
         run: python -m py_compile add_opportunity_ui.py opportunity_history_ui.py
-      - name: Commit UI polish
+      - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add add_opportunity_ui.py opportunity_history_ui.py
-          git commit -m "Align B with Applied and show canonical I events"
-          git push origin HEAD:canonical-i-ui-polish
+          if git diff --cached --quiet; then
+            echo "UI already polished"
+          else
+            git commit -m "Align B with Applied and show canonical I events"
+            git push origin HEAD:canonical-i-ui-polish
+          fi

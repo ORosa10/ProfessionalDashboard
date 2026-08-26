@@ -78,3 +78,4 @@ First full review of the Consulting-expansion shortlist (20 roles across Oliver 
 **Strong-fit consulting firms for him.** Horváth (treasury / CFO / FP&A / working capital) and Alvarez & Marsal (corporate finance / modelling / PE performance) are the clearest matches; FTI and AlixPartners (restructuring, M&A, capital advisory) also land well.
 
 **Encoded into calibration_rules.json (2026-08-17):** added restructuring / working capital as a positive; added wealth-management / private-banking and organisational-performance / operational as cautions. (Real estate and compliance/IT already downranked from earlier rounds.) Reorder only, never hard-exclude.
+- [2026-08-26] User example (Interested): Consultant, Market & Commodity Trading and Risk (Energy Trading) @ Boston Consulting Group - theme commodity & market risk / energy trading

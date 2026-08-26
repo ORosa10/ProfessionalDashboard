@@ -1,0 +1,32 @@
+name: A and G quality checks
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "company_targeting_ui.py"
+      - "sourcing/g_data_quality.py"
+      - "sourcing/test_g_data_quality.py"
+      - "sourcing/test_company_targeting_promotion.py"
+      - ".github/workflows/a-g-quality-checks.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas streamlit requests
+      - name: Unit tests
+        run: |
+          python -m unittest \
+            sourcing.test_g_data_quality \
+            sourcing.test_company_targeting_promotion
+      - name: Compile A UI
+        run: python -m py_compile company_targeting_ui.py sourcing/g_data_quality.py

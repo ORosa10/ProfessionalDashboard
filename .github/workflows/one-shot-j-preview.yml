@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pandas streamlit
-      - name: Print current J top 20
+      - name: Print current J top 20 after quality-first rerank
         run: |
           python - <<'PY'
           from action_queue_ui import _load_candidates, _merge_semantic, _company_context, _quality_and_rank, _select_top, _country_value
@@ -28,4 +28,6 @@ jobs:
           print(top[['company','title','country','company_rating','_language_soft','_seniority_soft']].to_string(index=False))
           print('\nGerman-advert soft flags:', int(top['_language_soft'].sum()))
           print('Seniority soft penalty count:', int((top['_seniority_soft'] > 0).sum()))
+          print('Country counts:')
+          print(top['country'].value_counts().to_string())
           PY

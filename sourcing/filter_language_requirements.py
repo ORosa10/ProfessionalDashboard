@@ -29,7 +29,6 @@ DEFAULT_PATH = ROOT / "data" / "jobs_board_staging.csv"
 
 GERMAN_TERMS = ("german", "deutsch", "deutsche", "deutschen", "deutscher")
 
-# English and Czech are intentionally absent. German is handled separately.
 OTHER_LANGUAGES = {
     "Norwegian": ("norwegian", "norsk"),
     "Swedish": ("swedish", "svenska"),
@@ -55,8 +54,6 @@ def _text(row: pd.Series) -> str:
 
 
 def _sentences(text: str) -> list[str]:
-    # Keep bullet-style requirements separate enough that a language marker is
-    # not accidentally paired with an unrelated requirement several paragraphs away.
     return [s.strip().lower() for s in re.split(r"[\n\r•;.!?]+", text) if s.strip()]
 
 
@@ -66,11 +63,7 @@ def _language_regex(terms: tuple[str, ...]) -> str:
 
 def _german_block(sentence: str) -> bool:
     lang = _language_regex(GERMAN_TERMS)
-
-    # Explicit B1/B2 should stay eligible unless the same sentence also states
-    # a genuinely higher German requirement.
     ordinary_level = re.search(rf"(?:{lang}).{{0,25}}\b(?:b1|b2)\b|\b(?:b1|b2)\b.{{0,25}}(?:{lang})", sentence)
-
     explicit_high = [
         rf"(?:{lang}).{{0,35}}\b(?:c1|c2)\b",
         rf"\b(?:c1|c2)\b.{{0,35}}(?:{lang})",
@@ -94,6 +87,21 @@ def _german_block(sentence: str) -> bool:
 
 def _other_language_block(sentence: str, terms: tuple[str, ...]) -> bool:
     lang = _language_regex(terms)
+    # Remove explicitly negated requirement language before applying positive
+    # blocker patterns. This prevents phrases such as "Norwegian is preferred
+    # but not mandatory" from being interpreted as a mandatory requirement.
+    positive_sentence = re.sub(
+        r"\bnot\s+(?:(?:a|an)\s+)?(?:required|mandatory|essential)(?:\s+requirement)?\b",
+        "",
+        sentence,
+        flags=re.IGNORECASE,
+    )
+    positive_sentence = re.sub(
+        r"\b(?:is|are)\s+not\s+(?:required|mandatory|essential)\b",
+        "",
+        positive_sentence,
+        flags=re.IGNORECASE,
+    )
     explicit = [
         rf"(?:{lang}).{{0,35}}\b(?:required|mandatory|essential|prerequisite)\b",
         rf"\b(?:required|mandatory|essential)\b.{{0,35}}(?:{lang})",
@@ -109,16 +117,14 @@ def _other_language_block(sentence: str, terms: tuple[str, ...]) -> bool:
         rf"(?:{lang}).{{0,25}}\bnative\b",
         rf"\bmust\b.{{0,20}}(?:speak|know|be fluent in|have).{{0,20}}(?:{lang})",
     ]
-    return any(re.search(pattern, sentence, flags=re.IGNORECASE) for pattern in explicit)
+    return any(re.search(pattern, positive_sentence, flags=re.IGNORECASE) for pattern in explicit)
 
 
 def blocking_language_requirement(text: str) -> str:
     sentences = _sentences(text)
-
     for sentence in sentences:
         if any(term in sentence for term in GERMAN_TERMS) and _german_block(sentence):
             return "German C1/C2/fluent/native-level requirement"
-
     for label, terms in OTHER_LANGUAGES.items():
         for sentence in sentences:
             if any(term in sentence for term in terms) and _other_language_block(sentence, terms):

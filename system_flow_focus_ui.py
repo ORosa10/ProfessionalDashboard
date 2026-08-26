@@ -6,10 +6,16 @@ from streamlit_flow import streamlit_flow
 from system_flow_ui import (
     EDGE_DETAILS,
     FLOW_STATE_KEY,
+    HEALTH_CONFIG,
     SUPPORT_DETAILS,
     WORKSTREAM_DETAILS,
     _initial_state,
     _reset_flow,
+    edge_health,
+    health_text,
+    node_health,
+    node_summary,
+    workstream_health_counts,
 )
 
 FOCUS_MODE_KEY = "system_flow_focus_mode"
@@ -43,45 +49,47 @@ def _render_detail(selected_id: str | None) -> None:
     if edge:
         st.subheader("Selected connection")
         st.markdown(f"### {selected_id}")
-        st.markdown(f"**{edge['status']}**")
+        st.markdown(f"**{health_text(edge_health(selected_id or ''))}**")
         st.markdown(edge["flow"])
         if edge["missing"]:
-            st.markdown(f"**Missing:** {edge['missing']}")
+            st.markdown(f"**Remaining:** {edge['missing']}")
     else:
         info = WORKSTREAM_DETAILS.get(selected_id or "") or SUPPORT_DETAILS.get(selected_id or "")
         st.subheader("Selected node")
         if info:
             st.markdown(f"### {info['title']}")
-            st.caption(info["status"])
+            st.markdown(f"**{health_text(node_health(selected_id or ''))}**")
+            summary = node_summary(selected_id or "")
+            if summary:
+                st.caption(summary)
             st.markdown(info["purpose"])
             st.markdown(f"**Inputs**  \n{info['inputs']}")
             st.markdown(f"**Outputs**  \n{info['outputs']}")
-            st.markdown(f"**Outstanding**  \n{info['outstanding']}")
+            st.markdown(f"**Remaining**  \n{info['outstanding']}")
         else:
             st.info("Click any node or connection to inspect its purpose and implementation status.")
 
     st.divider()
-    st.markdown("#### Connection health")
+    st.markdown("#### Health legend")
     st.markdown(
-        "🟢 **LIVE** — intended flow is implemented  \n"
-        "🟠 **PARTIAL** — some plumbing works, target flow is incomplete  \n"
-        "⚪ **PLANNED** — target architecture only"
+        "🟢 **DONE / WORKING** — intended node or connection works  \n"
+        "🟠 **IN PROGRESS** — mostly working, but integration or cleanup remains  \n"
+        "🔴 **NOT WORKING / NOT ACTIVE** — missing, deferred or not wired"
     )
-    st.caption("Solid = concrete core candidate/data flow. Dashed = context, learning feedback, secondary lane or planned relation.")
+    st.caption("Solid = core candidate/data flow. Dashed = context, learning feedback, secondary or inactive relation.")
 
     st.divider()
     st.markdown("#### Architecture")
     st.code(
-        "CORE DISCOVERY: A + C → G → C → J → I\n"
-        "MANUAL: B → I (Interested immediately)\n"
-        "PREFERENCE LEARNING: I → A company feedback · I → C role learning\n"
-        "OUTCOME LEARNING: I → H → A/C/G/J as attainability context\n"
-        "SECONDARY: D/E → C optional candidates · F → A/access context\n"
-        "C → G future search intelligence"
+        "CORE DISCOVERY: A + C → G → C → actionability → J → I\n"
+        "MANUAL: B → I\n"
+        "PREFERENCE LEARNING: I → A company evidence · I → C role learning\n"
+        "OUTCOME LEARNING: I → H → A/C/G/J (future attainability context)\n"
+        "SECONDARY: D/E → C optional candidates · F → A/access context"
     )
     st.caption(
-        "H never overwrites A preference or C semantic fit: it adds empirical attainability context, "
-        "soft sourcing guidance and J prioritisation. D/E/F remain optional lanes."
+        "H never overwrites A preference or C semantic fit. Red H outbound arrows mean the evidence base exists, "
+        "but the grouped attainability model is not yet live in those decisions."
     )
 
 
@@ -98,9 +106,15 @@ def render_system_flow() -> None:
     st.markdown('<div class="eyebrow">System architecture</div>', unsafe_allow_html=True)
     st.title("A–J System Flow")
     st.caption(
-        "CORE = A/B/C/G/J/I/H. D/E/F are optional secondary lanes. Drag nodes, zoom/pan, "
-        "and click nodes or connections; colour shows LIVE, PARTIAL or PLANNED."
+        f"Current implementation health · updated {HEALTH_CONFIG.get('updated_at', 'unknown')}. "
+        "Green = done, orange = in progress, red = not working/not active."
     )
+
+    counts = workstream_health_counts()
+    m1, m2, m3 = st.columns(3)
+    m1.metric("🟢 Done / working", counts["green"])
+    m2.metric("🟠 In progress", counts["orange"])
+    m3.metric("🔴 Not working", counts["red"])
 
     c1, c2, spacer, c4 = st.columns([1.2, 1.3, 5.5, 1.2])
     with c1:
@@ -126,7 +140,7 @@ def render_system_flow() -> None:
 
     with canvas:
         st.session_state[FLOW_STATE_KEY] = streamlit_flow(
-            "professional_dashboard_system_flow_focus_v5",
+            "professional_dashboard_system_flow_focus_v7",
             st.session_state[FLOW_STATE_KEY],
             fit_view=True,
             height=1040,

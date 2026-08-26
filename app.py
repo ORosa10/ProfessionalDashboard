@@ -13,6 +13,7 @@ from opportunity_history_ui import render_opportunity_history
 from people_ui import render_people
 from cost_of_living_ui import render_cost_of_living
 from system_flow_focus_ui import render_system_flow
+from system_flow_ui import HEALTH_CONFIG, node_health, node_summary, workstream_health_counts, health_text
 from github_storage import RATING_COLUMNS, github_token, load_ratings, save_ratings
 from jobs_ui import (
     render_board_sweep,
@@ -124,12 +125,21 @@ def home_page() -> None:
     col2.metric("Companies with jobs", jobs["company"].nunique() if not jobs.empty else 0)
     col3.metric("Markets", jobs["_market"].nunique() if not jobs.empty else 0)
     col4.metric("Source runs", len(runs))
+
     st.subheader("Operating model")
-    st.code("G SOURCING → A COMPANY + C ROLE FIT → J APPLY SHORTLIST → I HISTORY → H ATTAINABILITY")
+    st.code("G SOURCING → A COMPANY + C ROLE FIT → ACTIONABILITY → J APPLY SHORTLIST → I HISTORY → H ATTAINABILITY")
+
+    counts = workstream_health_counts()
+    h1, h2, h3 = st.columns(3)
+    h1.metric("🟢 A–J done / working", counts["green"])
+    h2.metric("🟠 A–J in progress", counts["orange"])
+    h3.metric("🔴 A–J not working", counts["red"])
+    st.caption(f"Workflow health updated {HEALTH_CONFIG.get('updated_at', 'unknown')} · open A–J System Flow for node/connection detail.")
+
     if jobs.empty:
         st.info("The sourcing framework is ready. Scheduled runs will populate the Jobs page automatically.")
     else:
-        st.success("Live sourcing is active. Open Apply Shortlist for the actionable TOP 20.")
+        st.success("Live sourcing is active. Open J · Apply Shortlist for the actionable queue.")
 
 
 def opportunities_page() -> None:
@@ -172,6 +182,25 @@ def cost_of_living_page() -> None:
     render_cost_of_living()
 
 
+def attainability_page() -> None:
+    header("H — Attainability", "Outcome-based evidence about how realistic comparable roles are, kept separate from preference and semantic fit.")
+    health = node_health("H")
+    st.markdown(f"### {health_text(health)}")
+    summary = node_summary("H")
+    if summary:
+        st.write(summary)
+    st.info(
+        "I → H evidence is already collected from real application stages/outcomes. "
+        "The grouped confidence-aware model that would feed H context back into A/C/G/J is still in progress."
+    )
+    for name, label in [("h_learning_summary.csv", "Current H summary"), ("h_learning_events.csv", "Current H evidence events")]:
+        path = DATA_DIR / name
+        if path.exists():
+            frame = pd.read_csv(path).fillna("")
+            st.subheader(label)
+            st.dataframe(frame, hide_index=True, width="stretch")
+
+
 def _load_company_universe() -> pd.DataFrame:
     universe = pd.read_csv(DATA_DIR / "company_universe.csv").fillna("")
     categories = pd.read_csv(DATA_DIR / "company_categories.csv").fillna("")
@@ -210,7 +239,7 @@ def _load_company_universe() -> pd.DataFrame:
 
 
 def companies_page() -> None:
-    header("Companies", "Your rated Company Universe and the input layer for company-driven job sourcing.")
+    header("A — Companies", "Your rated Company Universe and the input layer for company-driven job sourcing.")
     universe = _load_company_universe()
     token = github_token()
     ratings_sha = None
@@ -356,20 +385,24 @@ navigation = st.navigation(
         "Dashboard": [st.Page(home_page, title="Home")],
         "Opportunities": [
             st.Page(opportunities_page, title="Overview"),
-            st.Page(action_queue_page, title="Apply Shortlist"),
-            st.Page(add_opportunity_page, title="Add Opportunity"),
-            st.Page(jobs_page, title="Jobs / Calibration"),
-            st.Page(remote_page, title="Remote"),
-            st.Page(projects_page, title="Projekty / Interim"),
-            st.Page(board_sweep_page, title="Country / Board Sweep"),
-            st.Page(companies_page, title="Companies"),
-            st.Page(people_page, title="Lidé / Network"),
+            st.Page(action_queue_page, title="J · Apply Shortlist"),
+            st.Page(add_opportunity_page, title="B · Add Opportunity"),
+            st.Page(jobs_page, title="C · Jobs / Calibration"),
+            st.Page(remote_page, title="D · Remote"),
+            st.Page(projects_page, title="E · Projekty / Interim"),
+            st.Page(board_sweep_page, title="G · Country / Board Sweep"),
+            st.Page(companies_page, title="A · Companies"),
+            st.Page(people_page, title="F · Lidé / Network"),
             st.Page(cost_of_living_page, title="Cost of Living"),
         ],
-        "Workspace": [st.Page(pipeline_page, title="Applications / History"), st.Page(ideas_page, title="Ideas & Projects")],
+        "Workspace": [
+            st.Page(pipeline_page, title="I · Applications / History"),
+            st.Page(attainability_page, title="H · Attainability"),
+            st.Page(ideas_page, title="Ideas & Projects"),
+        ],
         "System": [
-            st.Page(system_flow_page, title="A–J System Flow"),
-            st.Page(sources_page, title="Sources / Radar"),
+            st.Page(system_flow_page, title="A–J · System Flow"),
+            st.Page(sources_page, title="G · Sources / Radar"),
         ],
     }
 )

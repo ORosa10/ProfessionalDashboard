@@ -20,6 +20,7 @@ from sourcing.g_data_quality import invalid_company_name, invalid_job_title
 COMPANY_TARGETING_FEEDBACK_PATH = "data/company_targeting_feedback.csv"
 COMPANY_TARGETING_FEEDBACK_COLUMNS = ["submitted_at", "scope", "feedback"]
 DISCOVERED_COMPANIES_PATH = Path(__file__).parent / "data" / "a_discovered_companies.csv"
+I_COMPANY_LEARNING_PATH = Path(__file__).parent / "data" / "a_learning_summary.csv"
 DISCOVERED_COLUMNS = [
     "suggested_company_id", "company", "role_count", "countries", "source_streams",
     "sample_titles", "first_seen_at", "last_seen_at", "suggested_rating", "evidence_source",
@@ -217,8 +218,6 @@ def render_discovered_company_suggestions() -> None:
             else:
                 current.at[suggested_id, "rating"] = new_rating
         try:
-            # Promote first. If the rating save then fails, the promoted row still
-            # carries the same explicit rating as a safe local fallback.
             _promote_discovered_companies(token, changed, discovered)
             save_ratings(token, current.reset_index().reindex(columns=RATING_COLUMNS, fill_value=""), ratings_sha)
         except Exception as exc:
@@ -228,8 +227,75 @@ def render_discovered_company_suggestions() -> None:
             st.rerun()
 
 
+def render_i_company_learning() -> None:
+    """Surface company-level evidence from canonical I without changing A ratings."""
+    st.divider()
+    st.subheader("Learning from I")
+    st.caption(
+        "Company-level feedback accumulated from your canonical opportunity history. "
+        "This is evidence only: it never changes A/B/C/Exclude automatically."
+    )
+    if not I_COMPANY_LEARNING_PATH.exists() or not I_COMPANY_LEARNING_PATH.stat().st_size:
+        st.info("No I company-learning evidence has been generated yet.")
+        return
+    try:
+        evidence = pd.read_csv(I_COMPANY_LEARNING_PATH).fillna("")
+    except Exception:
+        st.warning("I company-learning evidence could not be loaded.")
+        return
+    if evidence.empty:
+        st.info("No explicit company-level feedback in I yet. Role feedback is kept separately for C.")
+        return
+
+    token = github_token()
+    try:
+        ratings, _ = load_ratings(token)
+    except Exception:
+        ratings = pd.DataFrame(columns=RATING_COLUMNS)
+    rating_map = (
+        ratings.fillna("").drop_duplicates("canonical_company_id", keep="last")
+        .set_index("canonical_company_id")["rating"].to_dict()
+        if not ratings.empty else {}
+    )
+    evidence["current_A_rating"] = evidence.get("canonical_company_id", "").map(rating_map).fillna("Unrated").replace("", "Unrated")
+    direction = evidence.get("evidence_direction", pd.Series([""] * len(evidence), index=evidence.index)).astype(str)
+    evidence["review_hint"] = direction.map({
+        "positive pattern": "Review for possible upgrade",
+        "negative pattern": "Review for possible downgrade / Exclude",
+        "mixed / insufficient": "No rating change suggested yet",
+    }).fillna("No rating change suggested yet")
+    evidence["_sort"] = pd.to_numeric(evidence.get("evidence_rows", 0), errors="coerce").fillna(0)
+    evidence = evidence.sort_values(["_sort", "latest_feedback_at"], ascending=[False, False]).drop(columns="_sort")
+
+    cols = [
+        "company", "current_A_rating", "evidence_rows", "positive", "neutral", "negative",
+        "evidence_direction", "review_hint", "latest_feedback_at",
+    ]
+    for col in cols:
+        if col not in evidence.columns:
+            evidence[col] = ""
+    st.dataframe(
+        evidence[cols],
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "company": st.column_config.TextColumn("Company", width="medium"),
+            "current_A_rating": st.column_config.TextColumn("Current A rating", width="small"),
+            "evidence_rows": st.column_config.NumberColumn("Evidence", width="small"),
+            "positive": st.column_config.NumberColumn("Positive", width="small"),
+            "neutral": st.column_config.NumberColumn("Neutral", width="small"),
+            "negative": st.column_config.NumberColumn("Negative", width="small"),
+            "evidence_direction": st.column_config.TextColumn("Pattern", width="medium"),
+            "review_hint": st.column_config.TextColumn("Suggestion", width="large"),
+            "latest_feedback_at": st.column_config.TextColumn("Latest", width="medium"),
+        },
+    )
+    st.caption("To change a company rating, use the normal A rating control. Explicit A ratings remain authoritative.")
+
+
 def render_company_targeting_feedback() -> None:
     render_discovered_company_suggestions()
+    render_i_company_learning()
 
     with st.expander("Give feedback on the company targeting thesis"):
         st.caption(

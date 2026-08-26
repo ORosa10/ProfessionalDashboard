@@ -232,7 +232,7 @@ jobs:
         run: |
           python - <<'PY'
           import pandas as pd
-          from pathlib import import Path
+          from pathlib import Path
           p=Path('/tmp/replenish/out')
           def r(n):
               f=p/n

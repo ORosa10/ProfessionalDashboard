@@ -118,6 +118,18 @@ class ShadowAggregatorTests(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertEqual(result.iloc[0]["job_id"], "good")
 
+    def test_parser_navigation_artefacts_are_rejected_at_g_boundary(self) -> None:
+        frame = pd.DataFrame([
+            {"job_id": "good", "company": "Investika a.s.", "title": "Financial Risk Analyst"},
+            {"job_id": "bad1", "company": "LINKEDIN", "title": "Head of Corporate Finance"},
+            {"job_id": "bad2", "company": "Poslat nabídku na e-mail", "title": "Treasury Manager"},
+            {"job_id": "bad3", "company": "Nabídka Pracovní nabídka O nás Volná místa 9", "title": "Senior M&A Analyst"},
+            {"job_id": "bad4", "company": "Employer not stated", "title": "FP&A Analyst"},
+            {"job_id": "bad-title", "company": "Example AG", "title": "125 jobs für deine Suche"},
+        ])
+        result = aggregate_frames([("board", frame)])
+        self.assertEqual(result["job_id"].tolist(), ["good"])
+
     def test_diagnostics_report_raw_source_and_country_coverage(self) -> None:
         de = pd.DataFrame([
             {"job_id": "de1", "company": "A", "title": "Treasury Analyst", "location": "Frankfurt, Germany"},

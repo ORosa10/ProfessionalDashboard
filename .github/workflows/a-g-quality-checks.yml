@@ -8,6 +8,9 @@ on:
       - "sourcing/g_data_quality.py"
       - "sourcing/test_g_data_quality.py"
       - "sourcing/test_company_targeting_promotion.py"
+      - "sourcing/sync_a_company_sources.py"
+      - "sourcing/test_sync_a_company_sources.py"
+      - "scripts/build_sector_sources.py"
       - ".github/workflows/a-g-quality-checks.yml"
 
 permissions:
@@ -27,6 +30,7 @@ jobs:
         run: |
           python -m unittest \
             sourcing.test_g_data_quality \
-            sourcing.test_company_targeting_promotion
-      - name: Compile A UI
-        run: python -m py_compile company_targeting_ui.py sourcing/g_data_quality.py
+            sourcing.test_company_targeting_promotion \
+            sourcing.test_sync_a_company_sources
+      - name: Compile A/G modules
+        run: python -m py_compile company_targeting_ui.py sourcing/g_data_quality.py sourcing/sync_a_company_sources.py scripts/build_sector_sources.py

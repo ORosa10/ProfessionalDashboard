@@ -1,19 +1,6 @@
 name: Architecture replenishment shadow
 
 on:
-  push:
-    branches: [architecture-safe-migration]
-    paths:
-      - "data/semantic_fit.csv"
-      - "data/semantic_fit_reviews/**"
-      - "docs/C_SEMANTIC_THESIS.md"
-      - "docs/C_WORK_CONTRACT.md"
-      - "sourcing/build_a_discovered_companies_shadow.py"
-      - "sourcing/build_semantic_fit_queue_shadow.py"
-      - "sourcing/test_build_semantic_fit_queue_shadow.py"
-      - "sourcing/prepare_j_candidates_shadow.py"
-      - "sourcing/test_prepare_j_candidates_shadow.py"
-      - ".github/workflows/architecture-replenishment-shadow.yml"
   pull_request:
     branches: [main]
     paths:
@@ -147,9 +134,6 @@ jobs:
           def description(row):
               return str(row.get('description_en', '') or row.get('description', '') or '')
 
-          # Steady-state unresolved queue. Hide ratings/geography/calibration so
-          # they cannot anchor C. A tiny description-quality flag lets Work spend
-          # browser time only where role text is genuinely insufficient.
           src = Path('/tmp/replenish/out/c_queue.csv')
           base_cols = ['opportunity_id','title','company','job_url','description_for_fit']
           try:
@@ -164,9 +148,6 @@ jobs:
           queue['needs_description_enrichment'] = queue['description_chars'].lt(500)
           queue.to_csv('/tmp/replenish/out/c_work_queue.csv', index=False)
 
-          # One-time v2 recalibration queue: active G roles that already have a
-          # semantic judgment. This cleans old false-Strong labels under the new
-          # stricter thesis before steady-state processing takes over.
           try:
               g = pd.read_csv('/tmp/replenish/out/g_candidates.csv').fillna('')
           except Exception:
@@ -251,7 +232,7 @@ jobs:
         run: |
           python - <<'PY'
           import pandas as pd
-          from pathlib import Path
+          from pathlib import import Path
           p=Path('/tmp/replenish/out')
           def r(n):
               f=p/n

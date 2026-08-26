@@ -55,6 +55,25 @@ class CanonicalILearningTests(unittest.TestCase):
         self.assertEqual(len(changed), len(first) + 1)
         self.assertEqual(changed.iloc[-1]["application_stage"], "1st interview")
 
+    def test_comment_only_new_row_is_preserved_without_inferred_polarity(self) -> None:
+        row = {c: "" for c in HISTORY_COLUMNS}
+        row.update({
+            "opportunity_id": "comment-only", "source_stream": "G",
+            "first_seen_at": "2026-08-26T10:00:00+00:00", "decision_at": "2026-08-26T10:00:00+00:00",
+            "title": "Quantitative Analyst", "company": "Example Bank", "market": "Germany",
+            "action": "New", "company_feedback": "Not rated", "role_feedback": "Not rated",
+            "user_comment": "Too quantitative",
+        })
+        history = pd.DataFrame([row])
+        events = reconcile_events(history, pd.DataFrame(columns=EVENT_COLUMNS))
+        decision = events[events["event_type"].eq("decision")]
+        self.assertEqual(len(decision), 1)
+        _, _, c_events, _, _ = build_learning(history, events)
+        self.assertEqual(len(c_events), 1)
+        self.assertEqual(c_events.iloc[0]["evidence_type"], "comment_only")
+        self.assertEqual(c_events.iloc[0]["c_signal"], "")
+        self.assertEqual(c_events.iloc[0]["user_comment"], "Too quantitative")
+
     def test_learning_separates_a_c_h(self) -> None:
         history = pd.DataFrame([{c: "" for c in HISTORY_COLUMNS}])
         history.loc[0, [

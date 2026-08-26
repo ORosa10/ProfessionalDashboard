@@ -6,7 +6,7 @@
     "red": "Not working / not active yet"
   },
   "nodes": {
-    "A": {"health": "green", "summary": "Company universe, explicit ratings and G-discovered employer suggestions are live."},
+    "A": {"health": "green", "summary": "Company universe, explicit ratings, G-discovered employers and read-only company learning from canonical I are live."},
     "B": {"health": "green", "summary": "Manual intake is reconciled automatically into canonical I as Apply / Applied and bypasses J."},
     "C": {"health": "orange", "summary": "Semantic thesis, Work queues and production C→J bridge are live; ongoing Work recalibration still remains a maintained process."},
     "D": {"health": "orange", "summary": "Remote sourcing lane exists but remains secondary and only partially integrated into canonical C."},
@@ -27,7 +27,7 @@
     "A-F": "orange",
     "F-A": "red",
     "B-A": "orange",
-    "I-A": "orange",
+    "I-A": "green",
     "H-A": "red",
     "C-G": "orange",
     "G-C": "green",

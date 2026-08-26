@@ -11,6 +11,8 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
+from sourcing.g_data_quality import any_finance_marker
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151 Safari/537.36",
     "Accept-Language": "en-US,en;q=0.9,da;q=0.8,fi;q=0.7",
@@ -45,8 +47,7 @@ def _clean(value: object) -> str:
 
 def _relevant(title: str, description: str = "") -> bool:
     """Academic Work is broad: require a target-finance signal in the title."""
-    text = title.lower()
-    return any(marker in text for marker in TITLE_MARKERS)
+    return any_finance_marker(title, TITLE_MARKERS)
 
 
 def extract_academicwork_links(source_id: str, html: str, limit: int) -> list[str]:

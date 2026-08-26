@@ -1,0 +1,67 @@
+name: Canonical I and learning sync
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/opportunity_history.csv"
+      - "data/user_submitted_opportunities.csv"
+      - "sourcing/reconcile_i_learning.py"
+      - "sourcing/test_reconcile_i_learning.py"
+      - ".github/workflows/i-learning-sync.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: canonical-i-learning
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+      - name: Test canonical I guardrails
+        run: python -m unittest sourcing.test_reconcile_i_learning
+      - name: Rebase on latest main
+        run: git pull --rebase origin main
+      - name: Reconcile I and downstream factual evidence
+        run: |
+          python -m sourcing.reconcile_i_learning \
+            --history data/opportunity_history.csv \
+            --submissions data/user_submitted_opportunities.csv \
+            --events data/opportunity_events.csv \
+            --history-out data/opportunity_history.csv \
+            --events-out data/opportunity_events.csv \
+            --a-events-out data/a_learning_events.csv \
+            --a-summary-out data/a_learning_summary.csv \
+            --c-events-out data/c_learning_evidence.csv \
+            --h-events-out data/h_learning_events.csv \
+            --h-summary-out data/h_learning_summary.csv
+      - name: Commit canonical I and learning outputs
+        run: |
+          git config user.name "professional-dashboard-bot"
+          git config user.email "professional-dashboard-bot@users.noreply.github.com"
+          git add \
+            data/opportunity_history.csv \
+            data/opportunity_events.csv \
+            data/a_learning_events.csv \
+            data/a_learning_summary.csv \
+            data/c_learning_evidence.csv \
+            data/h_learning_events.csv \
+            data/h_learning_summary.csv
+          if git diff --cached --quiet; then
+            echo "Canonical I already synchronized."
+          else
+            git commit -m "Sync canonical I history and learning evidence"
+            git push origin HEAD:main
+          fi

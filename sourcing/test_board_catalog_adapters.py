@@ -1,6 +1,6 @@
 import unittest
 
-from sourcing.board_catalog_adapters import extract_catalog_links, extract_detail_fields
+from sourcing.board_catalog_adapters import _relevant, extract_catalog_links, extract_detail_fields
 
 
 class CatalogAdapterTest(unittest.TestCase):
@@ -27,6 +27,38 @@ class CatalogAdapterTest(unittest.TestCase):
         self.assertEqual(
             extract_catalog_links("nzz-jobs-ch", html, 5),
             ["https://jobs.nzz.ch/job/treasury-manager-zuerich/496136"],
+        )
+
+    def test_jobserve_requires_finance_signal_in_title(self):
+        self.assertFalse(
+            _relevant(
+                "Senior Data Architect",
+                "Banking client with financial risk and investment systems.",
+                "jobserve-uk",
+            )
+        )
+        self.assertTrue(
+            _relevant(
+                "Corporate Treasury Analyst",
+                "Technology-enabled treasury team.",
+                "jobserve-uk",
+            )
+        )
+        self.assertTrue(
+            _relevant(
+                "Product Owner - Lease Finance",
+                "Product ownership role.",
+                "jobserve-uk",
+            )
+        )
+
+    def test_non_jobserve_can_use_description_context(self):
+        self.assertTrue(
+            _relevant(
+                "Analyst",
+                "Corporate finance and valuation responsibilities.",
+                "jobwinner-ch",
+            )
         )
 
     def test_jobbank(self):

@@ -26,6 +26,7 @@ TITLE_MARKERS = (
     "transaction", "private equity", "asset management", "equity research", "credit",
     "rahoitus", "talouspäällikkö", "økonomi", "økonom", "analyse", "analytiker", "regnskab",
 )
+STRICT_TITLE_SOURCES = {"jobserve-uk"}
 CONFIG = {
     "startupjobs-cz": {"market": "Czechia", "base": "https://www.startupjobs.cz", "listing": "https://www.startupjobs.cz/nabidky/finance", "patterns": (r"/nabidka/\d+/",)},
     "cocuma-cz": {"market": "Czechia", "base": "https://www.cocuma.cz", "listing": "https://www.cocuma.cz/jobs/", "patterns": (r"/job/",)},
@@ -52,8 +53,17 @@ def _stable_id(source_id: str, url: str) -> str:
     return hashlib.sha256(f"{source_id}|{url}".encode()).hexdigest()[:16]
 
 
-def _relevant(title: str, description: str = "") -> bool:
-    text = f"{title} {description}".lower(); return any(marker in text for marker in TITLE_MARKERS)
+def _relevant(title: str, description: str = "", source_id: str = "") -> bool:
+    """Keep broad-board noise out of G while preserving downstream C judgment.
+
+    JobServe is a generalist search board. A description-only match there was
+    admitting unrelated IT, property and operations roles because their text
+    happened to mention finance/risk/banking. For that source, a target-finance
+    marker must be present in the actual title. Finance-titled ambiguous roles
+    still proceed to C for semantic judgment.
+    """
+    text = title.lower() if source_id in STRICT_TITLE_SOURCES else f"{title} {description}".lower()
+    return any(marker in text for marker in TITLE_MARKERS)
 
 
 def _jobposting(html: str) -> dict | None:
@@ -162,7 +172,7 @@ def discover_catalog_board(source_id: str, queries: list[str], per_query: int, m
             if not title: raise ValueError("title missing")
         except Exception as exc:
             errors.append(f"detail {url[-60:]}: {type(exc).__name__}"); continue
-        if not _relevant(title, description[:2500]): continue
+        if not _relevant(title, description[:2500], source_id): continue
         location = location or str(cfg["market"])
         jobs.append({"job_id": _stable_id(source_id, url), "canonical_company_id": "", "company": company, "title": title, "description": description, "description_en": "", "translation_status": "pending", "market": cfg["market"], "location": location, "priority_locations": location, "job_url": url, "source_url": url, "source_id": source_id, "date_posted": date_posted, "discovered_at": now, "last_seen_at": now, "relevance_score": len(matched), "matched_terms": "; ".join(sorted(matched)), "verification": f"verified {source_id} HTML detail", "status": "Open", "alternate_job_urls": "", "duplicate_count": 0, "calibration_score": "", "calibration_note": ""})
         time.sleep(0.08)

@@ -9,9 +9,9 @@ import pandas as pd
 
 OUTPUT_COLUMNS = [
     "job_id", "candidate_id", "source_id", "canonical_company_id", "company",
-    "title", "role_family", "market", "country_bucket", "location", "date_posted",
-    "last_seen_at", "job_url", "semantic_fit", "semantic_reasoning",
-    "actionability_warnings",
+    "title", "description", "description_en", "role_family", "market", "country_bucket",
+    "location", "date_posted", "last_seen_at", "job_url", "semantic_fit",
+    "semantic_reasoning", "actionability_warnings",
 ]
 EXCLUDED_COLUMNS = ["opportunity_id", "company", "title", "excluded_reason"]
 
@@ -209,8 +209,8 @@ def build_live_pool(
     jobs = candidates.fillna("").copy()
     for col in [
         "candidate_id", "job_id", "source_id", "canonical_company_id", "company",
-        "title", "role_family", "market", "country_bucket", "location",
-        "date_posted", "last_seen_at", "job_url",
+        "title", "description", "description_en", "role_family", "market", "country_bucket",
+        "location", "date_posted", "last_seen_at", "job_url",
     ]:
         if col not in jobs.columns:
             jobs[col] = ""

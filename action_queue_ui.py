@@ -9,6 +9,7 @@ import pandas as pd
 import streamlit as st
 
 from github_storage import github_token, load_csv_file, save_csv_file
+from sourcing.j_soft_ranking import add_soft_rank_columns
 
 DATA_DIR = Path(__file__).parent / "data"
 LIVE_POOL_PATH = DATA_DIR / "j_eligible_pool.csv"
@@ -204,11 +205,15 @@ def _quality_and_rank(jobs: pd.DataFrame) -> pd.DataFrame:
     moderate = out["semantic_fit"].eq("Moderate") & out["is_curated"].eq(True)
     out = out[strong | moderate].copy()
     out = out[~out["company_rating"].eq("Exclude")].copy()
+    out = add_soft_rank_columns(out)
     out["_fit"] = out["semantic_fit"].map({"Strong": 0, "Moderate": 1}).fillna(9)
     out["_curated"] = pd.to_numeric(out["curated_rank"], errors="coerce").fillna(999)
     out["_company"] = out["company_rating"].map({"A": 0, "B": 1, "C": 2, "Unrated": 3, "": 3}).fillna(3)
     out["_date"] = pd.to_datetime(out["date_posted"], errors="coerce", utc=True)
-    return out.sort_values(["_fit", "_curated", "_company", "_date"], ascending=[True, True, True, False])
+    return out.sort_values(
+        ["_fit", "_curated", "_language_soft", "_seniority_soft", "_company", "_date"],
+        ascending=[True, True, True, True, True, False],
+    )
 
 
 def _country_value(row: pd.Series) -> str:

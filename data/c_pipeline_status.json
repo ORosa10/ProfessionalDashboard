@@ -1,0 +1,13 @@
+{
+  "promoted_at": "2026-08-26T07:23:24.473070+00:00",
+  "source_workflow_run_id": "32942260203",
+  "eligible_regular_j": 54,
+  "strong_in_live_pool": 54,
+  "production_exclusions": {
+    "not_strong": 716,
+    "actionability:language:German C1/C2/fluent/native-level requirement": 13,
+    "seniority:above_target_extreme": 8,
+    "data_quality:invalid_company": 7,
+    "seniority:below_target_extreme": 3
+  }
+}

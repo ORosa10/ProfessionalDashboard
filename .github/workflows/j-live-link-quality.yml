@@ -2,6 +2,12 @@ name: J live-link quality
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "sourcing/verify_live_j_links.py"
+      - "sourcing/test_verify_live_j_links.py"
+      - ".github/workflows/j-live-link-quality.yml"
   schedule:
     - cron: "23 5 * * *"
 

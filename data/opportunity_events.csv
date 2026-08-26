@@ -1,0 +1,121 @@
+event_id,opportunity_id,event_at,event_type,source_stream,action,application_stage,company_feedback,role_feedback,user_comment,outcome_reason,notes
+17e50a84882c071995a4,B:d3c976a3df3a7b79,2026-08-16T20:30:50.371702+00:00,decision,B,Apply,,Not rated,Positive,Interested Lost,,Decision/feedback snapshot
+5a4764d9359e547ce45f,B:d3c976a3df3a7b79,2026-08-16T20:30:50.371702+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+e670a18105884766f5d5,B:d3c976a3df3a7b79,2026-08-16T20:30:50.371702+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+14df478d3cb949a48b81,B:2b72cf95cccf7164,2026-08-16T21:22:55.263941+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+5e3faa593367037637b0,B:2b72cf95cccf7164,2026-08-16T21:22:55.263941+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+a0a024679b0a17e3348c,B:2b72cf95cccf7164,2026-08-16T21:22:55.263941+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+6b41952768d8feed73af,B:25e983666d4c50d2,2026-08-16T21:23:48.062854+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+94ded1a70c11dc0487a7,B:25e983666d4c50d2,2026-08-16T21:23:48.062854+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+f4f523e4447928437b13,B:25e983666d4c50d2,2026-08-16T21:23:48.062854+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+6c20fc857cb500d4d31b,B:15cded1e7a55d5d7,2026-08-16T21:38:22.545138+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+786fb0bafdb3f37f67ef,B:15cded1e7a55d5d7,2026-08-16T21:38:22.545138+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+815e3a2e17573ab7025f,B:15cded1e7a55d5d7,2026-08-16T21:38:22.545138+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+42ed8143a280c62fa2d0,B:4e523757d77617bf,2026-08-16T21:53:41.169033+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+853566583d2a260ad2b8,B:4e523757d77617bf,2026-08-16T21:53:41.169033+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+921ba75a76a94e4ebd22,B:4e523757d77617bf,2026-08-16T21:53:41.169033+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+6cc5a6a09c7fc813a7e5,B:7fa016cb43ac0410,2026-08-16T21:54:17.942402+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+cd7d17e06e892e0eb1a7,B:7fa016cb43ac0410,2026-08-16T21:54:17.942402+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+d9769266b6c0580518c2,B:7fa016cb43ac0410,2026-08-16T21:54:17.942402+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+03de650e23aef55f1abd,B:e13781321a90a40a,2026-08-17T17:36:43.369756+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+32e4237c1611834b8ef9,B:e13781321a90a40a,2026-08-17T17:36:43.369756+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+c7ff4f0ccddeeabb76e7,B:e13781321a90a40a,2026-08-17T17:36:43.369756+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+32583b8993c1725aa87a,B:41d0a4ebd62d6b21,2026-08-17T17:42:26.471913+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+72390be3cb0046545378,B:41d0a4ebd62d6b21,2026-08-17T17:42:26.471913+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+d095f599895c3ed9c9a4,B:41d0a4ebd62d6b21,2026-08-17T17:42:26.471913+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+c51ecad70982f3380287,B:6f28065092456220,2026-08-17T17:42:45.871486+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+d08c554bec68f9e5b5a2,B:6f28065092456220,2026-08-17T17:42:45.871486+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+d24439ff9bd8acfc6e47,B:6f28065092456220,2026-08-17T17:42:45.871486+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+353b36dc00ed495fa47a,B:3ea81804da7faf70,2026-08-17T18:28:23.386395+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+e25d8fe96776e241d8d2,B:3ea81804da7faf70,2026-08-17T18:28:23.386395+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+ff8d46075a199af052e6,B:3ea81804da7faf70,2026-08-17T18:28:23.386395+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+144f90e3fe2c80813a9b,B:6c509b886de2b398,2026-08-17T18:45:52.378177+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+426b052d0d5391703d3b,B:6c509b886de2b398,2026-08-17T18:45:52.378177+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+87ebd9c19b9995951e2c,B:6c509b886de2b398,2026-08-17T18:45:52.378177+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+741f1eea2d90bfa0fa58,B:5d5737e1a7fef7f3,2026-08-17T19:16:21.206640+00:00,decision,B,Apply,,Not rated,Positive,Interested Lost,,Decision/feedback snapshot
+78e88fe198c56501974e,B:5d5737e1a7fef7f3,2026-08-17T19:16:21.206640+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+b4713485d0d78342ac50,B:5d5737e1a7fef7f3,2026-08-17T19:16:21.206640+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+477bf1a7342e34267361,B:e0ff3e64de9c6844,2026-08-17T21:13:09.493214+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+a32046d379ebf0958d18,B:e0ff3e64de9c6844,2026-08-17T21:13:09.493214+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+c9d1c65c84cf7c4908d9,B:e0ff3e64de9c6844,2026-08-17T21:13:09.493214+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+1c8a8dd0be4280958cf7,B:3380d091325fa119,2026-08-18T18:37:03.292620+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+c1401bee4fc15b67b438,B:3380d091325fa119,2026-08-18T18:37:03.292620+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+fccb9570a2824538b961,B:3380d091325fa119,2026-08-18T18:37:03.292620+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+012f469671298c0c29ee,B:178a58648f3b9dd0,2026-08-18T18:48:20.103192+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+2cc7b3b649d8ad5f2f52,B:178a58648f3b9dd0,2026-08-18T18:48:20.103192+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+b831ef70f85816c05073,B:178a58648f3b9dd0,2026-08-18T18:48:20.103192+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+4b39033b796fd81e0bd3,B:6e6171414b4b7598,2026-08-18T18:57:22.293694+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+a87e69b0c6cdba88dc06,B:6e6171414b4b7598,2026-08-18T18:57:22.293694+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+af30e529b8eff7a451bc,B:6e6171414b4b7598,2026-08-18T18:57:22.293694+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+4846fdabab19540ef67b,B:71212cac6d265f42,2026-08-18T19:52:17.663507+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+768b05f345fcf90b9bdf,B:71212cac6d265f42,2026-08-18T19:52:17.663507+00:00,decision,B,Apply,,Not rated,Positive,Interested mostly because in CZ and good salary,,Decision/feedback snapshot
+e4fff4948ffd8046f04b,B:71212cac6d265f42,2026-08-18T19:52:17.663507+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+18281e1f6219fe6abf51,B:a88c4852de227556,2026-08-18T20:12:18.861263+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+344d9456a700ef6d90f8,B:a88c4852de227556,2026-08-18T20:12:18.861263+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+7bd09b247375cc24c841,B:a88c4852de227556,2026-08-18T20:12:18.861263+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+b3343607129c41bd2450,B:e117d8e691f098ae,2026-08-18T20:17:13.672107+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+d1ea5a5cfdc86c122903,B:e117d8e691f098ae,2026-08-18T20:17:13.672107+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+fb15b0705efdcf9093e5,B:e117d8e691f098ae,2026-08-18T20:17:13.672107+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+6fd8be80fca3da95aee2,B:fed9eea989b8d413,2026-08-18T20:38:56.747302+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+8c28fa03a406cb176927,B:fed9eea989b8d413,2026-08-18T20:38:56.747302+00:00,decision,B,Apply,,Not rated,Positive,Interested,,Decision/feedback snapshot
+92b0c97ebe7cb335664b,B:fed9eea989b8d413,2026-08-18T20:38:56.747302+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+528e4cc58054829d8618,B:bed04c674e6f5320,2026-08-23T21:05:32.324348+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+69541f80da34badcb2ca,B:bed04c674e6f5320,2026-08-23T21:05:32.324348+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+944cbe3dce202a796731,B:bed04c674e6f5320,2026-08-23T21:05:32.324348+00:00,decision,B,Apply,,Not rated,Positive,,,Decision/feedback snapshot
+678ecd1136e4b765928d,B:360ce8a53e888d9f,2026-08-23T21:21:12.433973+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+8f1aceb506c318ecc39e,B:360ce8a53e888d9f,2026-08-23T21:21:12.433973+00:00,decision,B,Apply,,Not rated,Positive,,,Decision/feedback snapshot
+e807bb068855f4653979,B:360ce8a53e888d9f,2026-08-23T21:21:12.433973+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+5134f41e456b5591ffd4,B:d684886c18f401b9,2026-08-23T21:28:01.831051+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+8044d574e2380a0e5412,B:d684886c18f401b9,2026-08-23T21:28:01.831051+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+91230c2be0953196856d,B:d684886c18f401b9,2026-08-23T21:28:01.831051+00:00,decision,B,Apply,,Not rated,Positive,,,Decision/feedback snapshot
+1c1e643236f422418171,B:5123b5ac544a0fc6,2026-08-23T21:38:18.029387+00:00,decision,B,Apply,,Not rated,Positive,,,Decision/feedback snapshot
+56ff6b466859f486c920,B:5123b5ac544a0fc6,2026-08-23T21:38:18.029387+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+7f20ea934d40b3fa719d,B:5123b5ac544a0fc6,2026-08-23T21:38:18.029387+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+617e822f0af842f41182,B:85f8a156e160beb4,2026-08-23T22:00:20.239074+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+73926f9a4310e8b04000,B:85f8a156e160beb4,2026-08-23T22:00:20.239074+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+934cd92a543ae779b60c,B:85f8a156e160beb4,2026-08-23T22:00:20.239074+00:00,decision,B,Apply,,Not rated,Positive,,,Decision/feedback snapshot
+bc22bae74cf449e08d6d,533c93106dd3fa47,2026-08-24T08:09:42.700702+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+2c21908b987bdb23d66b,fef9ac5cca247be6,2026-08-24T08:09:57.793237+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+ddcb377e8022f5c59269,e999c1cd362bc36d,2026-08-24T08:10:13.304210+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+a7a2470a1580c60cc8d3,74ef827840a7ed39,2026-08-24T08:10:19.682285+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+63209f4498d69dc94bbf,55b9541521c6f6ae,2026-08-24T15:08:03.502332+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+5ab02108121263730f65,433d0ed522284afa,2026-08-25T13:14:51.828478+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+260a8a92fac014a97c40,1001b47ca3efa63a,2026-08-25T13:18:47.384582+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+06f609871805dbebe108,9d71137f16abfa48,2026-08-25T13:23:26.339830+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+6289bfad1e5b7b83c361,ecb3107de3fc600b,2026-08-25T13:30:07.949843+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+e2a710d3c07dd45d143d,2cc64a6c24f26a8f,2026-08-25T13:30:20.409382+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+8702a01d5dd472b1d03c,f7e6a9d264b702c2,2026-08-25T13:31:49.451102+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+244a1b09baea39c2e90a,5bf017acebde3c48,2026-08-25T14:30:40.450979+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+762fcc7130a533449401,ad0d08994f3f1226,2026-08-25T14:37:18.186577+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+ed673a6a256cadd400b2,6c8d38bce692ccc5,2026-08-25T14:37:28.590689+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+ca40e41569bb7d49cf99,372f3c7eab580934,2026-08-25T14:43:00.883803+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+8443a3c27d9cf0802aa5,631244fce9f6f3fd,2026-08-25T14:43:42.773012+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+cb5501121d0bf2b774b8,5a42b4d1211c8127,2026-08-25T14:44:03.259580+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+4dda01432c033792367d,a991f98ac58949f8,2026-08-25T14:44:22.035515+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+083889f0d571b87fab9c,8af03a2e258844e4,2026-08-25T14:44:33.370487+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+aa2ffe51866f64aaf42e,7b4bf8be3be24209,2026-08-25T14:45:22.866235+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+313c36f826ed341be677,bcdc9a452bb69211,2026-08-25T14:45:45.388980+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+9bed7f1fa9f365786447,daea9e85342ff14d,2026-08-25T14:46:30.619074+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+2381b2edcdf4dc04b6be,4b62f8d2a94e0133,2026-08-25T14:47:01.354133+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+1cc31006ed44804b08c9,B:af778c24f3a6ccf4,2026-08-25T19:33:21.816243+00:00,decision,B,Apply,,Not rated,Positive,,,Decision/feedback snapshot
+743a74f134596b1d0a17,B:af778c24f3a6ccf4,2026-08-25T19:33:21.816243+00:00,application_stage,B,,Applied,,,,,Canonical B manual application intake
+d9e5b624834ca72229bb,B:af778c24f3a6ccf4,2026-08-25T19:33:21.816243+00:00,opportunity_created,B,,,,,,,Opportunity entered canonical I
+ff029cd7072ab71c55f8,5dbcd46003c16276,2026-08-25T19:44:15.909800+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+b52613c44a4ef240d5ae,1c367a65b7ad44f1,2026-08-25T19:45:42.954227+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+288eb44e236724e5c1ab,ef6d37436f1003c2,2026-08-25T19:45:54.155411+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+bfd8eca58f3212b4b27c,d45a7ac0e1e28811,2026-08-25T19:46:04.083412+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+b33705c172630e8b687b,2020857c6d02cafb,2026-08-25T19:46:21.449568+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+a19a5b005ef161944da5,4d8174f94d126980,2026-08-25T19:47:33.697547+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+b3fd038d4d5d3614155f,22836df63a60c592,2026-08-25T19:47:59.416411+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+b0865c6e8689050d46be,a73d5bd77e62f237,2026-08-25T19:48:24.088150+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+8de0470c9eaf2da3a390,c2f3cd8a54330a42,2026-08-25T19:50:14.869858+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+c41e622d9ccef46ad806,e11b7704eeb66b68,2026-08-25T19:51:11.650263+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+ff45a38bace6453e4cc3,da0fb4654435f53b,2026-08-25T19:51:27.318454+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+0772263c37beb39eaa6c,0b33d8db7c36525d,2026-08-25T19:52:48.213125+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+f62b659aa29cbaa4893a,b1c1b759dc949048,2026-08-25T20:07:22.528277+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+17e34f7e8d624ee919ad,e999c1cd362bc36d,2026-08-24T08:10:00+00:00,decision,G,Apply,,Not rated,Positive,"Link not working, found applied good fit",,Decision/feedback snapshot
+2d89f473413099bfff2b,74ef827840a7ed39,2026-08-24T08:10:00+00:00,application_stage,G,,Applied,,,,,
+54928a0e2eda6535572c,74ef827840a7ed39,2026-08-24T08:10:00+00:00,decision,G,Apply,,Not rated,Positive,Applied good fit,,Decision/feedback snapshot
+7de6d8fd0cfaaa045252,fef9ac5cca247be6,2026-08-24T08:10:00+00:00,application_stage,G,,Applied,,,,,
+d3fddadc367a53bc93f3,e999c1cd362bc36d,2026-08-24T08:10:00+00:00,application_stage,G,,Applied,,,,,
+d8e4176905c1d542a6e9,fef9ac5cca247be6,2026-08-24T08:10:00+00:00,decision,G,Apply,,Not rated,Neutral,"Okay applied, probably too senior with 5-7 years of experience",,Decision/feedback snapshot

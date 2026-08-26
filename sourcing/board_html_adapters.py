@@ -14,6 +14,7 @@ from urllib.parse import quote, urljoin
 import requests
 from bs4 import BeautifulSoup
 
+from sourcing.czech_board_identity import recover_czech_board_company
 from sourcing.g_data_quality import invalid_company_name
 
 HEADERS = {
@@ -120,8 +121,8 @@ def _fallback_detail(html: str) -> dict | None:
     if not title:
         return None
     company = ""
-    # HTML boards often contain navigation/actions with generic h2/h3 or
-    # company-like CSS classes. Never promote such UI text into employer identity.
+    # Generic fallback is useful for many boards, but Czech Jobs/Prace identity
+    # is subsequently revalidated from vacancy-specific text/page branding.
     for selector in ("[class*=company]", "[class*=employer]", "h2", "h3"):
         for node in soup.select(selector):
             candidate = _clean(node.get_text(" ", strip=True))
@@ -210,7 +211,10 @@ def discover_html_jsonld_board(source_id: str, market: str, queries: list[str], 
         try:
             response = requests.get(url, headers=HEADERS, timeout=35)
             response.raise_for_status()
-            item = _jsonld_jobposting(response.text) or _fallback_detail(response.text)
+            item = _jsonld_jobposting(response.text)
+            used_fallback = item is None
+            if used_fallback:
+                item = _fallback_detail(response.text)
             if not item:
                 raise ValueError("job detail missing")
         except Exception as exc:
@@ -223,6 +227,14 @@ def discover_html_jsonld_board(source_id: str, market: str, queries: list[str], 
         if not isinstance(organization, dict):
             organization = {}
         company = _clean(organization.get("name"))
+        if source_id in {"jobs-cz", "prace-cz"} and (used_fallback or invalid_company_name(company)):
+            # Do not trust generic h2/h3 navigation text on Czech branded
+            # microsites. Recover only from explicit vacancy labels/page brand.
+            company = recover_czech_board_company(
+                source_id,
+                response.text,
+                "" if used_fallback else company,
+            )
         if invalid_company_name(company):
             company = "Employer not stated"
         identifier = item.get("identifier") or ""

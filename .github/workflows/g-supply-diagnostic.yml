@@ -30,6 +30,7 @@ jobs:
               return pd.read_csv(p).fillna("") if p.exists() and p.stat().st_size else pd.DataFrame()
 
           g = load('data/jobs_board_staging.csv')
+          sem = load('data/semantic_fit.csv')
           if not g.empty:
               open_g = g[g['status'].eq('Open')].copy()
               open_g = add_soft_rank_columns(open_g)
@@ -39,6 +40,17 @@ jobs:
               print(open_g.groupby(['market','source_id']).size().sort_values(ascending=False).to_string())
               print('\nOPEN G LOCAL-LANGUAGE SIGNAL BY MARKET')
               print(open_g.groupby('market')['_language_soft'].agg(['count','sum']).to_string())
+
+              if not sem.empty and {'opportunity_id','fit'}.issubset(sem.columns):
+                  latest = sem.drop_duplicates('opportunity_id', keep='last')[['opportunity_id','fit']]
+                  x = open_g.merge(latest, left_on='job_id', right_on='opportunity_id', how='left')
+                  x['fit'] = x['fit'].replace('', 'Unresolved').fillna('Unresolved')
+                  x['advert_bucket'] = x['_language_soft'].map({0:'English/no-local-signal',1:'Local-language'})
+                  print('\nOPEN G C OUTCOME BY MARKET')
+                  print(pd.crosstab(x['market'], x['fit']).to_string())
+                  print('\nOPEN G C OUTCOME BY MARKET + ADVERT LANGUAGE')
+                  print(x.groupby(['market','advert_bucket','fit']).size().to_string())
+
           q = load('data/semantic_fit_queue.csv')
           if not q.empty:
               print('\nCURRENT C QUEUE BY MARKET')

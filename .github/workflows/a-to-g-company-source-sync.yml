@@ -1,0 +1,64 @@
+name: Sync A ratings into G company sources
+
+# A owns explicit company preference; G owns company-career sourcing.
+# Any A rating/universe update automatically reconciles company source cadence
+# without changing calibrated ATS adapters or semantic company categories.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/company_ratings.csv"
+      - "data/company_universe.csv"
+      - "data/company_universe_wave*.csv"
+      - "sourcing/sync_a_company_sources.py"
+      - "sourcing/test_sync_a_company_sources.py"
+      - ".github/workflows/a-to-g-company-source-sync.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: a-to-g-company-source-sync
+  cancel-in-progress: true
+
+jobs:
+  sync-company-sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install pandas
+      - name: Test A to G company source contract
+        run: python -m unittest sourcing.test_sync_a_company_sources
+      - name: Reconcile A ratings into G source registries
+        run: python -m sourcing.sync_a_company_sources
+      - name: Commit reconciled G company sources
+        run: |
+          git config user.name "professional-dashboard-bot"
+          git config user.email "professional-dashboard-bot@users.noreply.github.com"
+          git add data/job_sources_consulting.csv \
+                  data/job_sources_pe.csv \
+                  data/job_sources_corporate.csv \
+                  data/job_sources_financial_services.csv \
+                  data/job_sources_holdings.csv \
+                  data/job_sources_investment_banking.csv \
+                  data/job_sources_public_markets.csv \
+                  data/job_sources_specialist_funds.csv \
+                  data/a_to_g_company_source_status.csv
+          if git diff --cached --quiet; then
+            echo "No A to G company-source changes"
+            exit 0
+          fi
+          git commit -m "Sync A ratings into G company sources"
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 5))
+          done
+          echo "A to G company-source push failed"
+          exit 1

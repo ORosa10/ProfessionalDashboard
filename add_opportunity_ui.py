@@ -390,26 +390,45 @@ def render_add_opportunity() -> None:
         "title", "company", "company_category", "review_status", "feedback",
         "company_profile", "role_profile", "salary_range", "salary_research", "user_comment", "job_url",
     ]
-    editor = saved.set_index("submission_id")[display_cols]
+    # Use presentation-only column names here.  In some Streamlit versions the
+    # first column named "title" can render without its header in data_editor,
+    # which makes the B table look shifted even though the data is correct.
+    display_labels = {
+        "title": "Role",
+        "company": "Company",
+        "company_category": "Category",
+        "review_status": "Status",
+        "feedback": "Intent",
+        "company_profile": "Company profile",
+        "role_profile": "Role profile",
+        "salary_range": "Salary range",
+        "salary_research": "Salary research / expectation",
+        "user_comment": "Your comment",
+        "job_url": "Link",
+    }
+    editor = (
+        saved.set_index("submission_id")[display_cols]
+        .rename(columns=display_labels)
+    )
     with st.form("manual_opportunity_comments_form"):
         edited = st.data_editor(
             editor,
             hide_index=True,
             width="stretch",
             height=560,
-            disabled=[c for c in display_cols if c != "user_comment"],
+            disabled=[c for c in editor.columns if c != "Your comment"],
             column_config={
-                "title": st.column_config.TextColumn("Role", width="medium"),
-                "company": st.column_config.TextColumn("Company", width="small"),
-                "company_category": st.column_config.TextColumn("Category", width="small"),
-                "review_status": st.column_config.TextColumn("Status", width="small"),
-                "feedback": st.column_config.TextColumn("Intent", width="small"),
-                "company_profile": st.column_config.TextColumn("Company profile", width="large"),
-                "role_profile": st.column_config.TextColumn("Role profile", width="large"),
-                "salary_range": st.column_config.TextColumn("Salary range", width="medium"),
-                "salary_research": st.column_config.TextColumn("Salary research / expectation", width="large"),
-                "user_comment": st.column_config.TextColumn("Your comment", width="medium"),
-                "job_url": st.column_config.LinkColumn("Link", display_text="Open", width="small"),
+                "Role": st.column_config.TextColumn("Role", width="medium"),
+                "Company": st.column_config.TextColumn("Company", width="small"),
+                "Category": st.column_config.TextColumn("Category", width="small"),
+                "Status": st.column_config.TextColumn("Status", width="small"),
+                "Intent": st.column_config.TextColumn("Intent", width="small"),
+                "Company profile": st.column_config.TextColumn("Company profile", width="large"),
+                "Role profile": st.column_config.TextColumn("Role profile", width="large"),
+                "Salary range": st.column_config.TextColumn("Salary range", width="medium"),
+                "Salary research / expectation": st.column_config.TextColumn("Salary research / expectation", width="large"),
+                "Your comment": st.column_config.TextColumn("Your comment", width="medium"),
+                "Link": st.column_config.LinkColumn("Link", display_text="Open", width="small"),
             },
             key="submitted_opportunity_editor",
         )
@@ -420,7 +439,7 @@ def render_add_opportunity() -> None:
         else:
             updated = raw_saved.set_index("submission_id")
             shared = updated.index.intersection(edited.index)
-            updated.loc[shared, "user_comment"] = edited.loc[shared, "user_comment"]
+            updated.loc[shared, "user_comment"] = edited.loc[shared, "Your comment"]
             updated.loc[shared, "feedback"] = "Applied"
             updated.loc[shared, "calibration_signal"] = "User-supplied positive example"
             try:

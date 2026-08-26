@@ -18,7 +18,7 @@ from system_flow_ui import (
     workstream_health_counts,
 )
 
-FOCUS_MODE_KEY = "system_flow_focus_mode"
+FOCUS_MODE_KEY = "system_flow_focus_mode_v2"
 DETAIL_PANEL_KEY = "system_flow_detail_panel"
 
 
@@ -94,8 +94,10 @@ def _render_detail(selected_id: str | None) -> None:
 
 
 def render_system_flow() -> None:
+    # Keep the sidebar visible by default so the A–J letter labels remain useful
+    # for orientation. Focus mode is still available when a full-width diagram is wanted.
     if FOCUS_MODE_KEY not in st.session_state:
-        st.session_state[FOCUS_MODE_KEY] = True
+        st.session_state[FOCUS_MODE_KEY] = False
     if DETAIL_PANEL_KEY not in st.session_state:
         st.session_state[DETAIL_PANEL_KEY] = False
 

@@ -211,7 +211,7 @@ def _quality_and_rank(jobs: pd.DataFrame) -> pd.DataFrame:
     out["_company"] = out["company_rating"].map({"A": 0, "B": 1, "C": 2, "Unrated": 3, "": 3}).fillna(3)
     out["_date"] = pd.to_datetime(out["date_posted"], errors="coerce", utc=True)
     return out.sort_values(
-        ["_fit", "_curated", "_language_soft", "_seniority_soft", "_company", "_date"],
+        ["_fit", "_curated", "_seniority_soft", "_language_soft", "_company", "_date"],
         ascending=[True, True, True, True, True, False],
     )
 
@@ -228,6 +228,8 @@ def _select_top(jobs: pd.DataFrame, limit: int = 20) -> pd.DataFrame:
         return jobs
     selected: list[int] = []
     companies: dict[str, int] = {}
+    targets = _country_targets()
+    country_counts: dict[str, int] = {}
 
     def add(idx: int, row: pd.Series) -> bool:
         key = _norm(row.get("company", "")) or str(idx)
@@ -235,6 +237,8 @@ def _select_top(jobs: pd.DataFrame, limit: int = 20) -> pd.DataFrame:
             return False
         selected.append(idx)
         companies[key] = companies.get(key, 0) + 1
+        country = _country_value(row)
+        country_counts[country] = country_counts.get(country, 0) + 1
         return True
 
     curated = jobs[jobs["is_curated"].eq(True)]
@@ -244,22 +248,33 @@ def _select_top(jobs: pd.DataFrame, limit: int = 20) -> pd.DataFrame:
             return jobs.loc[selected[:limit]].copy()
 
     pool = jobs[~jobs["is_curated"].eq(True)]
-    targets = _country_targets()
-    selected_countries = [_country_value(jobs.loc[idx]) for idx in selected]
-    counts = pd.Series(selected_countries, dtype=str).value_counts().to_dict() if selected else {}
-    for country, target in targets.items():
-        missing = max(0, target - int(counts.get(country, 0)))
-        country_pool = pool[pool.apply(_country_value, axis=1).eq(country)]
-        for idx, row in country_pool.iterrows():
-            if missing <= 0 or len(selected) >= limit:
+    # Quality dominates country mix. Country targets only break ties inside the
+    # same seniority/language tier, so a weaker local-language or over-senior role
+    # is never promoted solely to fill a geography target.
+    tier_cols = ["_seniority_soft", "_language_soft"]
+    tiers = pool[tier_cols].drop_duplicates().sort_values(tier_cols)
+    for _, tier in tiers.iterrows():
+        tier_pool = pool[
+            pool["_seniority_soft"].eq(tier["_seniority_soft"])
+            & pool["_language_soft"].eq(tier["_language_soft"])
+        ]
+        remaining = list(tier_pool.index)
+        while remaining and len(selected) < limit:
+            eligible = []
+            for idx in remaining:
+                row = jobs.loc[idx]
+                key = _norm(row.get("company", "")) or str(idx)
+                if companies.get(key, 0) < 2:
+                    eligible.append(idx)
+            if not eligible:
                 break
-            if add(idx, row):
-                missing -= 1
-        if len(selected) >= limit:
-            return jobs.loc[selected[:limit]].copy()
-
-    for idx, row in pool.iterrows():
-        add(idx, row)
+            under_target = [
+                idx for idx in eligible
+                if country_counts.get(_country_value(jobs.loc[idx]), 0) < targets.get(_country_value(jobs.loc[idx]), 0)
+            ]
+            chosen = under_target[0] if under_target else eligible[0]
+            add(chosen, jobs.loc[chosen])
+            remaining.remove(chosen)
         if len(selected) >= limit:
             break
     return jobs.loc[selected[:limit]].copy()

@@ -1,0 +1,37 @@
+name: Source parser quality
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "sourcing/board_html_adapters.py"
+      - "sourcing/board_catalog_adapters.py"
+      - "sourcing/board_academicwork.py"
+      - "sourcing/czech_board_identity.py"
+      - "sourcing/test_board_html_adapters.py"
+      - "sourcing/test_board_catalog_adapters.py"
+      - "sourcing/test_board_academicwork.py"
+      - "sourcing/test_czech_board_identity.py"
+      - "sourcing/g_data_quality.py"
+      - ".github/workflows/source-parser-quality.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests beautifulsoup4
+      - name: Run focused parser regressions
+        run: >-
+          python -m unittest
+          sourcing.test_board_html_adapters
+          sourcing.test_board_catalog_adapters
+          sourcing.test_board_academicwork
+          sourcing.test_czech_board_identity

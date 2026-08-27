@@ -165,3 +165,4 @@ Attainability nesmí nahrazovat Semantic fit ani role tvrdě vyřazovat; má bý
 - D vs E dělení podle typu úvazku, ne lokality.
 - LinkedIn se nescrapuje (F = CSV export; G bez LinkedInu).
 - Žádné tvrdé vylučování rolí — kalibrace i attainability mění pořadí/interpretaci, ne dostupnost role.
+- [2026-08-27] B: enriched 1 (Nobia Group - Group Treasurer, Aarhus/Tilst DK; Corporate), onboarded 0 companies to sourcing (no newly rated submissions; 1 LinkedIn-only row unidentifiable, left for retry).

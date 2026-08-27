@@ -1,0 +1,53 @@
+name: A company career-page sourcing
+
+# Run every enabled A company source, not only the historical Big Four pilot.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "47 3 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "sourcing/company_source_sweep.py"
+      - "sourcing/sync_a_company_sources.py"
+      - "sourcing/big4_pilot.py"
+      - "sourcing/pe_pilot.py"
+      - "data/job_sources_*.csv"
+      - ".github/workflows/a-company-sourcing.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: a-company-sourcing
+  cancel-in-progress: false
+
+jobs:
+  source-a-companies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run all enabled company sources
+        run: python -m sourcing.company_source_sweep --max-pages 30
+      - name: Commit company roles and coverage telemetry
+        run: |
+          git config user.name "professional-dashboard-bot"
+          git config user.email "professional-dashboard-bot@users.noreply.github.com"
+          git add data/jobs_company_staging.csv                   data/source_runs_company_staging.csv                   data/company_source_coverage.csv
+          if git diff --cached --quiet; then
+            echo "No company sourcing changes"
+            exit 0
+          fi
+          git commit -m "Run A company sources and record coverage"
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 5))
+          done
+          echo "Company sourcing push failed"
+          exit 1

@@ -143,7 +143,19 @@ def _queries(row: pd.Series) -> list[str]:
         f"{base} salary compensation".strip(),
         f"{base} {local_word}".strip(),
         f"{generic} salary compensation".strip(),
+        f'{base} site:kununu.com Gehalt'.strip(),
+        f'{base} site:glassdoor.com salary'.strip(),
+        f'{base} site:xing.com/jobs salary'.strip(),
+        f'{generic} site:salaryexpert.com salary'.strip(),
     ]
+    if "switzerland" in c:
+        queries.append(f"{base} site:jobs.ch salary")
+    elif "austria" in c:
+        queries.append(f"{base} site:karriere.at Gehalt")
+    elif "germany" in c:
+        queries.append(f"{base} site:stepstone.de Gehalt")
+    elif "united kingdom" in c or c == "uk":
+        queries.append(f"{base} site:totaljobs.com salary")
     return list(dict.fromkeys(q for q in queries if q and len(q) > 8))
 
 

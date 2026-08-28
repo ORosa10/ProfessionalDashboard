@@ -47,12 +47,29 @@ def _source_with_domain(source: pd.Series) -> pd.Series:
 
 
 def discover_source(source: pd.Series, max_pages: int) -> tuple[list[dict], dict]:
-    adapter = str(source.get("adapter") or "generic").lower()
-    if adapter in {"greenhouse", "personio", "successfactors", "workday"}:
-        # The mature category runners already implement these official ATS feeds.
-        if adapter in {"greenhouse", "personio", "successfactors"}:
-            return discover_pe_source(source, max_pages)
-        return common.discover_workday_jobs(source, max_pages=min(max_pages, 15))
+    """Dispatch each configured source to the adapter it actually declares.
+
+    The previous implementation routed most adapter types through the generic
+    crawler. It also routed SuccessFactors through the PE runner, whose
+    investment-role filter incorrectly removed corporate and banking vacancies.
+    """
+    adapter = str(source.get("adapter") or "generic").strip().lower()
+    if adapter == "greenhouse":
+        return discover_pe_source(source, max_pages)
+    if adapter == "personio":
+        return discover_pe_source(source, max_pages)
+    if adapter == "successfactors":
+        return common.discover_successfactors_sitemap_jobs(source, max_jobs=140)
+    if adapter == "workday":
+        return common.discover_workday_jobs(source, max_pages=min(max_pages, 20))
+    if adapter == "smartrecruiters":
+        return common.discover_smartrecruiters_jobs(source, max_jobs=140)
+    if adapter == "phenom":
+        return common.discover_phenom_jobs(source, max_pages=min(max_pages, 12))
+    if adapter == "avature":
+        return common.discover_avature_jobs(source, max_pages=min(max_pages, 20), max_jobs=140)
+    if adapter == "jobylon":
+        return common.discover_jobylon_jobs(source, max_jobs=140)
     return common.discover_jobs(_source_with_domain(source), max_pages=min(max_pages, 30))
 
 

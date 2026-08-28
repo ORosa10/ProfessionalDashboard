@@ -9,6 +9,7 @@ on:
       - "sourcing/test_g_data_quality.py"
       - "sourcing/test_company_targeting_promotion.py"
       - "sourcing/sync_a_company_sources.py"
+      - "sourcing/company_source_sweep.py"
       - "sourcing/test_sync_a_company_sources.py"
       - "sourcing/sector_pilot.py"
       - "sourcing/test_sector_adapter_fallback.py"

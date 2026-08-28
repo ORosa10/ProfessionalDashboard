@@ -184,7 +184,7 @@ def _company_context(jobs: pd.DataFrame) -> pd.DataFrame:
 
 def _salary_context(jobs: pd.DataFrame) -> pd.DataFrame:
     out = jobs.copy()
-    out["salary_range"] = "Needs salary research"
+    out["salary_range"] = "Salary unavailable in public sources"
     if not SALARY_PATH.exists() or not SALARY_PATH.stat().st_size:
         return out
     try:
@@ -195,7 +195,7 @@ def _salary_context(jobs: pd.DataFrame) -> pd.DataFrame:
         return out
     salary = salary.drop_duplicates("job_id", keep="last").set_index("job_id")
     mapped = out["job_id"].map(salary["salary_range"]).fillna("")
-    out["salary_range"] = mapped.where(mapped.ne(""), "Needs salary research")
+    out["salary_range"] = mapped.where(mapped.ne(""), "Salary unavailable in public sources")
     return out
 
 
@@ -471,3 +471,4 @@ def render_action_queue() -> None:
             "Parser placeholders and obvious seniority extremes are removed before this live pool. "
             "Country targets only guide which eligible roles are shown first."
         )
+

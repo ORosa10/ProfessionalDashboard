@@ -1,0 +1,47 @@
+name: J salary research
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "37 6 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "data/j_eligible_pool.csv"
+      - "sourcing/run_j_salary_research_free.py"
+      - "sourcing/salary_research_free.py"
+      - ".github/workflows/j-salary-research.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: j-salary-research
+  cancel-in-progress: false
+
+jobs:
+  research:
+    if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas ddgs
+      - name: Research missing J salaries
+        run: python -m sourcing.run_j_salary_research_free --max-items 20
+      - name: Commit J salary research
+        run: |
+          if git diff --quiet -- data/j_salary_research.csv; then
+            echo "No J salary changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/j_salary_research.csv
+          git commit -m "Research J shortlist salaries"
+          git pull --rebase origin main
+          git push origin HEAD:main
+

@@ -1,10 +1,10 @@
 {
-  "promoted_at": "2026-08-26T21:51:59.356600+00:00",
+  "promoted_at": "2026-08-28T18:52:31.642600+00:00",
   "source_workflow_run_id": "33008368567",
-  "eligible_regular_j": 23,
-  "strong_in_live_pool": 23,
+  "eligible_regular_j": 22,
+  "strong_in_live_pool": 22,
   "link_status": {
-    "live": 23
+    "live": 22
   },
   "verified_link_records": 45,
   "production_exclusions": {
@@ -13,7 +13,7 @@
     "seniority:above_target_extreme": 7,
     "seniority:below_target_extreme": 3,
     "history:same_role_identity": 3,
-    "actionability:language:Mandatory Swedish requirement": 1,
-    "link_quality:http_404": 1
+    "link_quality:http_404": 2,
+    "actionability:language:Mandatory Swedish requirement": 1
   }
 }

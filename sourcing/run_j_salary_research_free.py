@@ -46,7 +46,17 @@ def run(max_items: int = 20, force: bool = False) -> int:
     existing = research.drop_duplicates("job_id", keep="last").set_index("job_id") if not research.empty else pd.DataFrame()
     if not force and not research.empty:
         known = set(existing.index.astype(str))
-        pending = pool[~pool["job_id"].astype(str).isin(known)].copy()
+        # Re-run earlier records that were incorrectly flattened to the generic
+        # no-result label by a low-confidence run. Keep curated numeric ranges.
+        retry_ids = {
+            str(job_id)
+            for job_id, record in existing.iterrows()
+            if _text(record.get("salary_range")).lower().startswith("not found")
+        }
+        pending = pool[
+            (~pool["job_id"].astype(str).isin(known))
+            | pool["job_id"].astype(str).isin(retry_ids)
+        ].copy()
     else:
         pending = pool.copy()
     pending = pending.head(max_items)
@@ -66,8 +76,9 @@ def run(max_items: int = 20, force: bool = False) -> int:
             basis = f"Salary research failed: {type(exc).__name__}: {exc}"
             status = "failed"
 
-        # Do not expose an internal review label as if it were a salary figure.
-        if status != "done":
+        # Low-confidence runs still contain a usable numeric range. Only replace
+        # the range when the engine genuinely found no salary figures at all.
+        if salary_range == "Needs ChatGPT review":
             salary_range = "Not found in public sources"
         records[job_id] = {
             "job_id": job_id,
@@ -92,4 +103,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

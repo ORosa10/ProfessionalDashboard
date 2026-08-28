@@ -299,6 +299,10 @@ def _current_shortlist() -> tuple[pd.DataFrame, pd.DataFrame, str | None]:
         ("prior_role_feedback", "role_feedback"), ("prior_comment", "user_comment"),
     ]:
         jobs[col] = jobs["job_id"].map(latest[hist_col]).fillna("") if latest is not None and hist_col in latest.columns else ""
+    # B is the manual-application lane. Once an opportunity is submitted there,
+    # it must never re-enter the J apply shortlist, even if a hand-curated pool
+    # contains the same submission or the history snapshot is temporarily stale.
+    jobs = jobs[~jobs["job_id"].astype(str).str.startswith("B:")].copy()
     jobs = jobs[~jobs["prior_action"].isin(["Apply", "Skip", "Pass"])].copy()
     shortlist = _select_top(jobs, 20)
     return _salary_context(shortlist), history, sha

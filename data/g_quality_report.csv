@@ -676,10 +676,12 @@ jobs.csv,eb243c8ab6a49a5d,ey-ch,ready,,Open
 jobs.csv,6ac9e3019faba7d5,ey-uk,ready,,Open
 jobs.csv,9a279dc9a21f94e5,ey-uk,ready,,Open
 jobs.csv,f928010c8e20fb46,pwc-uk,ready,,Open
-jobs_board_staging.csv,51c619fb5a7debac,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,22f08834ecf01afe,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,0ef4c8f07e537368,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,2aad3be8753ada36,arbeitsagentur-de,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,e999c1cd362bc36d,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,97ea9f786a33695f,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,ce02d3ef5045ae47,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,3eab515c0c95c050,platsbanken-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,0b598269d6fb4818,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,9dc447bff0766fb0,prace-cz,ready,,Not seen in latest board sweep
@@ -697,6 +699,8 @@ jobs_board_staging.csv,de8ba93a9da57afa,jobs-ch,ready,,Not seen in latest board 
 jobs_board_staging.csv,a4fe1bfc0f057ec2,stepstone-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,2fcc0c986299a42e,stepstone-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,bb8e9d412a15d033,stepstone-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,4095157fcf7d2d0d,platsbanken-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,c3dbfd3520fc64a6,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,9661fa377664c0b4,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,d0dab2c78787dc30,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,4f18e45306df09f5,arbeitsagentur-de,ready,,Not seen in latest board sweep
@@ -717,12 +721,15 @@ jobs_board_staging.csv,9713dd74090f3cdd,jobs-ch,ready,,Not seen in latest board 
 jobs_board_staging.csv,b9b455550ee9802a,jobs-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,0c467d0d9daa743f,jobs-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,1407349f2d7c46bc,arbeitsagentur-de,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,8d28e9fd7f1995ad,jobserve-uk,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,27c44afece62b7de,willhaben-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,e106acf5b4053b04,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,33e368a045cf421f,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,9c27152052cae350,stellenanzeigen-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,8300b04bcd18ac7a,karriere-at,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,30f14b8f7f79370e,stellenanzeigen-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,205bc69aefa28751,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,d4fb67d3eb4aebb4,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,7a0d01f555c5d69d,jobunivers-dk,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,585027d1e2e1740b,willhaben-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,7cc9632292cf9513,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,d6f811ce5746558b,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,ee6d07e1eadac222,arbeitsagentur-de,ready,,Not seen in latest board sweep
@@ -736,6 +743,11 @@ jobs_board_staging.csv,4628a132fd468f80,jobbsafari-se,ready,,Not seen in latest 
 jobs_board_staging.csv,bd1dda832ab54a0b,jobbsafari-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,f58aee9c03c5971a,stepstone-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,bccf5203c786c292,stepstone-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,e914230f4f44bb8c,platsbanken-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,1b0e2372f17b0ec8,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,721cc56bc2b9084f,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,4bbeff44091dd49d,stellenanzeigen-de,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,93f5caafc7bac25e,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,b21dc73fc59ab1f1,stellenanzeigen-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,4950db71e46f6467,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,d33501427f7ce717,arbeitsagentur-de,ready,,Not seen in latest board sweep
@@ -775,11 +787,19 @@ jobs_board_staging.csv,ef438a7b4afc1bb1,stepstone-at,ready,,Not seen in latest b
 jobs_board_staging.csv,2daefe521d6dad1f,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,7fc8afad8c8052d0,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,5a2566d6f7dee7e6,jobbsafari-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,bcdc9a452bb69211,jobbsafari-no,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,ff486ce688107946,jobserve-uk,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,12ad3fe06fcbf9c5,jobserve-uk,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,68b31306cfcb0ce1,jobserve-uk,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,e1600d3eec32244c,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,485548fd70775e78,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,5bda5d327f3adec0,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,32810f022a45399b,willhaben-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,8638d9bfcbb6ed9f,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,31f30aee77f31fdd,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,a70ffc7987406289,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,b695053bf19cc4f9,jobwinner-ch,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,06a8d810012e5d69,jobwinner-ch,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,9c436dabe99655b0,stellenanzeigen-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,589b82b43fb617a7,jobs-cz,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,79327b86026619a2,platsbanken-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,a703e25fe4cb1077,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,f2422ed59e0f5ac6,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,8d3117efbd0c63bf,arbeitsagentur-de,ready,,Not seen in latest board sweep
@@ -812,6 +832,8 @@ jobs_board_staging.csv,1e9b7aff05ef2bb9,stepstone-at,ready,,Not seen in latest b
 jobs_board_staging.csv,533c93106dd3fa47,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,e6d137a5235ea584,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,78286a226ad66b13,platsbanken-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,f1bca9bb81c1c41d,jobs-cz,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,ef11b27733602203,jobs-cz,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,99db17adcb7cf1f7,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,fc9e910392cfa641,willhaben-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,141faae93d16accf,arbeitsagentur-de,ready,,Not seen in latest board sweep
@@ -822,8 +844,39 @@ jobs_board_staging.csv,5de4415fe500574a,jobwinner-ch,ready,,Not seen in latest b
 jobs_board_staging.csv,33bd4db955337170,jobs-cz,review,missing_or_invalid_company,Not seen in latest board sweep
 jobs_board_staging.csv,d080e418756185cf,jobserve-uk,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,74e9aa99f8019f50,jobs-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,1c0c16890098cfa1,jobunivers-dk,review,duplicate_vacancy_url,Not seen in latest board sweep
+jobs_board_staging.csv,d3cf5b3393b71b96,jobunivers-dk,review,duplicate_vacancy_url,Not seen in latest board sweep
+jobs_board_staging.csv,c5ebdc51620bc5cc,jobdanmark-dk,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,2fdbbdf9abcc77d1,arbeidsplassen-no,review,thin_description,Not seen in latest board sweep
+jobs_board_staging.csv,2335b3080978f970,ledigajobb-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,7420653f147e9428,jobbland-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,d88adb22fce5a90d,platsbanken-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,4b16dae6fa288a40,platsbanken-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,c562ef97dbc614e5,platsbanken-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,3c7837b0d567a526,jobserve-uk,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,f3d35a728c9ce7ab,jobserve-uk,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,3c7f67214e7f58a7,jobserve-uk,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,c4d7db3c89709269,nzz-jobs-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,41d09daf0319148b,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,5d98e7c9846cc94c,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,aadfa851da9357c5,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,67eebd8cb32768af,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,0069aeaf6c0bff0a,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,13c7ceaa44324341,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,77a99ae018329211,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,7562d8a1ff9e518f,willhaben-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,5fc242e0a1166320,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,cbd65125d234b518,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,c8638f508f6283ba,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,aea0ecb010eb9901,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,d8db3d899ae034ce,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,bcf8bca26038db38,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,36e51d7738deafab,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,687aae65dc103b61,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,fe47f8754b44b48f,stellenanzeigen-de,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,b98eda71a3dd1a24,stellenanzeigen-de,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,7b57b7854b929cfc,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,3bec3731b9f0571c,jobunivers-dk,review,duplicate_vacancy_url,Not seen in latest board sweep
-jobs_board_staging.csv,bcf4b58b1c94a893,jobunivers-dk,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,baf4d3c45af3a3a4,ledigajobb-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,7a09ceda6627a494,jobbland-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,afa3d535a7054e97,platsbanken-se,ready,,Not seen in latest board sweep
@@ -842,17 +895,14 @@ jobs_board_staging.csv,9083029f7183ff27,jobwinner-ch,ready,,Not seen in latest b
 jobs_board_staging.csv,18de1355464a1ff9,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,6304d6cd24ee7f58,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,93f6f757001a5322,jobwinner-ch,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,65c23a3a01da2943,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,f52ef8388b3e1d0d,willhaben-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,1911050f6b46f7a1,willhaben-at,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,63e97243a8582388,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,195258288c1b5cda,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,cfc33e00f076c4d9,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,405b9292509f111a,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,83df7314ad5cd725,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,cde7dd554223c3dc,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,0de3855742b065fe,karriere-at,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,ad55ce21a80d9e54,stellenanzeigen-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,53fa1abfd81d4153,stellenanzeigen-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,720de64be0f70230,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,7c597c030a78396e,ledigajobb-se,ready,,Not seen in latest board sweep
@@ -865,13 +915,10 @@ jobs_board_staging.csv,71276ff5eaa5baaa,karriere-at,ready,,Not seen in latest bo
 jobs_board_staging.csv,dacb57a52b8f8807,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,421361963c61fa10,arbeidsplassen-no,review,thin_description,Not seen in latest board sweep
 jobs_board_staging.csv,664f386abb01a752,jobunivers-dk,review,duplicate_vacancy_url,Not seen in latest board sweep
-jobs_board_staging.csv,0d6a0fda90f381f7,jobunivers-dk,review,duplicate_vacancy_url,Not seen in latest board sweep
 jobs_board_staging.csv,41d04eb20272b902,platsbanken-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,cf7af784bfe364d3,platsbanken-se,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,82a38044a74f15c4,platsbanken-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,fa7491a9b133ffc9,nzz-jobs-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,d7e95f08372bffaa,jobwinner-ch,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,07bfae884b19a074,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,30b317cc0888ceca,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,f5272d7b7528ce94,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,76dc3c0019fa0d85,karriere-at,ready,,Not seen in latest board sweep
@@ -880,14 +927,13 @@ jobs_board_staging.csv,4ba63c81c93e267f,arbeitsagentur-de,ready,,Not seen in lat
 jobs_board_staging.csv,ab5b916637f85a80,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,b9d57d2da676a30a,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,332bf4d4f87d263c,arbeitsagentur-de,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,32fd34a96cea88cb,jobs-cz,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,ece137256438d5b5,ledigajobb-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,d1239c55e08c29b1,ledigajobb-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,9536a82bd1ce6d11,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,f3ec192ce212de46,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,73c36fa969a45c23,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,f17fc7c38f952ab0,prace-cz,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,cdd9757ed9fd54eb,jobunivers-dk,review,duplicate_vacancy_url,Not seen in latest board sweep
+jobs_board_staging.csv,cdd9757ed9fd54eb,jobunivers-dk,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,bacc83f9388f21db,ledigajobb-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,d5e7dd2111e3e757,jobbland-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,1b9fe018c379d18a,jobbland-se,ready,,Not seen in latest board sweep
@@ -979,7 +1025,6 @@ jobs_board_staging.csv,bb8e12fb678570eb,jobwinner-ch,ready,,Not seen in latest b
 jobs_board_staging.csv,68d090ae481007fb,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,b898bd629da01b26,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,e68a86ce60c692f0,jobwinner-ch,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,f863723656623871,willhaben-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,e60d209f0e525b7a,willhaben-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,67a0e7ffa50db5ab,willhaben-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,aef83d71303c182b,karriere-at,ready,,Not seen in latest board sweep
@@ -1044,6 +1089,8 @@ jobs_board_staging.csv,4301fce51f86b895,platsbanken-se,ready,,Not seen in latest
 jobs_board_staging.csv,b1141306a8e92a8e,jobs-cz,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,f7d637d13b1baf47,platsbanken-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,6b6128429957ba24,jobbsafari-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,9815fbfe90f28b4e,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,6a5daf2739ad0b21,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,75b71d5e183cb69e,jobdanmark-dk,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,0198e0621f591289,nzz-jobs-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,bb4db35eb6334495,jobwinner-ch,ready,,Not seen in latest board sweep
@@ -1053,6 +1100,12 @@ jobs_board_staging.csv,e540304b9ac9c103,jobs-ch,ready,,Not seen in latest board 
 jobs_board_staging.csv,0c0fa0268d49406d,jobs-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,843cb974643f4d56,karriere-at,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,ff47d72cab1fece8,jobs-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,cdacb932f7dc09fb,nzz-jobs-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,a157be11aeee225e,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,8585184008ac3351,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,79b9cc3ee5259ada,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,3f0bf63343babb54,karriere-at,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,7e862349f3c4aa7e,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,56dc94f926f1fcd3,ledigajobb-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,8cef283376c2f612,jobserve-uk,review,missing_or_invalid_company,Not seen in latest board sweep
 jobs_board_staging.csv,ae0d09e52a0c5202,jobserve-uk,review,missing_or_invalid_company,Not seen in latest board sweep
@@ -1088,28 +1141,32 @@ jobs_board_staging.csv,82215198139354b0,jobbsafari-se,ready,,Not seen in latest 
 jobs_board_staging.csv,e89bd1543f27fc60,jobs-ch,review,thin_description,Not seen in latest board sweep
 jobs_board_staging.csv,f914313608440d9d,jobs-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,685a92526fcddb3b,stepstone-at,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,a921b0753d8952a8,platsbanken-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,bddba405028a949d,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,d34f2953955d5407,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,35dcc3c1620431b1,arbeitsagentur-de,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,30f534df2e4ed30c,jobserve-uk,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,1dfe5692bf46f702,academicwork-fi,review,missing_or_invalid_company,Not seen in latest board sweep
 jobs_board_staging.csv,c03dd107cf9281c3,platsbanken-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,8a907d352d7ae48f,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,87a81296544f93a0,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,7b3be45a57cc54c7,jobs-cz,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,684a5473204b0887,jobbland-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,1154e7e55483e6b9,jobserve-uk,review,missing_or_invalid_company,Not seen in latest board sweep
 jobs_board_staging.csv,382a6fe4cfeea41a,karriere-at,ready,,Not seen in latest board sweep
-jobs_board_staging.csv,fa213a6efd458cd5,platsbanken-se,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,bf530068ed779ec3,ledigajobb-se,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,6b9eca6173f55e2f,jobs-cz,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,a703998e03bd30dc,jobwinner-ch,ready,,Not seen in latest board sweep
+jobs_board_staging.csv,5989715164a8ccc8,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,dadfba56f86ee774,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,26576aac86f19e8f,jobwinner-ch,ready,,Not seen in latest board sweep
 jobs_board_staging.csv,0ed3ed69a86f4712,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,51c619fb5a7debac,karriere-at,ready,,Open
 jobs_board_staging.csv,1f7be77b3454d2fe,jobs-cz,ready,,Open
 jobs_board_staging.csv,dc67ef3d0f7a044c,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,12f085d51f37810f,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,f3128b7b8f4777fd,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,fef9ac5cca247be6,karriere-at,ready,,Open
+jobs_board_staging.csv,d448ff1c82401024,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,05ed86ba7ceae8cf,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,768139a8eb985834,karriere-at,ready,,Open
 jobs_board_staging.csv,840f4ebbfbe455da,karriere-at,ready,,Pass_language
@@ -1122,21 +1179,20 @@ jobs_board_staging.csv,c382579fc0a25d44,platsbanken-se,ready,,Open
 jobs_board_staging.csv,2cc64a6c24f26a8f,platsbanken-se,ready,,Open
 jobs_board_staging.csv,9397f62cb25ac4e3,platsbanken-se,ready,,Open
 jobs_board_staging.csv,ecfdbb249f2df6e5,platsbanken-se,ready,,Open
-jobs_board_staging.csv,e999c1cd362bc36d,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,8d9de8b3f3d32409,jobserve-uk,ready,,Open
 jobs_board_staging.csv,5128de62c3ca69a7,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,9a3c1b8f40abb1a1,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,062551b1fd040a20,willhaben-at,ready,,Open
 jobs_board_staging.csv,5846ffef6b7724b5,willhaben-at,ready,,Pass_language
 jobs_board_staging.csv,5dbcd46003c16276,karriere-at,ready,,Open
+jobs_board_staging.csv,f7fc3236d0fa6a9a,karriere-at,ready,,Pass_language
+jobs_board_staging.csv,6d4283157c1e0c67,karriere-at,ready,,Open
 jobs_board_staging.csv,1d5ca73eb6b8dcaa,karriere-at,ready,,Open
-jobs_board_staging.csv,97ea9f786a33695f,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,3f8f5b86572e54cc,karriere-at,ready,,Open
-jobs_board_staging.csv,019174f0cecbbebb,karriere-at,ready,,Open
 jobs_board_staging.csv,4d206377970bb728,karriere-at,ready,,Open
 jobs_board_staging.csv,707c268b05aa0816,karriere-at,ready,,Open
 jobs_board_staging.csv,d39081982ff3d86e,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,f50d9a9b24b4d94e,karriere-at,ready,,Pass_language
-jobs_board_staging.csv,ce02d3ef5045ae47,karriere-at,ready,,Open
 jobs_board_staging.csv,465c43c6f18f6916,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,c009607866dfebb6,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,f381a4af41f4a4f3,stellenanzeigen-de,ready,,Open
@@ -1150,10 +1206,10 @@ jobs_board_staging.csv,3f0c64336154bf40,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,d450bd87d2f076f1,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,9db8ca363f3a9df9,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,e447acf060506ab6,arbeitsagentur-de,ready,,Open
-jobs_board_staging.csv,0780c9a8e5de8026,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,22dbb4b3482e53c0,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,f0f9461af761e414,arbeitsagentur-de,ready,,Pass_language
 jobs_board_staging.csv,caf2e765c59a860c,arbeitsagentur-de,ready,,Pass_language
+jobs_board_staging.csv,0780c9a8e5de8026,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,8f13b3ffeb4ca006,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,3fed763dad2c3e1b,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,c67be21cb94d645e,arbeitsagentur-de,ready,,Pass_language
@@ -1170,7 +1226,6 @@ jobs_board_staging.csv,b3de5b5978c80b04,jobs-cz,ready,,Open
 jobs_board_staging.csv,86165147a076066b,jobs-cz,ready,,Open
 jobs_board_staging.csv,150e452afb834797,karriere-at,ready,,Open
 jobs_board_staging.csv,6b2d81ca1ef908c6,jobbland-se,ready,,Open
-jobs_board_staging.csv,4095157fcf7d2d0d,platsbanken-se,ready,,Open
 jobs_board_staging.csv,372f3c7eab580934,karriere-at,ready,,Open
 jobs_board_staging.csv,bab49a2a07881603,karriere-at,ready,,Open
 jobs_board_staging.csv,837f38bb32903055,karriere-at,ready,,Open
@@ -1184,15 +1239,15 @@ jobs_board_staging.csv,cec2adc522391fa1,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,0ad80b55baf4aaf6,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,96f1f7b47e5b374f,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,ab48925b917005ff,arbeitsagentur-de,ready,,Open
+jobs_board_staging.csv,c9e489b58f28f5d9,arbeitsagentur-de,ready,,Pass_language
 jobs_board_staging.csv,74c581b33785c673,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,8fe892f186695be8,arbeitsagentur-de,ready,,Open
-jobs_board_staging.csv,c3dbfd3520fc64a6,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,c7af033b2ef0a5c1,cocuma-cz,ready,,Open
 jobs_board_staging.csv,6c8d74128326991a,mpsv-open-data-cz,review,thin_description;duplicate_vacancy_url,Open
 jobs_board_staging.csv,5bca53df4abf18f0,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,8ca34e029d0a9f99,platsbanken-se,ready,,Open
 jobs_board_staging.csv,a542dcfa47cb3cfe,platsbanken-se,ready,,Open
-jobs_board_staging.csv,8d28e9fd7f1995ad,jobserve-uk,ready,,Open
+jobs_board_staging.csv,6767c7fc29e36e34,platsbanken-se,ready,,Open
 jobs_board_staging.csv,264578eda35a5464,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,9967310ba0e11bf7,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,947b41bdad35dcbd,jobwinner-ch,ready,,Open
@@ -1201,23 +1256,23 @@ jobs_board_staging.csv,247b67b8a755e77b,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,977dc7b2dfd19861,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,c915e047f9fdd4cb,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,ed52a006b3dc963f,willhaben-at,ready,,Open
-jobs_board_staging.csv,27c44afece62b7de,willhaben-at,ready,,Open
+jobs_board_staging.csv,585027d1e2e1740b,willhaben-at,ready,,Open
 jobs_board_staging.csv,01cc6d88ef5438b3,karriere-at,ready,,Pass_language
+jobs_board_staging.csv,e3a031816372ed4f,karriere-at,ready,,Open
 jobs_board_staging.csv,d7d44969d8dd2c2b,karriere-at,ready,,Open
 jobs_board_staging.csv,ab07bd0aa0ec0eac,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,580c30323183a307,karriere-at,ready,,Open
 jobs_board_staging.csv,797d875a93f963d7,karriere-at,ready,,Open
 jobs_board_staging.csv,32593b5ae62fe8f3,karriere-at,ready,,Open
 jobs_board_staging.csv,a99bc156659ee988,karriere-at,ready,,Open
-jobs_board_staging.csv,e3a031816372ed4f,karriere-at,ready,,Open
 jobs_board_staging.csv,93ba32af70b742cf,karriere-at,ready,,Open
 jobs_board_staging.csv,13f6fa374248f1f7,karriere-at,ready,,Open
+jobs_board_staging.csv,61bed84e682bf7a3,karriere-at,ready,,Open
 jobs_board_staging.csv,aae6814e75af9a25,karriere-at,ready,,Open
-jobs_board_staging.csv,e106acf5b4053b04,karriere-at,ready,,Open
+jobs_board_staging.csv,36588bcb02594e48,karriere-at,ready,,Open
 jobs_board_staging.csv,edf030228e069daa,karriere-at,ready,,Open
 jobs_board_staging.csv,08bb3dae090d2c11,karriere-at,ready,,Open
 jobs_board_staging.csv,5b23ad9e9ab518fd,karriere-at,ready,,Open
-jobs_board_staging.csv,33e368a045cf421f,karriere-at,ready,,Open
 jobs_board_staging.csv,22152bcaa065d47e,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,44bb2c6ea559fda9,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,1930915f71c57f53,stellenanzeigen-de,ready,,Open
@@ -1227,12 +1282,13 @@ jobs_board_staging.csv,6964b371544deacd,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,10cda8707a44ff0c,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,cdd52ed83608e4b4,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,2cbf89f0b985e8a1,stellenanzeigen-de,ready,,Open
-jobs_board_staging.csv,9c27152052cae350,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,5b41ed2f466bb899,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,72bb3a516440544b,stellenanzeigen-de,ready,,Pass_language
+jobs_board_staging.csv,30f14b8f7f79370e,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,436b6a51dbe3d51d,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,54ea2614d0701789,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,fe0bdc38ecc61f11,stellenanzeigen-de,ready,,Open
+jobs_board_staging.csv,6b2e6c421e64460b,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,1594b50b19fc1e79,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,031f077a1a73e411,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,2cd90624e53eebdd,arbeitsagentur-de,ready,,Pass_language
@@ -1251,6 +1307,7 @@ jobs_board_staging.csv,b57e773296aa5267,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,be0a677f1a4a1e54,arbeitsagentur-de,ready,,Pass_language
 jobs_board_staging.csv,010d24ec36e60acf,arbeitsagentur-de,ready,,Pass_language
 jobs_board_staging.csv,33ee7c2114fd38a5,arbeitsagentur-de,ready,,Open
+jobs_board_staging.csv,7cb08af280e11702,arbeitsagentur-de,ready,,Pass_language
 jobs_board_staging.csv,d915f3f08c9525a0,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,ad526e66d124abe8,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,cf30d164fd1e67cf,arbeitsagentur-de,ready,,Open
@@ -1267,6 +1324,7 @@ jobs_board_staging.csv,eb639cf501633c83,arbeitsagentur-de,ready,,Pass_language
 jobs_board_staging.csv,6a3d62d33d85468c,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,6e5dad56e83609d3,arbeitsagentur-de,ready,,Pass_language
 jobs_board_staging.csv,82389a6fc4d43ec5,arbeitsagentur-de,ready,,Open
+jobs_board_staging.csv,0bd3835816e4bfc6,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,96ec6395f38928c9,jobs-cz,ready,,Open
 jobs_board_staging.csv,aafd45b709f8ab58,jobs-cz,ready,,Open
 jobs_board_staging.csv,7a18b6bf3fc62924,jobs-cz,ready,,Open
@@ -1280,45 +1338,42 @@ jobs_board_staging.csv,b8e1cca597bb7707,mpsv-open-data-cz,review,duplicate_vacan
 jobs_board_staging.csv,ccd69ca07047a5a6,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,491c5eed7584f7ac,jobbsafari-no,ready,,Open
 jobs_board_staging.csv,1bac44ca54719f46,platsbanken-se,ready,,Open
+jobs_board_staging.csv,54faea686f0ed39b,platsbanken-se,ready,,Open
 jobs_board_staging.csv,e0e464425e26070e,platsbanken-se,ready,,Open
-jobs_board_staging.csv,e914230f4f44bb8c,platsbanken-se,ready,,Open
 jobs_board_staging.csv,122dc2a7e61de5fc,platsbanken-se,ready,,Open
 jobs_board_staging.csv,7e19662416ef3d3c,platsbanken-se,ready,,Open
+jobs_board_staging.csv,b74cde6444ed3981,platsbanken-se,ready,,Open
 jobs_board_staging.csv,9bb7d53f993ce319,platsbanken-se,ready,,Open
 jobs_board_staging.csv,ff9990f0542f8f98,platsbanken-se,ready,,Open
 jobs_board_staging.csv,0d5f16b446e39c1b,platsbanken-se,ready,,Open
 jobs_board_staging.csv,28d44c87ce3cac85,platsbanken-se,ready,,Pass_language
 jobs_board_staging.csv,869888302ab56c05,platsbanken-se,ready,,Open
-jobs_board_staging.csv,54faea686f0ed39b,platsbanken-se,ready,,Open
-jobs_board_staging.csv,b74cde6444ed3981,platsbanken-se,ready,,Open
 jobs_board_staging.csv,48742d332f2aa168,platsbanken-se,ready,,Pass_language
 jobs_board_staging.csv,d29cb590f9f94d6a,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,02fb0f8909bc4aae,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,b1c0b73b0b143215,jobwinner-ch,ready,,Pass_language
-jobs_board_staging.csv,1b0e2372f17b0ec8,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,7659ad69461f0975,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,56985d6446ac725c,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,adb4904d841d415a,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,7659ad69461f0975,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,48987f75b300e276,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,8abf4628d435fbd2,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,657fbb06865d1048,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,721cc56bc2b9084f,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,db0696fcc318deb9,karriere-at,ready,,Open
 jobs_board_staging.csv,8609468a57213231,karriere-at,ready,,Open
 jobs_board_staging.csv,15d8b47389941073,karriere-at,ready,,Open
+jobs_board_staging.csv,f26564bb19dde204,karriere-at,ready,,Open
 jobs_board_staging.csv,46e55d0ea5b42dee,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,a974a6ddc6495fb8,karriere-at,ready,,Open
-jobs_board_staging.csv,f26564bb19dde204,karriere-at,ready,,Open
 jobs_board_staging.csv,5e23348f6e241d5d,karriere-at,ready,,Open
 jobs_board_staging.csv,e3f2e741008a8b1e,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,b166fff86fa0d769,karriere-at,ready,,Open
 jobs_board_staging.csv,5acd04753983f8e8,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,730797242a810c20,karriere-at,ready,,Open
 jobs_board_staging.csv,2db34f9d9683f387,karriere-at,ready,,Open
-jobs_board_staging.csv,2131130c94643ead,karriere-at,ready,,Open
 jobs_board_staging.csv,c748a5e98286e8d3,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,59775b2c4e9c9cdc,karriere-at,ready,,Open
 jobs_board_staging.csv,1462f2db426462bd,karriere-at,ready,,Open
+jobs_board_staging.csv,2131130c94643ead,karriere-at,ready,,Open
 jobs_board_staging.csv,4667cca4463416b6,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,97cacaf9c18b9542,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,cdb3e346a101b285,stellenanzeigen-de,ready,,Open
@@ -1329,7 +1384,6 @@ jobs_board_staging.csv,379c48a700b2b70b,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,b890b9eea93dba38,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,4b6261ecc312ea64,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,46f8fe6d3616a8a1,stellenanzeigen-de,ready,,Open
-jobs_board_staging.csv,4bbeff44091dd49d,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,d9f426b2e1da41ca,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,009902e205bd424f,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,0e4f77610aa07886,stellenanzeigen-de,ready,,Open
@@ -1350,9 +1404,8 @@ jobs_board_staging.csv,00bc889aad7c79e5,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,590e4afd2f05d6e4,arbeitsagentur-de,ready,,Pass_language
 jobs_board_staging.csv,926a60f41a404872,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,707c17c2bd1c07cf,arbeitsagentur-de,ready,,Pass_language
-jobs_board_staging.csv,284a87dc6f8f71fa,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,ed973f11cd05dd08,arbeitsagentur-de,ready,,Open
-jobs_board_staging.csv,93f5caafc7bac25e,arbeitsagentur-de,ready,,Open
+jobs_board_staging.csv,284a87dc6f8f71fa,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,dd5526186d976ea3,jobs-cz,ready,,Open
 jobs_board_staging.csv,1108238615130b52,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,c42d739fdc79e217,arbeitsagentur-de,ready,,Open
@@ -1363,44 +1416,41 @@ jobs_board_staging.csv,048baa8856b44aea,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,7510505d15dfcd0c,jobs-cz,ready,,Open
 jobs_board_staging.csv,0967e2f47b625777,barona-fi,ready,,Open
 jobs_board_staging.csv,e5c02f0eb02df27d,jobbsafari-no,ready,,Open
-jobs_board_staging.csv,bcdc9a452bb69211,jobbsafari-no,ready,,Pass_language
 jobs_board_staging.csv,7e04e05310427ce1,ledigajobb-se,ready,,Pass_language
 jobs_board_staging.csv,a991f98ac58949f8,jobbland-se,ready,,Open
 jobs_board_staging.csv,646c8d372e775312,jobbland-se,ready,,Pass_language
 jobs_board_staging.csv,c2e2d986728fb9a1,jobbland-se,ready,,Open
 jobs_board_staging.csv,45a81bbd844eae9f,platsbanken-se,ready,,Open
+jobs_board_staging.csv,0442dddc92b81a56,platsbanken-se,ready,,Open
+jobs_board_staging.csv,79327b86026619a2,platsbanken-se,ready,,Open
 jobs_board_staging.csv,05ec83d612f56734,platsbanken-se,ready,,Open
 jobs_board_staging.csv,2e2bb8949b5c328a,platsbanken-se,ready,,Open
-jobs_board_staging.csv,ff486ce688107946,jobserve-uk,ready,,Open
-jobs_board_staging.csv,12ad3fe06fcbf9c5,jobserve-uk,ready,,Open
-jobs_board_staging.csv,68b31306cfcb0ce1,jobserve-uk,ready,,Open
+jobs_board_staging.csv,fe2d657bca8f54ae,jobserve-uk,ready,,Open
+jobs_board_staging.csv,af73e544b4c5f24f,nzz-jobs-ch,ready,,Open
 jobs_board_staging.csv,653bab8d9df456be,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,e73d427e0f45bfc7,jobwinner-ch,ready,,Pass_language
-jobs_board_staging.csv,e1600d3eec32244c,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,43a70fca12c55355,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,06a8d810012e5d69,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,0ab4d1d7bf1ef81d,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,264f532905f6e205,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,43a70fca12c55355,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,485548fd70775e78,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,0952f3418890631a,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,87a8e8a2dab0e5fc,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,729b98590f252e84,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,2edf9f4c71a5fc68,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,edf2c6a760079b6f,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,5bda5d327f3adec0,jobwinner-ch,ready,,Pass_language
-jobs_board_staging.csv,32810f022a45399b,willhaben-at,ready,,Open
 jobs_board_staging.csv,74ef827840a7ed39,karriere-at,ready,,Open
 jobs_board_staging.csv,1acdf86f9cfeaeac,karriere-at,ready,,Open
-jobs_board_staging.csv,38667bbd636e2cc5,karriere-at,ready,,Open
 jobs_board_staging.csv,72b5dbc1b1049228,karriere-at,ready,,Open
-jobs_board_staging.csv,8638d9bfcbb6ed9f,karriere-at,ready,,Pass_language
+jobs_board_staging.csv,374cb39c367afc79,karriere-at,ready,,Pass_language
+jobs_board_staging.csv,382ef1fb57dd0c51,karriere-at,ready,,Open
+jobs_board_staging.csv,38667bbd636e2cc5,karriere-at,ready,,Open
 jobs_board_staging.csv,b1e740694d17e7e9,karriere-at,ready,,Open
 jobs_board_staging.csv,82e56bc82c1013b0,karriere-at,ready,,Open
+jobs_board_staging.csv,64ad44f1667354cf,karriere-at,ready,,Open
 jobs_board_staging.csv,38233b16e5f9aaa3,karriere-at,ready,,Open
-jobs_board_staging.csv,374cb39c367afc79,karriere-at,ready,,Pass_language
-jobs_board_staging.csv,31f30aee77f31fdd,karriere-at,ready,,Open
 jobs_board_staging.csv,19fc3dee88c7704f,karriere-at,ready,,Open
-jobs_board_staging.csv,a70ffc7987406289,karriere-at,ready,,Open
 jobs_board_staging.csv,9615e018e637f9cf,stellenanzeigen-de,ready,,Pass_language
+jobs_board_staging.csv,9c436dabe99655b0,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,915454437b4d4429,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,ff1544888486b20b,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,32a3c02dea8bc7cb,arbeitsagentur-de,ready,,Open
@@ -1414,6 +1464,8 @@ jobs_board_staging.csv,bce43b3f6476c6eb,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,1edf42856218da89,arbeitsagentur-de,ready,,Pass_language
 jobs_board_staging.csv,9f8eca1b41311c91,jobs-cz,review,missing_or_invalid_company,Open
 jobs_board_staging.csv,4165148669a292de,jobs-cz,ready,,Open
+jobs_board_staging.csv,a860bc9993c8729a,jobs-cz,ready,,Open
+jobs_board_staging.csv,2e08af151d1b5e35,jobs-cz,ready,,Open
 jobs_board_staging.csv,0d6b10c73ca69aa4,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,dece0f41c7257be2,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,cc32a0c7f0a34857,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
@@ -1427,6 +1479,7 @@ jobs_board_staging.csv,6e206afd70bfb45b,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,0dfb90cf40b7d3ee,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,20fd368258a220ae,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,d92b9e75eb2ff4ec,willhaben-at,ready,,Open
+jobs_board_staging.csv,ca0e4e38c1a1a90f,willhaben-at,ready,,Open
 jobs_board_staging.csv,46006d8f7670eda7,karriere-at,ready,,Open
 jobs_board_staging.csv,3dc5538a380e6ce2,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,6455b8721994f16e,karriere-at,ready,,Pass_language
@@ -1434,30 +1487,33 @@ jobs_board_staging.csv,35113dde996b2081,karriere-at,ready,,Open
 jobs_board_staging.csv,38d2a6d2e986d166,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,c1e1527a74ada28d,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,10165b9fe6781170,arbeitsagentur-de,ready,,Open
-jobs_board_staging.csv,44c07207c1267db5,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,b4a97f22fee3efb3,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,44f31e257807d35d,arbeitsagentur-de,ready,,Open
+jobs_board_staging.csv,44c07207c1267db5,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,761ea71c9ddbcc56,jobs-cz,ready,,Open
 jobs_board_staging.csv,5cd713f5addc590c,jobs-cz,ready,,Open
-jobs_board_staging.csv,f1bca9bb81c1c41d,jobs-cz,ready,,Open
-jobs_board_staging.csv,ef11b27733602203,jobs-cz,ready,,Open
 jobs_board_staging.csv,37a5d4bbbe12470e,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
+jobs_board_staging.csv,a9b177bf54385f3b,platsbanken-se,ready,,Open
+jobs_board_staging.csv,f2ca871bbc53f3a5,platsbanken-se,ready,,Open
 jobs_board_staging.csv,45ef1b38f5569f25,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,b53b5ab8d3df02b4,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,da70d7b71f292e57,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,f3e2576ff4338a7c,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,65b98c7976e8d55a,karriere-at,ready,,Open
 jobs_board_staging.csv,f22de42810a3c257,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,f453d7044ab52fb5,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,5a865dbb620f1dd4,barona-fi,ready,,Open
+jobs_board_staging.csv,7ad235c3ee39f797,jobunivers-dk,review,duplicate_vacancy_url,Open
+jobs_board_staging.csv,f951dc309bad6fec,jobunivers-dk,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,51dcb02c82a5c09c,jobunivers-dk,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,bcfda180ca0d8cbb,jobunivers-dk,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,0843a034264f2e28,jobunivers-dk,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,a7530a1eb1c24a7c,jobunivers-dk,review,duplicate_vacancy_url,Open
-jobs_board_staging.csv,30908692c9b0a9b2,jobunivers-dk,review,duplicate_vacancy_url,Open
-jobs_board_staging.csv,1c0c16890098cfa1,jobunivers-dk,review,duplicate_vacancy_url,Open
-jobs_board_staging.csv,d3cf5b3393b71b96,jobunivers-dk,review,duplicate_vacancy_url,Open
+jobs_board_staging.csv,76757a6ec76d0d68,jobunivers-dk,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,a485fc118d1319ad,jobunivers-dk,review,duplicate_vacancy_url,Open
-jobs_board_staging.csv,c5ebdc51620bc5cc,jobdanmark-dk,ready,,Open
+jobs_board_staging.csv,0d6a0fda90f381f7,jobunivers-dk,review,duplicate_vacancy_url,Open
+jobs_board_staging.csv,bcf4b58b1c94a893,jobunivers-dk,review,duplicate_vacancy_url,Open
+jobs_board_staging.csv,0ad15aad7f78214f,jobdanmark-dk,ready,,Open
 jobs_board_staging.csv,3758b0268dfa31c9,jobbsafari-no,ready,,Open
 jobs_board_staging.csv,9e3b021598443c28,jobbsafari-no,ready,,Open
 jobs_board_staging.csv,0ad4f38ba6fb329e,jobbsafari-no,ready,,Open
@@ -1466,10 +1522,11 @@ jobs_board_staging.csv,51919789db48960a,jobbsafari-no,ready,,Pass_language
 jobs_board_staging.csv,98120e6054c78c10,jobbsafari-no,ready,,Open
 jobs_board_staging.csv,c473777e799396b2,jobbsafari-no,ready,,Open
 jobs_board_staging.csv,09c245c8f5a3b41b,jobbsafari-no,ready,,Open
-jobs_board_staging.csv,2fdbbdf9abcc77d1,arbeidsplassen-no,review,thin_description,Open
-jobs_board_staging.csv,5245c5ef0e4dc089,ledigajobb-se,ready,,Open
-jobs_board_staging.csv,63752f00523a3f3a,ledigajobb-se,ready,,Open
+jobs_board_staging.csv,96a3636502a353d7,arbeidsplassen-no,review,thin_description,Open
 jobs_board_staging.csv,f8da7b8f9a7ed09c,ledigajobb-se,ready,,Open
+jobs_board_staging.csv,5245c5ef0e4dc089,ledigajobb-se,ready,,Open
+jobs_board_staging.csv,65e1b3a590ec2698,ledigajobb-se,ready,,Open
+jobs_board_staging.csv,63752f00523a3f3a,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,b1a19c91c7d498ee,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,82ccd6f93823a071,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,325865aa37e39670,ledigajobb-se,ready,,Open
@@ -1480,13 +1537,13 @@ jobs_board_staging.csv,31de27f929343f98,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,5e4c79325ab38acc,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,d41ef3b70e4cc0ba,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,ecffc186e6b4ebde,ledigajobb-se,ready,,Open
+jobs_board_staging.csv,11ab530039574b84,ledigajobb-se,ready,,Pass_language
 jobs_board_staging.csv,22b757a91bb85a74,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,55717bdd29577e2f,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,c1f65292a38dbbfb,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,b7ea4c0e67451c28,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,7d0427021e018521,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,8c6454df48202fde,ledigajobb-se,ready,,Open
-jobs_board_staging.csv,2335b3080978f970,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,331a67e6f6c2f915,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,bd912ed1907adec1,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,4bd8d89cd934bb34,ledigajobb-se,ready,,Open
@@ -1499,7 +1556,6 @@ jobs_board_staging.csv,ec5764f327ecf9c3,jobbland-se,ready,,Open
 jobs_board_staging.csv,b9e0763bc202327b,jobbland-se,ready,,Open
 jobs_board_staging.csv,8f3d254a4ec3966f,jobbland-se,ready,,Open
 jobs_board_staging.csv,26d87a74845e15a1,jobbland-se,ready,,Pass_language
-jobs_board_staging.csv,7420653f147e9428,jobbland-se,ready,,Open
 jobs_board_staging.csv,cc91679fc1e8512b,jobbland-se,ready,,Open
 jobs_board_staging.csv,a964c33725e196a2,jobbland-se,ready,,Pass_language
 jobs_board_staging.csv,fdb3635fde86adcf,jobbland-se,ready,,Open
@@ -1511,11 +1567,11 @@ jobs_board_staging.csv,fa7237d6213ee866,jobbland-se,ready,,Open
 jobs_board_staging.csv,af909ef6f99fe3b8,platsbanken-se,ready,,Open
 jobs_board_staging.csv,28ad412e06b49869,platsbanken-se,ready,,Pass_language
 jobs_board_staging.csv,18d52c9d271521ff,platsbanken-se,ready,,Open
-jobs_board_staging.csv,d88adb22fce5a90d,platsbanken-se,ready,,Open
 jobs_board_staging.csv,1e90b563ae7a2987,platsbanken-se,ready,,Open
 jobs_board_staging.csv,607a1c2c7c7d72c4,platsbanken-se,ready,,Open
 jobs_board_staging.csv,b8b40392c5844080,platsbanken-se,ready,,Open
 jobs_board_staging.csv,802a5a05efca6b26,platsbanken-se,ready,,Open
+jobs_board_staging.csv,638f9528468ab4d3,platsbanken-se,ready,,Open
 jobs_board_staging.csv,663fb576df3f3bd1,platsbanken-se,ready,,Open
 jobs_board_staging.csv,e8c8e5b5ecc82ac0,platsbanken-se,ready,,Open
 jobs_board_staging.csv,f7d3fb316585d9ac,platsbanken-se,ready,,Pass_language
@@ -1526,6 +1582,7 @@ jobs_board_staging.csv,ac442095984ccb4d,platsbanken-se,ready,,Open
 jobs_board_staging.csv,c04705fce60dd537,platsbanken-se,ready,,Open
 jobs_board_staging.csv,8f2045ef8629ada4,platsbanken-se,ready,,Open
 jobs_board_staging.csv,5e04281aaf3b1f4f,platsbanken-se,ready,,Open
+jobs_board_staging.csv,ea220afafeae1daa,platsbanken-se,ready,,Open
 jobs_board_staging.csv,6d15b55efcfec50d,platsbanken-se,ready,,Open
 jobs_board_staging.csv,7f34ecbbb2dc4527,platsbanken-se,ready,,Pass_language
 jobs_board_staging.csv,d73de080d31e6634,platsbanken-se,ready,,Open
@@ -1536,26 +1593,33 @@ jobs_board_staging.csv,5260e3b296f5ba18,platsbanken-se,ready,,Open
 jobs_board_staging.csv,80205072a1dec32f,platsbanken-se,ready,,Open
 jobs_board_staging.csv,da2dabc14cbc6cd0,platsbanken-se,ready,,Open
 jobs_board_staging.csv,e4146c6bff4f1637,platsbanken-se,ready,,Open
-jobs_board_staging.csv,4b16dae6fa288a40,platsbanken-se,ready,,Open
-jobs_board_staging.csv,c562ef97dbc614e5,platsbanken-se,ready,,Open
 jobs_board_staging.csv,54538d5bcabc12c7,platsbanken-se,ready,,Open
+jobs_board_staging.csv,be26bdee8d70967b,platsbanken-se,ready,,Open
 jobs_board_staging.csv,3d900a385456e3cd,platsbanken-se,ready,,Open
-jobs_board_staging.csv,3c7837b0d567a526,jobserve-uk,ready,,Open
-jobs_board_staging.csv,f3d35a728c9ce7ab,jobserve-uk,ready,,Open
-jobs_board_staging.csv,3c7f67214e7f58a7,jobserve-uk,ready,,Open
-jobs_board_staging.csv,c4d7db3c89709269,nzz-jobs-ch,ready,,Open
+jobs_board_staging.csv,82a38044a74f15c4,platsbanken-se,ready,,Open
+jobs_board_staging.csv,d8736f164ddc03a9,jobserve-uk,review,missing_or_invalid_company,Open
+jobs_board_staging.csv,c780151d592f1c17,jobserve-uk,ready,,Open
+jobs_board_staging.csv,6bdb69f6634cf65c,jobserve-uk,ready,,Open
+jobs_board_staging.csv,419d7369bd35104f,jobserve-uk,ready,,Open
+jobs_board_staging.csv,18995402fb1a0f0c,jobserve-uk,ready,,Open
+jobs_board_staging.csv,2f9c652776771b2f,jobserve-uk,ready,,Open
+jobs_board_staging.csv,42786f207998b968,nzz-jobs-ch,ready,,Open
+jobs_board_staging.csv,e433ed5cd8e77018,nzz-jobs-ch,ready,,Open
 jobs_board_staging.csv,e10da4a6889b81a9,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,4972e6d5ddddd0fb,jobwinner-ch,ready,,Pass_language
+jobs_board_staging.csv,f1e1f18999f9de21,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,d87973faa322f78d,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,aa8b896daad8a411,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,930d586b67473cc7,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,9c72ea1a36529346,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,28291c28998921ce,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,f6d6fdb940aa5ef8,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,ef8bffb461fc1278,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,898010adb3f0f0cd,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,16065f094320ccd6,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,75f4f7e6f84584cb,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,8f2545ca241a518c,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,07bfae884b19a074,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,167d532316573705,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,4ecc1fedb299cad2,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,4102f740e8ab2a90,jobwinner-ch,ready,,Pass_language
@@ -1570,26 +1634,24 @@ jobs_board_staging.csv,c84189286f407be5,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,c8d58801937b30d5,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,b96e16a8dcb67df8,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,c414ca21570505af,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,41d09daf0319148b,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,daadf915b13a38a2,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,d64b5caeb496a45d,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,5d98e7c9846cc94c,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,ec6ae7c43049e4a1,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,220b633ead9e6fe8,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,84e342828759a8dd,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,050d221b0c4376a1,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,648530f553bb5bb6,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,48b8e5951a336276,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,b1821751877ddc1f,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,582336d52041876b,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,632476b93b79b8d9,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,0b981e4881f17dbd,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,e2ce2e4e69325f85,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,5c52e20e89a4b06d,jobwinner-ch,ready,,Pass_language
-jobs_board_staging.csv,aadfa851da9357c5,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,67eebd8cb32768af,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,1f0c1f01db70a502,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,699595d81c6a0167,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,4d8e2daae55f1176,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,04bece3ebddf0c36,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,985d843295af345f,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,e4b3754487a10062,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,f2f9e151ae64841a,jobwinner-ch,ready,,Pass_language
@@ -1598,37 +1660,41 @@ jobs_board_staging.csv,c43e2a895a791e93,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,1e38900f93a97cd8,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,333f8bc2545ec327,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,3e6e83ffb42cdfc6,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,06e5925e4c07281b,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,41a8fa23fafb2cdc,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,cdda0389658fe7ed,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,56a86cea26f2c9b6,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,42b9c9df5ff2a2a4,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,14be2cd8ffb82e9a,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,5f6659b827c49216,jobwinner-ch,ready,,Pass_language
-jobs_board_staging.csv,0069aeaf6c0bff0a,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,e9e757099eee1e65,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,8e56da67cae62f16,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,13c7ceaa44324341,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,10adeb24b16c00ca,jobwinner-ch,ready,,Pass_language
-jobs_board_staging.csv,77a99ae018329211,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,48cb7e3240a7de3e,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,bda182fae461dd6d,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,6969fc5caeed27c6,jobwinner-ch,ready,,Pass_language
+jobs_board_staging.csv,65c23a3a01da2943,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,148e7e55f60ab83c,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,f494fb06e2171159,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,e54510ad63a00745,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,21bce81fe4848c44,willhaben-at,ready,,Open
-jobs_board_staging.csv,7562d8a1ff9e518f,willhaben-at,ready,,Open
 jobs_board_staging.csv,b9eaf66bf2d0d68e,willhaben-at,ready,,Open
-jobs_board_staging.csv,9a0d691eeac843b9,willhaben-at,ready,,Pass_language
+jobs_board_staging.csv,f863723656623871,willhaben-at,ready,,Pass_language
+jobs_board_staging.csv,35a74eab1edffdea,willhaben-at,ready,,Open
 jobs_board_staging.csv,8ae44da671f935fe,willhaben-at,ready,,Open
+jobs_board_staging.csv,e30898cfa5c9fafa,willhaben-at,ready,,Open
+jobs_board_staging.csv,9a0d691eeac843b9,willhaben-at,ready,,Pass_language
 jobs_board_staging.csv,bfe2564512ba1b05,karriere-at,ready,,Open
 jobs_board_staging.csv,6c8d38bce692ccc5,karriere-at,ready,,Open
 jobs_board_staging.csv,dca1d7fcc0eae49b,karriere-at,ready,,Open
 jobs_board_staging.csv,6e15888c224a48bc,karriere-at,ready,,Open
+jobs_board_staging.csv,63e97243a8582388,karriere-at,ready,,Open
+jobs_board_staging.csv,2a216922bd6735be,karriere-at,ready,,Open
+jobs_board_staging.csv,76d8aa8b13207d7c,karriere-at,ready,,Open
 jobs_board_staging.csv,973bef403b518089,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,636f6cbb25f47e72,karriere-at,ready,,Open
 jobs_board_staging.csv,61a75fb5d2102674,karriere-at,ready,,Open
 jobs_board_staging.csv,20df7f6e77e0b393,karriere-at,ready,,Open
-jobs_board_staging.csv,5fc242e0a1166320,karriere-at,ready,,Open
 jobs_board_staging.csv,59c8d04522949367,karriere-at,ready,,Open
 jobs_board_staging.csv,978830ae2a94c651,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,62925cce400d2964,karriere-at,ready,,Open
@@ -1636,43 +1702,44 @@ jobs_board_staging.csv,3076d1764e2e8f0a,karriere-at,ready,,Open
 jobs_board_staging.csv,cfb96003b3b2950c,karriere-at,ready,,Open
 jobs_board_staging.csv,ad0d08994f3f1226,karriere-at,ready,,Open
 jobs_board_staging.csv,92f5f1dc39a34144,karriere-at,ready,,Open
-jobs_board_staging.csv,34965031be582889,karriere-at,ready,,Open
+jobs_board_staging.csv,6a927f751d51f956,karriere-at,ready,,Open
 jobs_board_staging.csv,9e134114be50365a,karriere-at,ready,,Open
 jobs_board_staging.csv,78eef1f55291ccef,karriere-at,ready,,Open
 jobs_board_staging.csv,5684b5d37b08db82,karriere-at,ready,,Open
-jobs_board_staging.csv,d33a130f99935d9e,karriere-at,ready,,Open
+jobs_board_staging.csv,34965031be582889,karriere-at,ready,,Open
+jobs_board_staging.csv,976cc30bfcee7bf3,karriere-at,ready,,Open
 jobs_board_staging.csv,7281b8aec0e31f3c,karriere-at,ready,,Open
+jobs_board_staging.csv,d33a130f99935d9e,karriere-at,ready,,Open
+jobs_board_staging.csv,a10f08c62301ad5b,karriere-at,ready,,Open
 jobs_board_staging.csv,7e98f9b2f68de558,karriere-at,ready,,Open
 jobs_board_staging.csv,b329f6ba1c465184,karriere-at,ready,,Open
+jobs_board_staging.csv,322339a6b646a72c,karriere-at,ready,,Open
+jobs_board_staging.csv,8b1bdbc56fbc0d8b,karriere-at,ready,,Open
 jobs_board_staging.csv,b8e8e736f4178297,karriere-at,ready,,Open
 jobs_board_staging.csv,eeaa39e7047c72f3,karriere-at,ready,,Open
-jobs_board_staging.csv,a10f08c62301ad5b,karriere-at,ready,,Open
-jobs_board_staging.csv,cbd65125d234b518,karriere-at,ready,,Open
-jobs_board_staging.csv,2a216922bd6735be,karriere-at,ready,,Open
 jobs_board_staging.csv,d361494736db8ffd,karriere-at,ready,,Open
 jobs_board_staging.csv,4a7035d800cc4132,karriere-at,ready,,Open
 jobs_board_staging.csv,86016cf0ceafea0c,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,5ffd3927cf8b04d6,karriere-at,ready,,Pass_language
+jobs_board_staging.csv,ae57c2de6036f13d,karriere-at,ready,,Open
 jobs_board_staging.csv,91d334870c31a0b9,karriere-at,ready,,Open
-jobs_board_staging.csv,c8638f508f6283ba,karriere-at,ready,,Open
-jobs_board_staging.csv,aea0ecb010eb9901,karriere-at,ready,,Pass_language
+jobs_board_staging.csv,19e01f6549ff302a,karriere-at,ready,,Open
+jobs_board_staging.csv,490b24a2532fe026,karriere-at,ready,,Pass_language
+jobs_board_staging.csv,b91efa28cb66e2da,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,ebcaced5fd3aa148,karriere-at,ready,,Open
-jobs_board_staging.csv,d8db3d899ae034ce,karriere-at,ready,,Open
-jobs_board_staging.csv,bcf8bca26038db38,karriere-at,ready,,Open
-jobs_board_staging.csv,36e51d7738deafab,karriere-at,ready,,Open
-jobs_board_staging.csv,687aae65dc103b61,karriere-at,ready,,Open
 jobs_board_staging.csv,955d0e7077689311,stellenanzeigen-de,ready,,Open
+jobs_board_staging.csv,b81bf7837bb61f4f,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,4d3f6322ed63590f,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,46f35907e6f18bc8,stellenanzeigen-de,ready,,Open
-jobs_board_staging.csv,b81bf7837bb61f4f,stellenanzeigen-de,ready,,Open
-jobs_board_staging.csv,fe47f8754b44b48f,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,5e47b64ce33b2fc6,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,2a4d82dccd1a9fc2,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,a631e5aff74f736f,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,e83387d86dc327c1,stellenanzeigen-de,ready,,Pass_language
+jobs_board_staging.csv,ad55ce21a80d9e54,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,bd8682afdcff57b6,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,bf710158b29a7fe6,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,786852c0ea53b51a,stellenanzeigen-de,ready,,Pass_language
+jobs_board_staging.csv,d7b401b59a0a6cb2,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,b5dd2233f9c8c345,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,e04c0d812f5411b1,stellenanzeigen-de,ready,,Pass_language
 jobs_board_staging.csv,57ff31a0553014c3,stellenanzeigen-de,ready,,Open
@@ -1680,7 +1747,7 @@ jobs_board_staging.csv,1fb3cea9312b4d23,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,d746e22965f0e920,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,e2751fc30c9dd08d,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,abf16e994337a267,stellenanzeigen-de,ready,,Open
-jobs_board_staging.csv,b98eda71a3dd1a24,stellenanzeigen-de,ready,,Open
+jobs_board_staging.csv,8052e9cad7462086,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,b4e025c1f1dd0dbe,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,2f80ff70227f5b3c,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,5d19526d5eb63faa,arbeitsagentur-de,ready,,Open
@@ -1711,13 +1778,13 @@ jobs_board_staging.csv,5b9c2c1b18e78338,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,2b07a0a3310a667a,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,4c53315861e71838,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,b7bf57ced055be5a,arbeitsagentur-de,ready,,Open
-jobs_board_staging.csv,7b57b7854b929cfc,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,89ac9cfa2f88f27d,cocuma-cz,ready,,Open
 jobs_board_staging.csv,b39bdacaa679b049,jobs-cz,ready,,Open
 jobs_board_staging.csv,6911ea7241bf73f8,jobs-cz,ready,,Open
 jobs_board_staging.csv,e94b6f46500aaaa4,jobs-cz,ready,,Open
 jobs_board_staging.csv,a4d1816b9f7ded0c,jobs-cz,ready,,Open
 jobs_board_staging.csv,1466274ae7657235,jobs-cz,ready,,Open
+jobs_board_staging.csv,32fd34a96cea88cb,jobs-cz,ready,,Open
 jobs_board_staging.csv,57e07762df94aec7,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,f78a0af755783f7d,mpsv-open-data-cz,review,thin_description;duplicate_vacancy_url,Open
 jobs_board_staging.csv,9a14e5a3705d1d42,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
@@ -1744,10 +1811,8 @@ jobs_board_staging.csv,04c0ebe1a87f304e,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,656f39040402236a,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,1e272820bb8525be,platsbanken-se,ready,,Open
 jobs_board_staging.csv,ceaf6f004ffc3d0c,jobwinner-ch,ready,,Pass_language
-jobs_board_staging.csv,9815fbfe90f28b4e,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,7182f97187814c9e,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,aac17b202385c76f,karriere-at,ready,,Open
-jobs_board_staging.csv,6a5daf2739ad0b21,karriere-at,ready,,Open
 jobs_board_staging.csv,1309994d372d5294,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,7bdf60f752bded45,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,d800a380c6741cdd,arbeitsagentur-de,ready,,Pass_language
@@ -1761,6 +1826,7 @@ jobs_board_staging.csv,bfb15167855a6c1f,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,d0eb62243765c307,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,ea0a8994ac0f4ff1,platsbanken-se,ready,,Open
 jobs_board_staging.csv,3c737a991afb54c6,stellenanzeigen-de,ready,,Open
+jobs_board_staging.csv,910e97671ba8b3a7,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,c2daec4ba27eee8f,jobunivers-dk,review,duplicate_vacancy_url,Pass_language
 jobs_board_staging.csv,de2de5ce817cd57b,ledigajobb-se,ready,,Open
 jobs_board_staging.csv,3a2d39abb660959f,ledigajobb-se,ready,,Open
@@ -1778,8 +1844,9 @@ jobs_board_staging.csv,81a3652b4241414a,platsbanken-se,ready,,Open
 jobs_board_staging.csv,0bce5f5e6a008db9,platsbanken-se,ready,,Open
 jobs_board_staging.csv,b78e37f69d6234ac,platsbanken-se,ready,,Open
 jobs_board_staging.csv,acb586810a730bbb,platsbanken-se,ready,,Open
-jobs_board_staging.csv,cdacb932f7dc09fb,nzz-jobs-ch,ready,,Open
-jobs_board_staging.csv,a157be11aeee225e,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,91ce412b0074c243,jobserve-uk,ready,,Open
+jobs_board_staging.csv,e82a8ab26bce1152,jobserve-uk,ready,,Open
+jobs_board_staging.csv,54ace5cbd7b354a5,jobserve-uk,ready,,Open
 jobs_board_staging.csv,c145206ec7b3ea69,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,55b65c03c3e20d61,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,da6980b5b601ca92,jobwinner-ch,ready,,Open
@@ -1796,8 +1863,10 @@ jobs_board_staging.csv,cd87b85cbcd64b90,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,3fadf80851a65e6e,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,cb396303d73acf04,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,2830a1e4184f0f4a,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,d23d9dd76e251010,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,0b8df38df2916d48,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,8585184008ac3351,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,44e8e3b3734fb403,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,5dfee2b3d95c97c7,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,19c7df49ea7c1439,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,1db834b0d6b393d5,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,5f2db93444cc071b,karriere-at,ready,,Open
@@ -1806,16 +1875,14 @@ jobs_board_staging.csv,327e6a3f95132719,karriere-at,ready,,Open
 jobs_board_staging.csv,29f548bcac19b881,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,0f484945a05757b5,karriere-at,ready,,Open
 jobs_board_staging.csv,8806f92ffec9ae28,karriere-at,ready,,Open
-jobs_board_staging.csv,79b9cc3ee5259ada,karriere-at,ready,,Open
 jobs_board_staging.csv,035da1125c9e00af,karriere-at,ready,,Open
-jobs_board_staging.csv,3f0bf63343babb54,karriere-at,ready,,Open
 jobs_board_staging.csv,0c31979ae0690394,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,7ae7ac168810f9fd,stellenanzeigen-de,ready,,Open
 jobs_board_staging.csv,e953cc8f396159c2,stellenanzeigen-de,ready,,Open
+jobs_board_staging.csv,8bd34f8849f9c348,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,79ecf19d33416d06,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,1b43944b28bf06e9,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,68c4c952437d7081,arbeitsagentur-de,ready,,Open
-jobs_board_staging.csv,7e862349f3c4aa7e,arbeitsagentur-de,ready,,Open
 jobs_board_staging.csv,b67f113643b23372,cocuma-cz,ready,,Open
 jobs_board_staging.csv,ebc13542bcbe062b,jobs-cz,ready,,Open
 jobs_board_staging.csv,f91b1afd83ab5381,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
@@ -1824,18 +1891,20 @@ jobs_board_staging.csv,f3e4a9961652522e,mpsv-open-data-cz,review,duplicate_vacan
 jobs_board_staging.csv,9fa0bd35a9e27244,mpsv-open-data-cz,review,thin_description;duplicate_vacancy_url,Open
 jobs_board_staging.csv,f445746b51b4b39a,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,aeedd6fa6157287d,platsbanken-se,ready,,Open
+jobs_board_staging.csv,a921b0753d8952a8,platsbanken-se,ready,,Open
 jobs_board_staging.csv,ed5266e0fce0cded,jobbsafari-no,ready,,Open
 jobs_board_staging.csv,8e0188dfc4d70592,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,058f5311886bc080,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,3075b4bb2247b7d9,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,8616d937284e83e6,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,29c2ce09af481012,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,fc7e3ae0ecd44903,jobwinner-ch,ready,,Pass_language
-jobs_board_staging.csv,8a907d352d7ae48f,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,9af595ccba98307f,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,30bb485f377f7fd5,arbeitsagentur-de,ready,,Pass_language
 jobs_board_staging.csv,a8118272c9629300,karriere-at,ready,,Pass_language
 jobs_board_staging.csv,cf18ce8229237147,jobunivers-dk,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,ec73d98bff1abb12,ledigajobb-se,ready,,Open
+jobs_board_staging.csv,fa213a6efd458cd5,platsbanken-se,ready,,Open
 jobs_board_staging.csv,59178dcaa888f3bc,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,a39f2cdcd11598ea,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,954625871faa8629,jobwinner-ch,ready,,Open
@@ -1844,20 +1913,595 @@ jobs_board_staging.csv,83747e0ced07a538,willhaben-at,ready,,Open
 jobs_board_staging.csv,5c1ecd0bccf05717,karriere-at,ready,,Open
 jobs_board_staging.csv,680435c59c74fe9d,karriere-at,ready,,Open
 jobs_board_staging.csv,cf74ba5c55a067e1,karriere-at,ready,,Open
+jobs_board_staging.csv,18be3d538ec43ca2,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,0b5cecd2c1051f07,jobwinner-ch,ready,,Pass_language
 jobs_board_staging.csv,3ab7a3dc6a215acb,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,8db3ba296cdd2e37,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,332f2d82f88b73af,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,6b9eca6173f55e2f,jobs-cz,ready,,Open
+jobs_board_staging.csv,bd0524c76bf930cf,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,891bb5561be16ff3,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,7f6d00010ee29f67,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
+jobs_board_staging.csv,4c4c631b85f684a1,nzz-jobs-ch,ready,,Pass_language
 jobs_board_staging.csv,0ae57e8da6cb72ec,karriere-at,ready,,Open
 jobs_board_staging.csv,eb5ca44795e6e471,arbeitsagentur-de,ready,,Open
-jobs_board_staging.csv,a703998e03bd30dc,jobwinner-ch,ready,,Open
+jobs_board_staging.csv,be13dbe29dc52901,nzz-jobs-ch,ready,,Pass_language
 jobs_board_staging.csv,67b998b62021d1e6,jobwinner-ch,ready,,Open
-jobs_board_staging.csv,5989715164a8ccc8,jobwinner-ch,ready,,Open
 jobs_board_staging.csv,2f5931aa56742ce7,mpsv-open-data-cz,review,duplicate_vacancy_url,Open
 jobs_board_staging.csv,fe1cce8c75206a05,jobwinner-ch,ready,,Open
+jobs_company_staging.csv,6eed5866a40cd9c1,vanguard-global,ready,,Open
+jobs_company_staging.csv,5dbad0e38cb3130a,vanguard-global,ready,,Open
+jobs_company_staging.csv,2b1320084bfcfae4,wipro-global,ready,,Open
+jobs_company_staging.csv,16aae4a6134a3813,zeb-global,ready,,Open
+jobs_company_staging.csv,2f5abc7f5a160fc7,zeb-global,ready,,Open
+jobs_company_staging.csv,c6f693152ea1e8e7,zeb-global,ready,,Open
+jobs_company_staging.csv,a5723b0f1e43f60c,zeb-global,ready,,Open
+jobs_company_staging.csv,5c00718b5a9188df,zeb-global,ready,,Open
+jobs_company_staging.csv,f0d70d5ba5a54f87,zeb-global,ready,,Open
+jobs_company_staging.csv,db55d2c5404bc172,zeb-global,ready,,Open
+jobs_company_staging.csv,7d8f1e08f2a383d7,zeb-global,ready,,Open
+jobs_company_staging.csv,82621dc4618ed44d,zeb-global,ready,,Open
+jobs_company_staging.csv,cc34c642a58319a9,zeb-global,ready,,Open
+jobs_company_staging.csv,6611af47c4811301,zeb-global,ready,,Open
+jobs_company_staging.csv,6e03d9f4ed67f15f,zeb-global,ready,,Open
+jobs_company_staging.csv,1fa6d4217c143e4e,zeb-global,ready,,Open
+jobs_company_staging.csv,2967e1143a13a7b6,zeb-global,ready,,Open
+jobs_company_staging.csv,42952cf9240a49d4,zeb-global,ready,,Open
+jobs_company_staging.csv,90ab781894804dfa,zeb-global,ready,,Open
+jobs_company_staging.csv,8fd7f746d84494ba,zeb-global,ready,,Open
+jobs_company_staging.csv,3ef36c097d58a9cb,zeb-global,ready,,Open
+jobs_company_staging.csv,00c151707b219963,zeb-global,ready,,Open
+jobs_company_staging.csv,0353a2cdeb34562d,zeb-global,ready,,Open
+jobs_company_staging.csv,be48f2d201726a5f,zeb-global,ready,,Open
+jobs_company_staging.csv,46feaafebf47f79b,zeb-global,ready,,Open
+jobs_company_staging.csv,502032e9968b48be,zeb-global,ready,,Open
+jobs_company_staging.csv,f35d433a1e0b26a1,zeb-global,ready,,Open
+jobs_company_staging.csv,11ebada7b6b5ac14,zeb-global,ready,,Open
+jobs_company_staging.csv,66588568cbc445c7,zeb-global,ready,,Open
+jobs_company_staging.csv,6d3c149ed60406f2,zeb-global,ready,,Open
+jobs_company_staging.csv,cf8971495f64db5c,zeb-global,ready,,Open
+jobs_company_staging.csv,08ac09304e75ef06,zeb-global,ready,,Open
+jobs_company_staging.csv,ace89c31081d4edc,zeb-global,ready,,Open
+jobs_company_staging.csv,19a4f4071dd4e367,zeb-global,ready,,Open
+jobs_company_staging.csv,20522777893fe360,zeb-global,ready,,Open
+jobs_company_staging.csv,da7dbe204166cc84,zeb-global,ready,,Open
+jobs_company_staging.csv,ab6083a40cb9ea45,zeb-global,ready,,Open
+jobs_company_staging.csv,ce3d9755bd5b9beb,zeb-global,ready,,Open
+jobs_company_staging.csv,c36531805496386d,zeb-global,ready,,Open
+jobs_company_staging.csv,9a098bef4e6f59c5,zeb-global,ready,,Open
+jobs_company_staging.csv,c0c723a1bb72a6a6,zeb-global,ready,,Open
+jobs_company_staging.csv,a1d8c2e06f2cde4d,zeb-global,ready,,Open
+jobs_company_staging.csv,fa6279a294c022df,zeb-global,ready,,Open
+jobs_company_staging.csv,3e58183dca1e355b,zeb-global,ready,,Open
+jobs_company_staging.csv,ee3274f09bef63ae,zeb-global,ready,,Open
+jobs_company_staging.csv,41c84d8d884b7b0d,zeb-global,ready,,Open
+jobs_company_staging.csv,5434de021d95ab49,zeb-global,ready,,Open
+jobs_company_staging.csv,d4b3019a131d4fc7,zeb-global,ready,,Open
+jobs_company_staging.csv,9db35abcb25a171c,zeb-global,ready,,Open
+jobs_company_staging.csv,af26075b2810b2f4,zeb-global,ready,,Open
+jobs_company_staging.csv,6022ef079acfeb63,zeb-global,ready,,Open
+jobs_company_staging.csv,f1b53e39de8b5a26,zeb-global,ready,,Open
+jobs_company_staging.csv,80dcb10403a8b3d7,rwe-global,ready,,Open
+jobs_company_staging.csv,137e1b4fa6b92d9d,rwe-global,ready,,Open
+jobs_company_staging.csv,3f50f073079944af,rwe-global,ready,,Open
+jobs_company_staging.csv,390b2df08df8ef3a,rwe-global,ready,,Open
+jobs_company_staging.csv,8c864cbe7326984d,rwe-global,ready,,Open
+jobs_company_staging.csv,985d2869bf88254e,rwe-global,ready,,Open
+jobs_company_staging.csv,b16ba7123ce6d062,rwe-global,ready,,Open
+jobs_company_staging.csv,35d903b6d540ffc5,rwe-global,ready,,Open
+jobs_company_staging.csv,341f049f27f296c5,rwe-global,ready,,Open
+jobs_company_staging.csv,a50f67a3bdf48e0d,rwe-global,ready,,Open
+jobs_company_staging.csv,72baa1bbc80591da,rwe-global,ready,,Open
+jobs_company_staging.csv,8bb7d749f942c088,rwe-global,ready,,Open
+jobs_company_staging.csv,fb1fa5f9a2ebd8d4,rwe-global,ready,,Open
+jobs_company_staging.csv,204d9e01b54aa070,rwe-global,ready,,Open
+jobs_company_staging.csv,aeb9ad18193b7a28,rwe-global,ready,,Open
+jobs_company_staging.csv,7b316e6844864536,rwe-global,ready,,Open
+jobs_company_staging.csv,6e70c5dc013da7e5,rwe-global,ready,,Open
+jobs_company_staging.csv,efc11917634e5e6e,rwe-global,ready,,Open
+jobs_company_staging.csv,21ebc56f2d115778,rwe-global,ready,,Open
+jobs_company_staging.csv,6ec0860c40436ae7,rwe-global,ready,,Open
+jobs_company_staging.csv,cbecff719444a22e,rwe-global,ready,,Open
+jobs_company_staging.csv,e525145db5bb4d05,rwe-global,ready,,Open
+jobs_company_staging.csv,135edc2a8bea1f15,rwe-global,ready,,Open
+jobs_company_staging.csv,ccbe029b3ec8691e,rwe-global,ready,,Open
+jobs_company_staging.csv,0677cdb450153489,rwe-global,ready,,Open
+jobs_company_staging.csv,32f347bcba578ac5,rwe-global,ready,,Open
+jobs_company_staging.csv,f534e53f6b0421ee,rwe-global,ready,,Open
+jobs_company_staging.csv,e784ed05c5366680,rwe-global,ready,,Open
+jobs_company_staging.csv,d1ded8ae8aaadb58,airbus-global,ready,,Open
+jobs_company_staging.csv,be4d1d1e3dcc927f,holcim-global,ready,,Open
+jobs_company_staging.csv,f943b82aacd5a534,holcim-global,ready,,Open
+jobs_company_staging.csv,2152bf1a3bd67613,holcim-global,ready,,Open
+jobs_company_staging.csv,2d2f54df51d2eaf9,holcim-global,ready,,Open
+jobs_company_staging.csv,2d76286f7c36eba6,holcim-global,ready,,Open
+jobs_company_staging.csv,da72bbb45b3752b4,holcim-global,ready,,Open
+jobs_company_staging.csv,72f91ef795c4eee5,holcim-global,ready,,Open
+jobs_company_staging.csv,b62358dcfacf3214,holcim-global,ready,,Open
+jobs_company_staging.csv,beb49ea17d0388cf,holcim-global,ready,,Open
+jobs_company_staging.csv,43e578ac035a467f,holcim-global,ready,,Open
+jobs_company_staging.csv,952edfb29d85bd48,holcim-global,ready,,Open
+jobs_company_staging.csv,21639ab08e0cf459,holcim-global,ready,,Open
+jobs_company_staging.csv,faef50bc3ca2fa00,holcim-global,ready,,Open
+jobs_company_staging.csv,818243e2250a3224,holcim-global,ready,,Open
+jobs_company_staging.csv,602efabe5fbf63fe,holcim-global,ready,,Open
+jobs_company_staging.csv,01c8576d720886a4,holcim-global,ready,,Open
+jobs_company_staging.csv,f117bec42d78e76c,uniqa-global,ready,,Open
+jobs_company_staging.csv,370e60ccb85f326e,uniqa-global,ready,,Open
+jobs_company_staging.csv,48e97f8fd26928b4,uniqa-global,ready,,Open
+jobs_company_staging.csv,ca4f29216fbf16e4,ebrd-global,ready,,Open
+jobs_company_staging.csv,caa55b02b893bedf,ebrd-global,ready,,Open
+jobs_company_staging.csv,752a9b0f08355576,ebrd-global,ready,,Open
+jobs_company_staging.csv,816fb62b56ac854c,ebrd-global,ready,,Open
+jobs_company_staging.csv,de197065f7ec5acc,ebrd-global,ready,,Open
+jobs_company_staging.csv,7b355e0cd3a3e5eb,ebrd-global,ready,,Open
+jobs_company_staging.csv,1c0bef99cee85614,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,8401193929975c9a,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,1d74f95a1ad9f7f5,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,f15b786d39469b2a,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,b58128450c7c9819,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,e08fc737a543b9f5,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,94cdc54c9a4b1da4,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,955f5751d8a7a735,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,d1e4a59dabb12a80,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,e1c189243cf221b9,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,b254b9ba685c5e9f,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,66ce65f8df63fe49,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,818f5644a61317c6,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,bf1bdb66709a9662,deutsche-boerse-global,ready,,Open
+jobs_company_staging.csv,e717f8f4a16c61b7,de-shaw-global,ready,,Open
+jobs_company_staging.csv,09b319329480a00b,de-shaw-global,ready,,Open
+jobs_company_staging.csv,0284b179bb00e11d,de-shaw-global,ready,,Open
+jobs_company_staging.csv,6be5de8cbb6157d8,de-shaw-global,ready,,Open
+jobs_company_staging.csv,ac84cac2e7f8fc42,de-shaw-global,ready,,Open
+jobs_company_staging.csv,b0cab32eb042323b,de-shaw-global,ready,,Open
+jobs_company_staging.csv,5d6dce8d59477606,de-shaw-global,ready,,Open
+jobs_company_staging.csv,991aa4b951f96837,de-shaw-global,ready,,Open
+jobs_company_staging.csv,50f8131298b7c784,de-shaw-global,ready,,Open
+jobs_company_staging.csv,fe7aff5a61d92b22,de-shaw-global,ready,,Open
+jobs_company_staging.csv,e892561687cbca41,de-shaw-global,ready,,Open
+jobs_company_staging.csv,799684c316347291,de-shaw-global,ready,,Open
+jobs_company_staging.csv,6d2c8457b0e4f34d,de-shaw-global,ready,,Open
+jobs_company_staging.csv,812149e4788e1607,de-shaw-global,ready,,Open
+jobs_company_staging.csv,27cbd3855bda62e8,de-shaw-global,ready,,Open
+jobs_company_staging.csv,c453dd54ff994644,de-shaw-global,ready,,Open
+jobs_company_staging.csv,d8dc2b9b8e22cabb,de-shaw-global,ready,,Open
+jobs_company_staging.csv,0db329d8a07fff5b,de-shaw-global,ready,,Open
+jobs_company_staging.csv,5dce6ef657371c65,de-shaw-global,ready,,Open
+jobs_company_staging.csv,c755be60bdadcd70,de-shaw-global,ready,,Open
+jobs_company_staging.csv,bfa8854b8825582f,de-shaw-global,ready,,Open
+jobs_company_staging.csv,f23741cb46f88345,de-shaw-global,ready,,Open
+jobs_company_staging.csv,945db9d015ccf121,de-shaw-global,ready,,Open
+jobs_company_staging.csv,2f9584aeff0b7ea6,de-shaw-global,ready,,Open
+jobs_company_staging.csv,2d07150eb6789e81,de-shaw-global,ready,,Open
+jobs_company_staging.csv,abb98d3415f51a81,capco-global,ready,,Open
+jobs_company_staging.csv,040c29192f1c323a,capco-global,ready,,Open
+jobs_company_staging.csv,8a036d180a8ad0dd,capco-global,ready,,Open
+jobs_company_staging.csv,2504680d61785442,capco-global,ready,,Open
+jobs_company_staging.csv,2ac8de8ce0adcad1,capco-global,ready,,Open
+jobs_company_staging.csv,8181cf09aa51dfd7,capco-global,ready,,Open
+jobs_company_staging.csv,bd890abbbc175647,capco-global,ready,,Open
+jobs_company_staging.csv,acea3e26e5ba4fda,capco-global,ready,,Open
+jobs_company_staging.csv,694952771bad4526,capco-global,ready,,Open
+jobs_company_staging.csv,a572af1c5bacc792,capco-global,ready,,Open
+jobs_company_staging.csv,d72cd392b3a6650c,capco-global,ready,,Open
+jobs_company_staging.csv,2499d26f2a9729f0,capco-global,ready,,Open
+jobs_company_staging.csv,644165deff255c77,capco-global,ready,,Open
+jobs_company_staging.csv,70b26bf49cb11727,capco-global,ready,,Open
+jobs_company_staging.csv,97ca03462084dbbd,capco-global,ready,,Open
+jobs_company_staging.csv,2797ebc5a49c26e7,capco-global,ready,,Open
+jobs_company_staging.csv,e02fe70fddc6d260,capco-global,ready,,Open
+jobs_company_staging.csv,f2b5f90d5a5f27e3,capco-global,ready,,Open
+jobs_company_staging.csv,71336ef27ac8a9a2,capco-global,ready,,Open
+jobs_company_staging.csv,c2924280a4c0a2ac,capco-global,ready,,Open
+jobs_company_staging.csv,c12a93e320d366a3,capco-global,ready,,Open
+jobs_company_staging.csv,6b964e983b011d45,capco-global,ready,,Open
+jobs_company_staging.csv,262e0c95a2194089,capco-global,ready,,Open
+jobs_company_staging.csv,cb3c3985e93aa9de,capco-global,ready,,Open
+jobs_company_staging.csv,b52a8a0e11a8febe,capco-global,ready,,Open
+jobs_company_staging.csv,163f3805e0013659,capco-global,ready,,Open
+jobs_company_staging.csv,b02bf42c82317f39,capco-global,ready,,Open
+jobs_company_staging.csv,2f35fbad97baa458,capco-global,ready,,Open
+jobs_company_staging.csv,343173c11bee4328,capco-global,ready,,Open
+jobs_company_staging.csv,cbd261306e628d57,capco-global,ready,,Open
+jobs_company_staging.csv,2ae1b8fb1a2ef923,capco-global,ready,,Open
+jobs_company_staging.csv,22eb0b86c6a38dfe,capco-global,ready,,Open
+jobs_company_staging.csv,e2803acd33d3b806,capco-global,ready,,Open
+jobs_company_staging.csv,037217d84ad814f8,capco-global,ready,,Open
+jobs_company_staging.csv,e7ea27b0a9a6a4d6,capco-global,ready,,Open
+jobs_company_staging.csv,f1e191062ba13ba1,capco-global,ready,,Open
+jobs_company_staging.csv,66dff2493d017d89,capco-global,ready,,Open
+jobs_company_staging.csv,e4dfa41d094a7657,capco-global,ready,,Open
+jobs_company_staging.csv,4eed2050e8f68d67,capco-global,ready,,Open
+jobs_company_staging.csv,c6235e79446b2f08,capco-global,ready,,Open
+jobs_company_staging.csv,5064c75b5e33476f,capco-global,ready,,Open
+jobs_company_staging.csv,7ce485dd1ba7d524,capco-global,ready,,Open
+jobs_company_staging.csv,a1751bda5a3ad66a,capco-global,ready,,Open
+jobs_company_staging.csv,b4d00a6676e22407,capco-global,ready,,Open
+jobs_company_staging.csv,0122489818dfa8f2,capco-global,ready,,Open
+jobs_company_staging.csv,f1184c5f8541f2ef,capco-global,ready,,Open
+jobs_company_staging.csv,a69ff57df5638a68,capco-global,ready,,Open
+jobs_company_staging.csv,e8eb45fcbac6a0a5,capco-global,ready,,Open
+jobs_company_staging.csv,8c34fb408ffd6764,capco-global,ready,,Open
+jobs_company_staging.csv,48196c463909dda2,capco-global,ready,,Open
+jobs_company_staging.csv,ed15da8d0b618ea9,capco-global,ready,,Open
+jobs_company_staging.csv,7a11f3a567984644,capco-global,ready,,Open
+jobs_company_staging.csv,f4308cfc5c0e32fc,capco-global,ready,,Open
+jobs_company_staging.csv,7db590f6ed756fc3,capco-global,ready,,Open
+jobs_company_staging.csv,3aa5874002b5f650,capco-global,ready,,Open
+jobs_company_staging.csv,b738ee1c1add5e5e,munich-re-global,ready,,Open
+jobs_company_staging.csv,455d81d558129cf6,munich-re-global,ready,,Open
+jobs_company_staging.csv,74b625ddedf024d1,munich-re-global,ready,,Open
+jobs_company_staging.csv,a8828c20c61b1147,partners-group-global,ready,,Open
+jobs_company_staging.csv,ef9862cbb45d1f3e,partners-group-global,ready,,Open
+jobs_company_staging.csv,a76dcb18d84e91ea,partners-group-global,ready,,Open
+jobs_company_staging.csv,809270c26f3f0444,partners-group-global,ready,,Open
+jobs_company_staging.csv,8cfb9544cc1a5c84,partners-group-global,ready,,Open
+jobs_company_staging.csv,f67f13b34cc77f36,partners-group-global,ready,,Open
+jobs_company_staging.csv,04ac3a2ecd523767,partners-group-global,ready,,Open
+jobs_company_staging.csv,9706cd6603ddc18e,partners-group-global,ready,,Open
+jobs_company_staging.csv,dca3146f5f50ab41,partners-group-global,ready,,Open
+jobs_company_staging.csv,f347e4df9ab4c0fc,partners-group-global,ready,,Open
+jobs_company_staging.csv,c42fe87ab53c2d5f,partners-group-global,ready,,Open
+jobs_company_staging.csv,942f251b5c648dc1,partners-group-global,ready,,Open
+jobs_company_staging.csv,c0eee6bd219b1d23,partners-group-global,ready,,Open
+jobs_company_staging.csv,0947f32ab53dd26f,partners-group-global,ready,,Open
+jobs_company_staging.csv,d81fa3da37a2b16d,partners-group-global,ready,,Open
+jobs_company_staging.csv,1e06cf9d611fa93b,partners-group-global,ready,,Open
+jobs_company_staging.csv,ed642288cf34470b,partners-group-global,ready,,Open
+jobs_company_staging.csv,160d949e95648109,partners-group-global,ready,,Open
+jobs_company_staging.csv,d155e8f21597ebe3,partners-group-global,ready,,Open
+jobs_company_staging.csv,e987be1a284fc3e5,partners-group-global,ready,,Open
+jobs_company_staging.csv,64bc2a73e9f478c2,partners-group-global,ready,,Open
+jobs_company_staging.csv,e92b157eb6a21680,ares-global,ready,,Open
+jobs_company_staging.csv,1364e31d65fa68ee,ares-global,ready,,Open
+jobs_company_staging.csv,c37253f29b5d98e9,ares-global,ready,,Open
+jobs_company_staging.csv,1b0e0244638c894b,ares-global,ready,,Open
+jobs_company_staging.csv,8e13eaf7871562e6,ares-global,ready,,Open
+jobs_company_staging.csv,4cee8225439bceaa,ares-global,ready,,Open
+jobs_company_staging.csv,d9285f5ebcb5ab0e,ares-global,ready,,Open
+jobs_company_staging.csv,354cbd17ad01e22e,ares-global,ready,,Open
+jobs_company_staging.csv,ca5e124d43aef792,ares-global,ready,,Open
+jobs_company_staging.csv,67d935f280a9cd45,ares-global,ready,,Open
+jobs_company_staging.csv,973842b1025ca809,vanguard-global,ready,,Open
+jobs_company_staging.csv,c2f3cd8a54330a42,maersk-global,ready,,Open
+jobs_company_staging.csv,7ba3d67f1143d484,maersk-global,ready,,Open
+jobs_company_staging.csv,9d5e713b936dc952,astrazeneca-global,ready,,Open
+jobs_company_staging.csv,e4c4d4fcacc8e02c,astrazeneca-global,ready,,Open
+jobs_company_staging.csv,5d26698a72b05aa2,ing-global,ready,,Open
+jobs_company_staging.csv,fceea2442de45b03,ing-global,ready,,Open
+jobs_company_staging.csv,8f466afe6f9143c2,ing-global,ready,,Open
+jobs_company_staging.csv,31afa6724107aef8,ing-global,ready,,Open
+jobs_company_staging.csv,f8833864defe0196,ing-global,ready,,Open
+jobs_company_staging.csv,3201cac45075e63b,ing-global,ready,,Open
+jobs_company_staging.csv,364b9fedfadb2ee2,ing-global,ready,,Open
+jobs_company_staging.csv,d557bf8036452acf,ing-global,ready,,Open
+jobs_company_staging.csv,da8287293207ef4f,ing-global,ready,,Open
+jobs_company_staging.csv,751a64ecf49fc8a3,ing-global,ready,,Open
+jobs_company_staging.csv,d3b3263d7069f1a2,ing-global,ready,,Open
+jobs_company_staging.csv,f3c286f14daddf28,ing-global,ready,,Open
+jobs_company_staging.csv,15b9d6a530eedebc,ing-global,ready,,Open
+jobs_company_staging.csv,f4c7887859cbc284,ing-global,ready,,Open
+jobs_company_staging.csv,a6f207251f17600d,ing-global,ready,,Open
+jobs_company_staging.csv,22317a55a2cf9fc7,ing-global,ready,,Open
+jobs_company_staging.csv,8dc4780567c793c4,rbi-global,ready,,Open
+jobs_company_staging.csv,e6d1b25eb51b9189,rbi-global,ready,,Open
+jobs_company_staging.csv,92c925479edf4b61,rbi-global,ready,,Open
+jobs_company_staging.csv,f97b3decd47f6845,rbi-global,ready,,Open
+jobs_company_staging.csv,b07d86609c4d4f82,rbi-global,ready,,Open
+jobs_company_staging.csv,308f84dafe957342,rbi-global,ready,,Open
+jobs_company_staging.csv,8ef1f3d9b2bfdabb,rbi-global,ready,,Open
+jobs_company_staging.csv,f483e196aad3b507,rbi-global,ready,,Open
+jobs_company_staging.csv,0720653eca0f9b4d,rbi-global,ready,,Open
+jobs_company_staging.csv,011210e20352b81c,rbi-global,ready,,Open
+jobs_company_staging.csv,ca6606ccd3f602df,rbi-global,ready,,Open
+jobs_company_staging.csv,4656e211ac647cc2,rbi-global,ready,,Open
+jobs_company_staging.csv,147e9f8839743bd8,rbi-global,ready,,Open
+jobs_company_staging.csv,a9aa983fbda23854,rbi-global,ready,,Open
+jobs_company_staging.csv,0d4426503fea9aba,capital-group-global,ready,,Open
+jobs_company_staging.csv,43cd464a52801390,capital-group-global,ready,,Open
+jobs_company_staging.csv,b83e1e0d129d1ed0,capital-group-global,ready,,Open
+jobs_company_staging.csv,8650547ce3349a28,icg-global,ready,,Open
+jobs_company_staging.csv,c6bb3086ec191c4d,icg-global,ready,,Open
+jobs_company_staging.csv,2b6adaf592cbbf80,icg-global,ready,,Open
+jobs_company_staging.csv,6b909ac398c1a896,icg-global,ready,,Open
+jobs_company_staging.csv,558f9163702e747b,gsk-global,ready,,Open
+jobs_company_staging.csv,42c893ab924d6f83,gsk-global,ready,,Open
+jobs_company_staging.csv,4a37674b3e760b03,gsk-global,ready,,Open
+jobs_company_staging.csv,0a7a7adb76df28ca,gsk-global,ready,,Open
+jobs_company_staging.csv,aaaa060b95be8462,gsk-global,ready,,Open
+jobs_company_staging.csv,e4ecabbacd6e91b5,gsk-global,ready,,Open
+jobs_company_staging.csv,bd82d6b93ac9248a,gsk-global,ready,,Open
+jobs_company_staging.csv,425d2edfdeb871e2,unicredit-global,ready,,Open
+jobs_company_staging.csv,4ae3862692dc98ab,unicredit-global,review,thin_description,Open
+jobs_company_staging.csv,ff11dfb5423c3078,unicredit-global,review,thin_description,Open
+jobs_company_staging.csv,62d9b3038fe7b22c,unicredit-global,ready,,Open
+jobs_company_staging.csv,49a0e1cb6f136fc8,unicredit-global,review,thin_description,Open
+jobs_company_staging.csv,7da8f39ce471205b,lombard-odier-global,ready,,Open
+jobs_company_staging.csv,a55b6ffd99744d24,lombard-odier-global,ready,,Open
+jobs_company_staging.csv,c82dd8a67859a8e6,lombard-odier-global,ready,,Open
+jobs_company_staging.csv,9e6b1b00f6e79c78,lombard-odier-global,ready,,Open
+jobs_company_staging.csv,36fb65cd240cbb34,aviva-global,ready,,Open
+jobs_company_staging.csv,94f23f04fdea11f6,aviva-global,ready,,Open
+jobs_company_staging.csv,ede29493d776f105,aviva-global,ready,,Open
+jobs_company_staging.csv,0b02cb7fdf23f2fb,aviva-global,ready,,Open
+jobs_company_staging.csv,20934e049c69ce41,aviva-global,ready,,Open
+jobs_company_staging.csv,06dc5ec54b729255,aviva-global,ready,,Open
+jobs_company_staging.csv,f98e43802d862739,vontobel-global,review,thin_description,Open
+jobs_company_staging.csv,1fda26466677974c,vontobel-global,ready,,Open
+jobs_company_staging.csv,f80b6f426dddf172,vontobel-global,ready,,Open
+jobs_company_staging.csv,a9023985c4093636,vontobel-global,ready,,Open
+jobs_company_staging.csv,a26efb5b24735da8,vontobel-global,ready,,Open
+jobs_company_staging.csv,ed5335aa30fad741,vontobel-global,ready,,Open
+jobs_company_staging.csv,ddcc7077eae9cd40,vontobel-global,ready,,Open
+jobs_company_staging.csv,6ada1002be21c20b,vontobel-global,ready,,Open
+jobs_company_staging.csv,c21cc6ee6bdd8e83,vontobel-global,ready,,Open
+jobs_company_staging.csv,ae84bb6d94583bf3,vontobel-global,ready,,Open
+jobs_company_staging.csv,b13fc05b3d2375c8,vontobel-global,ready,,Open
+jobs_company_staging.csv,f7fe368b34f32fb7,vontobel-global,ready,,Open
+jobs_company_staging.csv,a73d5bd77e62f237,vontobel-global,ready,,Open
+jobs_company_staging.csv,002c94635d1bfd76,vontobel-global,ready,,Open
+jobs_company_staging.csv,9a7583807e7cf6f2,vontobel-global,ready,,Open
+jobs_company_staging.csv,640e88ad07a636b7,vontobel-global,ready,,Open
+jobs_company_staging.csv,4ff95f5ac58e7374,vontobel-global,ready,,Open
+jobs_company_staging.csv,270da8b26ad393f3,vontobel-global,ready,,Open
+jobs_company_staging.csv,9279c2b3caf9175c,vontobel-global,ready,,Open
+jobs_company_staging.csv,e11b7704eeb66b68,vontobel-global,review,thin_description,Open
+jobs_company_staging.csv,48e3150e36aeea41,vontobel-global,ready,,Open
+jobs_company_staging.csv,5b3cc661c95edf0c,vontobel-global,ready,,Open
+jobs_company_staging.csv,03dd29e53d1e7b14,vontobel-global,ready,,Open
+jobs_company_staging.csv,ae1bb1dd918d843e,vontobel-global,ready,,Open
+jobs_company_staging.csv,bd68027d9a2d5395,vontobel-global,ready,,Open
+jobs_company_staging.csv,b0b335e2bb1b1cc8,vontobel-global,ready,,Open
+jobs_company_staging.csv,e91548f9e24a9fa6,vontobel-global,ready,,Open
+jobs_company_staging.csv,57bf4eb3516a6523,alixpartners-global,ready,,Open
+jobs_company_staging.csv,180920c7dd39fe0e,alixpartners-global,ready,,Open
+jobs_company_staging.csv,891e3523304da464,alixpartners-global,ready,,Open
+jobs_company_staging.csv,c0c0e75faa1e5117,alixpartners-global,ready,,Open
+jobs_company_staging.csv,abe65a282c96c031,alixpartners-global,ready,,Open
+jobs_company_staging.csv,1cd6e1de283a473b,alixpartners-global,ready,,Open
+jobs_company_staging.csv,f2c61286cbb1916d,alixpartners-global,ready,,Open
+jobs_company_staging.csv,28ee1e7cc6005499,alixpartners-global,ready,,Open
+jobs_company_staging.csv,f9304a88adea3f40,alixpartners-global,ready,,Open
+jobs_company_staging.csv,80333acff53d3766,alixpartners-global,ready,,Open
+jobs_company_staging.csv,2635176094915ae3,alixpartners-global,ready,,Open
+jobs_company_staging.csv,8cf568a12fb210fb,alixpartners-global,ready,,Open
+jobs_company_staging.csv,1b23a38b6c4afeb1,alixpartners-global,ready,,Open
+jobs_company_staging.csv,dc2ca9de0bd8710c,alixpartners-global,ready,,Open
+jobs_company_staging.csv,55760aa702d3cf86,alixpartners-global,ready,,Open
+jobs_company_staging.csv,d02a3dc7717e0192,mutares-global,ready,,Open
+jobs_company_staging.csv,05158d0366b830ae,mutares-global,ready,,Open
+jobs_company_staging.csv,dc224bfa69d8a99d,mutares-global,ready,,Open
+jobs_company_staging.csv,ef58dbb6169e4335,mutares-global,ready,,Open
+jobs_company_staging.csv,09421c20cf174023,mutares-global,ready,,Open
+jobs_company_staging.csv,0703bb88a6f3f038,mutares-global,ready,,Open
+jobs_company_staging.csv,8221c99a4dbfb295,mutares-global,ready,,Open
+jobs_company_staging.csv,fb61213359b127e8,mutares-global,ready,,Open
+jobs_company_staging.csv,996882277a68f40d,mutares-global,ready,,Open
+jobs_company_staging.csv,47683c81f87dea4c,mutares-global,ready,,Open
+jobs_company_staging.csv,1c032d797c381bc5,mutares-global,ready,,Open
+jobs_company_staging.csv,f410211b55fd5509,mutares-global,ready,,Open
+jobs_company_staging.csv,5e2e4b0a86c02797,mutares-global,ready,,Open
+jobs_company_staging.csv,c8a9d818f35537f8,mutares-global,ready,,Open
+jobs_company_staging.csv,1511897040f53d4e,mutares-global,ready,,Open
+jobs_company_staging.csv,c596b43f71b3f93a,mutares-global,ready,,Open
+jobs_company_staging.csv,82954437c7fba9ca,mutares-global,ready,,Open
+jobs_company_staging.csv,60529bbfa7fd7267,mutares-global,ready,,Open
+jobs_company_staging.csv,905bdcf599a6c7e7,mutares-global,ready,,Open
+jobs_company_staging.csv,999898f7eda4602f,mutares-global,ready,,Open
+jobs_company_staging.csv,b1756c1d01357887,mutares-global,ready,,Open
+jobs_company_staging.csv,522be61efae97aec,mutares-global,ready,,Open
+jobs_company_staging.csv,85334d86dd592484,mutares-global,ready,,Open
+jobs_company_staging.csv,de11df6a5c7f4991,mutares-global,ready,,Open
+jobs_company_staging.csv,5a519f8e0f117586,mutares-global,ready,,Open
+jobs_company_staging.csv,60d746902649d71f,volvo-group-global,ready,,Open
+jobs_company_staging.csv,361e5f2543d40551,volvo-group-global,ready,,Open
+jobs_company_staging.csv,2ab6bd72f7d40b22,volvo-group-global,ready,,Open
+jobs_company_staging.csv,9f7e1d3610e24918,volvo-group-global,ready,,Open
+jobs_company_staging.csv,ca73af47635cbe58,volvo-group-global,ready,,Open
+jobs_company_staging.csv,44580e9c5503aa2e,volvo-group-global,ready,,Open
+jobs_company_staging.csv,4ea424c974bba6c1,volvo-group-global,ready,,Open
+jobs_company_staging.csv,80e4bc9e55c1f401,volvo-group-global,ready,,Open
+jobs_company_staging.csv,a5ed67da54dd01cb,volvo-group-global,ready,,Open
+jobs_company_staging.csv,723c3af4ea7a3d97,volvo-group-global,ready,,Open
+jobs_company_staging.csv,2277e63e4e86d3b2,volvo-group-global,ready,,Open
+jobs_company_staging.csv,0ef5cb51bec73f35,volvo-group-global,ready,,Open
+jobs_company_staging.csv,454222e42a845578,volvo-group-global,ready,,Open
+jobs_company_staging.csv,cb6b734e1fec7316,volvo-group-global,ready,,Open
+jobs_company_staging.csv,79fb12b7dc142bd1,volvo-group-global,ready,,Open
+jobs_company_staging.csv,4492cc63c3db8584,volvo-group-global,ready,,Open
+jobs_company_staging.csv,72f2a424c43d6b77,volvo-group-global,ready,,Open
+jobs_company_staging.csv,0e3f8f20771c7927,volvo-group-global,ready,,Open
+jobs_company_staging.csv,daba0bd74ef5cafe,volvo-group-global,ready,,Open
+jobs_company_staging.csv,a9906b059b466249,volvo-group-global,ready,,Open
+jobs_company_staging.csv,5c1fa8aee39d1fd7,volvo-group-global,ready,,Open
+jobs_company_staging.csv,877677c3a067ae6d,wipro-global,ready,,Open
+jobs_company_staging.csv,add5799420db1b83,wipro-global,ready,,Open
+jobs_company_staging.csv,9119b7eeb4811616,wipro-global,ready,,Open
+jobs_company_staging.csv,6dd42cafaae86bec,wipro-global,ready,,Open
+jobs_company_staging.csv,cca792f18aead516,wipro-global,ready,,Open
+jobs_company_staging.csv,3fdb3affcdcec3b4,wipro-global,ready,,Open
+jobs_company_staging.csv,dca2b557540214c2,wipro-global,ready,,Open
+jobs_company_staging.csv,b498a418e05fcd59,wipro-global,ready,,Open
+jobs_company_staging.csv,d11912ee0b0a117e,wipro-global,ready,,Open
+jobs_company_staging.csv,0a0e356ba8d2016a,wipro-global,ready,,Open
+jobs_company_staging.csv,c1939de8d06aab20,wipro-global,ready,,Open
+jobs_company_staging.csv,5cad45eb0190bafb,wipro-global,ready,,Open
+jobs_company_staging.csv,6df700765445eb89,wipro-global,ready,,Open
+jobs_company_staging.csv,217bc2ab39220d30,wipro-global,ready,,Open
+jobs_company_staging.csv,c3a884085d410709,wipro-global,ready,,Open
+jobs_company_staging.csv,a55460577a2665c9,wipro-global,ready,,Open
+jobs_company_staging.csv,707a492b234ce1fc,wipro-global,ready,,Open
+jobs_company_staging.csv,d4497079ef532f2b,wipro-global,ready,,Open
+jobs_company_staging.csv,3c0650bbda59f717,wipro-global,ready,,Open
+jobs_company_staging.csv,6b3fbc0567808d32,wipro-global,ready,,Open
+jobs_company_staging.csv,3903c6b135df0338,wipro-global,ready,,Open
+jobs_company_staging.csv,e20cacdca55e1867,wipro-global,ready,,Open
+jobs_company_staging.csv,d257f614a4c92d93,wipro-global,ready,,Open
+jobs_company_staging.csv,d3fae830f3b261d3,wipro-global,ready,,Open
+jobs_company_staging.csv,f03df037d99dc549,wipro-global,ready,,Open
+jobs_company_staging.csv,592db02d1d1e1da8,wipro-global,ready,,Open
+jobs_company_staging.csv,8e293bf573d6ce98,wipro-global,ready,,Open
+jobs_company_staging.csv,cdda5ba0bf8300da,wipro-global,ready,,Open
+jobs_company_staging.csv,bd33d85fd41614e5,wipro-global,ready,,Open
+jobs_company_staging.csv,31175b55719808c7,wipro-global,ready,,Open
+jobs_company_staging.csv,867a336289b0ddf9,wipro-global,ready,,Open
+jobs_company_staging.csv,b79a6b124ffd9aa2,wipro-global,ready,,Open
+jobs_company_staging.csv,c85cdd0bdc703c6b,wipro-global,ready,,Open
+jobs_company_staging.csv,e394922e606c0d14,wipro-global,ready,,Open
+jobs_company_staging.csv,baf65a603fb1eaf3,wipro-global,ready,,Open
+jobs_company_staging.csv,31df6f73471fac02,wipro-global,ready,,Open
+jobs_company_staging.csv,cb851c1389d422fe,wipro-global,ready,,Open
+jobs_company_staging.csv,4087eb920b093207,wipro-global,ready,,Open
+jobs_company_staging.csv,f43688724d2f18bc,wipro-global,ready,,Open
+jobs_company_staging.csv,dd2c0d324091e4cc,wipro-global,ready,,Open
+jobs_company_staging.csv,6e85401d16384823,wipro-global,ready,,Open
+jobs_company_staging.csv,3bfbd1e8dbcf030e,wipro-global,ready,,Open
+jobs_company_staging.csv,b8d3373797a2126f,wipro-global,ready,,Open
+jobs_company_staging.csv,09abef5c36a6d7e9,wipro-global,ready,,Open
+jobs_company_staging.csv,e81d687df9c27d8f,wipro-global,ready,,Open
+jobs_company_staging.csv,a67dedaad2875452,wipro-global,ready,,Open
+jobs_company_staging.csv,9ef306f6d0a0e98d,wipro-global,ready,,Open
+jobs_company_staging.csv,b887ebf69c65364f,wipro-global,ready,,Open
+jobs_company_staging.csv,63f7b0df042c6222,wipro-global,ready,,Open
+jobs_company_staging.csv,d0737d76203e2152,wipro-global,ready,,Open
+jobs_company_staging.csv,f42b7bef4082dbca,wipro-global,ready,,Open
+jobs_company_staging.csv,6ea83ba47cd1f7d5,wipro-global,ready,,Open
+jobs_company_staging.csv,291e7a78a3de202a,wipro-global,ready,,Open
+jobs_company_staging.csv,77fd64273e3c340c,wipro-global,ready,,Open
+jobs_company_staging.csv,ed933f9a17392521,wipro-global,ready,,Open
+jobs_company_staging.csv,ac20295c3b27911e,wipro-global,ready,,Open
+jobs_company_staging.csv,ed06adc1ea380a5d,wipro-global,ready,,Open
+jobs_company_staging.csv,6f9456a634fdb4e7,wipro-global,ready,,Open
+jobs_company_staging.csv,3fcd0a017e881726,wipro-global,ready,,Open
+jobs_company_staging.csv,bb81d6d161677b44,wipro-global,ready,,Open
+jobs_company_staging.csv,e8a191d5b4c3a36f,wipro-global,ready,,Open
+jobs_company_staging.csv,2c335dba52175a28,wipro-global,ready,,Open
+jobs_company_staging.csv,6cc3edc2ae395c84,wipro-global,ready,,Open
+jobs_company_staging.csv,48ff335f44de620e,wipro-global,ready,,Open
+jobs_company_staging.csv,e8715c8eea547fed,wipro-global,ready,,Open
+jobs_company_staging.csv,f95c052e4073a2df,wipro-global,ready,,Open
+jobs_company_staging.csv,93347223004a275e,wipro-global,ready,,Open
+jobs_company_staging.csv,808f8d4a23e71272,wipro-global,ready,,Open
+jobs_company_staging.csv,ceac1aa12721e26a,wipro-global,ready,,Open
+jobs_company_staging.csv,09d81769e2f6daa8,wipro-global,ready,,Open
+jobs_company_staging.csv,d8dcdc47a36cee7d,wipro-global,ready,,Open
+jobs_company_staging.csv,217396fd940bd284,wipro-global,ready,,Open
+jobs_company_staging.csv,23d947ea795fa5ed,wipro-global,ready,,Open
+jobs_company_staging.csv,4bbea3b8fb10d43a,wipro-global,ready,,Open
+jobs_company_staging.csv,f3aae7de36b4216a,wipro-global,ready,,Open
+jobs_company_staging.csv,b0175745f133325c,wipro-global,ready,,Open
+jobs_company_staging.csv,ad5fb682d1c65dd9,wipro-global,ready,,Open
+jobs_company_staging.csv,df6582cd2035caef,wipro-global,ready,,Open
+jobs_company_staging.csv,3a1d70510e2893cd,wipro-global,ready,,Open
+jobs_company_staging.csv,fa544b05eea2a9a5,wipro-global,ready,,Open
+jobs_company_staging.csv,f5b17617e14b5266,wipro-global,ready,,Open
+jobs_company_staging.csv,3edc5d4f3baaac20,wipro-global,ready,,Open
+jobs_company_staging.csv,ab321416bb615679,wipro-global,ready,,Open
+jobs_company_staging.csv,d7294cd414b902fa,wipro-global,ready,,Open
+jobs_company_staging.csv,81c97a375437d482,wipro-global,ready,,Open
+jobs_company_staging.csv,fcb587baaaf1f509,wipro-global,ready,,Open
+jobs_company_staging.csv,34aceac1b75ebc56,wipro-global,ready,,Open
+jobs_company_staging.csv,f3b2198c5d4b49cf,wipro-global,ready,,Open
+jobs_company_staging.csv,c71e79e393c11d6b,wipro-global,ready,,Open
+jobs_company_staging.csv,1ce3e8cb1b79c339,wipro-global,ready,,Open
+jobs_company_staging.csv,8a3f93b73e6432ea,wipro-global,ready,,Open
+jobs_company_staging.csv,4df3be939adf1487,wipro-global,ready,,Open
+jobs_company_staging.csv,9aa59353dfa10028,wipro-global,ready,,Open
+jobs_company_staging.csv,6b1ec18f72cc9592,wipro-global,ready,,Open
+jobs_company_staging.csv,a65d493fbbd59739,wipro-global,ready,,Open
+jobs_company_staging.csv,147dbd8c3973370b,wipro-global,ready,,Open
+jobs_company_staging.csv,a1c217b5ca45765f,wipro-global,ready,,Open
+jobs_company_staging.csv,cb3002bf0a8d3654,wipro-global,ready,,Open
+jobs_company_staging.csv,1ca4c071dd6dda24,wipro-global,ready,,Open
+jobs_company_staging.csv,d7d4d777e6c078bd,wipro-global,ready,,Open
+jobs_company_staging.csv,df5250d6e18a8b65,wipro-global,ready,,Open
+jobs_company_staging.csv,f941c45bce38442f,wipro-global,ready,,Open
+jobs_company_staging.csv,8f4c7d5b1d15c928,wipro-global,ready,,Open
+jobs_company_staging.csv,e79266c0624f76b5,wipro-global,ready,,Open
+jobs_company_staging.csv,ca91d9f97e1a97cd,zurich-insurance-global,ready,,Open
+jobs_company_staging.csv,639ec1c97c1bb5eb,zurich-insurance-global,ready,,Open
+jobs_company_staging.csv,8605746103996779,zurich-insurance-global,ready,,Open
+jobs_company_staging.csv,6fa3767896c099d0,zurich-insurance-global,ready,,Open
+jobs_company_staging.csv,557207775f07248a,legal-general-global,ready,,Open
+jobs_company_staging.csv,99512e9bdb1d066c,legal-general-global,ready,,Open
+jobs_company_staging.csv,cba09aaed8a4e59b,legal-general-global,ready,,Open
+jobs_company_staging.csv,6360e742a988fc19,t-rowe-price-global,ready,,Open
+jobs_company_staging.csv,8f23c2b4e4e0eaa1,jupiter-fund-management-global,ready,,Open
+jobs_company_staging.csv,8ce1fa815ca4dc87,jupiter-fund-management-global,ready,,Open
+jobs_company_staging.csv,b83a720341b30c7d,jupiter-fund-management-global,ready,,Open
+jobs_company_staging.csv,1cdcb0d384f9e803,jupiter-fund-management-global,ready,,Open
+jobs_company_staging.csv,55ead527861c7f05,jupiter-fund-management-global,ready,,Open
+jobs_company_staging.csv,9d7ed98182a0bd0e,roche-global,ready,,Open
+jobs_company_staging.csv,8e8e3a94340d7967,roche-global,ready,,Open
+jobs_company_staging.csv,1c81242b1ddf10b4,barclays-global,ready,,Open
+jobs_company_staging.csv,459f49c165c08252,barclays-global,ready,,Open
+jobs_company_staging.csv,b157013db6ee476e,citigroup-global,ready,,Open
+jobs_company_staging.csv,3956c4412aa22176,citigroup-global,ready,,Open
+jobs_company_staging.csv,38d643a3e3046abe,citigroup-global,ready,,Open
+jobs_company_staging.csv,a62f0f77147d22e4,ardian-global,ready,,Open
+jobs_company_staging.csv,d9660deb078a93d6,neste-global,ready,,Open
+jobs_company_staging.csv,e324dfa9b799a57c,kone-global,ready,,Open
+jobs_company_staging.csv,40484c04a6e67899,omv-global,ready,,Open
+jobs_company_staging.csv,4d490ede0271e050,omv-global,ready,,Open
+jobs_company_staging.csv,392474ef311398e3,omv-global,ready,,Open
+jobs_company_staging.csv,51ab06ad0c8e3972,omv-global,ready,,Open
+jobs_company_staging.csv,363800940683433f,omv-global,ready,,Open
+jobs_company_staging.csv,c555b81b71c38b9f,omv-global,ready,,Open
+jobs_company_staging.csv,244e0481e36d59f2,omv-global,ready,,Open
+jobs_company_staging.csv,d79d0c8b1eca7389,omv-global,review,thin_description,Open
+jobs_company_staging.csv,d37cc790bc347045,omv-global,ready,,Open
+jobs_company_staging.csv,68b1fa4f5dc76ec7,omv-global,ready,,Open
+jobs_company_staging.csv,5fd6295b48b6b014,omv-global,ready,,Open
+jobs_company_staging.csv,1c3c38a9273f6bfb,omv-global,ready,,Open
+jobs_company_staging.csv,eb52ef3ae75e76c4,omv-global,ready,,Open
+jobs_company_staging.csv,38d78ae58bdd9635,omv-global,ready,,Open
+jobs_company_staging.csv,0d29df806abb9ea7,swedbank-global,ready,,Open
+jobs_company_staging.csv,4b1f6dc8f0edc2c9,swedbank-global,ready,,Open
+jobs_company_staging.csv,be05cbdbf0ed76b5,swedbank-global,ready,,Open
+jobs_company_staging.csv,2b7b0d60fc958665,swedbank-global,ready,,Open
+jobs_company_staging.csv,00bbb516bcee5642,swedbank-global,ready,,Open
+jobs_company_staging.csv,d665fe90c3bf6f61,swedbank-global,ready,,Open
+jobs_company_staging.csv,931fb376dd72db9e,swedbank-global,ready,,Open
+jobs_company_staging.csv,b04d89fd8683b7c6,swedbank-global,ready,,Open
+jobs_company_staging.csv,f029a617ed8979bc,swedbank-global,ready,,Open
+jobs_company_staging.csv,02cb74de22dafce0,swedbank-global,ready,,Open
+jobs_company_staging.csv,12f2e07183965b90,swedbank-global,ready,,Open
+jobs_company_staging.csv,6ee90ee11afd9711,swedbank-global,ready,,Open
+jobs_company_staging.csv,027d0dc8d41649b0,swedbank-global,ready,,Open
+jobs_company_staging.csv,69fc7621b0447b07,swedbank-global,ready,,Open
+jobs_company_staging.csv,fb475055f0cc2ed7,swedbank-global,ready,,Open
+jobs_company_staging.csv,d72e17521449e98d,swedbank-global,ready,,Open
+jobs_company_staging.csv,5940c7182153cd76,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,fcbcba5a3f05047c,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,3d65875bffacdbc7,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,31773b74074e2f6c,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,ec828b95879cad9e,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,5b5258ab3392750c,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,350e19edeca6a47e,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,95bfb28672f2c3e1,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,afb0446196849d56,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,be4cd8494d9dce71,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,1949f31522b2d3eb,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,6d869bbfe06eb4c0,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,eb8efdd86b6bd880,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,430eddfc84581cab,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,6603f34c9d01b8d9,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,1e1a875a76afa184,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,8aad4bac443c46f1,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,8cd7e9a762d16916,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,0bb650ea18286d6b,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,ebfd7eed2a243d4f,lloyds-banking-group-global,ready,,Open
+jobs_company_staging.csv,43b88bf4bb1e1826,bank-of-america-global,ready,,Open
+jobs_company_staging.csv,413ce19c6f481223,bank-of-america-global,ready,,Open
+jobs_company_staging.csv,7c8c42786c3a4fbe,bank-of-america-global,ready,,Open
+jobs_company_staging.csv,774efeef7e884e5f,bank-of-america-global,ready,,Open
+jobs_company_staging.csv,ca01acce09d8417e,bank-of-america-global,ready,,Open
+jobs_company_staging.csv,09768978bbd42783,bank-of-america-global,ready,,Open
+jobs_company_staging.csv,d6dedca5016024a7,bank-of-america-global,ready,,Open
+jobs_company_staging.csv,c0dcf92087e530a2,bank-of-america-global,ready,,Open
+jobs_company_staging.csv,3c1d0323e343048a,bank-of-america-global,ready,,Open
+jobs_company_staging.csv,6edd0fecc8f58bd9,bank-of-america-global,ready,,Open
+jobs_company_staging.csv,14ed853f26f4a643,neuberger-berman-global,ready,,Open
 jobs_corporate_staging.csv,5fdbf19c00e1070c,bosch-global,ready,,Open
 jobs_corporate_staging.csv,5450b6175a400100,bosch-global,ready,,Open
 jobs_corporate_staging.csv,c57445208679d172,statkraft-global,ready,,Open
@@ -1909,13 +2553,13 @@ jobs_corporate_staging.csv,9119b7eeb4811616,wipro-global,ready,,Open
 jobs_corporate_staging.csv,cca792f18aead516,wipro-global,ready,,Open
 jobs_corporate_staging.csv,433fe5f286483d8e,bosch-global,ready,,Open
 jobs_corporate_staging.csv,5f7c64e87e116b94,wipro-global,ready,,Open
-jobs_corporate_staging.csv,460d6eadaa0c327b,wipro-global,ready,,Open
+jobs_corporate_staging.csv,460d6eadaa0c327b,wipro-global,review,duplicate_vacancy_url,Open
 jobs_corporate_staging.csv,f03df037d99dc549,wipro-global,ready,,Open
 jobs_corporate_staging.csv,8e293bf573d6ce98,wipro-global,ready,,Open
-jobs_corporate_staging.csv,bb81d6d161677b44,wipro-global,ready,,Open
+jobs_corporate_staging.csv,bb81d6d161677b44,wipro-global,review,duplicate_vacancy_url,Open
 jobs_corporate_staging.csv,4d747c77c67a2631,wipro-global,ready,,Open
 jobs_corporate_staging.csv,3edc5d4f3baaac20,wipro-global,ready,,Open
-jobs_corporate_staging.csv,325261b027fe1b11,wipro-global,ready,,Open
+jobs_corporate_staging.csv,325261b027fe1b11,wipro-global,review,duplicate_vacancy_url,Open
 jobs_corporate_staging.csv,3fcd0a017e881726,wipro-global,ready,,Open
 jobs_corporate_staging.csv,ae3589b7efe9dbe1,wipro-global,ready,,Open
 jobs_corporate_staging.csv,6ea83ba47cd1f7d5,wipro-global,ready,,Open
@@ -1931,13 +2575,13 @@ jobs_corporate_staging.csv,a1c217b5ca45765f,wipro-global,ready,,Open
 jobs_corporate_staging.csv,e79266c0624f76b5,wipro-global,ready,,Open
 jobs_corporate_staging.csv,f943b82aacd5a534,holcim-global,ready,,Open
 jobs_corporate_staging.csv,7ba3d67f1143d484,maersk-global,ready,,Open
-jobs_corporate_staging.csv,0677cdb450153489,rwe-global,ready,,Open
+jobs_corporate_staging.csv,0677cdb450153489,rwe-global,review,duplicate_vacancy_url,Open
 jobs_corporate_staging.csv,32de4f864e93dc68,shell-global,ready,,Open
 jobs_corporate_staging.csv,63f1aeb7cf73de83,astrazeneca-global,ready,,Open
 jobs_corporate_staging.csv,0a7a7adb76df28ca,gsk-global,ready,,Open
 jobs_corporate_staging.csv,e3467df441d05819,volvo-group-global,ready,,Open
 jobs_corporate_staging.csv,2ab6bd72f7d40b22,volvo-group-global,ready,,Open
-jobs_corporate_staging.csv,62424e0cf1e50757,wipro-global,ready,,Open
+jobs_corporate_staging.csv,62424e0cf1e50757,wipro-global,review,duplicate_vacancy_url,Open
 jobs_corporate_staging.csv,6dd42cafaae86bec,wipro-global,ready,,Open
 jobs_corporate_staging.csv,3fdb3affcdcec3b4,wipro-global,ready,,Open
 jobs_corporate_staging.csv,0a0e356ba8d2016a,wipro-global,ready,,Open

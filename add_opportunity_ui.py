@@ -205,33 +205,35 @@ def _company_context(company: str, domain: str) -> tuple[str, str, str]:
     return _slug(inferred), inferred, "Unclassified"
 
 
-def _fallback_metadata(url: str) -> dict[str, str]:
-    """Recover basic metadata when an ATS blocks HTML parsing."""
-    host = (urlparse(url).hostname or "").lower()
-    path_text = urlparse(url).path.replace("-", " ").replace("_", " ")
-    haystack = f"{host} {path_text}".lower()
+def _fallback_metadata(urls: str) -> dict[str, str]:
+    """Recover basic metadata when LinkedIn/ATS HTML parsing is blocked."""
     company = ""
-    for domain, name in {
-        "partnersgroup.com": "Partners Group",
-        "terrepower.com": "TERREPOWER Europe",
-        "nobia.com": "Nobia Group",
-    }.items():
-        if domain in host:
-            company = name
-            break
     location = ""
     country = ""
-    for city, country_name in {
-        "baar": "Switzerland", "zug": "Switzerland", "zurich": "Switzerland",
-        "zürich": "Switzerland", "basel": "Switzerland", "geneva": "Switzerland",
-        "luxembourg": "Luxembourg", "london": "United Kingdom",
-        "frankfurt": "Germany", "munich": "Germany", "münchen": "Germany",
-        "aarhus": "Denmark", "copenhagen": "Denmark", "paris": "France",
-    }.items():
-        if city in haystack:
-            location = city.title()
-            country = country_name
-            break
+    for raw_url in re.findall(r"https?://[^\\s]+", urls):
+        parsed = urlparse(raw_url)
+        host = (parsed.hostname or "").lower()
+        path_text = parsed.path.replace("-", " ").replace("_", " ")
+        haystack = f"{host} {path_text}".lower()
+        for domain, name in {
+            "partnersgroup.com": "Partners Group",
+            "terrepower.com": "TERREPOWER Europe",
+            "nobia.com": "Nobia Group",
+        }.items():
+            if domain in host and not company:
+                company = name
+                break
+        for city, country_name in {
+            "baar": "Switzerland", "zug": "Switzerland", "zurich": "Switzerland",
+            "zürich": "Switzerland", "basel": "Switzerland", "geneva": "Switzerland",
+            "luxembourg": "Luxembourg", "london": "United Kingdom",
+            "frankfurt": "Germany", "munich": "Germany", "münchen": "Germany",
+            "aarhus": "Denmark", "copenhagen": "Denmark", "paris": "France",
+        }.items():
+            if city in haystack and not location:
+                location = city.title()
+                country = country_name
+                break
     return {"company": company, "location": location, "country": country}
 
 
@@ -307,19 +309,37 @@ def render_add_opportunity() -> None:
         if not token:
             st.error("GitHub saving is not configured for this app.")
         else:
+            # Keep LinkedIn as the identity of the individual vacancy. A
+            # generic company homepage must not deduplicate all roles at one
+            # employer or replace the actual LinkedIn job identifier.
+            identifier_url = linkedin_url.strip() or company_url.strip()
             primary_url = company_url.strip() or linkedin_url.strip()
             draft: dict[str, str] = {
                 "title": "", "company": "", "location": "", "description": "",
                 "source_domain": urlparse(primary_url).hostname or "",
             }
-            if company_url.strip():
+            # Try both sources. LinkedIn often blocks requests, while the
+            # company/ATS page often contains the richer description. Values
+            # already obtained from LinkedIn are retained; the company page
+            # fills any missing fields.
+            for candidate_url in [linkedin_url.strip(), company_url.strip()]:
+                if not candidate_url:
+                    continue
                 try:
-                    draft.update(extract_job_page(company_url.strip()))
+                    parsed = extract_job_page(candidate_url)
                 except Exception:
-                    pass
+                    continue
+                for key, value in parsed.items():
+                    if key == "description":
+                        if len(_normalize(value)) > len(_normalize(draft.get(key))):
+                            draft[key] = value
+                    elif _normalize(value) and not _normalize(draft.get(key)):
+                        draft[key] = value
             # ATS pages can block requests or omit JSON-LD. Keep enough
             # location/company metadata to drive the correct salary market.
-            fallback = _fallback_metadata(company_url.strip() or linkedin_url.strip())
+            fallback = _fallback_metadata(" ".join(
+                value for value in [linkedin_url.strip(), company_url.strip()] if value
+            ))
             for key, value in fallback.items():
                 if not _normalize(draft.get(key)) and value:
                     draft[key] = value
@@ -330,7 +350,7 @@ def render_add_opportunity() -> None:
             else:
                 canonical_id, canonical_company, category = "", "", ""
             now = datetime.now(timezone.utc).isoformat()
-            identifier = hashlib.sha256(primary_url.encode("utf-8")).hexdigest()[:16]
+            identifier = hashlib.sha256(identifier_url.encode("utf-8")).hexdigest()[:16]
             opportunities, opp_sha = load_csv_file(token, SUBMISSIONS_PATH, SUBMISSION_COLUMNS)
             row = {col: "" for col in SUBMISSION_COLUMNS}
             row.update({

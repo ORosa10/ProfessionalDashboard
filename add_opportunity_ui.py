@@ -205,6 +205,36 @@ def _company_context(company: str, domain: str) -> tuple[str, str, str]:
     return _slug(inferred), inferred, "Unclassified"
 
 
+def _fallback_metadata(url: str) -> dict[str, str]:
+    """Recover basic metadata when an ATS blocks HTML parsing."""
+    host = (urlparse(url).hostname or "").lower()
+    path_text = urlparse(url).path.replace("-", " ").replace("_", " ")
+    haystack = f"{host} {path_text}".lower()
+    company = ""
+    for domain, name in {
+        "partnersgroup.com": "Partners Group",
+        "terrepower.com": "TERREPOWER Europe",
+        "nobia.com": "Nobia Group",
+    }.items():
+        if domain in host:
+            company = name
+            break
+    location = ""
+    country = ""
+    for city, country_name in {
+        "baar": "Switzerland", "zug": "Switzerland", "zurich": "Switzerland",
+        "zürich": "Switzerland", "basel": "Switzerland", "geneva": "Switzerland",
+        "luxembourg": "Luxembourg", "london": "United Kingdom",
+        "frankfurt": "Germany", "munich": "Germany", "münchen": "Germany",
+        "aarhus": "Denmark", "copenhagen": "Denmark", "paris": "France",
+    }.items():
+        if city in haystack:
+            location = city.title()
+            country = country_name
+            break
+    return {"company": company, "location": location, "country": country}
+
+
 def _apply_research_overrides(saved: pd.DataFrame) -> pd.DataFrame:
     if saved.empty or not RESEARCH_OVERRIDES_PATH.exists():
         return saved
@@ -287,6 +317,12 @@ def render_add_opportunity() -> None:
                     draft.update(extract_job_page(company_url.strip()))
                 except Exception:
                     pass
+            # ATS pages can block requests or omit JSON-LD. Keep enough
+            # location/company metadata to drive the correct salary market.
+            fallback = _fallback_metadata(company_url.strip() or linkedin_url.strip())
+            for key, value in fallback.items():
+                if not _normalize(draft.get(key)) and value:
+                    draft[key] = value
             if draft.get("company", "").strip():
                 canonical_id, canonical_company, category = _company_context(
                     draft["company"].strip(), draft.get("source_domain", "")
@@ -308,6 +344,7 @@ def render_add_opportunity() -> None:
                 "canonical_company_id": canonical_id,
                 "company_category": category if category != "Unclassified" else "",
                 "location": draft.get("location", ""),
+                "country": fallback.get("country", ""),
                 "role_summary_en": draft.get("description", ""),
                 "user_comment": comment.strip(),
                 "feedback": "Applied",

@@ -210,7 +210,7 @@ def _fallback_metadata(urls: str) -> dict[str, str]:
     company = ""
     location = ""
     country = ""
-    for raw_url in re.findall(r"https?://[^\\s]+", urls):
+    for raw_url in re.findall(r"https?://[^\s]+", urls):
         parsed = urlparse(raw_url)
         host = (parsed.hostname or "").lower()
         path_text = parsed.path.replace("-", " ").replace("_", " ")

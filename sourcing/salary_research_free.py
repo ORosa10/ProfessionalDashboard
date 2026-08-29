@@ -54,11 +54,39 @@ def _text(value: object) -> str:
     return re.sub(r"\s+", " ", str(value or "")).strip()
 
 
-def _expected_currency(country: str, location: str) -> str:
-    haystack = f"{country} {location}".lower()
+LOCATION_COUNTRY_HINTS = {
+    "baar": "Switzerland", "zug": "Switzerland", "zurich": "Switzerland",
+    "zürich": "Switzerland", "basel": "Switzerland", "geneva": "Switzerland",
+    "genève": "Switzerland", "lausanne": "Switzerland", "bern": "Switzerland",
+    "lucerne": "Switzerland", "rorschach": "Switzerland", "winterthur": "Switzerland",
+    "luxembourg": "Luxembourg", "london": "United Kingdom", "frankfurt": "Germany",
+    "munich": "Germany", "münchen": "Germany", "vienna": "Austria",
+    "aarhus": "Denmark", "copenhagen": "Denmark", "paris": "France",
+}
+
+
+def _inferred_country(row: pd.Series) -> str:
+    explicit = _text(row.get("country"))
+    if explicit:
+        return explicit
+    haystack = " ".join(
+        _text(row.get(key))
+        for key in ["location", "company_url", "job_url", "source_domain", "title", "company"]
+    ).lower()
+    for hint, country in LOCATION_COUNTRY_HINTS.items():
+        if hint in haystack:
+            return country
+    return ""
+
+
+def _expected_currency(country: str, location: str, urls: str = "") -> str:
+    haystack = f"{country} {location} {urls}".lower()
     for key, currency in COUNTRY_CURRENCY.items():
         if key in haystack:
             return currency
+    for hint, inferred_country in LOCATION_COUNTRY_HINTS.items():
+        if hint in haystack:
+            return COUNTRY_CURRENCY.get(inferred_country.lower(), "")
     return ""
 
 
@@ -121,7 +149,7 @@ def _queries(row: pd.Series) -> list[str]:
     title = _text(row.get("title"))
     company = _text(row.get("company"))
     location = _text(row.get("location"))
-    country = _text(row.get("country"))
+    country = _inferred_country(row)
     query_location = location or country
     base = " ".join(x for x in [f'"{title}"' if title else "", f'"{company}"' if company else "", query_location] if x)
     generic = " ".join(x for x in [f'"{title}"' if title else "", query_location] if x)
@@ -203,7 +231,9 @@ def _domain(url: str) -> str:
 
 
 def research_salary(row: pd.Series) -> tuple[str, str, str]:
-    expected = _expected_currency(_text(row.get("country")), _text(row.get("location")))
+    inferred_country = _inferred_country(row)
+    url_hints = " ".join(_text(row.get(key)) for key in ["company_url", "job_url", "source_domain"])
+    expected = _expected_currency(inferred_country, _text(row.get("location")), url_hints)
     results = _search(row)
     evidence: list[tuple[str, float, dict[str, str]]] = []
     for item in results:

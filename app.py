@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from action_queue_ui import render_action_queue
+from big4_queue_ui import render_big4_queue
 from add_opportunity_ui import render_add_opportunity
 from board_registry_ui import render_board_registry
 from company_targeting_ui import render_company_targeting_feedback
@@ -152,6 +153,10 @@ def opportunities_page() -> None:
 
 def action_queue_page() -> None:
     render_action_queue()
+
+
+def big4_queue_page() -> None:
+    render_big4_queue()
 
 
 def jobs_page() -> None:
@@ -386,6 +391,7 @@ navigation = st.navigation(
         "Opportunities": [
             st.Page(opportunities_page, title="Overview"),
             st.Page(action_queue_page, title="J · Apply Shortlist"),
+            st.Page(big4_queue_page, title="J · Big Four"),
             st.Page(add_opportunity_page, title="B · Add Opportunity"),
             st.Page(jobs_page, title="C · Jobs / Calibration"),
             st.Page(remote_page, title="D · Remote"),
@@ -412,3 +418,4 @@ with st.sidebar:
     st.caption("v0 live sourcing pilot · Build for iteration")
 
 navigation.run()
+

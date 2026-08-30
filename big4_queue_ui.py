@@ -39,7 +39,7 @@ def render_big4_queue() -> None:
         return bool(tokens) and not (title.lower().strip().startswith("assistant manager") and tokens == ["manager"])
     all_jobs = all_jobs[~all_jobs["title"].map(manager_plus)].copy()
     include_role = r"due diligence|transaction services|transaction diligence|m&a|corporate finance|valuation|modelling|modeling|capital markets|treasury|financial risk|finance consulting|cfo specialist|banking"
-    exclude_role = r"intern|praktik|junior konzultant|tax|steuer|reward|account|audit|data management|data governance|\bit\b|non-financial risk|data acquisition|strategy & execution|finance optimization|people consulting|d365"
+    exclude_role = r"intern|praktik|junior konzultant|tax|steuer|transfer pricing|transfer-pricing|reward|account|audit|data management|data governance|\bit\b|non-financial risk|data acquisition|strategy & execution|finance optimization|people consulting|d365"
     role_title = all_jobs["title"].astype(str)
     all_jobs = all_jobs[role_title.str.contains(include_role, case=False, regex=True, na=False) & ~role_title.str.contains(exclude_role, case=False, regex=True, na=False)].copy()
     token = github_token()

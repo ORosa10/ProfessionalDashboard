@@ -49,6 +49,7 @@ Vstup: LinkedIn/job link + firemní stránka → `data/user_submitted_opportunit
 - **Otevřené (na systému):** automatická Fáze 2 musí spolehlivě zpracovat nové reálné ratingy; nové outcome signály `Lost` se nemají míchat do preference fitu, ale přejdou do H.
 - [2026-08-24] B: enriched 5 (StepStone Group, Albedis/Basel, ING Frankfurt, ETL International, W&W Informatik), onboarded 0 companies to sourcing (no newly rated submissions).
 - [2026-08-26] B: enriched 1 (BCG Consultant - Market & Commodity Trading and Risk / Energy Trading), onboarded 1 company to sourcing (Boston Consulting Group, Interested; already in universe + job_sources_consulting).
+- [2026-08-30] B: enriched 5 (Lyceum Technology Berlin, Flex/Flextronics Vienna, Berner Kantonalbank Bern, BTC AG Oldenburg, Norsk Hydro Oslo), onboarded 0 companies to sourcing (no newly rated Interested/Maybe/Pass submissions; 1 unidentifiable login-gated LinkedIn row left as Needs enrichment).
 
 ## C — Kalibrace + shortlisty (jádro)
 - **`data/calibration_rules.json`** = učené skórovací pravidlo (positive/caution termy + váhy). `calibrate_jobs` ho čte. Jen mění pořadí, NIKDY tvrdé vyloučení; drží exploration.

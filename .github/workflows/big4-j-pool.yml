@@ -1,0 +1,42 @@
+name: Refresh J Big Four pool
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "12 5 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "data/jobs.csv"
+      - "data/jobs_staging.csv"
+      - "sourcing/build_big4_j_pool.py"
+      - ".github/workflows/big4-j-pool.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: big4-j-pool
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+      - name: Build separate Big Four J pool
+        run: python -m sourcing.build_big4_j_pool --input data/jobs.csv --input data/jobs_staging.csv --output data/j_big4_pool.csv
+      - name: Commit pool
+        run: |
+          if git diff --quiet -- data/j_big4_pool.csv; then echo "No Big Four pool changes"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/j_big4_pool.csv
+          git commit -m "Refresh separate Big Four J pool"
+          git pull --rebase origin main
+          git push origin HEAD:main

@@ -55,7 +55,7 @@ def render_big4_queue() -> None:
     jobs = company_jobs[~company_jobs.prior_action.isin(["Apply", "Skip", "Pass"])].copy()
     st.metric("Open relevant roles", len(jobs))
     resolved_count = len(company_jobs) - len(jobs)
-    st.caption(f"{len(company_jobs)} relevantních rolí EY celkem · {resolved_count} již rozhodnuto a skryto · {len(jobs)} čeká na Apply / Skip.")
+    st.caption(f"{len(company_jobs)} relevantních rolí {selected_company} celkem · {resolved_count} již rozhodnuto a skryto · {len(jobs)} čeká na Apply / Skip.")
     bands = ["All seniority bands", "Realistic target / adjacent", "Junior / early-career", "Too senior / upper-level", "Seniority unclear"]
     selected_band = st.selectbox("Seniority filter", bands, index=0)
     if selected_band != bands[0]:

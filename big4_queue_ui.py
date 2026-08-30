@@ -10,7 +10,7 @@ from github_storage import github_token, load_csv_file, save_csv_file
 
 
 DATA = Path(__file__).parent / "data"
-POOL = DATA / "j_big4_pool.csv"
+POOL = DATA / "j_big4_pilot20.csv"
 HISTORY_PATH = "data/opportunity_history.csv"
 HISTORY_COLUMNS = [
     "opportunity_id", "source_stream", "source_id", "first_seen_at", "decision_at",
@@ -25,7 +25,7 @@ HISTORY_COLUMNS = [
 def render_big4_queue() -> None:
     st.markdown('<div class="eyebrow">Separate application lane</div>', unsafe_allow_html=True)
     st.title("J · Big Four")
-    st.caption("Deloitte · EY · KPMG · PwC — separate from the regular J shortlist. Language constraints are intentionally not applied here yet.")
+    st.caption("Pilot: 20 live-link roles from Deloitte · EY · KPMG · PwC — separate from the regular J shortlist. Language constraints are intentionally not applied here yet.")
     if not POOL.exists() or not POOL.stat().st_size:
         st.info("The Big Four career-site sweep has not produced a pool yet.")
         return
@@ -80,4 +80,3 @@ def render_big4_queue() -> None:
         updated = pd.concat([history, pd.DataFrame(records)], ignore_index=True).reindex(columns=HISTORY_COLUMNS, fill_value="")
         save_csv_file(token, HISTORY_PATH, updated, sha, "Auto-save Big Four shortlist decision")
         st.rerun()
-

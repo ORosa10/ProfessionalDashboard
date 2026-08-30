@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from pathlib import Path
+import re
 
 import pandas as pd
 import streamlit as st
@@ -10,7 +11,8 @@ from github_storage import github_token, load_csv_file, save_csv_file
 
 
 DATA = Path(__file__).parent / "data"
-POOL = DATA / "j_big4_pilot20.csv"
+POOL = DATA / "j_big4_pool.csv"
+PILOT_POOL = DATA / "j_big4_pilot20.csv"
 CV_DIR = DATA / "big4_cv_pilot20"
 CV_MAP = CV_DIR / "README.csv"
 HISTORY_PATH = "data/opportunity_history.csv"
@@ -31,7 +33,11 @@ def render_big4_queue() -> None:
     if not POOL.exists() or not POOL.stat().st_size:
         st.info("The Big Four career-site sweep has not produced a pool yet.")
         return
-    all_jobs = pd.read_csv(POOL).fillna("").drop_duplicates("job_id", keep="last")
+    all_jobs = pd.read_csv(POOL if POOL.exists() else PILOT_POOL).fillna("").drop_duplicates("job_id", keep="last")
+    def manager_plus(title: str) -> bool:
+        tokens = re.findall(r"\b(manager|director|partner|head)\b", title.lower())
+        return bool(tokens) and not (title.lower().strip().startswith("assistant manager") and tokens == ["manager"])
+    all_jobs = all_jobs[~all_jobs["title"].map(manager_plus)].copy()
     token = github_token()
     history, sha = load_csv_file(token, HISTORY_PATH, HISTORY_COLUMNS) if token else (pd.DataFrame(columns=HISTORY_COLUMNS), None)
     latest = history.drop_duplicates("opportunity_id", keep="last").set_index("opportunity_id") if not history.empty else pd.DataFrame()
@@ -39,7 +45,10 @@ def render_big4_queue() -> None:
         all_jobs["prior_action"] = all_jobs.job_id.map(latest.get("action", pd.Series(dtype=str))).fillna("")
     else:
         all_jobs["prior_action"] = ""
-    jobs = all_jobs[~all_jobs.prior_action.isin(["Apply", "Skip", "Pass"])].copy()
+    companies = ["EY", "Deloitte", "KPMG", "PwC"]
+    selected_company = st.selectbox("Big Four firma", companies, index=0, key="big4_company_filter")
+    company_jobs = all_jobs[all_jobs["company"].eq(selected_company)].copy()
+    jobs = company_jobs[~company_jobs.prior_action.isin(["Apply", "Skip", "Pass"])].copy()
     st.metric("Relevant Big Four roles", len(jobs))
     bands = ["All seniority bands", "Realistic target / adjacent", "Junior / early-career", "Too senior / upper-level", "Seniority unclear"]
     selected_band = st.selectbox("Seniority filter", bands, index=0)
@@ -63,7 +72,7 @@ def render_big4_queue() -> None:
 
     st.subheader("K · CV pro Apply")
     st.caption("Každé CV vychází z Masteru a je upravené podle typu konkrétní Big Four role. Vyber roli a stáhni odpovídající PDF přímo z aplikace.")
-    applied_jobs = all_jobs[all_jobs["prior_action"].eq("Apply")].copy()
+    applied_jobs = company_jobs[company_jobs["prior_action"].eq("Apply")].copy()
     cv_options = applied_jobs[["job_id", "company", "title", "job_url"]].copy()
     cv_options["label"] = cv_options["company"] + " · " + cv_options["title"]
     if CV_MAP.exists():

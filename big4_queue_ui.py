@@ -11,6 +11,8 @@ from github_storage import github_token, load_csv_file, save_csv_file
 
 DATA = Path(__file__).parent / "data"
 POOL = DATA / "j_big4_pilot20.csv"
+CV_DIR = DATA / "big4_cv_pilot20"
+CV_MAP = CV_DIR / "README.csv"
 HISTORY_PATH = "data/opportunity_history.csv"
 HISTORY_COLUMNS = [
     "opportunity_id", "source_stream", "source_id", "first_seen_at", "decision_at",
@@ -58,6 +60,30 @@ def render_big4_queue() -> None:
                        "company_feedback": st.column_config.SelectboxColumn("Company", options=["Not rated", "Positive", "Neutral", "Negative"]),
                        "role_feedback": st.column_config.SelectboxColumn("Role", options=["Not rated", "Positive", "Neutral", "Negative"])},
         key="big4_queue_editor")
+
+    st.subheader("K · CV pro Apply")
+    st.caption("Každé CV vychází z Masteru a je upravené podle typu konkrétní Big Four role. Vyber roli a stáhni odpovídající PDF přímo z aplikace.")
+    cv_options = jobs[["job_id", "company", "title"]].copy()
+    cv_options["label"] = cv_options["company"] + " · " + cv_options["title"]
+    if CV_MAP.exists():
+        cv_map = pd.read_csv(CV_MAP).fillna("")
+        cv_options = cv_options.merge(cv_map[["number", "job_url", "cv_file"]], on="job_url", how="left") if "job_url" in cv_map.columns else cv_options
+    else:
+        cv_options["cv_file"] = ""
+    selected_cv = st.selectbox("Role pro CV", cv_options["label"].tolist(), key="big4_cv_role") if not cv_options.empty else ""
+    if selected_cv:
+        selected = cv_options.loc[cv_options["label"].eq(selected_cv)].iloc[0]
+        cv_path = CV_DIR / str(selected.get("cv_file", ""))
+        if cv_path.exists():
+            st.download_button(
+                "Stáhnout připravené CV",
+                data=cv_path.read_bytes(),
+                file_name=cv_path.name,
+                mime="application/pdf",
+                key=f"download_cv_{selected['job_id']}",
+            )
+        else:
+            st.warning("Pro tuto roli zatím není soubor CV vložený do aplikace.")
     changed = edited[["action", "company_feedback", "role_feedback", "user_comment"]].astype(str).ne(
         display[["action", "company_feedback", "role_feedback", "user_comment"]].astype(str)
     ).any(axis=1)

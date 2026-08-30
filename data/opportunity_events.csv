@@ -1,8 +1,12 @@
 event_id,opportunity_id,event_at,event_type,source_stream,action,application_stage,company_feedback,role_feedback,user_comment,outcome_reason,notes
+285efbcc053c115e726e,513e60989f2a985e,2026-08-11T19:34:50.772839+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
 2d81ff0cbcf565a14ce1,b5b66258ebb101d2,2026-08-11T19:36:00.373487+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
+91022e7918718bb90468,a916b4567772678d,2026-08-11T19:36:00.373487+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
 d1be181a0cbd4fb25914,527d82b47865b1e8,2026-08-11T19:36:00.373487+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
 95695490404fa93387b2,f13d28ce8b279ad0,2026-08-11T19:37:06.158891+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
+c3fa0e4d58a87e113ecd,af85284120a2db74,2026-08-11T19:37:06.158891+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
 6253e5be8fd3235319a9,996f717c55bd25a9,2026-08-11T19:38:11.846812+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
+0f71872a53e181df7ff2,1b40a7f72ba6c887,2026-08-11T19:43:41.728826+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
 f667aca246550e88d741,8ffae4b4edb25bc1,2026-08-11T21:36:09.992086+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
 d7002f3e45937deba678,db35f6a5476b9197,2026-08-11T21:36:40.594367+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
 308fec1b6a7908edcf77,a0cc82edfaec98af,2026-08-11T21:40:26.160836+00:00,opportunity_created,Big Four,,,,,,,Opportunity entered canonical I
@@ -242,6 +246,14 @@ eeff9dc2252fa8fe07ac,47a91b0fb536ccbd,2026-08-30T18:11:40.810010+00:00,applicati
 2c59a16a60f35d8c830d,5a68696d63dc6b80,2026-08-30T18:11:52.658220+00:00,decision,Big Four,Apply,,Not rated,Not rated,,,Decision/feedback snapshot
 af4c7535f2e29f9c3a60,5a68696d63dc6b80,2026-08-30T18:11:52.658220+00:00,application_stage,Big Four,,Applied,,,,,
 ca84e93ef76386ddbddd,cc5d9739be66b966,2026-08-30T18:12:03.891025+00:00,decision,Big Four,Skip,,Not rated,Not rated,,,Decision/feedback snapshot
+ab268cbe693a6871203a,af85284120a2db74,2026-08-30T18:43:21.435907+00:00,application_stage,Big Four,,Applied,,,,,
+f0bd17ffc731833b97b9,af85284120a2db74,2026-08-30T18:43:21.435907+00:00,decision,Big Four,Apply,,Not rated,Not rated,,,Decision/feedback snapshot
+7fcac17e407b3a4b23fa,513e60989f2a985e,2026-08-30T18:43:28.423460+00:00,decision,Big Four,Apply,,Not rated,Not rated,,,Decision/feedback snapshot
+915a0d744826683589d6,513e60989f2a985e,2026-08-30T18:43:28.423460+00:00,application_stage,Big Four,,Applied,,,,,
+8b03b16edc97943fc30a,a916b4567772678d,2026-08-30T18:43:36.022437+00:00,decision,Big Four,Apply,,Not rated,Not rated,,,Decision/feedback snapshot
+ff0dfc937b8fa42a5f62,a916b4567772678d,2026-08-30T18:43:36.022437+00:00,application_stage,Big Four,,Applied,,,,,
+4b4cfa7870c411956ef4,1b40a7f72ba6c887,2026-08-30T18:43:44.674656+00:00,decision,Big Four,Apply,,Not rated,Not rated,,,Decision/feedback snapshot
+7b8bd9f125ebc792c53b,1b40a7f72ba6c887,2026-08-30T18:43:44.674656+00:00,application_stage,Big Four,,Applied,,,,,
 17e34f7e8d624ee919ad,e999c1cd362bc36d,2026-08-24T08:10:00+00:00,decision,G,Apply,,Not rated,Positive,"Link not working, found applied good fit",,Decision/feedback snapshot
 2d89f473413099bfff2b,74ef827840a7ed39,2026-08-24T08:10:00+00:00,application_stage,G,,Applied,,,,,
 54928a0e2eda6535572c,74ef827840a7ed39,2026-08-24T08:10:00+00:00,decision,G,Apply,,Not rated,Positive,Applied good fit,,Decision/feedback snapshot

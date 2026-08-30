@@ -31,15 +31,15 @@ def render_big4_queue() -> None:
     if not POOL.exists() or not POOL.stat().st_size:
         st.info("The Big Four career-site sweep has not produced a pool yet.")
         return
-    jobs = pd.read_csv(POOL).fillna("").drop_duplicates("job_id", keep="last")
+    all_jobs = pd.read_csv(POOL).fillna("").drop_duplicates("job_id", keep="last")
     token = github_token()
     history, sha = load_csv_file(token, HISTORY_PATH, HISTORY_COLUMNS) if token else (pd.DataFrame(columns=HISTORY_COLUMNS), None)
     latest = history.drop_duplicates("opportunity_id", keep="last").set_index("opportunity_id") if not history.empty else pd.DataFrame()
     if not latest.empty:
-        jobs["prior_action"] = jobs.job_id.map(latest.get("action", pd.Series(dtype=str))).fillna("")
+        all_jobs["prior_action"] = all_jobs.job_id.map(latest.get("action", pd.Series(dtype=str))).fillna("")
     else:
-        jobs["prior_action"] = ""
-    jobs = jobs[~jobs.prior_action.isin(["Apply", "Skip", "Pass"])].copy()
+        all_jobs["prior_action"] = ""
+    jobs = all_jobs[~all_jobs.prior_action.isin(["Apply", "Skip", "Pass"])].copy()
     st.metric("Relevant Big Four roles", len(jobs))
     bands = ["All seniority bands", "Realistic target / adjacent", "Junior / early-career", "Too senior / upper-level", "Seniority unclear"]
     selected_band = st.selectbox("Seniority filter", bands, index=0)
@@ -63,7 +63,8 @@ def render_big4_queue() -> None:
 
     st.subheader("K · CV pro Apply")
     st.caption("Každé CV vychází z Masteru a je upravené podle typu konkrétní Big Four role. Vyber roli a stáhni odpovídající PDF přímo z aplikace.")
-    cv_options = jobs[["job_id", "company", "title"]].copy()
+    applied_jobs = all_jobs[all_jobs["prior_action"].eq("Apply")].copy()
+    cv_options = applied_jobs[["job_id", "company", "title", "job_url"]].copy()
     cv_options["label"] = cv_options["company"] + " · " + cv_options["title"]
     if CV_MAP.exists():
         cv_map = pd.read_csv(CV_MAP).fillna("")
@@ -71,6 +72,8 @@ def render_big4_queue() -> None:
     else:
         cv_options["cv_file"] = ""
     selected_cv = st.selectbox("Role pro CV", cv_options["label"].tolist(), key="big4_cv_role") if not cv_options.empty else ""
+    if cv_options.empty:
+        st.info("Nejdřív zvol u role v tabulce Apply. Potom se role objeví tady a bude mít své připravené CV.")
     if selected_cv:
         selected = cv_options.loc[cv_options["label"].eq(selected_cv)].iloc[0]
         cv_path = CV_DIR / str(selected.get("cv_file", ""))

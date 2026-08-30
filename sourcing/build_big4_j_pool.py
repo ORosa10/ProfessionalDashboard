@@ -26,6 +26,17 @@ EXCLUDE = (
 )
 
 
+def _seniority(title: str) -> tuple[str, int]:
+    low = title.lower()
+    if any(x in low for x in ("partner", "managing director", "executive director", "associate director", "assistant director", "senior manager", "head of")):
+        return "Too senior / upper-level", 3
+    if any(x in low for x in ("intern", "trainee", "graduate", "junior", "entry level", "assistant consultant")):
+        return "Junior / early-career", 1
+    if any(x in low for x in ("consultant", "associate", "manager", "analyst", "specialist", "advisor", "adviser")):
+        return "Realistic target / adjacent", 2
+    return "Seniority unclear", 2
+
+
 def _text(value: object) -> str:
     return " ".join(str(value or "").split()).strip()
 
@@ -81,7 +92,20 @@ def build(inputs: list[Path], output: Path) -> int:
     jobs["big4_stream"] = "J Big 4"
     jobs["source_stream"] = "Big Four"
     jobs["status"] = jobs.get("status", "Open").replace("", "Open")
-    jobs = jobs.sort_values(["canonical_company_id", "market", "title"], kind="stable")
+    seniority = jobs["title"].map(_seniority)
+    jobs["seniority_band"] = seniority.map(lambda x: x[0])
+    jobs["seniority_order"] = seniority.map(lambda x: x[1])
+    jobs = jobs.sort_values(["seniority_order", "canonical_company_id", "market", "title"], kind="stable")
+    # The queue needs the role identity and sourcing provenance, not the full
+    # vacancy body. Keep the committed J pool compact so the app and GitHub
+    # updates remain reliable even when career pages contain long descriptions.
+    output_columns = [
+        "job_id", "canonical_company_id", "company", "title", "market", "location",
+        "priority_locations", "job_url", "source_url", "source_id", "date_posted",
+        "discovered_at", "last_seen_at", "big4_relevance_reason", "big4_stream",
+        "source_stream", "status", "seniority_band", "seniority_order",
+    ]
+    jobs = jobs.reindex(columns=output_columns, fill_value="")
     output.parent.mkdir(parents=True, exist_ok=True)
     jobs.to_csv(output, index=False)
     return len(jobs)

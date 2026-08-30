@@ -38,6 +38,10 @@ def render_big4_queue() -> None:
         tokens = re.findall(r"\b(manager|director|partner|head)\b", title.lower())
         return bool(tokens) and not (title.lower().strip().startswith("assistant manager") and tokens == ["manager"])
     all_jobs = all_jobs[~all_jobs["title"].map(manager_plus)].copy()
+    include_role = r"due diligence|transaction services|transaction diligence|m&a|corporate finance|valuation|modelling|modeling|capital markets|treasury|financial risk|finance consulting|cfo specialist|banking"
+    exclude_role = r"intern|praktik|junior konzultant|tax|steuer|reward|account|audit|data management|data governance|\bit\b|non-financial risk|data acquisition|strategy & execution|finance optimization|people consulting|d365"
+    role_title = all_jobs["title"].astype(str)
+    all_jobs = all_jobs[role_title.str.contains(include_role, case=False, regex=True, na=False) & ~role_title.str.contains(exclude_role, case=False, regex=True, na=False)].copy()
     token = github_token()
     history, sha = load_csv_file(token, HISTORY_PATH, HISTORY_COLUMNS) if token else (pd.DataFrame(columns=HISTORY_COLUMNS), None)
     latest = history.drop_duplicates("opportunity_id", keep="last").set_index("opportunity_id") if not history.empty else pd.DataFrame()

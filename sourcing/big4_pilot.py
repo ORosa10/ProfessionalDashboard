@@ -1733,6 +1733,12 @@ def main() -> None:
         else:
             jobs, run = discover_jobs(source, max_pages=page_limit)
         all_jobs.extend(jobs)
+        # A zero-result source is not a successful check. Dynamic career
+        # boards often return an empty shell when their widget/API changes;
+        # surface that condition explicitly so it cannot silently shrink the
+        # next inventory or overwrite a previously healthy source state.
+        if not jobs and not run.get("errors"):
+            run["errors"] = "No verified postings returned; source requires review"
         runs.append(run)
 
     discovered = deduplicate_jobs(pd.DataFrame(all_jobs))
@@ -1756,3 +1762,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

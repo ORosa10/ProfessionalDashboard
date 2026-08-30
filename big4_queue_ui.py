@@ -53,7 +53,9 @@ def render_big4_queue() -> None:
     selected_company = st.selectbox("Big Four firma", companies, index=0, key="big4_company_filter")
     company_jobs = all_jobs[all_jobs["company"].eq(selected_company)].copy()
     jobs = company_jobs[~company_jobs.prior_action.isin(["Apply", "Skip", "Pass"])].copy()
-    st.metric("Relevant Big Four roles", len(jobs))
+    st.metric("Open relevant roles", len(jobs))
+    resolved_count = len(company_jobs) - len(jobs)
+    st.caption(f"{len(company_jobs)} relevantních rolí EY celkem · {resolved_count} již rozhodnuto a skryto · {len(jobs)} čeká na Apply / Skip.")
     bands = ["All seniority bands", "Realistic target / adjacent", "Junior / early-career", "Too senior / upper-level", "Seniority unclear"]
     selected_band = st.selectbox("Seniority filter", bands, index=0)
     if selected_band != bands[0]:
@@ -122,3 +124,4 @@ def render_big4_queue() -> None:
         updated = pd.concat([history, pd.DataFrame(records)], ignore_index=True).reindex(columns=HISTORY_COLUMNS, fill_value="")
         save_csv_file(token, HISTORY_PATH, updated, sha, "Auto-save Big Four shortlist decision")
         st.rerun()
+

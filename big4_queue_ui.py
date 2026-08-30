@@ -38,15 +38,22 @@ def render_big4_queue() -> None:
     else:
         jobs["prior_action"] = ""
     jobs = jobs[~jobs.prior_action.isin(["Apply", "Skip", "Pass"])].copy()
+    st.metric("Relevant Big Four roles", len(jobs))
+    bands = ["All seniority bands", "Realistic target / adjacent", "Junior / early-career", "Too senior / upper-level", "Seniority unclear"]
+    selected_band = st.selectbox("Seniority filter", bands, index=0)
+    if selected_band != bands[0]:
+        jobs = jobs[jobs["seniority_band"].eq(selected_band)].copy()
+    st.caption("Seniority is separated for review; language constraints remain intentionally off.")
     jobs["action"] = jobs.prior_action.replace("", "New")
     jobs["company_feedback"] = "Not rated"
     jobs["role_feedback"] = "Not rated"
     jobs["user_comment"] = ""
     display = jobs.set_index("job_id")
-    cols = ["company", "title", "market", "location", "big4_relevance_reason", "job_url", "action", "company_feedback", "role_feedback", "user_comment"]
+    cols = ["company", "title", "seniority_band", "market", "location", "big4_relevance_reason", "job_url", "action", "company_feedback", "role_feedback", "user_comment"]
     edited = st.data_editor(display[cols], hide_index=True, width="stretch", height=760, row_height=85,
         disabled=[c for c in cols if c not in {"action", "company_feedback", "role_feedback", "user_comment"}],
-        column_config={"job_url": st.column_config.LinkColumn("Job page", display_text="Open"),
+        column_config={"seniority_band": st.column_config.TextColumn("Seniority", width="small"),
+                       "job_url": st.column_config.LinkColumn("Job page", display_text="Open"),
                        "action": st.column_config.SelectboxColumn("Your action", options=["New", "Apply", "Maybe", "Skip"]),
                        "company_feedback": st.column_config.SelectboxColumn("Company", options=["Not rated", "Positive", "Neutral", "Negative"]),
                        "role_feedback": st.column_config.SelectboxColumn("Role", options=["Not rated", "Positive", "Neutral", "Negative"])},

@@ -40,12 +40,14 @@ jobs:
           git show origin/sourcing-staging:data/source_runs_staging.csv > data/source_runs_staging.csv
       - name: Build separate Big Four J pool
         run: python -m sourcing.build_big4_j_pool --input data/jobs.csv --input data/jobs_staging.csv --output data/j_big4_pool.csv
+      - name: Build 36-cell Big Four source audit
+        run: python -m sourcing.big4_source_audit --runs data/source_runs_staging.csv --output data/big4_source_audit.csv
       - name: Commit pool
         run: |
-          if git diff --quiet -- data/j_big4_pool.csv; then echo "No Big Four pool changes"; exit 0; fi
+          if git diff --quiet -- data/j_big4_pool.csv data/big4_source_audit.csv; then echo "No Big Four pool changes"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/j_big4_pool.csv
+          git add data/j_big4_pool.csv data/big4_source_audit.csv
           git commit -m "Refresh separate Big Four J pool"
           git pull --rebase origin main
           git push origin HEAD:main

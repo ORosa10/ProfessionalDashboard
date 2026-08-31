@@ -96,6 +96,10 @@ MARKET_LOCATION_TERMS = {
     "Austria": ("austria", "österreich", "vienna", "wien", ", at"),
     "Switzerland": ("switzerland", "schweiz", "zurich", "zürich", ", ch"),
     "United Kingdom": ("united kingdom", "uk", "london", "england", ", gb"),
+    "Sweden": ("sweden", "stockholm", ", se"),
+    "Norway": ("norway", "oslo", ", no"),
+    "Denmark": ("denmark", "copenhagen", ", dk"),
+    "Finland": ("finland", "helsinki", ", fi"),
     "Nordics": (
         "sweden", "stockholm", "denmark", "copenhagen", "norway", "oslo",
         "finland", "helsinki", ", se", ", dk", ", no", ", fi",
@@ -1762,4 +1766,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

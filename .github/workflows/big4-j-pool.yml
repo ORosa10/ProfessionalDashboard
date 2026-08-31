@@ -2,6 +2,9 @@ name: Refresh J Big Four pool
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Job sourcing pilot"]
+    types: [completed]
   schedule:
     - cron: "12 5 * * *"
   push:
@@ -21,7 +24,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
+    if: (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success') && (github.event_name != 'push' || github.actor != 'github-actions[bot]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,6 +32,12 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pandas
+      - name: Pull the completed sourcing snapshot
+        if: github.event_name == 'workflow_run'
+        run: |
+          git fetch origin sourcing-staging
+          git show origin/sourcing-staging:data/jobs_staging.csv > data/jobs_staging.csv
+          git show origin/sourcing-staging:data/source_runs_staging.csv > data/source_runs_staging.csv
       - name: Build separate Big Four J pool
         run: python -m sourcing.build_big4_j_pool --input data/jobs.csv --input data/jobs_staging.csv --output data/j_big4_pool.csv
       - name: Commit pool

@@ -1586,7 +1586,9 @@ def discover_kpmg_cz_jobs(source: pd.Series, max_jobs: int = 250) -> tuple[list[
             timeout=30,
         )
         response.raise_for_status()
-        grouped = (((response.json().get("data") or {}).get("widget") or {}).get("jobAdList") or {}).get("groupedJobAds") or {}
+        listing = (((response.json().get("data") or {}).get("widget") or {}).get("jobAdList") or {})
+        grouped = listing.get("groupedJobAds") or {}
+        open_roles = int((listing.get("paginator") or {}).get("totalNumberOfItems") or 0)
 
         def collect(group: dict) -> None:
             records.extend(group.get("jobAds") or [])
@@ -1617,7 +1619,7 @@ def discover_kpmg_cz_jobs(source: pd.Series, max_jobs: int = 250) -> tuple[list[
         if job:
             jobs[job["job_id"]] = job
 
-    run = {"run_at": started, "source_id": source.source_id, "company": source.company, "market": source.market, "seed_url": source.seed_url, "pages_checked": 1, "candidate_job_pages": len(records), "verified_jobs": len(jobs), "errors": " | ".join(errors[:5])}
+    run = {"run_at": started, "source_id": source.source_id, "company": source.company, "market": source.market, "seed_url": source.seed_url, "pages_checked": 1, "candidate_job_pages": len(records), "open_roles": open_roles, "verified_jobs": len(jobs), "errors": " | ".join(errors[:5])}
     return list(jobs.values()), run
 
 

@@ -1,6 +1,6 @@
 name: Job sourcing pilot
 
-# Manual test trigger: 2026-08-13 12:35 UTC (verifying the sourcing-staging branch flow)
+# Manual test trigger: 2026-08-31 13:00 UTC (final 36-source validation)
 on:
   workflow_dispatch:
   schedule:
@@ -20,7 +20,7 @@ permissions:
 
 concurrency:
   group: job-sourcing
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   source-jobs:

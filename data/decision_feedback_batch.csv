@@ -1,4 +1,28 @@
 opportunity_id,decision_at,source_stream,company,company_category,title,market,action,company_feedback,role_feedback,user_comment,company_rating_at_decision,semantic_fit_at_decision,semantic_reasoning_at_decision,calibration_score_at_decision,application_stage,outcome_reason,a_signal,c_signal,h_evidence
+1b40a7f72ba6c887,2026-08-30T18:43:44.674656+00:00,Big Four,EY,,Consultant and Senior Consultant within EY Finance Consulting,Nordics,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+a916b4567772678d,2026-08-30T18:43:36.022437+00:00,Big Four,EY,,EY-Parthenon Senior Consultant Transaction Diligence (Financial Services) (w/m/d),Germany,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+513e60989f2a985e,2026-08-30T18:43:28.423460+00:00,Big Four,EY,,Senior Consultant - Financial Due Diligence,Czechia,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+af85284120a2db74,2026-08-30T18:43:21.435907+00:00,Big Four,EY,,Finance & CFO Specialist | Banking (w/m/d),Austria,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+cc5d9739be66b966,2026-08-30T18:12:03.891025+00:00,Big Four,PwC,,Senior Consultant Real Estate Valuation (w/m/d),Germany,Skip,Not rated,Not rated,,,,,,,,,negative,
+5a68696d63dc6b80,2026-08-30T18:11:52.658220+00:00,Big Four,PwC,,"Transaction Services, Deals Insights and Analytics - Senior Associate",United Kingdom,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+47a91b0fb536ccbd,2026-08-30T18:11:40.810010+00:00,Big Four,PwC,,"Senior Consultant Valuation, Modeling & Analytics (w/m/d)",Germany,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+8ffae4b4edb25bc1,2026-08-30T18:11:32.776040+00:00,Big Four,PwC,,"Manager Valuation, Modeling & Analytics (w/m/d)",Germany,Skip,Not rated,Not rated,,,,,,,,,negative,
+a0cc82edfaec98af,2026-08-30T18:11:21.435160+00:00,Big Four,PwC,,Transaction Services – Manager (Financial Due Diligence),United Kingdom,Skip,Not rated,Not rated,,,,,,,,,negative,
+4b88e123713e303f,2026-08-30T18:11:05.693411+00:00,Big Four,KPMG,,Manager - Transaction Services,United Kingdom,Skip,Not rated,Not rated,,,,,,,,,negative,
+db35f6a5476b9197,2026-08-30T18:10:58.330754+00:00,Big Four,KPMG,,(Senior) Manager Valuation / Unternehmensbewertung (w/m/d),Germany,Skip,Not rated,Not rated,,,,,,,,,negative,
+22836df63a60c592,2026-08-30T18:10:49.483113+00:00,Big Four,KPMG,,Senior Consultant Valuation / Unternehmensbewertung (w/m/d),Germany,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+0b49186b65933e06,2026-08-30T18:10:40.959573+00:00,Big Four,KPMG,,(Assistant) Manager:in Restructuring und Transaction Services,Austria,Skip,Not rated,Not rated,,,,,,,,,negative,
+75e611523f8454da,2026-08-30T18:10:29.210848+00:00,Big Four,KPMG,,Consultant - Deal Advisory - Valuation & Financial Modelling,Switzerland,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+b5b66258ebb101d2,2026-08-30T18:10:20.695786+00:00,Big Four,EY,,EY-Parthenon Senior Consultant Transactions & Corporate Finance - Strategy and Transactions (w/m/d),Germany,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+527d82b47865b1e8,2026-08-30T18:10:11.161513+00:00,Big Four,EY,,EY-Parthenon Consultant Transactions & Corporate Finance - Strategy and Transactions (w/m/d),Germany,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+cbde71b0f8268e70,2026-08-30T18:09:56.299213+00:00,Big Four,EY,,"(Senior) Manager:in Valuation, Modelling & M&A",Austria,Skip,Not rated,Not rated,,,,,,,,,negative,
+2241a41f6003ba2b,2026-08-30T18:09:44.810153+00:00,Big Four,Deloitte,,"Manager, Financial Due Diligence, M&A",United Kingdom,Skip,Not rated,Not rated,,,,,,,,,negative,
+e061815f2a2ee0be,2026-08-30T18:09:37.975918+00:00,Big Four,Deloitte,,"Manager, Financial Due Diligence - TMT, M&A",United Kingdom,Skip,Not rated,Not rated,,,,,,,,,negative,
+ef16e2ff5228c8b2,2026-08-30T18:09:30.293271+00:00,Big Four,Deloitte,,"Manager, Financial Due Diligence - Private Equity, Consumer and Business Services, M&A",United Kingdom,Skip,Not rated,Not rated,,,,,,,,,negative,
+2813259323b9d49e,2026-08-30T18:09:23.267281+00:00,Big Four,Deloitte,,"Manager, Financial Due Diligence - Financial Services, M&A",United Kingdom,Skip,Not rated,Not rated,,,,,,,,,negative,
+1bcc885a71fe948e,2026-08-30T18:09:16.171300+00:00,Big Four,Deloitte,,"Assistant Manager, Financial Due Diligence - M&A",United Kingdom,Skip,Not rated,Not rated,,,,,,,,,negative,
+996f717c55bd25a9,2026-08-30T18:09:07.979408+00:00,Big Four,EY,,"(Senior) Consultant - EY Parthenon, Financial Services - M&A Advisory",Switzerland,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
+f13d28ce8b279ad0,2026-08-30T18:08:55.492295+00:00,Big Four,EY,,Banking & Capital Markets Consultant (w/m/d),Austria,Apply,Not rated,Not rated,,,,,,Applied,,,positive,applied_pending
 B:52513c4a339c03a1,2026-08-29T21:51:25.887317+00:00,B,Norsk Hydro ASA,Corporate,Financial Analyst,Norway,Apply,Not rated,Positive,,,,,,Applied,,,positive,applied_pending
 B:94e55e393b0105a9,2026-08-29T21:29:56.003629+00:00,B,BTC Business Technology Consulting AG,Corporate,Treasury Specialist (m/w/d),Germany,Apply,Not rated,Positive,,,,,,Applied,,,positive,applied_pending
 B:a491eef4c9e299b9,2026-08-29T21:25:42.195153+00:00,B,Berner Kantonalbank AG,Banking & Financial Services,Risk & Performance Analystin / Analyst Investment Analytics & Monitoring (a),Switzerland,Apply,Not rated,Positive,,,,,,Applied,,,positive,applied_pending

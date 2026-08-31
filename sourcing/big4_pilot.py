@@ -1136,6 +1136,24 @@ def discover_jobylon_jobs(source: pd.Series, max_jobs: int = 120) -> tuple[list[
                 job = posting_to_job(posting, detail_response.url, source, started)
                 if job:
                     jobs[job["job_id"]] = job
+            # Some Jobylon pages expose a valid listing but omit schema.org
+            # data on the detail page. Preserve the official listing as a
+            # verified fallback instead of silently converting the source to
+            # zero jobs.
+            if not postings and record.get("title"):
+                posting = {
+                    "@type": "JobPosting",
+                    "title": record["title"],
+                    "description": "",
+                    "datePosted": record.get("published_date") or "",
+                    "jobLocation": {"@type": "Place", "address": record.get("locations_text") or ""},
+                    "identifier": {"value": record_id},
+                    "url": detail_response.url,
+                    "_verification": "official Jobylon vacancy listing",
+                }
+                job = posting_to_job(posting, detail_response.url, source, started)
+                if job:
+                    jobs[job["job_id"]] = job
         except Exception as exc:
             errors.append(f"Jobylon {record_id}: {type(exc).__name__}")
         time.sleep(0.08)
@@ -1205,8 +1223,9 @@ def discover_workday_jobs(
         facet_response.raise_for_status()
         facet_payload = facet_response.json()
         location_ids = _workday_target_location_ids(facet_payload, source)
-        if not location_ids:
-            raise ValueError("Target Workday locations were not found")
+        # Some shared Workday tenants expose only a subset of location facets
+        # for a country. Fall back to an unfiltered listing and let the
+        # verified vacancy location be matched by posting_to_job().
 
         search_terms = ("finance", "treasury", "transaction", "investment", "risk", "analytics")
         for search_text in search_terms:
@@ -1216,7 +1235,7 @@ def discover_workday_jobs(
                     f"{api_root}/jobs",
                     headers={**HEADERS, "Content-Type": "application/json"},
                     json={
-                        "appliedFacets": {"locations": location_ids},
+                        "appliedFacets": {"locations": location_ids} if location_ids else {},
                         "limit": 20,
                         "offset": offset,
                         "searchText": search_text,
@@ -1563,8 +1582,8 @@ query($widgetId: ID!, $page: Int, $filters: [JobAdFilter!]!, $useExampleData: Bo
   widget(id: $widgetId, version: $version, useExampleData: $useExampleData, host: $host) {
     jobAdList(page: $page, filters: $filters) {
       groupedJobAds {
-        jobAds { id title validFrom teaser locations { country city region } salary { min max period currency } }
-        groups { jobAds { id title validFrom teaser locations { country city region } salary { min max period currency } } }
+        jobAds { id title validFrom teaser locations { country city region } }
+        groups { jobAds { id title validFrom teaser locations { country city region } } }
       }
       paginator { currentPage lastPage totalNumberOfItems }
     }
@@ -1831,3 +1850,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

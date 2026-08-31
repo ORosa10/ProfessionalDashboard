@@ -25,7 +25,7 @@ concurrency:
 jobs:
   source-jobs:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -46,17 +46,3 @@ jobs:
             echo "No sourcing changes"
             exit 0
           fi
-          git commit -m "Refresh sourced jobs"
-          # This branch never touches main, so it never triggers a Streamlit
-          # Community Cloud redeploy. It is always reset to "current main plus
-          # today's staging snapshot" so it cannot accumulate merge conflicts.
-          # New results only reach main (and the live Jobs review queue) via
-          # the separate, manually-triggered "Promote staged jobs" workflow.
-          for attempt in 1 2 3; do
-            if git push --force origin HEAD:refs/heads/sourcing-staging; then
-              exit 0
-            fi
-            sleep $((attempt * 5))
-          done
-          echo "Could not push sourcing results to sourcing-staging after three attempts"
-          exit 1

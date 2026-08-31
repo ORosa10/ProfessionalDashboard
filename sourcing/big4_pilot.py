@@ -1558,6 +1558,69 @@ def _kpmg_public_api_config(seed_url: str) -> tuple[str, str, str]:
     return api_url.group(1), customer_id, api_key.group(1)
 
 
+KPMG_CZ_LIST_QUERY = """
+query($widgetId: ID!, $page: Int, $filters: [JobAdFilter!]!, $useExampleData: Boolean!, $host: String, $version: String) {
+  widget(id: $widgetId, version: $version, useExampleData: $useExampleData, host: $host) {
+    jobAdList(page: $page, filters: $filters) {
+      groupedJobAds {
+        jobAds { id title validFrom teaser locations { country city region } salary { min max period currency } }
+        groups { jobAds { id title validFrom teaser locations { country city region } salary { min max period currency } } }
+      }
+      paginator { currentPage lastPage totalNumberOfItems }
+    }
+  }
+}
+"""
+
+
+def discover_kpmg_cz_jobs(source: pd.Series, max_jobs: int = 250) -> tuple[list[dict], dict]:
+    """Read KPMG Czechia's public Alma Career widget instead of its HTML shell."""
+    started = datetime.now(timezone.utc).isoformat()
+    errors: list[str] = []
+    records: list[dict] = []
+    try:
+        response = requests.post(
+            "https://api.capybara.lmc.cz/api/graphql/widget",
+            headers={**HEADERS, "X-API-KEY": "5507a25a7131e7bdf88907199221eb7f2c82032607a6f73431aee9fd741a4489", "Content-Type": "application/json"},
+            json={"query": KPMG_CZ_LIST_QUERY, "variables": {"widgetId": "9861cb46-232c-4cff-9f81-6f861835bbc9", "page": 1, "filters": [], "useExampleData": False, "host": "kpmg.jobs.cz", "version": "3"}},
+            timeout=30,
+        )
+        response.raise_for_status()
+        grouped = (((response.json().get("data") or {}).get("widget") or {}).get("jobAdList") or {}).get("groupedJobAds") or {}
+
+        def collect(group: dict) -> None:
+            records.extend(group.get("jobAds") or [])
+            for child in group.get("groups") or []:
+                if isinstance(child, dict):
+                    collect(child)
+
+        collect(grouped)
+    except Exception as exc:
+        errors.append(f"KPMG Czechia widget API: {type(exc).__name__}")
+
+    jobs: dict[str, dict] = {}
+    cached_by_id, _ = cached_jobs_for_source(source)
+    for record in records[:max_jobs]:
+        record_id = str(record.get("id") or "")
+        title = normalize(record.get("title", ""))
+        if not record_id or not is_relevant_listing_title(title):
+            continue
+        cached = cached_by_id.get(stable_job_id(source, record_id))
+        if cached:
+            refreshed = reuse_cached_job(cached, source, started)
+            jobs[refreshed["job_id"]] = refreshed
+            continue
+        location = " · ".join(normalize(str(value)) for item in (record.get("locations") or []) for value in (item.get("city"), item.get("region"), item.get("country")) if value)
+        detail_url = f"https://kpmg.jobs.cz/detail-pozice?id={record_id}"
+        posting = {"@type": "JobPosting", "title": title, "description": record.get("teaser") or "", "datePosted": record.get("validFrom"), "jobLocation": {"@type": "Place", "address": location}, "identifier": {"value": record_id}, "url": detail_url, "_verification": "official KPMG Czechia vacancy widget API"}
+        job = posting_to_job(posting, detail_url, source, started)
+        if job:
+            jobs[job["job_id"]] = job
+
+    run = {"run_at": started, "source_id": source.source_id, "company": source.company, "market": source.market, "seed_url": source.seed_url, "pages_checked": 1, "candidate_job_pages": len(records), "verified_jobs": len(jobs), "errors": " | ".join(errors[:5])}
+    return list(jobs.values()), run
+
+
 def discover_kpmg_api_jobs(source: pd.Series, max_jobs: int = 100) -> tuple[list[dict], dict]:
     started = datetime.now(timezone.utc).isoformat()
     errors: list[str] = []

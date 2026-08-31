@@ -8,11 +8,15 @@ import pandas as pd
 import streamlit as st
 
 from github_storage import github_token, load_csv_file, save_csv_file
+from sourcing.build_big4_j_pool import _relevant, _seniority
 
 
 DATA = Path(__file__).parent / "data"
 POOL = DATA / "j_big4_pool.csv"
 PILOT_POOL = DATA / "j_big4_pilot20.csv"
+ALL_JOBS = DATA / "jobs_staging.csv"
+LIVE_JOBS = DATA / "jobs.csv"
+SOURCE_AUDIT = DATA / "big4_source_audit.csv"
 CV_DIR = DATA / "big4_cv_pilot20"
 CV_MAP = CV_DIR / "README.csv"
 HISTORY_PATH = "data/opportunity_history.csv"
@@ -25,6 +29,40 @@ HISTORY_COLUMNS = [
     "outcome_reason", "history_notes",
 ]
 
+FIRMS = ("Deloitte", "EY", "KPMG", "PwC")
+MARKETS = ("Czechia", "Germany", "Austria", "Switzerland", "United Kingdom", "Sweden", "Norway", "Denmark", "Finland")
+
+def _country_for_row(row: pd.Series) -> str:
+    market = str(row.get("market", ""))
+    if market in MARKETS:
+        return market
+    text = " ".join(str(row.get(column, "")) for column in ("location", "description", "description_en")).lower()
+    for country, terms in {"Sweden": ("sweden", "stockholm", ", se"), "Norway": ("norway", "oslo", ", no"), "Denmark": ("denmark", "copenhagen", ", dk"), "Finland": ("finland", "helsinki", ", fi")}.items():
+        if any(term in text for term in terms):
+            return country
+    return ""
+
+def _coverage_matrix() -> pd.DataFrame:
+    source_path = ALL_JOBS if ALL_JOBS.exists() and ALL_JOBS.stat().st_size else LIVE_JOBS
+    if not source_path.exists() or not source_path.stat().st_size:
+        return pd.DataFrame()
+    jobs = pd.read_csv(source_path).fillna("").drop_duplicates("job_id", keep="last")
+    jobs = jobs[jobs["canonical_company_id"].astype(str).str.lower().isin({firm.lower() for firm in FIRMS})].copy()
+    jobs = jobs[~jobs["status"].astype(str).str.lower().eq("closed")]
+    jobs["country"] = jobs.apply(_country_for_row, axis=1)
+    decisions = jobs.apply(_relevant, axis=1, result_type="expand") if not jobs.empty else pd.DataFrame(index=jobs.index)
+    if not jobs.empty:
+        jobs["content_relevant"] = decisions[0].astype(bool)
+        jobs["seniority_band"] = jobs["title"].map(lambda title: _seniority(str(title))[0])
+        jobs["seniority_relevant"] = jobs["content_relevant"] & ~jobs["seniority_band"].eq("Too senior / upper-level")
+    audit = pd.read_csv(SOURCE_AUDIT).fillna("") if SOURCE_AUDIT.exists() and SOURCE_AUDIT.stat().st_size else pd.DataFrame()
+    rows = []
+    for firm in FIRMS:
+        for market in MARKETS:
+            subset = jobs[(jobs["company"].eq(firm)) & (jobs["country"].eq(market))]
+            audit_row = audit[(audit["company"].eq(firm)) & (audit["market"].eq(market))] if not audit.empty and {"company", "market"}.issubset(audit.columns) else pd.DataFrame()
+            rows.append({"Company": firm, "Country": market, "Source": str(audit_row.iloc[0].get("status", "not audited")) if not audit_row.empty else "not audited", "Open roles": len(subset), "Relevant by work content": int(subset["content_relevant"].sum()) if not subset.empty else 0, "Relevant incl. seniority": int(subset["seniority_relevant"].sum()) if not subset.empty else 0})
+    return pd.DataFrame(rows)
 
 def render_big4_queue() -> None:
     st.markdown('<div class="eyebrow">Separate application lane</div>', unsafe_allow_html=True)
@@ -33,6 +71,11 @@ def render_big4_queue() -> None:
     if not POOL.exists() or not POOL.stat().st_size:
         st.info("The Big Four career-site sweep has not produced a pool yet.")
         return
+    matrix = _coverage_matrix()
+    if not matrix.empty:
+        st.subheader("36-cell sourcing coverage")
+        st.caption("Open roles = all currently open Big Four vacancies; relevance is based on work content first, then seniority. Language constraints are not applied.")
+        st.dataframe(matrix, hide_index=True, width="stretch", height=520)
     all_jobs = pd.read_csv(POOL if POOL.exists() else PILOT_POOL).fillna("").drop_duplicates("job_id", keep="last")
     def manager_plus(title: str) -> bool:
         tokens = re.findall(r"\b(manager|director|partner|head)\b", title.lower())

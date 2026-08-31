@@ -17,6 +17,7 @@ PILOT_POOL = DATA / "j_big4_pilot20.csv"
 ALL_JOBS = DATA / "jobs_staging.csv"
 LIVE_JOBS = DATA / "jobs.csv"
 SOURCE_AUDIT = DATA / "big4_source_audit.csv"
+SOURCE_RUNS = DATA / "source_runs_staging.csv"
 CV_DIR = DATA / "big4_cv_pilot20"
 CV_MAP = CV_DIR / "README.csv"
 HISTORY_PATH = "data/opportunity_history.csv"
@@ -56,12 +57,25 @@ def _coverage_matrix() -> pd.DataFrame:
         jobs["seniority_band"] = jobs["title"].map(lambda title: _seniority(str(title))[0])
         jobs["seniority_relevant"] = jobs["content_relevant"] & ~jobs["seniority_band"].eq("Too senior / upper-level")
     audit = pd.read_csv(SOURCE_AUDIT).fillna("") if SOURCE_AUDIT.exists() and SOURCE_AUDIT.stat().st_size else pd.DataFrame()
+    runs = pd.read_csv(SOURCE_RUNS).fillna("") if SOURCE_RUNS.exists() and SOURCE_RUNS.stat().st_size else pd.DataFrame()
+    if not runs.empty:
+        runs["_run_at"] = pd.to_datetime(runs["run_at"], errors="coerce", utc=True)
+        runs = runs.sort_values("_run_at").drop_duplicates("source_id", keep="last").set_index("source_id")
     rows = []
     for firm in FIRMS:
         for market in MARKETS:
             subset = jobs[(jobs["company"].eq(firm)) & (jobs["country"].eq(market))]
             audit_row = audit[(audit["company"].eq(firm)) & (audit["market"].eq(market))] if not audit.empty and {"company", "market"}.issubset(audit.columns) else pd.DataFrame()
-            rows.append({"Company": firm, "Country": market, "Source": str(audit_row.iloc[0].get("status", "not audited")) if not audit_row.empty else "not audited", "Open roles": len(subset), "Relevant by work content": int(subset["content_relevant"].sum()) if not subset.empty else 0, "Relevant incl. seniority": int(subset["seniority_relevant"].sum()) if not subset.empty else 0})
+            source_status = str(audit_row.iloc[0].get("status", "not audited")) if not audit_row.empty else "not audited"
+            open_total = "—"
+            source_ids = str(audit_row.iloc[0].get("source_id", "")).split(";") if not audit_row.empty else []
+            for source_id in source_ids:
+                if source_id in runs.index:
+                    value = pd.to_numeric(runs.loc[source_id].get("open_roles", ""), errors="coerce")
+                    if pd.notna(value):
+                        open_total = int(value)
+                        break
+            rows.append({"Company": firm, "Country": market, "Source": source_status, "Open roles": open_total, "Relevant by work content": int(subset["content_relevant"].sum()) if not subset.empty else 0, "Relevant incl. seniority": int(subset["seniority_relevant"].sum()) if not subset.empty else 0})
     return pd.DataFrame(rows)
 
 def render_big4_queue() -> None:

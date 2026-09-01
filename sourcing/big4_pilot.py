@@ -1818,6 +1818,8 @@ def main() -> None:
             jobs, run = discover_avature_jobs(source, max_pages=args.max_pages, max_jobs=140)
         elif host == "jobs.kpmg.de":
             jobs, run = discover_kpmg_api_jobs(source, max_jobs=100)
+        elif host == "kpmg.jobs.cz":
+            jobs, run = discover_kpmg_cz_jobs(source, max_jobs=250)
         else:
             jobs, run = discover_jobs(source, max_pages=page_limit)
         all_jobs.extend(jobs)
@@ -1850,4 +1852,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

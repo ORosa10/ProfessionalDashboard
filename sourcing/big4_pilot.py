@@ -91,7 +91,7 @@ HEADERS = {
 }
 
 MARKET_LOCATION_TERMS = {
-    "Czechia": ("czech", "praha", "prague", "brno", "ostrava", ", cz"),
+    "Czechia": ("czech", "česk", "praha", "prague", "brno", "ostrava", ", cz"),
     "Germany": ("germany", "deutschland", "munich", "münchen", "berlin", "frankfurt", "hamburg", ", de"),
     "Austria": ("austria", "österreich", "vienna", "wien", ", at"),
     "Switzerland": ("switzerland", "schweiz", "zurich", "zürich", ", ch"),

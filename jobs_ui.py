@@ -385,6 +385,25 @@ def render_jobs() -> None:
         pe["review_status"] = "New"
         frames.append(pe)
 
+    # Separate, user-requested active J search lane. This combines G roles
+    # with fresh public research without changing the long-term backlog.
+    active_path = DATA_DIR / "j_active_search.csv"
+    if active_path.exists():
+        active = pd.read_csv(active_path).fillna("")
+        active = active[active["status"].eq("Open")].copy()
+        active["job_url"] = active["source_url"]
+        active["review_status"] = "New"
+        active["active_search"] = "PE / Investment Analyst — Switzerland"
+        active["company_category"] = active["role_family"].map({
+            "Private Equity & Private Markets": "Private Equity & Private Markets",
+            "Public Markets & Asset Management": "Public Markets & Asset Management",
+            "Investment Banking": "Consulting",
+            "Valuation": "Consulting",
+            "Corporate Finance": "Corporate",
+            "Treasury": "Banking & Financial Services",
+        }).fillna("Private Equity & Private Markets")
+        frames.append(active)
+
     consulting_path = DATA_DIR / "consulting_research_candidates.csv"
     if consulting_path.exists():
         consulting = pd.read_csv(consulting_path).fillna("")
@@ -439,7 +458,11 @@ def render_jobs() -> None:
     # categorisation dimension for jobs. Every job must belong to a company
     # that has a category; drop any that don't so the inbox never shows a
     # company-less / category-less role.
+    provided_categories = jobs.get("company_category", pd.Series("", index=jobs.index))
     jobs["company_category"] = _company_category_map(jobs["canonical_company_id"])
+    jobs["company_category"] = jobs["company_category"].where(
+        jobs["company_category"].astype(str).str.strip().ne(""), provided_categories
+    )
     jobs = jobs[
         jobs["canonical_company_id"].astype(str).str.strip().ne("")
         & jobs["company_category"].astype(str).str.strip().ne("")
@@ -527,6 +550,10 @@ def render_jobs() -> None:
         jobs["seniority_band"] = ""
         jobs["selection_reason"] = ""
         jobs["review_set"] = "Backlog"
+    jobs.loc[
+        jobs.get("active_search", pd.Series("", index=jobs.index)).astype(str).str.strip().ne(""),
+        "review_set",
+    ] = "Active search — PE Switzerland test"
     for required, default in {
         "countries": "",
         "cities": "",
@@ -536,6 +563,12 @@ def render_jobs() -> None:
         "discovered_at": "",
         "status": "Open",
         "review_status": "New",
+        "active_search": "",
+        "fit_tier": "",
+        "language_risk": "",
+        "seniority_signal": "",
+        "research_source": "",
+        "checked_at": "",
     }.items():
         if required not in jobs.columns:
             jobs[required] = default
@@ -577,6 +610,7 @@ def render_jobs() -> None:
             "Banking & Financial Services calibration (20)",
             "Public Markets & Asset Management calibration (12)",
             "Specialist & Boutique Funds calibration (6)",
+            "Active search — PE Switzerland test (20)",
             "All opportunities",
             "Backlog only",
         ],
@@ -591,6 +625,7 @@ def render_jobs() -> None:
         "Banking & Financial Services calibration (20)": "Banking & Financial Services calibration",
         "Public Markets & Asset Management calibration (12)": "Public Markets & Asset Management calibration",
         "Specialist & Boutique Funds calibration (6)": "Specialist & Boutique Funds calibration",
+        "Active search — PE Switzerland test (20)": "Active search — PE Switzerland test",
     }
     if review_scope in REVIEW_SCOPE_TO_SET:
         jobs = jobs[jobs["review_set"].eq(REVIEW_SCOPE_TO_SET[review_scope])].copy()
@@ -661,6 +696,7 @@ def render_jobs() -> None:
         "Banking & Financial Services calibration (20)": "Banking & Financial Services shortlist: a diverse 20-role learning sample.",
         "Public Markets & Asset Management calibration (12)": "Public Markets & Asset Management shortlist: a diverse learning sample.",
         "Specialist & Boutique Funds calibration (6)": "Specialist & Boutique Funds shortlist: a small diverse learning sample.",
+        "Active search — PE Switzerland test (20)": "Targeted J test: Switzerland, investment/PE/private debt; no internship titles; seniority and languages are explicitly flagged.",
         "All opportunities": "Every retained sourced role across all sectors.",
         "Backlog only": "Roles not currently in any calibration shortlist.",
     }
@@ -683,6 +719,9 @@ def render_jobs() -> None:
         "cohort",
         "theme",
         "fit_verdict",
+        "fit_tier",
+        "language_risk",
+        "seniority_signal",
         "personal_fit_summary",
         "salary_location_context",
         "description_display",
@@ -693,6 +732,8 @@ def render_jobs() -> None:
         "cities",
         "company_category",
         "source_url",
+        "research_source",
+        "checked_at",
     ]
     editor_view = view.set_index("opportunity_id")[columns]
     with st.form("job_feedback_form", clear_on_submit=False):
@@ -714,6 +755,9 @@ def render_jobs() -> None:
             "cohort": st.column_config.TextColumn("Calibration cohort", width="small"),
             "theme": st.column_config.TextColumn("Role theme", width="medium"),
             "fit_verdict": st.column_config.TextColumn("Fit", width="small"),
+            "fit_tier": st.column_config.TextColumn("Targeted-search tier", width="small"),
+            "language_risk": st.column_config.TextColumn("Language risk", width=260),
+            "seniority_signal": st.column_config.TextColumn("Seniority signal", width="medium"),
             "personal_fit_summary": st.column_config.TextColumn("Personal fit (semantic)", width=620),
             "salary_location_context": st.column_config.TextColumn(
                 "Salary target for location", width=320
@@ -728,6 +772,8 @@ def render_jobs() -> None:
             "cities": st.column_config.TextColumn("Cities", width="medium"),
             "company_category": st.column_config.TextColumn("Company category", width="medium"),
             "source_url": st.column_config.LinkColumn("Official job", display_text="Open", width="small"),
+            "research_source": st.column_config.TextColumn("Research source", width="medium"),
+            "checked_at": st.column_config.TextColumn("Checked", width="small"),
             },
         )
         save_feedback = st.form_submit_button(
@@ -957,3 +1003,4 @@ def render_board_sweep() -> None:
         "feedback back into workstream C; low-ranked exploration remains visible.",
         "board_sweep",
     )
+

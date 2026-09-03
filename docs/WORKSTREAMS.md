@@ -41,6 +41,7 @@ A udržuje universe firem a jejich relevanci vůči uživatelské company thesis
 - [2026-08-24] A: added 42 companies across Consulting, Corporate, Banking & Financial Services, Holding & Conglomerate, Private Equity & Private Markets, Investment Banking, Public Markets & Asset Management, Specialist & Boutique Funds
 - [2026-08-27] A: added 35 companies across Consulting, Corporate, Banking & Financial Services, Holding & Conglomerate, Private Equity & Private Markets, Investment Banking, Public Markets & Asset Management, Specialist & Boutique Funds
 - [2026-08-31] A: added 29 companies across Consulting, Corporate, Banking & Financial Services, Holding & Conglomerate, Private Equity & Private Markets, Investment Banking, Public Markets & Asset Management, Specialist & Boutique Funds
+- [2026-09-03] A: added 32 companies across Consulting, Corporate, Banking & Financial Services, Holding & Conglomerate, Private Equity & Private Markets, Investment Banking, Public Markets & Asset Management, Specialist & Boutique Funds
 
 ## B — Ručně vkládané opportunity (stránka Add Opportunity)
 Vstup: LinkedIn/job link + firemní stránka → `data/user_submitted_opportunities.csv`. Vlastní stránka (ne v Jobs inboxu).

@@ -139,6 +139,67 @@ def _load_candidates() -> pd.DataFrame:
     return out
 
 
+
+def handle_email_action() -> bool:
+    """Handle one-click Apply/Maybe/Skip links from the Gmail shortlist."""
+    params = dict(st.query_params)
+    action = str(params.get("email_action", "")).strip()
+    opportunity_id = str(params.get("opportunity_id", "")).strip()
+    if action not in {"Apply", "Maybe", "Skip"} or not opportunity_id:
+        return False
+
+    st.markdown('<div class="eyebrow">Workstream J · Email action</div>', unsafe_allow_html=True)
+    st.title("Email shortlist action")
+    token = github_token()
+    if not token:
+        st.error("GitHub saving is not configured, so this action was not saved.")
+        return True
+
+    source = _load_candidates()
+    if source.empty or opportunity_id not in set(source.get("job_id", pd.Series(dtype=str)).astype(str)):
+        st.error("This vacancy is no longer available in the current email/job pool.")
+        return True
+    source = _merge_semantic(source)
+    history, history_sha = _history()
+    latest = history.drop_duplicates("opportunity_id", keep="last").set_index("opportunity_id") if not history.empty else None
+    source["prior_action"] = source["job_id"].map(latest["action"]).fillna("") if latest is not None and "action" in latest.columns else ""
+    source["prior_company_feedback"] = source["job_id"].map(latest["company_feedback"]).fillna("") if latest is not None and "company_feedback" in latest.columns else ""
+    source["prior_role_feedback"] = source["job_id"].map(latest["role_feedback"]).fillna("") if latest is not None and "role_feedback" in latest.columns else ""
+    source["prior_comment"] = source["job_id"].map(latest["user_comment"]).fillna("") if latest is not None and "user_comment" in latest.columns else ""
+
+    src = source[source["job_id"].astype(str).eq(opportunity_id)].iloc[0]
+    title = str(src.get("title", ""))
+    company = str(src.get("company", ""))
+    current = str(src.get("prior_action", "") or "")
+    if current in {"Apply", "Maybe", "Skip"}:
+        st.info(f"'{title}' at {company} already has the decision '{current}'. Nothing was changed.")
+        return True
+
+    edited = pd.DataFrame([{
+        "action": action,
+        "company_feedback": "Not rated",
+        "role_feedback": "Not rated",
+        "user_comment": "",
+    }], index=[opportunity_id])
+    updated = _upsert_history(history, edited, source)
+    try:
+        save_csv_file(token, HISTORY_PATH, updated, history_sha, "Record one-click email shortlist action")
+    except Exception as exc:
+        st.error(f"Could not save the {action} decision to GitHub: {exc}")
+        return True
+
+    if action == "Apply":
+        error = _queue_k_requests(edited, source)
+        if error:
+            st.warning(error)
+        else:
+            st.success(f"Apply saved for {title} at {company}. K CV generation was queued.")
+    else:
+        st.success(f"{action} saved for {title} at {company}.")
+    st.caption("This action is now part of I history and will be available as feedback evidence for future C calibration. It does not retroactively overwrite the existing C verdict.")
+    return True
+
+
 def _load_k_requests() -> tuple[pd.DataFrame, str | None]:
     try:
         return load_csv_file(github_token(), K_REQUEST_PATH, K_REQUEST_COLUMNS)

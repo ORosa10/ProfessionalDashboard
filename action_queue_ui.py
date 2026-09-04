@@ -141,7 +141,7 @@ def _load_candidates() -> pd.DataFrame:
 
 
 def handle_email_action() -> bool:
-    """Handle one-click Apply/Maybe/Skip links from the Gmail shortlist."""
+    """Handle an email shortlist action and collect optional written feedback."""
     params = dict(st.query_params)
     action = str(params.get("email_action", "")).strip()
     opportunity_id = str(params.get("opportunity_id", "")).strip()
@@ -170,35 +170,78 @@ def handle_email_action() -> bool:
     src = source[source["job_id"].astype(str).eq(opportunity_id)].iloc[0]
     title = str(src.get("title", ""))
     company = str(src.get("company", ""))
-    current = str(src.get("prior_action", "") or "")
-    if current in {"Apply", "Maybe", "Skip"}:
-        st.info(f"'{title}' at {company} already has the decision '{current}'. Nothing was changed.")
+    existing_action = str(src.get("prior_action", "") or "")
+    existing_company_feedback = str(src.get("prior_company_feedback", "") or "Not rated")
+    existing_role_feedback = str(src.get("prior_role_feedback", "") or "Not rated")
+    existing_comment = str(src.get("prior_comment", "") or "")
+
+    st.info(f"{title} · {company}")
+    if existing_action in {"Apply", "Maybe", "Skip"}:
+        st.caption(
+            f"Tahle nabídka už má rozhodnutí: **{existing_action}**. "
+            "Níže můžeš doplnit nebo opravit feedback; nové K CV se nevytvoří."
+        )
+        save_action = existing_action
+    else:
+        save_action = action
+
+    company_options = FEEDBACK_OPTIONS
+    role_options = FEEDBACK_OPTIONS
+    company_index = company_options.index(existing_company_feedback) if existing_company_feedback in company_options else 0
+    role_index = role_options.index(existing_role_feedback) if existing_role_feedback in role_options else 0
+
+    with st.form(f"email_action_form_{opportunity_id}_{action}"):
+        st.subheader(f"Potvrdit: {save_action}")
+        company_feedback = st.selectbox(
+            "Company feedback",
+            company_options,
+            index=company_index,
+            help="Jak ti sedí firma / zaměstnavatel?",
+        )
+        role_feedback = st.selectbox(
+            "Role feedback",
+            role_options,
+            index=role_index,
+            help="Jak ti sedí konkrétní role?",
+        )
+        user_comment = st.text_area(
+            "Slovní feedback (volitelné)",
+            value=existing_comment,
+            placeholder="Např. příliš seniorní, nízký plat, zajímavá firma, chybí market-risk exposure…",
+            height=120,
+        )
+        submitted = st.form_submit_button(f"Uložit {save_action}", type="primary")
+
+    if not submitted:
+        st.caption("Rozhodnutí se uloží až po kliknutí na tlačítko výše.")
         return True
 
     edited = pd.DataFrame([{
-        "action": action,
-        "company_feedback": "Not rated",
-        "role_feedback": "Not rated",
-        "user_comment": "",
+        "action": save_action,
+        "company_feedback": company_feedback,
+        "role_feedback": role_feedback,
+        "user_comment": user_comment.strip(),
     }], index=[opportunity_id])
     updated = _upsert_history(history, edited, source)
     try:
-        save_csv_file(token, HISTORY_PATH, updated, history_sha, "Record one-click email shortlist action")
+        save_csv_file(token, HISTORY_PATH, updated, history_sha, "Record email shortlist action and feedback")
     except Exception as exc:
-        st.error(f"Could not save the {action} decision to GitHub: {exc}")
+        st.error(f"Could not save the {save_action} decision to GitHub: {exc}")
         return True
 
-    if action == "Apply":
+    if save_action == "Apply" and existing_action != "Apply":
         error = _queue_k_requests(edited, source)
         if error:
             st.warning(error)
         else:
             st.success(f"Apply saved for {title} at {company}. K CV generation was queued.")
     else:
-        st.success(f"{action} saved for {title} at {company}.")
-    st.caption("This action is now part of I history and will be available as feedback evidence for future C calibration. It does not retroactively overwrite the existing C verdict.")
+        st.success(f"{save_action} and feedback saved for {title} at {company}.")
+    st.caption(
+        "Feedback is now part of I history and will be included in the next batch calibration "
+        "for future C/J decisions. Existing C ratings are not retroactively overwritten."
+    )
     return True
-
 
 def _load_k_requests() -> tuple[pd.DataFrame, str | None]:
     try:

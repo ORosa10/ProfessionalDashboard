@@ -1,9 +1,12 @@
 """Build the pending Workstream C semantic-fit queue from Workstream G roles.
 
 This script is deterministic by design. GitHub Actions runs it after G sourcing.
-The intelligence step that assigns Strong / Moderate / Weak is external and
-writes data/semantic_fit.csv. Keeping these responsibilities separate preserves
-our architecture: Actions prepare data; the semantic agent performs judgement.
+The intelligence step that assigns Strong / Moderate / Weak is performed by the
+semantic agent and writes data/semantic_fit.csv. New Gmail-alert vacancies are
+normally reviewed inline by the G ingest agent after live resolution; this queue
+remains the durable fallback for residual and other G lanes. Keeping these
+responsibilities separate preserves the architecture: deterministic sourcing
+prepares data, while the semantic agent performs judgement.
 """
 from __future__ import annotations
 

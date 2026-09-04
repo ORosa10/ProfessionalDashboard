@@ -10,7 +10,7 @@ This document is the operating model for the job-search dashboard.
 
 G is a sourcing layer, not the final review queue. A and C also guide what G searches for, so the system is a feedback loop rather than a one-way pipeline.
 
-Semantic judgement in C is performed in chat on demand and written back to `data/semantic_fit.csv`. GitHub Actions prepare and refresh deterministic sourcing data; they do not invent semantic fit.
+Semantic judgement in C is performed by the C semantic agent and written back to `data/semantic_fit.csv`. For the Gmail-alert lane, the G ingest agent invokes this C step immediately after a vacancy has been live-resolved and registered, so J does not wait for a separate batch. A separate scheduled C run may process residual queues and non-email sourcing lanes as a fallback. GitHub Actions prepare and refresh deterministic sourcing data; they do not invent semantic fit.
 
 ### Manually added opportunities
 

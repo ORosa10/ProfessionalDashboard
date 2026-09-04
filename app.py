@@ -128,7 +128,7 @@ def home_page() -> None:
     col4.metric("Source runs", len(runs))
 
     st.subheader("Operating model")
-    st.code("G SOURCING → A COMPANY + C ROLE FIT → ACTIONABILITY → J APPLY SHORTLIST → I HISTORY → H ATTAINABILITY")
+    st.code("G SOURCING → C ROLE FIT → J APPLY SHORTLIST → K CV PACK → I HISTORY → H ATTAINABILITY")
 
     counts = workstream_health_counts()
     h1, h2, h3 = st.columns(3)
@@ -418,4 +418,3 @@ with st.sidebar:
     st.caption("v0 live sourcing pilot · Build for iteration")
 
 navigation.run()
-

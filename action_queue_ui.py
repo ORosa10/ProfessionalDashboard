@@ -15,6 +15,7 @@ DATA_DIR = Path(__file__).parent / "data"
 LIVE_POOL_PATH = DATA_DIR / "j_eligible_pool.csv"
 CURATED_PATH = DATA_DIR / "j_curated_shortlist.csv"
 BOARD_PATH = DATA_DIR / "jobs_board_staging.csv"
+EMAIL_PATH = DATA_DIR / "jobs_email_staging.csv"
 SEMANTIC_PATH = DATA_DIR / "semantic_fit.csv"
 COUNTRY_PATH = DATA_DIR / "country_sourcing_weights.json"
 SALARY_PATH = DATA_DIR / "j_salary_research.csv"
@@ -27,6 +28,12 @@ HISTORY_COLUMNS = [
     "company_rating_at_decision", "semantic_fit_at_decision", "semantic_reasoning_at_decision",
     "calibration_score_at_decision", "application_stage", "stage_updated_at",
     "outcome_reason", "history_notes",
+]
+K_REQUEST_PATH = "data/k_requests.csv"
+K_REQUEST_COLUMNS = [
+    "request_id", "opportunity_id", "requested_at", "title", "company",
+    "market", "location", "job_url", "description", "description_en",
+    "semantic_fit", "semantic_reasoning", "status", "output_path", "error",
 ]
 ACTION_OPTIONS = ["New", "Apply", "Maybe", "Skip"]
 FEEDBACK_OPTIONS = ["Not rated", "Positive", "Neutral", "Negative"]
@@ -57,6 +64,7 @@ def _load_candidates() -> pd.DataFrame:
     # New production path: the promoted pool already passed C=Strong, canonical
     # actionability, Big Four separation, prior-review/manual-B exclusions and
     # production data-quality/seniority guardrails.
+    frames: list[pd.DataFrame] = []
     if LIVE_POOL_PATH.exists() and LIVE_POOL_PATH.stat().st_size:
         try:
             live = pd.read_csv(LIVE_POOL_PATH).fillna("")
@@ -76,24 +84,47 @@ def _load_candidates() -> pd.DataFrame:
             ]:
                 if col not in live.columns:
                     live[col] = ""
-            return live.drop_duplicates("job_id", keep="first").fillna("")
+            frames.append(live.drop_duplicates("job_id", keep="first"))
+    else:
+        # Safe fallback to the pre-cutover J implementation.
+        if CURATED_PATH.exists() and CURATED_PATH.stat().st_size:
+            c = pd.read_csv(CURATED_PATH).fillna("")
+            c["is_curated"] = True
+            c["curated_rank"] = pd.to_numeric(c.get("curated_rank", 999), errors="coerce").fillna(999)
+            c["pipeline_source"] = "legacy"
+            frames.append(c)
+        if BOARD_PATH.exists() and BOARD_PATH.stat().st_size:
+            b = pd.read_csv(BOARD_PATH).fillna("")
+            if not b.empty and "status" in b.columns:
+                b = b[b["status"].eq("Open")].copy()
+                b["is_curated"] = False
+                b["curated_rank"] = 999
+                b["pipeline_source"] = "legacy"
+                frames.append(b)
 
-    # Safe fallback to the pre-cutover J implementation.
-    frames: list[pd.DataFrame] = []
-    if CURATED_PATH.exists() and CURATED_PATH.stat().st_size:
-        c = pd.read_csv(CURATED_PATH).fillna("")
-        c["is_curated"] = True
-        c["curated_rank"] = pd.to_numeric(c.get("curated_rank", 999), errors="coerce").fillna(999)
-        c["pipeline_source"] = "legacy"
-        frames.append(c)
-    if BOARD_PATH.exists() and BOARD_PATH.stat().st_size:
-        b = pd.read_csv(BOARD_PATH).fillna("")
-        if not b.empty and "status" in b.columns:
-            b = b[b["status"].eq("Open")].copy()
-            b["is_curated"] = False
-            b["curated_rank"] = 999
-            b["pipeline_source"] = "legacy"
-            frames.append(b)
+    # Email alerts are a separate G source lane, but once a vacancy is live-verified
+    # it must enter the same C -> J pipeline as every other sourced vacancy.
+    if EMAIL_PATH.exists() and EMAIL_PATH.stat().st_size:
+        try:
+            email = pd.read_csv(EMAIL_PATH).fillna("")
+        except Exception:
+            email = pd.DataFrame()
+        if not email.empty:
+            verification = email.get("verification", "").astype(str)
+            description = email.get("description", "").astype(str)
+            job_url = email.get("job_url", "").astype(str)
+            verified = (
+                verification.str.contains("verified email alert", case=False, na=False)
+                & description.str.len().ge(80)
+                & ~job_url.str.contains(r"click\.stepstone|sendibt|tracking|redirect", case=False, na=False)
+            )
+            email = email[verified].copy()
+            if not email.empty:
+                email["is_curated"] = False
+                email["curated_rank"] = 999
+                email["pipeline_source"] = "email alerts"
+                frames.append(email)
+
     if not frames:
         return pd.DataFrame()
     out = pd.concat(frames, ignore_index=True, sort=False).fillna("")
@@ -106,6 +137,66 @@ def _load_candidates() -> pd.DataFrame:
         if col not in out.columns:
             out[col] = ""
     return out
+
+
+def _load_k_requests() -> tuple[pd.DataFrame, str | None]:
+    try:
+        return load_csv_file(github_token(), K_REQUEST_PATH, K_REQUEST_COLUMNS)
+    except Exception:
+        return pd.DataFrame(columns=K_REQUEST_COLUMNS), None
+
+
+def _apply_requests(edited: pd.DataFrame, source: pd.DataFrame) -> pd.DataFrame:
+    """Build only newly-created Apply requests; never duplicate a K job."""
+    rows = []
+    now = datetime.now(timezone.utc).isoformat()
+    source = source.set_index("job_id")
+    for opportunity_id, row in edited.iterrows():
+        if opportunity_id not in source.index or str(row.get("action", "")) != "Apply":
+            continue
+        prior = str(source.loc[opportunity_id].get("prior_action", "") or "New")
+        if prior == "Apply":
+            continue
+        src = source.loc[opportunity_id]
+        rows.append({
+            "request_id": f"K:{opportunity_id}",
+            "opportunity_id": str(opportunity_id),
+            "requested_at": now,
+            "title": str(src.get("title", "")),
+            "company": str(src.get("company", "")),
+            "market": _country_value(src),
+            "location": str(src.get("location", "")),
+            "job_url": str(src.get("job_url", "")),
+            "description": str(src.get("description", "")),
+            "description_en": str(src.get("description_en", "")),
+            "semantic_fit": str(src.get("semantic_fit", "")),
+            "semantic_reasoning": str(src.get("semantic_reasoning", "")),
+            "status": "Pending K generation",
+            "output_path": "",
+            "error": "",
+        })
+    return pd.DataFrame(rows).reindex(columns=K_REQUEST_COLUMNS, fill_value="")
+
+
+def _queue_k_requests(edited: pd.DataFrame, source: pd.DataFrame) -> str | None:
+    requests = _apply_requests(edited, source)
+    if requests.empty:
+        return None
+    token = github_token()
+    if not token:
+        return "GitHub saving is not configured; the Apply decision was saved, but K was not queued."
+    existing, sha = _load_k_requests()
+    existing = existing.reindex(columns=K_REQUEST_COLUMNS, fill_value="")
+    existing_ids = set(existing.get("request_id", pd.Series(dtype=str)).astype(str))
+    requests = requests[~requests["request_id"].isin(existing_ids)].copy()
+    if requests.empty:
+        return None
+    combined = pd.concat([existing, requests], ignore_index=True).drop_duplicates("request_id", keep="last")
+    try:
+        save_csv_file(token, K_REQUEST_PATH, combined, sha, "Queue tailored CV generation from J Apply decision")
+    except Exception as exc:
+        return f"Apply was saved, but K queueing failed: {exc}"
+    return None
 
 
 def _merge_semantic(jobs: pd.DataFrame) -> pd.DataFrame:
@@ -459,6 +550,13 @@ def render_action_queue() -> None:
         except Exception as exc:
             st.error(f"Auto-save failed: {exc}")
         else:
+            k_error = _queue_k_requests(edited, shortlist)
+            if k_error:
+                st.warning(k_error)
+            else:
+                newly_applied = len(_apply_requests(edited, shortlist))
+                if newly_applied:
+                    st.toast(f"{newly_applied} role queued for K CV generation", icon="📄")
             st.toast("Saved", icon="✅")
             st.rerun()
     else:
@@ -469,6 +567,6 @@ def render_action_queue() -> None:
             "G sources broadly. C Work assigns Strong/Moderate/Weak from actual role content. "
             "Only Strong roles pass into hard actionability. Big Four stays separate. "
             "Parser placeholders and obvious seniority extremes are removed before this live pool. "
-            "Country targets only guide which eligible roles are shown first."
+            "Country targets only guide which eligible roles are shown first. Choosing Apply "
+            "also queues the role for K to prepare a tailored CV and cover letter."
         )
-

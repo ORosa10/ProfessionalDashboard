@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from action_queue_ui import render_action_queue
+from action_queue_ui import handle_email_action, render_action_queue
 from big4_queue_ui import render_big4_queue
 from add_opportunity_ui import render_add_opportunity
 from board_registry_ui import render_board_registry
@@ -417,4 +417,5 @@ with st.sidebar:
     st.divider()
     st.caption("v0 live sourcing pilot · Build for iteration")
 
-navigation.run()
+if not handle_email_action():
+    navigation.run()

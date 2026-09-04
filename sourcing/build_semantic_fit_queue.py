@@ -18,7 +18,10 @@ from .opportunity_registry import REGISTRY_COLUMNS, update_registry, validate_se
 from .queue_selection import select_country_balanced_indices
 
 ROOT = Path(__file__).resolve().parents[1]
-JOBS_PATH = ROOT / "data" / "jobs_board_staging.csv"
+G_LANE_PATHS = (
+    ROOT / "data" / "jobs_board_staging.csv",
+    ROOT / "data" / "jobs_email_staging.csv",
+)
 SEMANTIC_PATH = ROOT / "data" / "semantic_fit.csv"
 HISTORY_PATH = ROOT / "data" / "opportunity_history.csv"
 OUT_PATH = ROOT / "data" / "semantic_fit_queue.csv"
@@ -154,10 +157,27 @@ def _company_maps(universe: pd.DataFrame) -> tuple[dict[str, dict], dict[str, di
     return exact, aliases
 
 
+
+def _load_g_candidates() -> pd.DataFrame:
+    """Load current open candidates from every production G lane."""
+    frames: list[pd.DataFrame] = []
+    for path in G_LANE_PATHS:
+        if not path.exists() or path.stat().st_size == 0:
+            continue
+        try:
+            frame = pd.read_csv(path).fillna("")
+        except (OSError, pd.errors.EmptyDataError, pd.errors.ParserError):
+            continue
+        if "job_id" in frame.columns:
+            frames.append(frame)
+    if not frames:
+        return pd.DataFrame()
+    return pd.concat(frames, ignore_index=True, sort=False).fillna("")
+
+
+
 def build_queue(limit: int = 80) -> pd.DataFrame:
-    if not JOBS_PATH.exists() or JOBS_PATH.stat().st_size == 0:
-        return pd.DataFrame(columns=QUEUE_COLUMNS)
-    jobs = pd.read_csv(JOBS_PATH).fillna("")
+    jobs = _load_g_candidates()
     if jobs.empty:
         return pd.DataFrame(columns=QUEUE_COLUMNS)
     jobs = jobs[jobs.get("status", "").eq("Open")].copy()

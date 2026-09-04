@@ -507,12 +507,19 @@ def render_action_queue() -> None:
         lambda r: f"{r.get('semantic_fit')} · {r.get('semantic_reasoning')}" if r.get("semantic_reasoning") else str(r.get("semantic_fit", "")),
         axis=1,
     )
+    k_requests, _ = _load_k_requests()
+    k_status = (
+        k_requests.drop_duplicates("opportunity_id", keep="last").set_index("opportunity_id")["status"]
+        if not k_requests.empty and "opportunity_id" in k_requests.columns and "status" in k_requests.columns
+        else pd.Series(dtype=str)
+    )
+    display["k_status"] = display.index.map(k_status).fillna("")
     display["country"] = display.apply(_country_value, axis=1)
     display["warnings"] = display.get("actionability_warnings", "").replace("", "—")
 
     cols = [
         "company", "title", "role_family", "country", "location", "salary_range", "fit",
-        "warnings", "job_url", "action", "company_feedback", "role_feedback", "user_comment",
+        "warnings", "k_status", "job_url", "action", "company_feedback", "role_feedback", "user_comment",
     ]
     edited = st.data_editor(
         display[cols],
@@ -530,6 +537,7 @@ def render_action_queue() -> None:
             "salary_range": st.column_config.TextColumn("Salary", width="medium"),
             "fit": st.column_config.TextColumn("C — semantic fit", width="large"),
             "warnings": st.column_config.TextColumn("Checks", width="medium"),
+            "k_status": st.column_config.TextColumn("K · CV pack", width="small"),
             "job_url": st.column_config.LinkColumn("Job page", display_text="Open"),
             "action": st.column_config.SelectboxColumn("Your action", options=ACTION_OPTIONS, required=True),
             "company_feedback": st.column_config.SelectboxColumn("Company", options=FEEDBACK_OPTIONS, required=True),

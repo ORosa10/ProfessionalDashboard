@@ -1,2 +1,66 @@
-feedback_id,opportunity_id,request_id,submitted_at,target_version,feedback,status
-k-review-20260906-knds-v4,stepstone-de_14317130,K:stepstone-de_14317130,2026-09-06T22:00:00Z,4,"Current KNDS CV was too shortened versus the Master. Remove SELECTED RELEVANCE entirely. Keep detailed PROFILE and detailed WORK EXPERIENCE on page 1. Use Rockaway Capital and PwC with full bullet detail and Selected Project Experience where relevant; omit Komerční banka by default; keep Deloitte exactly 1:1 from the Master. Do not change Education, Leadership or Other Information on page 2.",Completed
+"feedback_id","opportunity_id","request_id","submitted_at","target_version","feedback","status"
+"k-review-20260906-knds-v4","stepstone-de_14317130","K:stepstone-de_14317130","2026-09-06T22:00:00Z","4","Current KNDS CV was too shortened versus the Master. Remove SELECTED RELEVANCE entirely. Keep detailed PROFILE and detailed WORK EXPERIENCE on page 1. Use Rockaway Capital and PwC with full bullet detail and Selected Project Experience where relevant; omit Komerční banka by default; keep Deloitte exactly 1:1 from the Master. Do not change Education, Leadership or Other Information on page 2.","Completed"
+"KREV:GLOBAL:2026-09-06T22:21:29.799Z","__global__","K:GLOBAL","2026-09-06T22:21:29.799Z","GLOBAL","PERMANENT MASTER CONTEXT FOR ALL K CV AND COVER-LETTER OUTPUTS
+
+1. CANDIDATE AND CAREER POSITIONING
+The candidate is Ondřej Rosický, MSc. et MSc., CFA, FRM, a finance professional with 5+ years of experience spanning investment analysis, corporate treasury, financial risk management, derivatives, valuation, capital markets and transaction/investment analysis. The broad career narrative is Markets → valuation/risk → fundamental investing → high-quality financial decision making. The strongest long-term themes are treasury, financial markets, FX, interest rates, commodities, liquidity, derivatives, hedge accounting, quantitative analysis, investment analysis, valuation and risk management. Do not reduce the profile to pure accounting, generic controlling or narrow debt administration unless the target role genuinely requires it.
+
+2. AUTHORITATIVE CV SOURCES
+MASTER(3), the approved Master CV in ChatGPT Library, is the sole authoritative source for factual CV content and the visual/structural baseline. The user's other uploaded Word and PDF CV variants are reference material only: use them to recover documented formulations, fuller bullet detail, selected projects, metrics, skills and role-specific emphasis that may be useful. Never combine variants casually, never treat a variant as permission to invent facts, and never change employer names, titles, dates, qualifications, metrics or factual scope without explicit evidence from the Master or confirmed user context.
+
+3. AUTHORITATIVE WORK HISTORY
+The full Master work history has four roles in this order:
+- Rockaway Capital — Investment Analyst — November 2025 to Present.
+- PwC Czech Republic — Junior Manager, Treasury Advisory Team — January 2023 to November 2025.
+- Komerční banka / Société Générale — Junior Salesman, Investment Banking — July 2021 to December 2022.
+- Deloitte Czech Republic — Audit Data Analyst Intern — September 2019 to September 2020.
+
+Unless the user explicitly asks otherwise, omit Komerční banka from a tailored CV. Keep Deloitte exactly 1:1 from the Master: do not shorten, rewrite or replace its content. Rockaway Capital and PwC should normally receive the detailed tailoring. Include the Komerční banka experience only when the role specifically benefits from FX, money-market, banking-sales or capital-markets execution experience, or when the user requests it.
+
+4. ROCKAWAY CAPITAL EXPERIENCE
+Rockaway is the investor-side / private-markets chapter. It includes sourcing, screening and evaluating domestic and international investment opportunities; fundamental analysis of financial statements and earnings quality; DCF and LBO modelling; investment underwriting; credit-risk assessment; review of financing terms, covenants and security packages; preparation of Investment Committee materials; due-diligence coordination; portfolio-company operations, KPI and performance monitoring; value-creation and growth analysis; and exposure to renewable-energy infrastructure and private-credit situations. Use longer, substantive sentence-style bullets comparable in detail to the PwC section, not one or two generic bullets. Emphasize the investor-side perspective, analytical judgment, thesis development and decision support for investment roles; emphasize underwriting, risk, financing and portfolio monitoring for credit/treasury/finance roles.
+
+5. PWC TREASURY ADVISORY EXPERIENCE
+PwC is the core treasury, financial-risk and quantitative-finance foundation. Documented themes include:
+- interest-rate, FX and commodity risk advisory;
+- valuation of FX forwards, interest-rate swaps, cross-currency swaps and exotic FX/commodity/equity options;
+- hedge accounting, hedging strategies and exposure monitoring;
+- cash and liquidity management, liquidity monitoring, forecasting and working capital;
+- treasury-management systems, including Kyriba;
+- financial-market data, curve construction, Greeks, regression/logit, VaR, stress testing, Monte Carlo, PCA and other quantitative methods;
+- more than 50 valuation and risk projects across financial instruments and asset classes;
+- building an RStudio/Power BI risk-management tool;
+- financial-instrument valuation leadership, including leading a small team of valuation specialists, mentoring junior colleagues, reviewing deliverables, coordinating execution and communicating complex conclusions to clients and stakeholders;
+- banking and balance-sheet/transaction-related valuation work, including a large banking mandate of approximately $50 million and an FX-risk mandate in the $50–100 million range, only where the exact documented context is relevant.
+
+Preserve both sides of PwC: technical treasury/valuation depth and leadership/stakeholder skills. The user's view is that treasury creates the most value when connected to the underlying business, cash flow, P&L and operating decisions, not when presented as purely administrative reporting.
+
+6. PWC ENERGY-SECTOR SECONDMENT
+During PwC, the candidate spent approximately six months on secondment at an energy-sector company. He supported a broad set of treasury- and accounting-related projects, including FX management, liquidity planning, commodity-risk and commodity-hedging topics, and related finance/accounting work. Use this as factual background when relevant to energy, utilities, commodities, corporate treasury, liquidity, FX, risk management, finance transformation or business-facing accounting/treasury roles. It is particularly valuable where the vacancy combines treasury with real operational exposure. Do not insert it into every CV, do not overstate it, and do not invent the company's name, exact dates, metrics or responsibilities beyond these confirmed facts.
+
+7. KOMERČNÍ BANKA AND DELOITTE
+Komerční banka provides documented FX, money-market, banking and capital-markets exposure and can support a markets-facing narrative when explicitly relevant. Deloitte is an early audit/data-analytics foundation and must remain exactly as written in the Master whenever included.
+
+8. EDUCATION, CREDENTIALS, LANGUAGES AND TOOLS
+Preserve the documented education and credentials: Charles University IES, MSc Economics and Finance / Financial Markets and Banking, Class of 2023, magna cum laude, average 1.44; University of Business in Prague / VŠFS, MSc Financial Engineering with Business Valuation focus; CFA and FRM. Documented tools and methods include Excel, PowerPoint, Bloomberg, Refinitiv, Capital IQ, R/RStudio, Alteryx, Power BI and Python, together with financial modelling, DCF/LBO, VaR, Monte Carlo, PCA, GARCH, curve construction, Greeks, regression/logit, stress testing and derivatives valuation. Preserve the Master’s factual language levels, especially Czech native, English C2 and German B2; only include Spanish/basic language information when supported by the selected source variant and relevant.
+
+9. TARGET-ROLE EMPHASIS
+Tailor semantically to the actual day-to-day role:
+- Treasury / corporate treasury: FX, interest rates, commodities, liquidity, cash forecasting, hedging, hedge accounting, TMS/Kyriba, bank relationships and business-facing decision support.
+- Market or financial risk: derivatives, valuation, risk measurement, stress testing, VaR, liquidity, FX/IR/commodity exposures, quantitative analysis and governance.
+- Energy / commodities: the PwC energy secondment, commodity hedging, FX management, liquidity planning and the connection between market risk and operating cash flows.
+- Quant / risk consulting: quantitative methods, modelling, derivatives, risk tools, data, client communication and structured problem solving.
+- Investment analysis / private markets / credit: Rockaway underwriting, DCF/LBO, financial statements, earnings quality, credit risk, financing terms, diligence, IC materials and portfolio monitoring.
+- M&A / corporate finance / valuation: Rockaway investment analysis, PwC valuation and modelling, transaction/diligence exposure, DCF, multiples, LBO and financial analysis.
+- Roles with strong accounting content: use accounting and hedge-accounting evidence where factual, but do not turn the CV into a generic accountant profile.
+
+10. FIXED CV FORMAT AND PAGE RULES
+Preserve the approved older Master style 1:1: black Times New Roman/serif typography, black header and contact block, the same font hierarchy, margins, spacing, section order, bullet style, page geometry, density and overall visual identity. Do not introduce a blue header, blue text, sans-serif redesign, colored badges, a new template or a modern dashboard-like CV style.
+Do not include a SELECTED RELEVANCE section. Page 1 must contain only the header, PROFILE and WORK EXPERIENCE. The PROFILE should remain substantive and detailed, not be reduced to a short generic summary. WORK EXPERIENCE must retain detailed bullets and relevant Selected Project Experience subsections for Rockaway and PwC. Insert a hard page break so EDUCATION begins on page 2.
+Page 2 is protected and must remain unchanged from the Master: EDUCATION, LEADERSHIP and OTHER INFORMATION. Do not tailor, shorten, redesign or move those sections unless the user explicitly changes this rule.
+
+11. VARIANT-CV USE
+The uploaded variants cover different emphases such as Treasury, Risk, M&A/FDD, Valuation, Corporate Finance, Finance Transformation, Investment Analysis, Big Four and other role-specific versions. Treat them as a phrase/project library, not as separate competing biographies. Retrieve fuller documented wording from the most relevant variant when it strengthens Rockaway or PwC, but always reconcile it to the Master and preserve the fixed layout. The best tailored CV is well-rounded and detailed, with intelligent emphasis rather than aggressive shortening.
+
+12. COVER LETTERS AND QUALITY CONTROL
+Create a concise, role- and company-specific cover letter when the K request calls for it or when relevant. It should explain the fit using verified facts, not repeat the entire CV and not invent motivation, achievements or employer details. Before marking a pack Ready for review, render and inspect every page of the PDF/DOCX for clipping, broken characters, bad page breaks, empty pages, inconsistent spacing and unreadable layout. Preserve previous versions and create v2/v3 revisions rather than overwriting them. Never submit an employer application automatically.","Global instruction"

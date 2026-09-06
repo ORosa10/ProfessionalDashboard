@@ -19,8 +19,12 @@ K_COLUMNS = [
     "market", "location", "job_url", "description", "description_en",
     "semantic_fit", "semantic_reasoning", "status", "output_path", "error",
 ]
+JOB_URL_OVERRIDES = {
+    "stepstone-de_14317130": "https://www.stepstone.de/stellenangebote--Specialist-m-w-d-Financial-Risk-Management-Muenchen-KNDS--14317130-inline.html",
+}
+
 REGISTRY_COLUMNS = [
-    "opportunity_id", "request_id", "title", "company", "market", "location",
+    "opportunity_id", "request_id", "title", "company", "market", "location", "job_url",
     "version", "status", "output_path", "created_at", "source",
 ]
 FEEDBACK_COLUMNS = [
@@ -57,7 +61,7 @@ def _records(requests: pd.DataFrame, registry: pd.DataFrame) -> pd.DataFrame:
         if not oid:
             continue
         current = rows.setdefault(oid, {col: "" for col in REGISTRY_COLUMNS})
-        for col in ["request_id", "title", "company", "market", "location", "status", "output_path"]:
+        for col in ["request_id", "title", "company", "market", "location", "job_url", "status", "output_path"]:
             value = str(row.get(col, "") or "")
             if value or not current.get(col):
                 current[col] = value
@@ -98,9 +102,64 @@ def render_k_review() -> None:
         st.info("Zatím není k dispozici žádný K balíček. Apply role se zde objeví po dokončení K.")
         return
 
+    global_feedback = ""
     if not feedback.empty:
-        feedback = feedback.sort_values("submitted_at").drop_duplicates("opportunity_id", keep="last")
-        feedback = feedback.set_index("opportunity_id")
+        global_rows = feedback[
+            feedback["opportunity_id"].astype(str).eq("__global__")
+        ].sort_values("submitted_at")
+        if not global_rows.empty:
+            global_feedback = str(global_rows.iloc[-1].get("feedback", "") or "")
+        feedback = feedback[
+            ~feedback["opportunity_id"].astype(str).eq("__global__")
+        ]
+        if not feedback.empty:
+            feedback = feedback.sort_values("submitted_at").drop_duplicates(
+                "opportunity_id", keep="last"
+            )
+            feedback = feedback.set_index("opportunity_id")
+
+    with st.container(border=True):
+        st.subheader("Obecné nastavení pro všechny budoucí K výstupy")
+        st.caption(
+            "Tento feedback není jen pro jednu pozici. K ho použije jako trvalé obecné "
+            "instrukce při tvorbě všech dalších CV a cover letterů; konkrétní připomínky "
+            "k jedné roli zůstávají níže u jejího balíčku."
+        )
+        with st.form("k_global_feedback_form"):
+            global_comment = st.text_area(
+                "Globální instrukce pro AI",
+                value=global_feedback,
+                height=150,
+                placeholder=(
+                    "Např. zachovej starší černobílý serifový master layout, "
+                    "nepřidávej modrý header ani Selected Relevance, "
+                    "na první stránce ponech Profile a Work Experience…"
+                ),
+            )
+            save_global = st.form_submit_button(
+                "Uložit obecné nastavení pro všechny K výstupy", type="primary"
+            )
+        if save_global:
+            text = global_comment.strip()
+            if not text:
+                st.warning("Globální instrukce jsou prázdné; nic se neuložilo.")
+            else:
+                now = datetime.now(timezone.utc).isoformat()
+                record = {
+                    "feedback_id": f"KREV:GLOBAL:{now}",
+                    "opportunity_id": "__global__",
+                    "request_id": "K:GLOBAL",
+                    "submitted_at": now,
+                    "target_version": "GLOBAL",
+                    "feedback": text,
+                    "status": "Global instruction",
+                }
+                error = _save_feedback(record)
+                if error:
+                    st.error(f"Obecné nastavení se nepodařilo uložit: {error}")
+                else:
+                    st.success("Obecné nastavení je uložené pro všechny další K výstupy.")
+                    st.rerun()
 
     ready = int(records["output_path"].astype(str).str.len().gt(0).sum())
     pending = int(records["status"].astype(str).str.contains("Pending|requested|progress", case=False, na=False).sum())
@@ -118,6 +177,7 @@ def render_k_review() -> None:
         company = str(row.get("company", "")).strip()
         status = str(row.get("status", "")).strip() or "Unknown"
         links = _links(row.get("output_path", ""))
+        job_url = str(row.get("job_url", "") or "").strip() or JOB_URL_OVERRIDES.get(oid, "")
         old_feedback = ""
         old_status = ""
         old_version = "1"
@@ -133,15 +193,28 @@ def render_k_review() -> None:
                 f"{row.get('market', '')} · {row.get('location', '')} · "
                 f"stav K: {status} · verze {row.get('version', '') or old_version}"
             )
-            if links:
-                st.warning(
-                    "Přímý download odkaz z externího Streamlitu blokuje ChatGPT jako cross-site file request. "
-                    "Otevři Library v novém panelu a vyhledej soubor podle firmy/role; přímé odkazy zde proto nepoužíváme."
+            if links or job_url:
+                b1, b2, b3, b4 = st.columns(4)
+                if job_url:
+                    b1.link_button("Otevřít pracovní nabídku", job_url, use_container_width=True)
+                else:
+                    b1.caption("Pracovní nabídka: odkaz chybí")
+                if links.get("pdf"):
+                    b2.link_button("Otevřít CV (PDF)", links["pdf"], use_container_width=True)
+                else:
+                    b2.caption("CV (PDF): čeká")
+                if links.get("docx"):
+                    b3.link_button("Otevřít CV (DOCX)", links["docx"], use_container_width=True)
+                else:
+                    b3.caption("CV (DOCX): čeká")
+                if links.get("cover_letter"):
+                    b4.link_button("Otevřít Cover letter", links["cover_letter"], use_container_width=True)
+                else:
+                    b4.caption("Cover letter: čeká")
+                st.caption(
+                    "Pracovní odkaz vede přímo na pozici. CV a Cover letter se otevírají z Library; "
+                    "pokud prohlížeč přímé stažení zablokuje, vyhledej tam soubor podle firmy/role."
                 )
-                b1, b2, b3 = st.columns(3)
-                b1.link_button("Otevřít ChatGPT Library", "https://chatgpt.com/library", use_container_width=True)
-                b2.link_button("Otevřít pracovní nabídku", str(row.get("job_url", "")), use_container_width=True)
-                b3.caption("V Library otevři PDF/DOCX/cover letter podle názvu role.")
             else:
                 st.info("K request je ve frontě; preview se objeví po dokončení generování.")
 
@@ -149,7 +222,7 @@ def render_k_review() -> None:
                 st.caption(f"Poslední review: {old_status} · cílová verze {old_version}")
             with st.form(f"k_review_form_{oid}"):
                 comment = st.text_area(
-                    "Feedback pro AI",
+                    "Feedback k této konkrétní pozici / verzi",
                     value=old_feedback,
                     height=130,
                     placeholder=(
@@ -178,6 +251,6 @@ def render_k_review() -> None:
 
     st.divider()
     st.caption(
-        "Feedback ovlivňuje jen konkrétní K balíček. C/J rating se tím zpětně nemění. "
+        "Globální instrukce platí pro všechny další K výstupy; tento formulář ovlivňuje jen konkrétní balíček. C/J rating se tím zpětně nemění. "
         "Žádost zaměstnavateli se z dashboardu automaticky neodesílá."
     )

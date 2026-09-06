@@ -143,7 +143,7 @@ def _load_candidates() -> pd.DataFrame:
 def handle_email_action() -> bool:
     """Handle an email shortlist action and collect optional written feedback."""
     params = dict(st.query_params)
-    action = str(params.get("email_action", "")).strip()
+    action = str(params.get("email_action", "")).strip().capitalize()
     opportunity_id = str(params.get("opportunity_id", "")).strip()
     if action not in {"Apply", "Maybe", "Skip"} or not opportunity_id:
         return False

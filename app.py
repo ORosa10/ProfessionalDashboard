@@ -1,3 +1,4 @@
+# K review UI redeploy marker: vacancy, CV, cover-letter links and global instructions
 from __future__ import annotations
 
 from pathlib import Path

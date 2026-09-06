@@ -43,6 +43,8 @@ company,KNDS,1,0,0,0,0,0,0
 company,EY,2,0,0,0,0,0,0
 company,Erste Group Bank AG,1,0,0,0,0,0,0
 company,airbus-bank,1,0,0,0,0,0,0
+company,mp-corporate-finance,1,0,0,0,0,0,0
+company,wartsila,1,0,0,0,0,0,0
 company,GoodMills Group GmbH,1,0,0,0,0,0,0
 company,NovaTaste Austria GmbH,1,0,0,0,0,0,0
 company_category,Corporate,14,0,0,0,0,0,0
@@ -55,7 +57,7 @@ company_category,Consulting,2,0,0,0,0,0,0
 company_category,Specialist & Boutique Funds,1,0,0,0,0,0,0
 company_category,Big Four,1,0,0,0,0,0,0
 market,Germany,22,0,0,0,0,0,0
-market,Austria,9,0,0,0,0,0,0
+market,Austria,10,0,0,0,0,0,0
 market,Switzerland,11,0,0,0,0,0,0
 market,Sweden,1,0,0,0,0,0,0
 market,Denmark,2,0,0,0,0,0,0
@@ -64,3 +66,4 @@ market,Czechia,2,0,0,0,0,0,0
 market,Luxembourg,1,0,0,0,0,0,0
 market,Norway,1,0,0,0,0,0,0
 market,Nordics,1,0,0,0,0,0,0
+market,Finland,1,0,0,0,0,0,0

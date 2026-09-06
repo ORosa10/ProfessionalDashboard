@@ -134,13 +134,14 @@ def render_k_review() -> None:
                 f"stav K: {status} · verze {row.get('version', '') or old_version}"
             )
             if links:
+                st.warning(
+                    "Přímý download odkaz z externího Streamlitu blokuje ChatGPT jako cross-site file request. "
+                    "Otevři Library v novém panelu a vyhledej soubor podle firmy/role; přímé odkazy zde proto nepoužíváme."
+                )
                 b1, b2, b3 = st.columns(3)
-                if links.get("pdf"):
-                    b1.link_button("Otevřít PDF preview", links["pdf"], use_container_width=True)
-                if links.get("docx"):
-                    b2.link_button("Otevřít DOCX", links["docx"], use_container_width=True)
-                if links.get("cover_letter"):
-                    b3.link_button("Otevřít cover letter", links["cover_letter"], use_container_width=True)
+                b1.link_button("Otevřít ChatGPT Library", "https://chatgpt.com/library", use_container_width=True)
+                b2.link_button("Otevřít pracovní nabídku", str(row.get("job_url", "")), use_container_width=True)
+                b3.caption("V Library otevři PDF/DOCX/cover letter podle názvu role.")
             else:
                 st.info("K request je ve frontě; preview se objeví po dokončení generování.")
 

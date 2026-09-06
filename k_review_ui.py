@@ -22,6 +22,7 @@ K_COLUMNS = [
 JOB_URL_OVERRIDES = {
     "stepstone-de_14317130": "https://www.stepstone.de/stellenangebote--Specialist-m-w-d-Financial-Risk-Management-Muenchen-KNDS--14317130-inline.html",
 }
+LIBRARY_URL = "https://chatgpt.com/library"
 
 REGISTRY_COLUMNS = [
     "opportunity_id", "request_id", "title", "company", "market", "location", "job_url",
@@ -200,20 +201,20 @@ def render_k_review() -> None:
                 else:
                     b1.caption("Pracovní nabídka: odkaz chybí")
                 if links.get("pdf"):
-                    b2.link_button("Otevřít CV (PDF)", links["pdf"], use_container_width=True)
+                    b2.link_button("Otevřít CV (PDF) v Library", LIBRARY_URL, use_container_width=True)
                 else:
                     b2.caption("CV (PDF): čeká")
                 if links.get("docx"):
-                    b3.link_button("Otevřít CV (DOCX)", links["docx"], use_container_width=True)
+                    b3.link_button("Otevřít CV (DOCX) v Library", LIBRARY_URL, use_container_width=True)
                 else:
                     b3.caption("CV (DOCX): čeká")
                 if links.get("cover_letter"):
-                    b4.link_button("Otevřít Cover letter", links["cover_letter"], use_container_width=True)
+                    b4.link_button("Otevřít Cover letter v Library", LIBRARY_URL, use_container_width=True)
                 else:
                     b4.caption("Cover letter: čeká")
                 st.caption(
-                    "Pracovní odkaz vede přímo na pozici. CV a Cover letter se otevírají z Library; "
-                    "pokud prohlížeč přímé stažení zablokuje, vyhledej tam soubor podle firmy/role."
+                    "Pracovní odkaz vede přímo na pozici. Tři dokumentová tlačítka otevírají Library; "
+                    "tam vyhledej soubor podle firmy a role."
                 )
             else:
                 st.info("K request je ve frontě; preview se objeví po dokončení generování.")

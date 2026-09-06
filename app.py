@@ -11,6 +11,7 @@ from add_opportunity_ui import render_add_opportunity
 from board_registry_ui import render_board_registry
 from company_targeting_ui import render_company_targeting_feedback
 from opportunity_history_ui import render_opportunity_history
+from k_review_ui import render_k_review
 from people_ui import render_people
 from cost_of_living_ui import render_cost_of_living
 from system_flow_focus_ui import render_system_flow
@@ -369,6 +370,10 @@ def pipeline_page() -> None:
     render_opportunity_history()
 
 
+def k_review_page() -> None:
+    render_k_review()
+
+
 def ideas_page() -> None:
     placeholder("Ideas & Projects", "Self-created opportunities, experiments, collaborations, and possible projects.", "Add after the job learning loop is working.")
 
@@ -403,6 +408,7 @@ navigation = st.navigation(
         ],
         "Workspace": [
             st.Page(pipeline_page, title="I · Applications / History"),
+            st.Page(k_review_page, title="K · CV Review"),
             st.Page(attainability_page, title="H · Attainability"),
             st.Page(ideas_page, title="Ideas & Projects"),
         ],

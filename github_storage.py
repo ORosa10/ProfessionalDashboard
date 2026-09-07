@@ -143,3 +143,67 @@ def save_csv_file(
         timeout=20,
     )
     response.raise_for_status()
+
+
+def load_file_bytes(
+    token: str | None,
+    repository_path: str,
+) -> tuple[bytes, str | None]:
+    """Load a small binary/text file from GitHub, with a local fallback."""
+    api_url = (
+        f"https://api.github.com/repos/{OWNER}/{REPOSITORY}/contents/"
+        f"{quote(repository_path, safe='/')}"
+    )
+    if token:
+        response = requests.get(
+            api_url,
+            headers=_headers(token),
+            params={"ref": BRANCH},
+            timeout=20,
+        )
+        if response.status_code == 404:
+            return b"", None
+        response.raise_for_status()
+        payload = response.json()
+        content = payload.get("content", "")
+        if content:
+            return base64.b64decode(content), payload.get("sha")
+        download_url = payload.get("download_url")
+        if download_url:
+            download = requests.get(download_url, timeout=20)
+            download.raise_for_status()
+            return download.content, payload.get("sha")
+        return b"", payload.get("sha")
+
+    local_path = Path(__file__).parent / repository_path
+    if local_path.exists():
+        return local_path.read_bytes(), None
+    return b"", None
+
+
+def save_file_bytes(
+    token: str,
+    repository_path: str,
+    content: bytes,
+    sha: str | None,
+    message: str,
+) -> None:
+    """Persist a binary file through the GitHub Contents API."""
+    api_url = (
+        f"https://api.github.com/repos/{OWNER}/{REPOSITORY}/contents/"
+        f"{quote(repository_path, safe='/')}"
+    )
+    payload: dict[str, str] = {
+        "message": message,
+        "content": base64.b64encode(content).decode("ascii"),
+        "branch": BRANCH,
+    }
+    if sha:
+        payload["sha"] = sha
+    response = requests.put(
+        api_url,
+        headers=_headers(token),
+        json=payload,
+        timeout=30,
+    )
+    response.raise_for_status()

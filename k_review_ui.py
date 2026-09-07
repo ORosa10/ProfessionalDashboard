@@ -107,6 +107,7 @@ def render_k_review() -> None:
     if not feedback.empty:
         global_rows = feedback[
             feedback["opportunity_id"].astype(str).eq("__global__")
+            & feedback["status"].astype(str).eq("Global instruction")
         ].sort_values("submitted_at")
         if not global_rows.empty:
             global_feedback = str(global_rows.iloc[-1].get("feedback", "") or "")
@@ -185,6 +186,8 @@ def render_k_review() -> None:
         if not feedback.empty and oid in feedback.index:
             old = feedback.loc[oid]
             old_feedback = str(old.get("feedback", "") or "")
+            if str(old.get("feedback_id", "") or "").startswith("KREV:GLOBAL_REFRESH:"):
+                old_feedback = ""
             old_status = str(old.get("status", "") or "")
             old_version = str(old.get("target_version", "") or "1")
 

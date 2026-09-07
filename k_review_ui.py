@@ -109,12 +109,7 @@ def _legacy_registry_view(legacy: pd.DataFrame) -> pd.DataFrame:
         return pd.DataFrame(columns=PACKAGE_COLUMNS)
     rows: list[dict[str, str]] = []
     for _, source in legacy.iterrows():
-        output = _text(source.get("output_path"))
-        links = {}
-        for label, key in (("PDF", "pdf"), ("DOCX", "docx"), ("Cover letter", "cover letter")):
-            match = re.search(rf"{re.escape(label)}:\s*(https?://[^;]+)", output, flags=re.IGNORECASE)
-            if match:
-                links[key] = match.group(1).strip()
+        links = _output_links(source.get("output_path"))
         package_id = _text(source.get("opportunity_id")) or _text(source.get("request_id"))
         rows.append({
             "package_id": package_id,
@@ -136,6 +131,16 @@ def _legacy_registry_view(legacy: pd.DataFrame) -> pd.DataFrame:
     view["_version_num"] = pd.to_numeric(view["version"], errors="coerce").fillna(0)
     view = view.sort_values(["package_id", "_version_num"], ascending=[True, False])
     return view.drop_duplicates("package_id", keep="first").drop(columns=["_version_num"])
+
+
+def _output_links(output_path: object) -> dict[str, str]:
+    output = _text(output_path)
+    links: dict[str, str] = {}
+    for label, key in (("PDF", "pdf"), ("DOCX", "docx"), ("Cover letter", "cover letter")):
+        match = re.search(rf"{re.escape(label)}:\s*(https?://[^;]+)", output, flags=re.IGNORECASE)
+        if match:
+            links[key] = match.group(1).strip()
+    return links
 
 
 def _document_url(url: str) -> str:
@@ -376,10 +381,19 @@ def render_k_review() -> None:
         st.info("V K zatím není žádný balíček připravený k review.")
         return
 
-    request_view = requests.rename(columns={"request_id": "package_id"}).copy()
+    request_view = requests.copy()
+    request_view["package_id"] = request_view["opportunity_id"].where(
+        request_view["opportunity_id"].astype(str).str.strip().ne(""),
+        request_view["request_id"],
+    )
     for column in PACKAGE_COLUMNS:
         if column not in request_view.columns:
             request_view[column] = ""
+    for index, request in request_view.iterrows():
+        links = _output_links(request.get("output_path"))
+        request_view.at[index, "cv_pdf_url"] = request_view.at[index, "cv_pdf_url"] or links.get("pdf", "")
+        request_view.at[index, "cv_docx_url"] = request_view.at[index, "cv_docx_url"] or links.get("docx", "")
+        request_view.at[index, "cover_letter_url"] = request_view.at[index, "cover_letter_url"] or links.get("cover letter", "")
     request_view = request_view[PACKAGE_COLUMNS]
     package_view = packages.reindex(columns=PACKAGE_COLUMNS, fill_value="").copy()
     legacy_view = _legacy_registry_view(legacy)

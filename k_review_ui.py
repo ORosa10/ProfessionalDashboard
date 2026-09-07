@@ -3,258 +3,406 @@ from __future__ import annotations
 import re
 from datetime import datetime, timezone
 from pathlib import Path
+from uuid import uuid4
 
 import pandas as pd
 import streamlit as st
 
-from github_storage import github_token, load_csv_file, save_csv_file
+from github_storage import (
+    github_token,
+    load_csv_file,
+    load_file_bytes,
+    save_csv_file,
+    save_file_bytes,
+)
 
-DATA_DIR = Path(__file__).parent / "data"
-K_REQUEST_PATH = "data/k_requests.csv"
-K_REGISTRY_PATH = "data/k_output_registry.csv"
-K_FEEDBACK_PATH = "data/k_review_feedback.csv"
 
-K_COLUMNS = [
-    "request_id", "opportunity_id", "requested_at", "title", "company",
-    "market", "location", "job_url", "description", "description_en",
-    "semantic_fit", "semantic_reasoning", "status", "output_path", "error",
-]
-JOB_URL_OVERRIDES = {
-    "stepstone-de_14317130": "https://www.stepstone.de/stellenangebote--Specialist-m-w-d-Financial-Risk-Management-Muenchen-KNDS--14317130-inline.html",
-}
 LIBRARY_URL = "https://chatgpt.com/library"
+K_REQUEST_PATH = "data/k_requests.csv"
+K_PACKAGE_PATH = "data/k_review_packages.csv"
+K_LEGACY_REGISTRY_PATH = "data/k_output_registry.csv"
+K_REVIEW_SETTINGS_PATH = "data/k_review_settings.csv"
+K_REVIEW_MESSAGES_PATH = "data/k_review_messages.csv"
+K_REVIEW_ATTACHMENTS_PATH = "data/k_review_attachments.csv"
 
-REGISTRY_COLUMNS = [
-    "opportunity_id", "request_id", "title", "company", "market", "location", "job_url",
-    "version", "status", "output_path", "created_at", "source",
+K_REQUEST_COLUMNS = [
+    "request_id", "opportunity_id", "requested_at", "title", "company", "market",
+    "location", "job_url", "description", "description_en", "semantic_fit",
+    "semantic_reasoning", "status", "output_path", "error",
 ]
-FEEDBACK_COLUMNS = [
-    "feedback_id", "opportunity_id", "request_id", "submitted_at",
-    "target_version", "feedback", "status",
+PACKAGE_COLUMNS = [
+    "package_id", "opportunity_id", "title", "company", "market", "location",
+    "job_url", "version", "status", "cv_pdf_url", "cv_docx_url",
+    "cover_letter_url", "updated_at", "notes",
 ]
+LEGACY_REGISTRY_COLUMNS = [
+    "opportunity_id", "request_id", "title", "company", "market", "location",
+    "job_url", "version", "status", "output_path", "created_at", "source",
+]
+SETTINGS_COLUMNS = ["updated_at", "global_instructions"]
+MESSAGE_COLUMNS = [
+    "message_id", "package_id", "version", "submitted_at", "author",
+    "message_type", "status", "body",
+]
+ATTACHMENT_COLUMNS = [
+    "attachment_id", "message_id", "package_id", "uploaded_at", "filename",
+    "repository_path", "mime_type", "size_bytes",
+]
+MAX_IMAGE_BYTES = 8 * 1024 * 1024
+MAX_IMAGES_PER_MESSAGE = 6
+IMAGE_TYPES = ["png", "jpg", "jpeg", "webp"]
+
+DEFAULT_GLOBAL_INSTRUCTIONS = """K CV generation rules:
+
+- Use MASTER(3) as the sole starting document. Other CV variants are reference material only for verified formulations, projects, metrics and emphasis.
+- Preserve the Master CV visual system 1:1: black-and-white Times New Roman, top header treatment, right-aligned location/dates, original hierarchy, spacing, bullet style, density and two-page structure. Do not invent a new modern template or redesign.
+- Tailor content to the role, but do not invent experience, metrics or responsibilities.
+- The approximately six-month PwC secondment at an energy-sector company is a verified experience. It covered treasury and accounting-related projects, including FX management, liquidity planning and commodity-risk hedging. Use it selectively where relevant and present it as a distinct Selected Project Experience item when the format calls for project experience.
+- Preserve the substance of the PwC work: FX, interest-rate and commodity exposures, derivatives valuation, IFRS 9 hedge accounting, cash/liquidity forecasting, working capital and quantitative modelling.
+- Treat every user review message and attached screenshot as authoritative feedback for the named version. Keep the whole review history, explain what was changed, and return the next draft to this same K Review thread.
+"""
 
 
-def _load(path: str, columns: list[str]) -> tuple[pd.DataFrame, str | None]:
+def _now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _text(value: object) -> str:
+    return str(value or "").strip()
+
+
+def _safe_filename(name: str) -> str:
+    original = Path(name).name
+    suffix = Path(original).suffix.lower()
+    stem = re.sub(r"[^A-Za-z0-9_-]+", "_", Path(original).stem).strip("._")
+    return f"{stem[:120]}{suffix}" if stem else "screenshot.png"
+
+
+def _package_id(row: pd.Series, index: int) -> str:
+    return (
+        _text(row.get("package_id"))
+        or _text(row.get("request_id"))
+        or _text(row.get("opportunity_id"))
+        or f"package-{index}"
+    )
+
+
+def _load_table(token: str | None, path: str, columns: list[str]) -> tuple[pd.DataFrame, str | None]:
     try:
-        frame, sha = load_csv_file(github_token(), path, columns)
+        frame, sha = load_csv_file(token, path, columns)
         return frame.reindex(columns=columns, fill_value="").fillna(""), sha
     except Exception:
         return pd.DataFrame(columns=columns), None
 
 
-def _links(output_path: object) -> dict[str, str]:
-    text = str(output_path or "")
-    found: dict[str, str] = {}
-    for label, url in re.findall(r"(PDF|DOCX|Cover letter):\s*(https?://[^;\s]+)", text, flags=re.I):
-        key = label.lower().replace(" ", "_")
-        found[key] = url
-    return found
+def _display_value(row: pd.Series, *names: str) -> str:
+    for name in names:
+        value = _text(row.get(name))
+        if value:
+            return value
+    return ""
 
 
-def _records(requests: pd.DataFrame, registry: pd.DataFrame) -> pd.DataFrame:
-    rows: dict[str, dict[str, str]] = {}
-    for _, row in registry.iterrows():
-        oid = str(row.get("opportunity_id", "")).strip()
-        if oid:
-            rows[oid] = {col: str(row.get(col, "") or "") for col in REGISTRY_COLUMNS}
-    for _, row in requests.iterrows():
-        oid = str(row.get("opportunity_id", "")).strip()
-        if not oid:
-            continue
-        current = rows.setdefault(oid, {col: "" for col in REGISTRY_COLUMNS})
-        for col in ["request_id", "title", "company", "market", "location", "job_url", "status", "output_path"]:
-            value = str(row.get(col, "") or "")
-            if value or not current.get(col):
-                current[col] = value
-        current["opportunity_id"] = oid
-        current["source"] = current.get("source") or "K queue"
-        current["version"] = current.get("version") or ("1" if current.get("output_path") else "")
-    return pd.DataFrame(list(rows.values())).reindex(columns=REGISTRY_COLUMNS, fill_value="").fillna("")
+def _legacy_registry_view(legacy: pd.DataFrame) -> pd.DataFrame:
+    """Adapt the pre-review output registry so existing KNDS packages remain visible."""
+    if legacy.empty:
+        return pd.DataFrame(columns=PACKAGE_COLUMNS)
+    rows: list[dict[str, str]] = []
+    for _, source in legacy.iterrows():
+        output = _text(source.get("output_path"))
+        links = {label.strip().lower(): url.strip() for label, url in re.findall(r"([^:;]+):\s*(https?://[^;]+)", output)}
+        package_id = _text(source.get("opportunity_id")) or _text(source.get("request_id"))
+        rows.append({
+            "package_id": package_id,
+            "opportunity_id": _text(source.get("opportunity_id")),
+            "title": _text(source.get("title")),
+            "company": _text(source.get("company")),
+            "market": _text(source.get("market")),
+            "location": _text(source.get("location")),
+            "job_url": _text(source.get("job_url")),
+            "version": _text(source.get("version")),
+            "status": _text(source.get("status")),
+            "cv_pdf_url": links.get("pdf", ""),
+            "cv_docx_url": links.get("docx", ""),
+            "cover_letter_url": links.get("cover letter", ""),
+            "updated_at": _text(source.get("created_at")),
+            "notes": "legacy output registry",
+        })
+    view = pd.DataFrame(rows).reindex(columns=PACKAGE_COLUMNS, fill_value="").fillna("")
+    view["_version_num"] = pd.to_numeric(view["version"], errors="coerce").fillna(0)
+    view = view.sort_values(["package_id", "_version_num"], ascending=[True, False])
+    return view.drop_duplicates("package_id", keep="first").drop(columns=["_version_num"])
 
 
-def _save_feedback(record: dict[str, str]) -> str | None:
-    token = github_token()
-    if not token:
-        return "GitHub saving is not configured for this app."
-    feedback, sha = _load(K_FEEDBACK_PATH, FEEDBACK_COLUMNS)
-    new_row = pd.DataFrame([record]).reindex(columns=FEEDBACK_COLUMNS, fill_value="")
-    combined = pd.concat([feedback, new_row], ignore_index=True)
+def _document_url(url: str) -> str:
+    """Avoid blocked cross-site Library download endpoints from Streamlit."""
+    lowered = url.lower()
+    if "chatgpt.com/api/library" in lowered or "/download" in lowered:
+        return LIBRARY_URL
+    return url
+
+
+def _render_document_links(row: pd.Series) -> None:
+    links = [
+        ("Otevřít pracovní nabídku", _display_value(row, "job_url")),
+        ("CV PDF v Library", _document_url(_display_value(row, "cv_pdf_url", "pdf_url", "cv_url"))),
+        ("CV DOCX v Library", _document_url(_display_value(row, "cv_docx_url", "docx_url"))),
+        ("Cover letter v Library", _document_url(_display_value(row, "cover_letter_url", "cover_url"))),
+    ]
+    valid = [(label, url) for label, url in links if url.startswith(("https://", "http://"))]
+    if valid:
+        cols = st.columns(min(4, len(valid)))
+        for col, (label, url) in zip(cols, valid):
+            col.link_button(label, url, use_container_width=True)
+    else:
+        output = _text(row.get("output_path"))
+        if output:
+            st.caption(f"K output: {output}")
+        st.caption("Dokumentové odkazy se zobrazí, jakmile je K zapíše do registru.")
+
+
+def _render_attachment(token: str | None, attachment: pd.Series) -> None:
+    path = _text(attachment.get("repository_path"))
+    if not path:
+        return
     try:
-        save_csv_file(token, K_FEEDBACK_PATH, combined, sha, "Store K CV review feedback")
+        content, _ = load_file_bytes(token, path)
+        if content:
+            st.image(content, caption=_text(attachment.get("filename")), width="stretch")
+        else:
+            st.caption(f"Příloha není dostupná: {_text(attachment.get('filename'))}")
     except Exception as exc:
-        return str(exc)
-    return None
+        st.caption(f"Přílohu se nepodařilo načíst: {exc}")
+
+
+def _save_user_review(
+    token: str,
+    package_id: str,
+    version: str,
+    body: str,
+    uploads: list,
+    messages: pd.DataFrame,
+    messages_sha: str | None,
+    attachments: pd.DataFrame,
+    attachments_sha: str | None,
+    requests: pd.DataFrame,
+    requests_sha: str | None,
+    packages: pd.DataFrame,
+    packages_sha: str | None,
+    legacy: pd.DataFrame,
+    legacy_sha: str | None,
+) -> tuple[pd.DataFrame, str | None, pd.DataFrame, str | None, str | None]:
+    message_id = f"KR-{uuid4().hex[:12]}"
+    submitted_at = _now()
+    new_attachments: list[dict[str, str]] = []
+    for upload in uploads:
+        raw = upload.getvalue()
+        if len(raw) > MAX_IMAGE_BYTES:
+            raise ValueError(f"{upload.name} je větší než 8 MB.")
+        attachment_id = f"ATT-{uuid4().hex[:12]}"
+        safe_name = _safe_filename(upload.name)
+        repo_path = f"data/k_review_attachments/{_safe_filename(package_id)}/{message_id}_{safe_name}"
+        save_file_bytes(token, repo_path, raw, None, f"Add K review screenshot for {package_id}")
+        new_attachments.append({
+            "attachment_id": attachment_id,
+            "message_id": message_id,
+            "package_id": package_id,
+            "uploaded_at": submitted_at,
+            "filename": safe_name,
+            "repository_path": repo_path,
+            "mime_type": _text(upload.type) or "image/png",
+            "size_bytes": str(len(raw)),
+        })
+
+    new_message = pd.DataFrame([{
+        "message_id": message_id,
+        "package_id": package_id,
+        "version": version,
+        "submitted_at": submitted_at,
+        "author": "user",
+        "message_type": "review_feedback",
+        "status": "Revision requested",
+        "body": body,
+    }], columns=MESSAGE_COLUMNS)
+    updated_messages = pd.concat([messages, new_message], ignore_index=True)
+    save_csv_file(token, K_REVIEW_MESSAGES_PATH, updated_messages, messages_sha, "Add K CV review feedback")
+
+    updated_attachments = attachments.copy()
+    if new_attachments:
+        updated_attachments = pd.concat([updated_attachments, pd.DataFrame(new_attachments)], ignore_index=True)
+        save_csv_file(token, K_REVIEW_ATTACHMENTS_PATH, updated_attachments, attachments_sha, "Add K CV review screenshots")
+
+    updated_requests = requests.copy()
+    match = (
+        updated_requests.get("request_id", pd.Series(dtype=str)).astype(str).eq(package_id)
+        | updated_requests.get("opportunity_id", pd.Series(dtype=str)).astype(str).eq(package_id)
+    )
+    if match.any() and "status" in updated_requests.columns:
+        updated_requests.loc[match, "status"] = "Revision requested"
+        updated_requests.loc[match, "error"] = ""
+        save_csv_file(token, K_REQUEST_PATH, updated_requests, requests_sha, "Mark K CV revision requested")
+
+    updated_packages = packages.copy()
+    package_match = (
+        updated_packages.get("package_id", pd.Series(dtype=str)).astype(str).eq(package_id)
+        | updated_packages.get("opportunity_id", pd.Series(dtype=str)).astype(str).eq(package_id)
+    )
+    if package_match.any() and "status" in updated_packages.columns:
+        updated_packages.loc[package_match, "status"] = "Revision requested"
+        updated_packages.loc[package_match, "updated_at"] = submitted_at
+        save_csv_file(token, K_PACKAGE_PATH, updated_packages, packages_sha, "Mark K package revision requested")
+
+    if not legacy.empty and legacy_sha:
+        updated_legacy = legacy.copy()
+        legacy_match = (
+            updated_legacy["opportunity_id"].astype(str).eq(package_id)
+            | updated_legacy["request_id"].astype(str).eq(package_id)
+        )
+        if legacy_match.any():
+            updated_legacy.loc[legacy_match, "status"] = "Revision requested"
+            save_csv_file(token, K_LEGACY_REGISTRY_PATH, updated_legacy, legacy_sha, "Mark legacy K CV revision requested")
+
+    return updated_messages, None, updated_attachments, None, message_id
+
+
+def _render_thread(
+    token: str | None,
+    package_id: str,
+    version: str,
+    messages: pd.DataFrame,
+    attachments: pd.DataFrame,
+    requests: pd.DataFrame,
+    requests_sha: str | None,
+    packages: pd.DataFrame,
+    packages_sha: str | None,
+    messages_sha: str | None,
+    attachments_sha: str | None,
+    legacy: pd.DataFrame,
+    legacy_sha: str | None,
+) -> None:
+    package_messages = messages[messages["package_id"].astype(str).eq(package_id)].sort_values("submitted_at")
+    package_attachments = attachments[attachments["package_id"].astype(str).eq(package_id)]
+    if package_messages.empty:
+        st.caption("Zatím žádný feedback ani AI odpověď.")
+    for _, message in package_messages.iterrows():
+        author = _text(message.get("author"))
+        with st.chat_message("assistant" if author == "ai" else "user"):
+            label = "AI / K" if author == "ai" else "Ty"
+            st.caption(f"{label} · {_text(message.get('submitted_at'))} · {_text(message.get('status'))}")
+            st.markdown(_text(message.get("body")))
+            for _, attachment in package_attachments[
+                package_attachments["message_id"].astype(str).eq(_text(message.get("message_id")))
+            ].iterrows():
+                _render_attachment(token, attachment)
+
+    st.markdown("**Nový feedback k této verzi**")
+    st.caption("Toto pole je záměrně prázdné. Obecné instrukce jsou nahoře; sem patří jen připomínky k této konkrétní verzi.")
+    feedback = st.text_area(
+        "Feedback",
+        key=f"k_review_feedback_{_safe_filename(package_id)}_{_safe_filename(version)}",
+        placeholder="Např. tento bullet přesuň, zkrať druhou stranu, zachovej přesný wording...",
+        label_visibility="collapsed",
+    )
+    uploads = st.file_uploader(
+        "Přiložit screenshoty",
+        type=IMAGE_TYPES,
+        accept_multiple_files=True,
+        key=f"k_review_upload_{_safe_filename(package_id)}_{_safe_filename(version)}",
+        help="Nahraj screenshot CV nebo konkrétní části, na které odkazuješ ve feedbacku.",
+    )
+    disabled = not token or (not feedback.strip() and not uploads)
+    if st.button(
+        "Uložit feedback a požádat o revizi",
+        type="primary",
+        key=f"k_review_submit_{_safe_filename(package_id)}_{_safe_filename(version)}",
+        disabled=disabled,
+    ):
+        if len(uploads) > MAX_IMAGES_PER_MESSAGE:
+            st.error(f"Maximálně {MAX_IMAGES_PER_MESSAGE} screenshotů v jedné zprávě.")
+            return
+        if not token:
+            st.error("Pro uložení feedbacku musí být nastavený GitHub token ve Streamlit Secrets.")
+            return
+        try:
+            _save_user_review(
+                token,
+                package_id,
+                version,
+                feedback.strip() or "(Feedback je v přiložených screenshotech.)",
+                list(uploads),
+                messages,
+                messages_sha,
+                attachments,
+                attachments_sha,
+                requests,
+                requests_sha,
+                packages,
+                packages_sha,
+                legacy,
+                legacy_sha,
+            )
+        except Exception as exc:
+            st.error(f"Feedback se nepodařilo uložit: {exc}")
+        else:
+            st.success("Feedback i screenshoty jsou uložené. K je nyní označené jako Revision requested.")
+            st.rerun()
 
 
 def render_k_review() -> None:
-    st.markdown('<div class="eyebrow">Workstream K</div>', unsafe_allow_html=True)
     st.title("K · CV Review")
-    st.caption(
-        "Otevři PDF preview, zkontroluj DOCX a cover letter, napiš připomínky a požádej o novou verzi. "
-        "Původní verze zůstává zachovaná."
-    )
+    st.caption("Jedno místo pro prohlížení CV, konkrétní feedback, screenshoty a následné reakce K.")
+    token = github_token()
+    if not token:
+        st.warning("GitHub saving není nastavené. Dokumenty můžeš číst, ale feedback a screenshoty se bez tokenu neuloží.")
 
-    requests, _ = _load(K_REQUEST_PATH, K_COLUMNS)
-    registry, _ = _load(K_REGISTRY_PATH, REGISTRY_COLUMNS)
-    records = _records(requests, registry)
-    feedback, _ = _load(K_FEEDBACK_PATH, FEEDBACK_COLUMNS)
-
-    if records.empty:
-        st.info("Zatím není k dispozici žádný K balíček. Apply role se zde objeví po dokončení K.")
-        return
-
-    global_feedback = ""
-    if not feedback.empty:
-        global_rows = feedback[
-            feedback["opportunity_id"].astype(str).eq("__global__")
-            & feedback["status"].astype(str).eq("Global instruction")
-        ].sort_values("submitted_at")
-        if not global_rows.empty:
-            global_feedback = str(global_rows.iloc[-1].get("feedback", "") or "")
-        feedback = feedback[
-            ~feedback["opportunity_id"].astype(str).eq("__global__")
-        ]
-        if not feedback.empty:
-            feedback = feedback.sort_values("submitted_at").drop_duplicates(
-                "opportunity_id", keep="last"
-            )
-            feedback = feedback.set_index("opportunity_id")
-
-    with st.container(border=True):
-        st.subheader("Obecné nastavení pro všechny budoucí K výstupy")
-        st.caption(
-            "Tento feedback není jen pro jednu pozici. K ho použije jako trvalé obecné "
-            "instrukce při tvorbě všech dalších CV a cover letterů; konkrétní připomínky "
-            "k jedné roli zůstávají níže u jejího balíčku."
-        )
-        with st.form("k_global_feedback_form"):
-            global_comment = st.text_area(
-                "Globální instrukce pro AI",
-                value=global_feedback,
-                height=150,
-                placeholder=(
-                    "Např. zachovej starší černobílý serifový master layout, "
-                    "nepřidávej modrý header ani Selected Relevance, "
-                    "na první stránce ponech Profile a Work Experience…"
-                ),
-            )
-            save_global = st.form_submit_button(
-                "Uložit obecné nastavení pro všechny K výstupy", type="primary"
-            )
-        if save_global:
-            text = global_comment.strip()
-            if not text:
-                st.warning("Globální instrukce jsou prázdné; nic se neuložilo.")
-            else:
-                now = datetime.now(timezone.utc).isoformat()
-                record = {
-                    "feedback_id": f"KREV:GLOBAL:{now}",
-                    "opportunity_id": "__global__",
-                    "request_id": "K:GLOBAL",
-                    "submitted_at": now,
-                    "target_version": "GLOBAL",
-                    "feedback": text,
-                    "status": "Global instruction",
-                }
-                error = _save_feedback(record)
-                if error:
-                    st.error(f"Obecné nastavení se nepodařilo uložit: {error}")
-                else:
-                    st.success("Obecné nastavení je uložené pro všechny další K výstupy.")
-                    st.rerun()
-
-    ready = int(records["output_path"].astype(str).str.len().gt(0).sum())
-    pending = int(records["status"].astype(str).str.contains("Pending|requested|progress", case=False, na=False).sum())
-    revisions = int(
-        feedback["status"].astype(str).eq("Revision requested").sum()
-    ) if not feedback.empty else 0
-    m1, m2, m3 = st.columns(3)
-    m1.metric("CV balíčky", len(records))
-    m2.metric("Ready / preview", ready)
-    m3.metric("Čeká nebo se přepracovává", pending + revisions)
-
-    for _, row in records.sort_values(["status", "company", "title"]).iterrows():
-        oid = str(row.get("opportunity_id", "")).strip()
-        title = str(row.get("title", "")).strip() or oid
-        company = str(row.get("company", "")).strip()
-        status = str(row.get("status", "")).strip() or "Unknown"
-        links = _links(row.get("output_path", ""))
-        job_url = str(row.get("job_url", "") or "").strip() or JOB_URL_OVERRIDES.get(oid, "")
-        old_feedback = ""
-        old_status = ""
-        old_version = "1"
-        if not feedback.empty and oid in feedback.index:
-            old = feedback.loc[oid]
-            old_feedback = str(old.get("feedback", "") or "")
-            if str(old.get("feedback_id", "") or "").startswith("KREV:GLOBAL_REFRESH:"):
-                old_feedback = ""
-            old_status = str(old.get("status", "") or "")
-            old_version = str(old.get("target_version", "") or "1")
-
-        with st.container(border=True):
-            st.subheader(f"{company} — {title}")
-            st.caption(
-                f"{row.get('market', '')} · {row.get('location', '')} · "
-                f"stav K: {status} · verze {row.get('version', '') or old_version}"
-            )
-            if links or job_url:
-                b1, b2, b3, b4 = st.columns(4)
-                if job_url:
-                    b1.link_button("Otevřít pracovní nabídku", job_url, use_container_width=True)
-                else:
-                    b1.caption("Pracovní nabídka: odkaz chybí")
-                if links.get("pdf"):
-                    b2.link_button("Otevřít CV (PDF) v Library", LIBRARY_URL, use_container_width=True)
-                else:
-                    b2.caption("CV (PDF): čeká")
-                if links.get("docx"):
-                    b3.link_button("Otevřít CV (DOCX) v Library", LIBRARY_URL, use_container_width=True)
-                else:
-                    b3.caption("CV (DOCX): čeká")
-                if links.get("cover_letter"):
-                    b4.link_button("Otevřít Cover letter v Library", LIBRARY_URL, use_container_width=True)
-                else:
-                    b4.caption("Cover letter: čeká")
-                st.caption(
-                    "Pracovní odkaz vede přímo na pozici. Tři dokumentová tlačítka otevírají Library; "
-                    "tam vyhledej soubor podle firmy a role."
-                )
-            else:
-                st.info("K request je ve frontě; preview se objeví po dokončení generování.")
-
-            if old_status:
-                st.caption(f"Poslední review: {old_status} · cílová verze {old_version}")
-            with st.form(f"k_review_form_{oid}"):
-                comment = st.text_area(
-                    "Feedback k této konkrétní pozici / verzi",
-                    value=old_feedback,
-                    height=130,
-                    placeholder=(
-                        "Např. zachovej dvoustránkový layout, zvýrazni FX hedging, "
-                        "zkrátit profil, nepřidávej nic co není v master CV…"
-                    ),
-                )
-                submit = st.form_submit_button("Uložit feedback a požádat o přepracování", type="primary")
-            if submit:
-                now = datetime.now(timezone.utc).isoformat()
-                record = {
-                    "feedback_id": f"KREV:{oid}:{now}",
-                    "opportunity_id": oid,
-                    "request_id": str(row.get("request_id", "") or f"K:{oid}"),
-                    "submitted_at": now,
-                    "target_version": str(row.get("version", "") or "1"),
-                    "feedback": comment.strip(),
-                    "status": "Revision requested",
-                }
-                error = _save_feedback(record)
-                if error:
-                    st.error(f"Feedback se nepodařilo uložit: {error}")
-                else:
-                    st.success("Feedback je uložený. K vytvoří novou verzi a ponechá původní.")
-                    st.rerun()
+    settings, settings_sha = _load_table(token, K_REVIEW_SETTINGS_PATH, SETTINGS_COLUMNS)
+    current_context = _text(settings.iloc[-1]["global_instructions"]) if not settings.empty else DEFAULT_GLOBAL_INSTRUCTIONS
+    st.subheader("Globální kontext pro všechny K výstupy")
+    st.caption("Toto je trvalé nastavení. Není to feedback k jedné pozici a nezobrazuje se v prázdném feedback poli níže.")
+    global_context = st.text_area("Globální instrukce", value=current_context, height=260, key="k_global_context")
+    if st.button("Uložit globální kontext", type="secondary", disabled=not token, key="k_global_context_save"):
+        updated = pd.DataFrame([{"updated_at": _now(), "global_instructions": global_context.strip()}], columns=SETTINGS_COLUMNS)
+        try:
+            save_csv_file(token, K_REVIEW_SETTINGS_PATH, updated, settings_sha, "Update global K CV context")
+        except Exception as exc:
+            st.error(f"Globální kontext se nepodařilo uložit: {exc}")
+        else:
+            st.success("Globální K kontext uložen.")
+            st.rerun()
 
     st.divider()
-    st.caption(
-        "Globální instrukce platí pro všechny další K výstupy; tento formulář ovlivňuje jen konkrétní balíček. C/J rating se tím zpětně nemění. "
-        "Žádost zaměstnavateli se z dashboardu automaticky neodesílá."
-    )
+    requests, requests_sha = _load_table(token, K_REQUEST_PATH, K_REQUEST_COLUMNS)
+    packages, packages_sha = _load_table(token, K_PACKAGE_PATH, PACKAGE_COLUMNS)
+    legacy, legacy_sha = _load_table(token, K_LEGACY_REGISTRY_PATH, LEGACY_REGISTRY_COLUMNS)
+    messages, messages_sha = _load_table(token, K_REVIEW_MESSAGES_PATH, MESSAGE_COLUMNS)
+    attachments, attachments_sha = _load_table(token, K_REVIEW_ATTACHMENTS_PATH, ATTACHMENT_COLUMNS)
+    if requests.empty and packages.empty and legacy.empty:
+        st.info("V K zatím není žádný balíček připravený k review.")
+        return
+
+    request_view = requests.rename(columns={"request_id": "package_id"}).copy()
+    for column in PACKAGE_COLUMNS:
+        if column not in request_view.columns:
+            request_view[column] = ""
+    request_view = request_view[PACKAGE_COLUMNS]
+    package_view = packages.reindex(columns=PACKAGE_COLUMNS, fill_value="").copy()
+    legacy_view = _legacy_registry_view(legacy)
+    visible = pd.concat([package_view, legacy_view, request_view], ignore_index=True).fillna("")
+    visible = visible.drop_duplicates("package_id", keep="first")
+    visible = visible[visible.apply(lambda row: _package_id(row, row.name) != "", axis=1)]
+    st.subheader(f"Balíčky k review ({len(visible)})")
+    for index, row in visible.iterrows():
+        package_id = _text(row.get("package_id")) or _package_id(row, int(index))
+        version = _display_value(row, "version", "cv_version") or "current"
+        title = _text(row.get("title")) or "Untitled role"
+        company = _text(row.get("company")) or "Unknown company"
+        status = _text(row.get("status")) or "Unknown status"
+        with st.container(border=True):
+            st.markdown(f"### {company} — {title}")
+            st.caption(f"{_display_value(row, 'location', 'market')} · {status} · version {version}")
+            _render_document_links(row)
+            _render_thread(
+                token, package_id, version, messages, attachments, requests,
+                requests_sha, packages, packages_sha, messages_sha, attachments_sha,
+                legacy, legacy_sha,
+            )

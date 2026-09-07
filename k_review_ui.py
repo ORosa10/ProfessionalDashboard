@@ -110,7 +110,11 @@ def _legacy_registry_view(legacy: pd.DataFrame) -> pd.DataFrame:
     rows: list[dict[str, str]] = []
     for _, source in legacy.iterrows():
         output = _text(source.get("output_path"))
-        links = {label.strip().lower(): url.strip() for label, url in re.findall(r"([^:;]+):\s*(https?://[^;]+)", output)}
+        links = {}
+        for label, key in (("PDF", "pdf"), ("DOCX", "docx"), ("Cover letter", "cover letter")):
+            match = re.search(rf"{re.escape(label)}:\s*(https?://[^;]+)", output, flags=re.IGNORECASE)
+            if match:
+                links[key] = match.group(1).strip()
         package_id = _text(source.get("opportunity_id")) or _text(source.get("request_id"))
         rows.append({
             "package_id": package_id,
@@ -144,17 +148,19 @@ def _document_url(url: str) -> str:
 
 def _render_document_links(row: pd.Series) -> None:
     links = [
-        ("Otevřít pracovní nabídku", _display_value(row, "job_url")),
-        ("CV PDF v Library", _document_url(_display_value(row, "cv_pdf_url", "pdf_url", "cv_url"))),
-        ("CV DOCX v Library", _document_url(_display_value(row, "cv_docx_url", "docx_url"))),
-        ("Cover letter v Library", _document_url(_display_value(row, "cover_letter_url", "cover_url"))),
+        ("Pracovní nabídka", _display_value(row, "job_url")),
+        ("CV · PDF", _document_url(_display_value(row, "cv_pdf_url", "pdf_url", "cv_url"))),
+        ("CV · DOCX", _document_url(_display_value(row, "cv_docx_url", "docx_url"))),
+        ("Cover letter", _document_url(_display_value(row, "cover_letter_url", "cover_url"))),
     ]
-    valid = [(label, url) for label, url in links if url.startswith(("https://", "http://"))]
-    if valid:
-        cols = st.columns(min(4, len(valid)))
-        for col, (label, url) in zip(cols, valid):
-            col.link_button(label, url, use_container_width=True)
-    else:
+    cols = st.columns(4, gap="small")
+    for col, (label, url) in zip(cols, links):
+        with col:
+            if url.startswith(("https://", "http://")):
+                col.link_button(label, url, use_container_width=True)
+            else:
+                st.button(label, disabled=True, use_container_width=True, key=f"missing_{_safe_filename(label)}_{_safe_filename(_text(row.get('package_id')))}")
+    if not any(url.startswith(("https://", "http://")) for _, url in links):
         output = _text(row.get("output_path"))
         if output:
             st.caption(f"K output: {output}")
@@ -303,23 +309,13 @@ def _render_thread(
         placeholder="Např. tento bullet přesuň, zkrať druhou stranu, zachovej přesný wording...",
         label_visibility="collapsed",
     )
-    uploads = st.file_uploader(
-        "Přiložit screenshoty",
-        type=IMAGE_TYPES,
-        accept_multiple_files=True,
-        key=f"k_review_upload_{_safe_filename(package_id)}_{_safe_filename(version)}",
-        help="Nahraj screenshot CV nebo konkrétní části, na které odkazuješ ve feedbacku.",
-    )
-    disabled = not token or (not feedback.strip() and not uploads)
+    disabled = not token or not feedback.strip()
     if st.button(
         "Uložit feedback a požádat o revizi",
         type="primary",
         key=f"k_review_submit_{_safe_filename(package_id)}_{_safe_filename(version)}",
         disabled=disabled,
     ):
-        if len(uploads) > MAX_IMAGES_PER_MESSAGE:
-            st.error(f"Maximálně {MAX_IMAGES_PER_MESSAGE} screenshotů v jedné zprávě.")
-            return
         if not token:
             st.error("Pro uložení feedbacku musí být nastavený GitHub token ve Streamlit Secrets.")
             return
@@ -328,8 +324,8 @@ def _render_thread(
                 token,
                 package_id,
                 version,
-                feedback.strip() or "(Feedback je v přiložených screenshotech.)",
-                list(uploads),
+                feedback.strip(),
+                [],
                 messages,
                 messages_sha,
                 attachments,
@@ -344,13 +340,13 @@ def _render_thread(
         except Exception as exc:
             st.error(f"Feedback se nepodařilo uložit: {exc}")
         else:
-            st.success("Feedback i screenshoty jsou uložené. K je nyní označené jako Revision requested.")
+            st.success("Feedback je uložený. K je nyní označené jako Revision requested.")
             st.rerun()
 
 
 def render_k_review() -> None:
     st.title("K · CV Review")
-    st.caption("Jedno místo pro prohlížení CV, konkrétní feedback, screenshoty a následné reakce K.")
+    st.caption("Jedno místo pro prohlížení CV a samostatnou konverzaci s K u každé pozice.")
     token = github_token()
     if not token:
         st.warning("GitHub saving není nastavené. Dokumenty můžeš číst, ale feedback a screenshoty se bez tokenu neuloží.")

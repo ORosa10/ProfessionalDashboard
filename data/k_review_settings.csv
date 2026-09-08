@@ -1,2 +1,304 @@
 updated_at,global_instructions
-2026-09-07T00:00:00+00:00,"K CV generation rules: use MASTER(3) as the sole starting document; use other CV variants only as reference material for verified formulations, projects, metrics and emphasis. Preserve the Master CV visual system 1:1: black-and-white Times New Roman, original header treatment, right-aligned location/dates, hierarchy, spacing, bullet style, density and two-page structure. Do not invent a new template or redesign. Tailor content without inventing experience, metrics or responsibilities. The approximately six-month PwC secondment at an energy-sector company is verified and covered treasury and accounting-related projects including FX management, liquidity planning and commodity-risk hedging. Use it selectively where relevant and present it as a distinct Selected Project Experience item when the format calls for project experience. Treat every user review message and attached screenshot as authoritative feedback for the named version; retain the thread and return the next draft to the same K Review thread."
+2026-09-08T13:00:00+00:00,"# K Master Context — Ondřej Rosický
+
+Updated: 2026-09-08
+
+This is the master context for all K CV generation and K Review work. It is the source of truth for candidate facts, tailoring decisions, formatting, and review behavior. Work on individual CVs should be handled in K Review, not copied back into the general chat.
+
+## 1. Candidate identity and positioning
+
+Name: Ondřej Rosický  
+Professional positioning: treasury, financial-risk, derivatives, valuation and investment professional with experience across consulting, banking and the investment side.  
+Credentials: CFA and FRM.  
+Working language for CVs: English unless the user explicitly requests another language. Do not claim German or another language at a level not verified in the source CV or user instructions.
+
+The candidate combines:
+- financial markets and treasury knowledge;
+- FX, interest-rate and commodity-risk management;
+- derivatives valuation and hedge accounting;
+- liquidity and working-capital analysis;
+- quantitative modelling and risk analytics;
+- investment analysis, valuation and transaction finance;
+- client advisory and junior-team leadership.
+
+The CV must present a coherent analytical finance profile. It must not reduce the candidate to a generic controller, generic consultant or generic private-equity profile.
+
+## 2. Career direction and role lanes
+
+The strongest long-term direction is analytical work connected to financial markets and real corporate/investment decisions, especially:
+- treasury and financial risk management;
+- FX, interest-rate and commodity hedging;
+- market and liquidity risk;
+- derivatives valuation and model validation;
+- quantitative risk and financial-services analytics;
+- valuation, corporate finance and M&A;
+- investment analysis where modelling, diligence and financing are central.
+
+The candidate prefers analytical substance, markets and decision support over:
+- pure sales or business development;
+- negotiation-heavy roles without analytical ownership;
+- reporting-only or controlling-heavy roles;
+- generic administration;
+- a role framed only around compliance or routine process work;
+- an overly junior position when the actual experience supports a more experienced level.
+
+Tailor the emphasis by role rather than forcing one narrative.
+
+### Treasury / risk / markets roles
+
+Prioritise PwC treasury advisory, the energy-sector secondment, FX/rates/commodity hedging, derivatives valuation, IFRS 9 hedge accounting, liquidity planning, working capital, treasury systems, quantitative risk methods, CFA and FRM.
+
+### Quant / model validation / financial-services consulting
+
+Prioritise derivatives valuation, market and liquidity risk, VaR, stress testing, Monte Carlo, PCA, GARCH, curve construction, Greeks, R/RStudio, Alteryx, model analysis, financial-risk advisory and CFA/FRM credentials.
+
+### Corporate finance / M&A roles
+
+Prioritise Rockaway investment analysis, financial-statement analysis, DCF/LBO modelling, cash-flow scenarios, financing structures, terms and covenants, due diligence, valuation and Investment Committee materials. Use PwC transaction and valuation experience where relevant, but do not overemphasise treasury mechanics.
+
+### Energy / infrastructure / commodity roles
+
+Prioritise the verified energy-sector secondment, commodity-risk hedging, FX management, liquidity planning, renewable-energy PPA advisory and renewable-energy infrastructure analysis.
+
+### Aviation / asset-based financing roles
+
+Prioritise financial modelling, asset/investment analysis, financing structures, diligence, cash-flow scenarios, terms and covenants, valuation and committee materials. Do not claim direct aircraft, engine or helicopter experience unless explicitly added by the user.
+
+### General advisory / consulting roles
+
+Prioritise PwC client work, structured analysis, communication with finance and treasury stakeholders, process and system implementation, leadership of junior colleagues and the ability to translate quantitative analysis into decisions.
+
+## 3. Verified professional experience
+
+### Rockaway Capital — Investment Analyst
+Prague, CZ  
+November 2025–Present
+
+Verified themes:
+- financial-statement analysis;
+- DCF and LBO modelling;
+- cash-flow scenarios;
+- analysis of financing structures, financing terms and covenants;
+- portfolio-company credit and liquidity monitoring;
+- Investment Committee materials;
+- portfolio-company budgeting and reporting;
+- investment and transaction analysis.
+
+Selected project:
+- renewable-energy infrastructure analysis.
+
+Use this role prominently for investment, corporate-finance, M&A, valuation, infrastructure and financing roles. Do not describe it as pure private-equity sourcing or as a senior portfolio-management role.
+
+### PwC Czech Republic — Junior Manager, Treasury Advisory
+Prague, CZ  
+January 2023–November 2025
+
+Verified themes:
+- FX, interest-rate and commodity exposure analysis;
+- hedging strategy and financial-risk management;
+- derivatives valuation, including forwards, swaps and relevant exotic FX, commodity and equity options;
+- IFRS 9 hedge accounting;
+- liquidity and working-capital forecasting;
+- treasury systems and risk-tool projects;
+- quantitative modelling and risk analysis;
+- client-facing treasury advisory;
+- leadership of a small junior team;
+- more than 50 cross-asset valuations;
+- a $50–100 million mandate where the verified CV formulation supports that reference;
+- renewable-energy PPA advisory;
+- RStudio / Power BI risk-tool work where relevant.
+
+### PwC energy-sector secondment — approximately six months
+
+This is verified and must be treated as a distinct project experience when relevant.
+
+Verified scope:
+- FX management;
+- liquidity planning;
+- commodity-risk management and hedging;
+- treasury and accounting-related projects;
+- related financial-risk and hedge-accounting work.
+
+Rules:
+- Use selectively for treasury, risk, energy, commodity, infrastructure, corporate-finance and relevant financing roles.
+- When the CV has a Selected Project Experience section, show this as its own distinct project item.
+- Do not attach it to an unrelated PwC bullet, especially not to the share-based-compensation / fair-value bullet.
+- Do not invent the energy company name, exact title, extra dates or responsibilities not provided by the user.
+- Keep the wording concise enough to preserve the approved two-page layout.
+
+### Komerční banka — Junior Salesman, Investment Banking
+Prague, CZ  
+July 2021–December 2022
+
+Verified themes:
+- FX and money-market products;
+- banking and investment-banking environment;
+- market-facing communication and financial instruments.
+
+Use when it strengthens a markets, treasury, banking, FX or financial-products narrative. Do not turn this into a pure sales profile.
+
+### Deloitte Czech Republic — Audit Data Analyst Intern
+September 2019–September 2020
+
+Verified themes:
+- IFRS 16 support;
+- audit data analysis;
+- lease fair-value web application.
+
+Use selectively for data, accounting, valuation, financial-reporting or analytical consulting roles. Keep it concise in senior applications.
+
+## 4. Education and credentials
+
+### Charles University — Institute of Economic Studies
+
+Master’s in Economics and Finance, Financial Markets and Banking  
+2023  
+Average grade 1.44, magna cum laude.
+
+Verified academic themes:
+- portfolio management;
+- asset pricing;
+- advanced financial econometrics / RStudio;
+- M&A;
+- financial instruments;
+- banking;
+- financial markets.
+
+Theses / research themes:
+- stock ownership structure and related risk premium;
+- portfolio optimisation using options.
+
+### University of Helsinki
+
+Erasmus+ exchange with focus on Alternative Investments.
+
+### Professional credentials
+
+- CFA
+- FRM
+
+Do not omit CFA or FRM from a relevant finance, risk, valuation, treasury or quantitative CV. Do not add unverified certificates.
+
+## 5. Technical and analytical toolkit
+
+Use only where relevant and keep the list consistent with the Master CV and verified variants:
+- R / RStudio;
+- Alteryx;
+- Excel;
+- PowerPoint;
+- Bloomberg;
+- Refinitiv;
+- Power BI where the relevant project is discussed.
+
+Verified analytical methods and subject areas:
+- VaR;
+- stress testing;
+- PCA;
+- GARCH;
+- Monte Carlo simulation;
+- curve construction;
+- option Greeks;
+- regression and logit models;
+- derivatives valuation;
+- DCF and LBO modelling;
+- financial-statement and cash-flow analysis.
+
+Do not add Python, SQL, programming languages, platforms, products or technical claims unless verified in the current Master CV or explicitly confirmed by the user.
+
+## 6. Selected Project Experience rules
+
+The Master CV uses project experience to surface the most relevant work without changing the underlying employment history.
+
+Approved projects include:
+- PwC energy-sector treasury and accounting secondment;
+- Rockaway renewable-energy infrastructure analysis;
+- renewable-energy PPA advisory;
+- RStudio / Power BI risk tool;
+- relevant large valuation or financing mandates where the source CV contains the verified metric.
+
+Each project must:
+- be factually grounded;
+- have a clear role connection;
+- use the same bullet font, size, indentation and line spacing as the surrounding bullets;
+- remain concise;
+- not create a third page.
+
+The PwC energy secondment must be a separate Selected Project Experience item when used. It must never be appended awkwardly to another PwC bullet.
+
+## 7. Master CV formatting — non-negotiable
+
+Use MASTER(3) as the sole starting document. Other CV variants are reference material only for verified wording, facts, projects, metrics and emphasis.
+
+Preserve the Master visual system 1:1:
+- black-and-white serif layout;
+- Times New Roman typography;
+- original header treatment;
+- no blue redesign and no newly invented modern template;
+- original hierarchy and section labels;
+- right-aligned locations and dates;
+- consistent bold treatment of employer/location header elements;
+- consistent bullet style;
+- consistent indentation;
+- consistent paragraph spacing and line spacing;
+- original density and margins;
+- two-page structure.
+
+Specific formatting controls:
+- every location label such as Prague, CZ must use the same formatting throughout the document; do not leave one location bold and another normal;
+- every bullet, including the final PwC fair-value / share-based-compensation bullet, must use the same font size, font face, indentation and line spacing as peer bullets;
+- Selected Project Experience is a content section, not a reason to redesign the document;
+- preserve the Master page-break logic so Education, Leadership and Other Information remain in the intended position;
+- avoid empty pages, orphan headings, clipped text, excessive whitespace and accidental third-page overflow;
+- do not add a Selected Relevance section unless the user explicitly requests it;
+- do not alter approved sections merely to make the CV look different.
+
+Every DOCX must be rendered and visually inspected before it is considered complete. Check both pages at full resolution and correct layout defects before registering the package.
+
+## 8. Content and integrity rules
+
+- Never invent experience, employers, dates, metrics, responsibilities, languages, transactions, clients or technical tools.
+- Do not infer direct aircraft experience from an aviation-finance job description.
+- Do not infer German fluency from a German or Austrian role.
+- Do not claim that the candidate managed a full treasury function if the verified experience was advisory or analytical.
+- Do not overstate Rockaway as a senior investment-committee decision-maker.
+- Do not erase the treasury and financial-risk identity when tailoring to M&A.
+- Do not erase the investment and transaction-finance experience when tailoring to corporate finance.
+- Do not include negative job-search commentary, salary negotiations or reasons for leaving in the CV.
+- Do not use generic filler bullets simply to fill a page.
+- Keep the candidate’s seniority credible: experienced analyst / junior-manager-level professional with strong cross-functional finance exposure.
+- Preserve the distinction between verified facts and role-specific positioning.
+
+## 9. Cover-letter rules
+
+Create a role-specific English cover letter unless another language is explicitly requested.
+
+The cover letter should:
+- identify the actual company and role;
+- explain the most credible connection between the role and the candidate’s experience;
+- use two or three specific evidence points from the CV;
+- reflect the relevant role lane;
+- sound professional and direct, not overly servile;
+- avoid inventing company facts or responsibilities;
+- avoid repeating the entire CV;
+- remain concise and normally fit one page;
+- be saved with the matching package and version.
+
+## 10. K Review workflow
+
+All individual CV work should happen inside K Review.
+
+For every package:
+- show the job link, CV PDF, CV DOCX and cover letter as separate clickable tiles;
+- keep the position-specific feedback field empty for a new version;
+- keep global context separate from position-specific feedback;
+- maintain one review thread per opportunity;
+- treat each user message in that thread as authoritative feedback for that role and version;
+- respond in the same thread with a concise explanation of the change;
+- create the next version only when feedback is actually submitted;
+- preserve older versions and never silently overwrite the review history;
+- register the newest version with valid PDF, DOCX and cover-letter links;
+- avoid duplicate cards caused by mixing the queue and legacy registry.
+
+The normal review flow is text-based. Screenshots are not required. If legacy attachment support exists, it is optional and must not be presented as a requirement.
+
+The general chat should not be used as the place to conduct individual CV revisions unless the user explicitly asks to move a discussion there."

@@ -312,6 +312,9 @@ d907b8ceb69c29837a43,22152bcaa065d47e,2026-09-08T13:42:46.037465+00:00,applicati
 a80346d143cf643cb2c4,2cbf89f0b985e8a1,2026-09-08T13:43:34.699613+00:00,application_stage,G,,Applied,,,,,
 d66682d938a912e2dc69,2cbf89f0b985e8a1,2026-09-08T13:43:34.699613+00:00,decision,G,Apply,,Not rated,Not rated,,,Decision/feedback snapshot
 f4a0448a42202fb4f40c,2cbf89f0b985e8a1,2026-09-08T13:43:34.699613+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
+837ad2e915427ebf8f80,d14f90d9371a24f0,2026-09-08T13:44:09.375496+00:00,decision,G,Apply,,Not rated,Not rated,,,Decision/feedback snapshot
+d0b9cf03f49fe7cdcd22,d14f90d9371a24f0,2026-09-08T13:44:09.375496+00:00,application_stage,G,,Applied,,,,,
+f5976b282d8c7e783aa2,d14f90d9371a24f0,2026-09-08T13:44:09.375496+00:00,opportunity_created,G,,,,,,,Opportunity entered canonical I
 17e34f7e8d624ee919ad,e999c1cd362bc36d,2026-08-24T08:10:00+00:00,decision,G,Apply,,Not rated,Positive,"Link not working, found applied good fit",,Decision/feedback snapshot
 2d89f473413099bfff2b,74ef827840a7ed39,2026-08-24T08:10:00+00:00,application_stage,G,,Applied,,,,,
 54928a0e2eda6535572c,74ef827840a7ed39,2026-08-24T08:10:00+00:00,decision,G,Apply,,Not rated,Positive,Applied good fit,,Decision/feedback snapshot

@@ -23,6 +23,7 @@ LIBRARY_URL = "https://chatgpt.com/library"
 K_REQUEST_PATH = "data/k_requests.csv"
 K_PACKAGE_PATH = "data/k_review_packages.csv"
 K_LEGACY_REGISTRY_PATH = "data/k_output_registry.csv"
+HISTORY_PATH = "data/opportunity_history.csv"
 K_REVIEW_SETTINGS_PATH = "data/k_review_settings.csv"
 K_REVIEW_MESSAGES_PATH = "data/k_review_messages.csv"
 K_REVIEW_ATTACHMENTS_PATH = "data/k_review_attachments.csv"
@@ -49,6 +50,14 @@ MESSAGE_COLUMNS = [
 ATTACHMENT_COLUMNS = [
     "attachment_id", "message_id", "package_id", "uploaded_at", "filename",
     "repository_path", "mime_type", "size_bytes",
+]
+HISTORY_COLUMNS = [
+    "opportunity_id", "source_stream", "source_id", "first_seen_at", "decision_at",
+    "title", "company", "canonical_company_id", "company_category", "market", "location",
+    "job_url", "action", "company_feedback", "role_feedback", "user_comment",
+    "company_rating_at_decision", "semantic_fit_at_decision", "semantic_reasoning_at_decision",
+    "calibration_score_at_decision", "application_stage", "stage_updated_at",
+    "outcome_reason", "history_notes",
 ]
 MAX_IMAGE_BYTES = 8 * 1024 * 1024
 MAX_IMAGES_PER_MESSAGE = 6
@@ -96,6 +105,118 @@ def _load_table(token: str | None, path: str, columns: list[str]) -> tuple[pd.Da
     except Exception:
         return pd.DataFrame(columns=columns), None
 
+
+
+
+def _mark_package_in_i(
+    token: str,
+    row: pd.Series,
+    history: pd.DataFrame,
+    history_sha: str | None,
+) -> None:
+    """Record a role as actually applied from K without touching K ordering."""
+    opportunity_id = _display_value(row, "opportunity_id", "package_id")
+    if not opportunity_id:
+        raise ValueError("Role nemá opportunity ID, takže ji nelze zapsat do I.")
+
+    now = _now()
+    updated = history.reindex(columns=HISTORY_COLUMNS, fill_value="").fillna("").copy()
+    existing = updated["opportunity_id"].astype(str).eq(opportunity_id)
+
+    if existing.any():
+        index = updated.index[existing][-1]
+        updated.loc[index, "action"] = "Apply"
+        updated.loc[index, "application_stage"] = "Applied"
+        updated.loc[index, "stage_updated_at"] = now
+        if not _text(updated.loc[index, "decision_at"]):
+            updated.loc[index, "decision_at"] = now
+        if not _text(updated.loc[index, "source_stream"]):
+            updated.loc[index, "source_stream"] = "G"
+        if not _text(updated.loc[index, "source_id"]):
+            updated.loc[index, "source_id"] = "k-review"
+        for column, names in {
+            "title": ("title",),
+            "company": ("company",),
+            "market": ("market",),
+            "location": ("location",),
+            "job_url": ("job_url",),
+        }.items():
+            value = _display_value(row, *names)
+            if value and not _text(updated.loc[index, column]):
+                updated.loc[index, column] = value
+    else:
+        updated = pd.concat([
+            updated,
+            pd.DataFrame([{
+                "opportunity_id": opportunity_id,
+                "source_stream": "G",
+                "source_id": "k-review",
+                "first_seen_at": _display_value(row, "updated_at") or now,
+                "decision_at": now,
+                "title": _text(row.get("title")),
+                "company": _text(row.get("company")),
+                "canonical_company_id": "",
+                "company_category": "",
+                "market": _text(row.get("market")),
+                "location": _text(row.get("location")),
+                "job_url": _text(row.get("job_url")),
+                "action": "Apply",
+                "company_feedback": "Not rated",
+                "role_feedback": "Not rated",
+                "user_comment": "",
+                "company_rating_at_decision": "",
+                "semantic_fit_at_decision": "",
+                "semantic_reasoning_at_decision": "",
+                "calibration_score_at_decision": "",
+                "application_stage": "Applied",
+                "stage_updated_at": now,
+                "outcome_reason": "",
+                "history_notes": "Marked from K after manual CV preparation and application.",
+            }], columns=HISTORY_COLUMNS),
+        ], ignore_index=True)
+
+    save_csv_file(token, HISTORY_PATH, updated, history_sha, "Mark K role as applied in I")
+
+
+def _render_i_action(
+    token: str | None,
+    row: pd.Series,
+    history: pd.DataFrame,
+    history_sha: str | None,
+) -> None:
+    """Render the K -> I hand-off while leaving the K list untouched."""
+    package_id = _display_value(row, "package_id", "opportunity_id")
+    applied = pd.Series(False, index=history.index)
+    if not history.empty and "opportunity_id" in history.columns:
+        applied = history["opportunity_id"].astype(str).eq(package_id)
+        if "application_stage" in history.columns:
+            applied &= history["application_stage"].astype(str).eq("Applied")
+        else:
+            applied &= False
+    if bool(applied.any()):
+        st.button(
+            "✓ Už je v I",
+            disabled=True,
+            use_container_width=True,
+            key=f"k_to_i_done_{_safe_filename(package_id)}",
+        )
+        return
+
+    if st.button(
+        "Přidat do I · Applied",
+        type="secondary",
+        use_container_width=True,
+        disabled=not token,
+        key=f"k_to_i_{_safe_filename(package_id)}",
+        help="Použij po skutečném podání přihlášky. Role se zapíše do I jako Applied.",
+    ):
+        try:
+            _mark_package_in_i(token, row, history, history_sha)
+        except Exception as exc:
+            st.error(f"Role se nepodařilo přidat do I: {exc}")
+        else:
+            st.success("Role byla přidána do I jako Applied.")
+            st.rerun()
 
 def _display_value(row: pd.Series, *names: str) -> str:
     for name in names:
@@ -379,6 +500,7 @@ def render_k_review() -> None:
     requests, requests_sha = _load_table(token, K_REQUEST_PATH, K_REQUEST_COLUMNS)
     packages, packages_sha = _load_table(token, K_PACKAGE_PATH, PACKAGE_COLUMNS)
     legacy, legacy_sha = _load_table(token, K_LEGACY_REGISTRY_PATH, LEGACY_REGISTRY_COLUMNS)
+    history, history_sha = _load_table(token, HISTORY_PATH, HISTORY_COLUMNS)
     messages, messages_sha = _load_table(token, K_REVIEW_MESSAGES_PATH, MESSAGE_COLUMNS)
     attachments, attachments_sha = _load_table(token, K_REVIEW_ATTACHMENTS_PATH, ATTACHMENT_COLUMNS)
     if requests.empty and packages.empty and legacy.empty:
@@ -416,6 +538,7 @@ def render_k_review() -> None:
             st.markdown(f"### {company} — {title}")
             st.caption(f"{_display_value(row, 'location', 'market')} · {status} · version {version}")
             _render_document_links(row)
+            _render_i_action(token, row, history, history_sha)
             _render_thread(
                 token, package_id, version, messages, attachments, requests,
                 requests_sha, packages, packages_sha, messages_sha, attachments_sha,

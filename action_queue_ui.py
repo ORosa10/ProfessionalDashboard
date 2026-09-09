@@ -141,106 +141,31 @@ def _load_candidates() -> pd.DataFrame:
 
 
 def handle_email_action() -> bool:
-    """Handle an email shortlist action and collect optional written feedback."""
+    """Record an email click as a non-binding K selection, never as Applied."""
     params = dict(st.query_params)
     action = str(params.get("email_action", "")).strip().capitalize()
     opportunity_id = str(params.get("opportunity_id", "")).strip()
     if action not in {"Apply", "Maybe", "Skip"} or not opportunity_id:
         return False
 
-    st.markdown('<div class="eyebrow">Workstream J · Email action</div>', unsafe_allow_html=True)
-    st.title("Email shortlist action")
-    token = github_token()
-    if not token:
-        st.error("GitHub saving is not configured, so this action was not saved.")
+    from k_email_selection_ui import record_email_action
+
+    st.markdown('<div class="eyebrow">Workstream J · K selection</div>', unsafe_allow_html=True)
+    st.title("Email shortlist selection")
+    selected_action, error = record_email_action(opportunity_id, action)
+    if error:
+        st.error(error)
         return True
 
-    source = _load_candidates()
-    if source.empty or opportunity_id not in set(source.get("job_id", pd.Series(dtype=str)).astype(str)):
-        st.error("This vacancy is no longer available in the current email/job pool.")
-        return True
-    source = _merge_semantic(source)
-    history, history_sha = _history()
-    latest = history.drop_duplicates("opportunity_id", keep="last").set_index("opportunity_id") if not history.empty else None
-    source["prior_action"] = source["job_id"].map(latest["action"]).fillna("") if latest is not None and "action" in latest.columns else ""
-    source["prior_company_feedback"] = source["job_id"].map(latest["company_feedback"]).fillna("") if latest is not None and "company_feedback" in latest.columns else ""
-    source["prior_role_feedback"] = source["job_id"].map(latest["role_feedback"]).fillna("") if latest is not None and "role_feedback" in latest.columns else ""
-    source["prior_comment"] = source["job_id"].map(latest["user_comment"]).fillna("") if latest is not None and "user_comment" in latest.columns else ""
-
-    src = source[source["job_id"].astype(str).eq(opportunity_id)].iloc[0]
-    title = str(src.get("title", ""))
-    company = str(src.get("company", ""))
-    existing_action = str(src.get("prior_action", "") or "")
-    existing_company_feedback = str(src.get("prior_company_feedback", "") or "Not rated")
-    existing_role_feedback = str(src.get("prior_role_feedback", "") or "Not rated")
-    existing_comment = str(src.get("prior_comment", "") or "")
-
-    st.info(f"{title} · {company}")
-    if existing_action in {"Apply", "Maybe", "Skip"}:
+    if selected_action == "To be applied":
+        st.success("Uloženo do K jako **To be applied**.")
         st.caption(
-            f"Tahle nabídka už má rozhodnutí: **{existing_action}**. "
-            "Níže můžeš doplnit nebo opravit feedback; nové K CV se nevytvoří."
+            "Tohle není hard Apply ani stav Applied. Role najdeš v K, podle odkazu připravíš CV ručně "
+            "a skutečné podání provedeš až samostatně."
         )
-        save_action = existing_action
     else:
-        save_action = action
-
-    company_options = FEEDBACK_OPTIONS
-    role_options = FEEDBACK_OPTIONS
-    company_index = company_options.index(existing_company_feedback) if existing_company_feedback in company_options else 0
-    role_index = role_options.index(existing_role_feedback) if existing_role_feedback in role_options else 0
-
-    with st.form(f"email_action_form_{opportunity_id}_{action}"):
-        st.subheader(f"Potvrdit: {save_action}")
-        company_feedback = st.selectbox(
-            "Company feedback",
-            company_options,
-            index=company_index,
-            help="Jak ti sedí firma / zaměstnavatel?",
-        )
-        role_feedback = st.selectbox(
-            "Role feedback",
-            role_options,
-            index=role_index,
-            help="Jak ti sedí konkrétní role?",
-        )
-        user_comment = st.text_area(
-            "Slovní feedback (volitelné)",
-            value=existing_comment,
-            placeholder="Např. příliš seniorní, nízký plat, zajímavá firma, chybí market-risk exposure…",
-            height=120,
-        )
-        submitted = st.form_submit_button(f"Uložit {save_action}", type="primary")
-
-    if not submitted:
-        st.caption("Rozhodnutí se uloží až po kliknutí na tlačítko výše.")
-        return True
-
-    edited = pd.DataFrame([{
-        "action": save_action,
-        "company_feedback": company_feedback,
-        "role_feedback": role_feedback,
-        "user_comment": user_comment.strip(),
-    }], index=[opportunity_id])
-    updated = _upsert_history(history, edited, source)
-    try:
-        save_csv_file(token, HISTORY_PATH, updated, history_sha, "Record email shortlist action and feedback")
-    except Exception as exc:
-        st.error(f"Could not save the {save_action} decision to GitHub: {exc}")
-        return True
-
-    if save_action == "Apply" and existing_action != "Apply":
-        error = _queue_k_requests(edited, source)
-        if error:
-            st.warning(error)
-        else:
-            st.success(f"Apply saved for {title} at {company}. K CV generation was queued.")
-    else:
-        st.success(f"{save_action} and feedback saved for {title} at {company}.")
-    st.caption(
-        "Feedback is now part of I history and will be included in the next batch calibration "
-        "for future C/J decisions. Existing C ratings are not retroactively overwritten."
-    )
+        st.success(f"Uloženo do K jako **{selected_action}**.")
+        st.caption("Kdykoli můžeš výběr v K změnit. Žádné CV se automaticky nevytváří.")
     return True
 
 def _load_k_requests() -> tuple[pd.DataFrame, str | None]:

@@ -16,6 +16,8 @@ from github_storage import (
     save_file_bytes,
 )
 
+from k_email_selection_ui import render_email_selection
+
 
 LIBRARY_URL = "https://chatgpt.com/library"
 K_REQUEST_PATH = "data/k_requests.csv"
@@ -372,6 +374,8 @@ def render_k_review() -> None:
             st.rerun()
 
     st.divider()
+    render_email_selection(token)
+    st.divider()
     requests, requests_sha = _load_table(token, K_REQUEST_PATH, K_REQUEST_COLUMNS)
     packages, packages_sha = _load_table(token, K_PACKAGE_PATH, PACKAGE_COLUMNS)
     legacy, legacy_sha = _load_table(token, K_LEGACY_REGISTRY_PATH, LEGACY_REGISTRY_COLUMNS)
@@ -382,6 +386,7 @@ def render_k_review() -> None:
         return
 
     request_view = requests.copy()
+    request_view = request_view[~request_view["status"].astype(str).str.startswith("Cancelled", na=False)].copy()
     request_view["package_id"] = request_view["opportunity_id"].where(
         request_view["opportunity_id"].astype(str).str.strip().ne(""),
         request_view["request_id"],

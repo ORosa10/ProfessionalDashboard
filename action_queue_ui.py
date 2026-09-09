@@ -496,7 +496,7 @@ def _upsert_history(history: pd.DataFrame, edited: pd.DataFrame, source: pd.Data
             "calibration_score_at_decision": "",
         })
         if action == "Apply" and not rec["application_stage"]:
-            rec["application_stage"] = "Applied"
+            rec["application_stage"] = "To be applied"
             rec["stage_updated_at"] = now
         by_id.loc[oid] = pd.Series(rec)
     return by_id.reset_index().reindex(columns=HISTORY_COLUMNS, fill_value="")

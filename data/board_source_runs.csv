@@ -1,25 +1,4 @@
 run_at,board_id,country,adapter,queries,verified_jobs,errors,registry_status,per_query_budget,max_details_budget
-2026-08-20T21:38:40.077344+00:00,academicwork-fi,Finland,academicwork_fi_html,9,3,,adapter_ready,,
-2026-08-20T21:50:17.466563+00:00,findajob-uk,United Kingdom,findajob_uk_html,9,0,search finance: q: ReadTimeout / qwd: ReadTimeout | search treasury: q: ReadTimeout / qwd: ReadTimeout | search investment: q: ReadTimeout / qwd: no detail links | search risk: q: no detail links / qwd: ReadTimeout,adapter_ready,,
-2026-08-20T21:50:17.466563+00:00,jobserve-uk,United Kingdom,jobserve_uk_html,9,10,,active,,
-2026-08-20T21:50:17.466563+00:00,arbeidsplassen-no,Norway,nav_stilling_feed,9,4,,adapter_ready,,
-2026-08-20T21:50:17.466563+00:00,jobbsafari-no,Norway,jobbsafari_no_html,9,6,,active,,
-2026-08-21T06:52:44.838336+00:00,mpsv-open-data-cz,Czechia,mpsv_open_data,9,65,,active,,
-2026-08-21T06:52:44.838336+00:00,jobs-cz,Czechia,jobs_cz_html,9,41,,active,,
-2026-08-21T06:52:44.838336+00:00,prace-cz,Czechia,prace_cz_html,9,1,,adapter_ready,,
-2026-08-21T06:52:44.838336+00:00,cocuma-cz,Czechia,cocuma_cz_html,9,1,,active,,
-2026-08-21T06:52:44.838336+00:00,arbeitsagentur-de,Germany,arbeitsagentur_html,9,55,,active,,
-2026-08-21T06:52:44.838336+00:00,stellenanzeigen-de,Germany,stellenanzeigen_de_html,9,23,search FP&A: HTTPError 404 | search corporate finance: HTTPError 404 | search valuation: HTTPError 404 | search investment analyst: HTTPError 404 | search financial risk: HTTPError 404 | search restructuring: HTTPError 404,active,,
-2026-08-21T06:52:44.838336+00:00,karriere-at,Austria,karriere_at_html,9,39,search FP&A: no detail links | search M&A: HTTPError 500,active,,
-2026-08-21T06:52:44.838336+00:00,willhaben-at,Austria,willhaben_at_html,9,11,search FP&A: no detail links | search valuation: no detail links | search investment analyst: no detail links | search restructuring: no detail links,active,,
-2026-08-21T06:52:44.838336+00:00,jobwinner-ch,Switzerland,jobwinner_ch_html,9,46,,active,,
-2026-08-21T06:52:44.838336+00:00,nzz-jobs-ch,Switzerland,nzz_jobs_ch_html,9,32,,active,,
-2026-08-21T06:52:44.838336+00:00,findajob-uk,United Kingdom,findajob_uk_html,9,0,search finance: q: no detail links / qwd: ReadTimeout | search treasury: q: ReadTimeout / qwd: no detail links | search investment: q: no detail links / qwd: ReadTimeout | search risk: q: no detail links / qwd: ReadTimeout,adapter_ready,,
-2026-08-21T06:52:44.838336+00:00,jobserve-uk,United Kingdom,jobserve_uk_html,9,1,,active,,
-2026-08-21T06:52:44.838336+00:00,platsbanken-se,Sweden,jobtech_api,9,25,,active,,
-2026-08-21T06:52:44.838336+00:00,jobbland-se,Sweden,jobbland_se_html,9,26,,active,,
-2026-08-21T06:52:44.838336+00:00,ledigajobb-se,Sweden,ledigajobb_se_html,9,48,,active,,
-2026-08-21T06:52:44.838336+00:00,arbeidsplassen-no,Norway,nav_stilling_feed,9,0,"token: ReadTimeout: HTTPSConnectionPool(host='pam-stilling-feed.nav.no', port=443): Read timed out. (read timeout=30)",adapter_ready,,
 2026-08-21T06:52:44.838336+00:00,jobbsafari-no,Norway,jobbsafari_no_html,9,7,,active,,
 2026-08-21T06:52:44.838336+00:00,jobdanmark-dk,Denmark,jobdanmark_dk_html,9,1,,active,,
 2026-08-21T06:52:44.838336+00:00,academicwork-dk,Denmark,academicwork_dk_html,9,0,,active,,
@@ -478,24 +457,45 @@ run_at,board_id,country,adapter,queries,verified_jobs,errors,registry_status,per
 2026-09-08T10:54:16.122693+00:00,jobunivers-dk,Denmark,jobunivers_dk_html,48,8,,active,11.0,102.0
 2026-09-08T10:54:16.122693+00:00,barona-fi,Finland,barona_fi_html,48,1,,active,17.0,153.0
 2026-09-08T10:54:16.122693+00:00,academicwork-fi,Finland,academicwork_fi_html,48,0,,active,17.0,153.0
-2026-09-09T10:58:49.163413+00:00,mpsv-open-data-cz,Czechia,mpsv_open_data,42,76,,active,9,76
-2026-09-09T10:58:49.163413+00:00,jobs-cz,Czechia,jobs_cz_html,42,32,search interest rate risk: no detail links | search fixed income analyst: no detail links | search deal advisory: no detail links,active,9,76
-2026-09-09T10:58:49.163413+00:00,prace-cz,Czechia,prace_cz_html,42,1,,adapter_ready,9,76
-2026-09-09T10:58:49.163413+00:00,cocuma-cz,Czechia,cocuma_cz_html,42,4,,active,9,76
-2026-09-09T10:58:49.163413+00:00,arbeitsagentur-de,Germany,arbeitsagentur_html,48,162,,active,34,305
-2026-09-09T10:58:49.163413+00:00,stellenanzeigen-de,Germany,stellenanzeigen_de_html,48,82,search corporate treasury: HTTPError 404 | search treasury analyst: HTTPError 404 | search liquidity management: HTTPError 404 | search funding: HTTPError 404 | search financial markets: HTTPError 404 | search market risk: HTTPError 404 | search liquidity risk: HTTPError 404 | search interest rate risk: HTTPError 404 | search FX risk: HTTPError 404 | search hedging: HTTPError 404 | search derivatives: HTTPError 404 | search commodity risk: HTTPError 404,active,34,305
-2026-09-09T10:58:49.163413+00:00,karriere-at,Austria,karriere_at_html,48,135,search FX risk: no detail links | search deal advisory: no detail links | search FP&A: no detail links | detail 10028312: HTTPError,active,26,229
-2026-09-09T10:58:49.163413+00:00,willhaben-at,Austria,willhaben_at_html,48,13,search treasury specialist: no detail links | search funding: no detail links | search interest rate risk: no detail links | search FX risk: no detail links | search hedging: no detail links | search derivatives: no detail links | search commodity risk: no detail links | search investment associate: no detail links | search private equity: no detail links | search equity analyst: no detail links | search fixed income analyst: no detail links | search investment research: no detail links,active,26,229
-2026-09-09T10:58:49.163413+00:00,jobwinner-ch,Switzerland,jobwinner_ch_html,48,146,search equity analyst: no detail links | search fixed income analyst: no detail links | search debt advisory: no detail links,active,26,229
-2026-09-09T10:58:49.163413+00:00,nzz-jobs-ch,Switzerland,nzz_jobs_ch_html,48,3,,active,26,229
-2026-09-09T10:58:49.163413+00:00,jobserve-uk,United Kingdom,jobserve_uk_html,42,9,,active,45,400
-2026-09-09T10:58:49.163413+00:00,platsbanken-se,Sweden,jobtech_api,48,81,,active,11,102
-2026-09-09T10:58:49.163413+00:00,jobbland-se,Sweden,jobbland_se_html,48,0,search catalog: HTTPError 403,active,11,102
-2026-09-09T10:58:49.163413+00:00,ledigajobb-se,Sweden,ledigajobb_se_html,48,48,,active,11,102
-2026-09-09T10:58:49.163413+00:00,arbeidsplassen-no,Norway,nav_stilling_feed,48,0,,adapter_ready,9,76
-2026-09-09T10:58:49.163413+00:00,jobbsafari-no,Norway,jobbsafari_no_html,48,6,,active,9,76
-2026-09-09T10:58:49.163413+00:00,jobdanmark-dk,Denmark,jobdanmark_dk_html,48,1,,active,11,102
-2026-09-09T10:58:49.163413+00:00,academicwork-dk,Denmark,academicwork_dk_html,48,0,,active,11,102
-2026-09-09T10:58:49.163413+00:00,jobunivers-dk,Denmark,jobunivers_dk_html,48,7,,active,11,102
-2026-09-09T10:58:49.163413+00:00,barona-fi,Finland,barona_fi_html,48,1,,active,17,153
-2026-09-09T10:58:49.163413+00:00,academicwork-fi,Finland,academicwork_fi_html,48,0,,active,17,153
+2026-09-09T10:58:49.163413+00:00,mpsv-open-data-cz,Czechia,mpsv_open_data,42,76,,active,9.0,76.0
+2026-09-09T10:58:49.163413+00:00,jobs-cz,Czechia,jobs_cz_html,42,32,search interest rate risk: no detail links | search fixed income analyst: no detail links | search deal advisory: no detail links,active,9.0,76.0
+2026-09-09T10:58:49.163413+00:00,prace-cz,Czechia,prace_cz_html,42,1,,adapter_ready,9.0,76.0
+2026-09-09T10:58:49.163413+00:00,cocuma-cz,Czechia,cocuma_cz_html,42,4,,active,9.0,76.0
+2026-09-09T10:58:49.163413+00:00,arbeitsagentur-de,Germany,arbeitsagentur_html,48,162,,active,34.0,305.0
+2026-09-09T10:58:49.163413+00:00,stellenanzeigen-de,Germany,stellenanzeigen_de_html,48,82,search corporate treasury: HTTPError 404 | search treasury analyst: HTTPError 404 | search liquidity management: HTTPError 404 | search funding: HTTPError 404 | search financial markets: HTTPError 404 | search market risk: HTTPError 404 | search liquidity risk: HTTPError 404 | search interest rate risk: HTTPError 404 | search FX risk: HTTPError 404 | search hedging: HTTPError 404 | search derivatives: HTTPError 404 | search commodity risk: HTTPError 404,active,34.0,305.0
+2026-09-09T10:58:49.163413+00:00,karriere-at,Austria,karriere_at_html,48,135,search FX risk: no detail links | search deal advisory: no detail links | search FP&A: no detail links | detail 10028312: HTTPError,active,26.0,229.0
+2026-09-09T10:58:49.163413+00:00,willhaben-at,Austria,willhaben_at_html,48,13,search treasury specialist: no detail links | search funding: no detail links | search interest rate risk: no detail links | search FX risk: no detail links | search hedging: no detail links | search derivatives: no detail links | search commodity risk: no detail links | search investment associate: no detail links | search private equity: no detail links | search equity analyst: no detail links | search fixed income analyst: no detail links | search investment research: no detail links,active,26.0,229.0
+2026-09-09T10:58:49.163413+00:00,jobwinner-ch,Switzerland,jobwinner_ch_html,48,146,search equity analyst: no detail links | search fixed income analyst: no detail links | search debt advisory: no detail links,active,26.0,229.0
+2026-09-09T10:58:49.163413+00:00,nzz-jobs-ch,Switzerland,nzz_jobs_ch_html,48,3,,active,26.0,229.0
+2026-09-09T10:58:49.163413+00:00,jobserve-uk,United Kingdom,jobserve_uk_html,42,9,,active,45.0,400.0
+2026-09-09T10:58:49.163413+00:00,platsbanken-se,Sweden,jobtech_api,48,81,,active,11.0,102.0
+2026-09-09T10:58:49.163413+00:00,jobbland-se,Sweden,jobbland_se_html,48,0,search catalog: HTTPError 403,active,11.0,102.0
+2026-09-09T10:58:49.163413+00:00,ledigajobb-se,Sweden,ledigajobb_se_html,48,48,,active,11.0,102.0
+2026-09-09T10:58:49.163413+00:00,arbeidsplassen-no,Norway,nav_stilling_feed,48,0,,adapter_ready,9.0,76.0
+2026-09-09T10:58:49.163413+00:00,jobbsafari-no,Norway,jobbsafari_no_html,48,6,,active,9.0,76.0
+2026-09-09T10:58:49.163413+00:00,jobdanmark-dk,Denmark,jobdanmark_dk_html,48,1,,active,11.0,102.0
+2026-09-09T10:58:49.163413+00:00,academicwork-dk,Denmark,academicwork_dk_html,48,0,,active,11.0,102.0
+2026-09-09T10:58:49.163413+00:00,jobunivers-dk,Denmark,jobunivers_dk_html,48,7,,active,11.0,102.0
+2026-09-09T10:58:49.163413+00:00,barona-fi,Finland,barona_fi_html,48,1,,active,17.0,153.0
+2026-09-09T10:58:49.163413+00:00,academicwork-fi,Finland,academicwork_fi_html,48,0,,active,17.0,153.0
+2026-09-10T10:55:42.917156+00:00,mpsv-open-data-cz,Czechia,mpsv_open_data,42,75,,active,9,76
+2026-09-10T10:55:42.917156+00:00,jobs-cz,Czechia,jobs_cz_html,42,33,search interest rate risk: no detail links | search fixed income analyst: no detail links | search deal advisory: no detail links,active,9,76
+2026-09-10T10:55:42.917156+00:00,prace-cz,Czechia,prace_cz_html,42,0,,adapter_ready,9,76
+2026-09-10T10:55:42.917156+00:00,cocuma-cz,Czechia,cocuma_cz_html,42,6,,active,9,76
+2026-09-10T10:55:42.917156+00:00,arbeitsagentur-de,Germany,arbeitsagentur_html,48,162,,active,34,305
+2026-09-10T10:55:42.917156+00:00,stellenanzeigen-de,Germany,stellenanzeigen_de_html,48,81,search corporate treasury: HTTPError 404 | search treasury analyst: HTTPError 404 | search liquidity management: HTTPError 404 | search funding: HTTPError 404 | search financial markets: HTTPError 404 | search market risk: HTTPError 404 | search liquidity risk: HTTPError 404 | search interest rate risk: HTTPError 404 | search FX risk: HTTPError 404 | search hedging: HTTPError 404 | search derivatives: HTTPError 404 | search commodity risk: HTTPError 404,active,34,305
+2026-09-10T10:55:42.917156+00:00,karriere-at,Austria,karriere_at_html,48,141,search FX risk: no detail links | search deal advisory: no detail links | search FP&A: no detail links | detail 7848221: HTTPError,active,26,229
+2026-09-10T10:55:42.917156+00:00,willhaben-at,Austria,willhaben_at_html,48,14,search treasury specialist: no detail links | search funding: no detail links | search interest rate risk: no detail links | search FX risk: no detail links | search hedging: no detail links | search derivatives: no detail links | search commodity risk: no detail links | search investment associate: no detail links | search private equity: no detail links | search equity analyst: no detail links | search fixed income analyst: no detail links | search investment research: no detail links,active,26,229
+2026-09-10T10:55:42.917156+00:00,jobwinner-ch,Switzerland,jobwinner_ch_html,48,150,search fixed income analyst: no detail links | search debt advisory: no detail links,active,26,229
+2026-09-10T10:55:42.917156+00:00,nzz-jobs-ch,Switzerland,nzz_jobs_ch_html,48,2,,active,26,229
+2026-09-10T10:55:42.917156+00:00,jobserve-uk,United Kingdom,jobserve_uk_html,42,6,,active,45,400
+2026-09-10T10:55:42.917156+00:00,platsbanken-se,Sweden,jobtech_api,48,79,,active,11,102
+2026-09-10T10:55:42.917156+00:00,jobbland-se,Sweden,jobbland_se_html,48,0,search catalog: HTTPError 403,active,11,102
+2026-09-10T10:55:42.917156+00:00,ledigajobb-se,Sweden,ledigajobb_se_html,48,48,,active,11,102
+2026-09-10T10:55:42.917156+00:00,arbeidsplassen-no,Norway,nav_stilling_feed,48,9,,adapter_ready,9,76
+2026-09-10T10:55:42.917156+00:00,jobbsafari-no,Norway,jobbsafari_no_html,48,7,,active,9,76
+2026-09-10T10:55:42.917156+00:00,jobdanmark-dk,Denmark,jobdanmark_dk_html,48,1,,active,11,102
+2026-09-10T10:55:42.917156+00:00,academicwork-dk,Denmark,academicwork_dk_html,48,0,,active,11,102
+2026-09-10T10:55:42.917156+00:00,jobunivers-dk,Denmark,jobunivers_dk_html,48,8,,active,11,102
+2026-09-10T10:55:42.917156+00:00,barona-fi,Finland,barona_fi_html,48,1,,active,17,153
+2026-09-10T10:55:42.917156+00:00,academicwork-fi,Finland,academicwork_fi_html,48,1,,active,17,153

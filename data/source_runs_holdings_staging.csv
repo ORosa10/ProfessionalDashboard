@@ -1,0 +1,11 @@
+run_at,source_id,company,market,seed_url,pages_checked,candidate_job_pages,verified_jobs,errors,adapter_used,fallback_reason
+2026-09-12T09:24:24.921159+00:00,csg-global,Czechoslovak Group,Multi-region,https://czechoslovakgroup.com/en/career,2,2,0,,llm,
+2026-09-12T09:24:51.959615+00:00,cpi-property-group-global,CPI Property Group,Multi-region,https://www.cpipg.com/careers,2,2,0,,llm,
+2026-09-12T09:25:08.130944+00:00,investor-ab-global,Investor AB,Multi-region,https://www.investorab.com/career/,2,2,0,,llm,
+2026-09-12T09:25:26.384690+00:00,industrivarden-global,Industrivärden,Multi-region,https://www.industrivarden.se/en-gb/career/,2,2,0,,llm,
+2026-09-12T09:25:39.528157+00:00,kinnevik-global,Kinnevik,Multi-region,https://www.kinnevik.com/careers,2,2,0,,llm,
+2026-09-12T09:25:54.481697+00:00,exor-global,Exor,Multi-region,https://www.exor.com/pages/exor/careers,2,2,0,,llm,
+2026-09-12T09:26:13.885565+00:00,porsche-se-global,Porsche Automobil Holding,Multi-region,https://www.porsche-se.com/en/company/career,2,2,0,,llm,
+2026-09-12T09:26:44.284257+00:00,ap-moller-holding-global,A.P. Moller Holding,Multi-region,https://apmoller.com/careers/,1,1,0,https://apmoller.com/careers/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions,llm,
+2026-09-12T09:27:01.294871+00:00,ppf-group-global,PPF Group,Multi-region,https://www.ppf.eu/en/careers,9,0,0,,generic,
+2026-09-12T09:27:10.876991+00:00,kkcg-global,KKCG,Multi-region,https://kkcg.com/en/careers,6,0,0,,generic,

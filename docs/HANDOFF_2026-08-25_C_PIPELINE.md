@@ -94,7 +94,7 @@ The user explicitly wants Big Four reviewed periodically as a separate broad bat
 The intended and now implemented visible semantics are:
 
 - B -> Applied directly
-- J Apply -> Applied
+- J/email Apply -> K `To be applied`; explicit K confirmation after actual submission -> I `Applied`
 - visible I = actual application processes only
 - Skip / Maybe / New / comment-only remain in `opportunity_history.csv` backend for learning but are not shown as applications
 

@@ -111,4 +111,4 @@ Current curated batch after the 2026-08-22 sourcing correction: 20 roles, 19 Str
 2. Verify language/actionability and current vacancy status.
 3. Perform C semantic review on promising candidates.
 4. Maintain roughly 20 genuinely actionable fitting roles in J.
-5. Record real Apply/Maybe/Skip decisions in I and use accumulated batches later for A/C calibration and H attainability.
+5. Record Apply/Maybe/Skip decisions in backend history; move only explicitly submitted K roles into I and use accumulated batches later for A/C calibration and H attainability.

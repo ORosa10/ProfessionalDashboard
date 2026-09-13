@@ -200,7 +200,7 @@ def _apply_requests(edited: pd.DataFrame, source: pd.DataFrame) -> pd.DataFrame:
             "description_en": str(src.get("description_en", "")),
             "semantic_fit": str(src.get("semantic_fit", "")),
             "semantic_reasoning": str(src.get("semantic_reasoning", "")),
-            "status": "Pending K generation",
+            "status": "To be applied",
             "output_path": "",
             "error": "",
         })
@@ -222,7 +222,7 @@ def _queue_k_requests(edited: pd.DataFrame, source: pd.DataFrame) -> str | None:
         return None
     combined = pd.concat([existing, requests], ignore_index=True).drop_duplicates("request_id", keep="last")
     try:
-        save_csv_file(token, K_REQUEST_PATH, combined, sha, "Queue tailored CV generation from J Apply decision")
+        save_csv_file(token, K_REQUEST_PATH, combined, sha, "Queue manual K review from J Apply decision")
     except Exception as exc:
         return f"Apply was saved, but K queueing failed: {exc}"
     return None

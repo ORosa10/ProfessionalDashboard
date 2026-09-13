@@ -149,7 +149,7 @@ Purpose: track only actual applications and their outcomes.
 
 Sources:
 - B manual add → Applied directly;
-- J Apply → Applied.
+- J/email Apply → K as `To be applied`; explicit confirmation from K after submission → I as `Applied`.
 
 Visible I should contain only actual application processes, e.g.:
 - Applied
@@ -171,7 +171,7 @@ Purpose: a fresh decision queue of new automatically sourced roles.
 J should contain only Strong + actionable roles after exclusions and ranking.
 
 User decisions:
-- Apply → I;
+- Apply → K manual intermediate selection;
 - Maybe → backend history / learning, not visible I;
 - Skip → backend history / learning, not visible I.
 
@@ -247,7 +247,7 @@ C semantic judgment
 Strong + Actionability
   ↓
 J
-  ├─ Apply → I → H
+  ├─ Apply → K → explicit submission → I → H
   ├─ Maybe → A/C learning
   └─ Skip  → A/C learning
 

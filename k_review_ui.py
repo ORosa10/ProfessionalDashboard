@@ -16,7 +16,7 @@ from github_storage import (
     save_file_bytes,
 )
 
-from k_email_selection_ui import render_email_selection
+from k_email_selection_ui import SELECTION_COLUMNS, SELECTION_PATH, render_email_selection
 
 
 LIBRARY_URL = "https://chatgpt.com/library"
@@ -217,6 +217,51 @@ def _render_i_action(
         else:
             st.success("Role byla přidána do I jako Applied.")
             st.rerun()
+
+
+def _withdraw_k_item(
+    token: str,
+    row: pd.Series,
+    requests: pd.DataFrame,
+    requests_sha: str | None,
+    packages: pd.DataFrame,
+    packages_sha: str | None,
+    legacy: pd.DataFrame,
+    legacy_sha: str | None,
+) -> None:
+    """Withdraw a role from every active K surface without deleting history."""
+    key = _display_value(row, "opportunity_id", "package_id", "request_id")
+    if not key:
+        raise ValueError("Role nemá stabilní opportunity ID.")
+    now = _now()
+
+    selection, selection_sha = _load_table(token, SELECTION_PATH, SELECTION_COLUMNS)
+    selection_match = selection.get("opportunity_id", pd.Series(dtype=str)).astype(str).eq(key)
+    if selection_match.any():
+        selection.loc[selection_match, "selection_action"] = "Withdrawn"
+        selection.loc[selection_match, "selected_at"] = now
+        selection.loc[selection_match, "notes"] = "Withdrawn from K; retained for possible reactivation."
+        save_csv_file(token, SELECTION_PATH, selection, selection_sha, "Withdraw role from K email selection")
+
+    request_match = requests.get("opportunity_id", pd.Series(dtype=str)).astype(str).eq(key) | requests.get("request_id", pd.Series(dtype=str)).astype(str).eq(key)
+    if request_match.any():
+        updated_requests = requests.copy()
+        updated_requests.loc[request_match, "status"] = "Withdrawn"
+        updated_requests.loc[request_match, "error"] = ""
+        save_csv_file(token, K_REQUEST_PATH, updated_requests, requests_sha, "Withdraw role from K review")
+
+    package_match = packages.get("opportunity_id", pd.Series(dtype=str)).astype(str).eq(key) | packages.get("package_id", pd.Series(dtype=str)).astype(str).eq(key)
+    if package_match.any():
+        updated_packages = packages.copy()
+        updated_packages.loc[package_match, "status"] = "Withdrawn"
+        updated_packages.loc[package_match, "updated_at"] = now
+        save_csv_file(token, K_PACKAGE_PATH, updated_packages, packages_sha, "Withdraw role from K review")
+
+    legacy_match = legacy.get("opportunity_id", pd.Series(dtype=str)).astype(str).eq(key) | legacy.get("request_id", pd.Series(dtype=str)).astype(str).eq(key)
+    if legacy_match.any() and legacy_sha:
+        updated_legacy = legacy.copy()
+        updated_legacy.loc[legacy_match, "status"] = "Withdrawn"
+        save_csv_file(token, K_LEGACY_REGISTRY_PATH, updated_legacy, legacy_sha, "Withdraw legacy role from K review")
 
 def _display_value(row: pd.Series, *names: str) -> str:
     for name in names:
@@ -508,7 +553,9 @@ def render_k_review() -> None:
         return
 
     request_view = requests.copy()
-    request_view = request_view[~request_view["status"].astype(str).str.startswith("Cancelled", na=False)].copy()
+    request_view = request_view[
+        ~request_view["status"].astype(str).str.casefold().isin({"cancelled", "withdrawn"})
+    ].copy()
     request_view["package_id"] = request_view["opportunity_id"].where(
         request_view["opportunity_id"].astype(str).str.strip().ne(""),
         request_view["request_id"],
@@ -527,6 +574,7 @@ def render_k_review() -> None:
     visible = pd.concat([package_view, legacy_view, request_view], ignore_index=True).fillna("")
     visible = visible.drop_duplicates("package_id", keep="first")
     visible = visible[visible.apply(lambda row: _package_id(row, row.name) != "", axis=1)]
+    visible = visible[~visible["status"].astype(str).str.casefold().eq("withdrawn")]
     st.subheader(f"Balíčky k review ({len(visible)})")
     for index, row in visible.iterrows():
         package_id = _text(row.get("package_id")) or _package_id(row, int(index))
@@ -538,7 +586,27 @@ def render_k_review() -> None:
             st.markdown(f"### {company} — {title}")
             st.caption(f"{_display_value(row, 'location', 'market')} · {status} · version {version}")
             _render_document_links(row)
-            _render_i_action(token, row, history, history_sha)
+            action_cols = st.columns(2, gap="small")
+            with action_cols[0]:
+                _render_i_action(token, row, history, history_sha)
+            with action_cols[1]:
+                if st.button(
+                    "Withdraw from K",
+                    use_container_width=True,
+                    disabled=not token,
+                    key=f"k_withdraw_{_safe_filename(package_id)}",
+                    help="Skryje roli z K, ale zachová ji v datech pro případné znovuaktivování.",
+                ):
+                    try:
+                        _withdraw_k_item(
+                            token, row, requests, requests_sha, packages, packages_sha,
+                            legacy, legacy_sha,
+                        )
+                    except Exception as exc:
+                        st.error(f"Role se nepodařilo odebrat z K: {exc}")
+                    else:
+                        st.success("Role byla odebrána z K. Pořadí ostatních pozic zůstalo stejné.")
+                        st.rerun()
             _render_thread(
                 token, package_id, version, messages, attachments, requests,
                 requests_sha, packages, packages_sha, messages_sha, attachments_sha,

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from pathlib import Path
 
 import pandas as pd
 import streamlit as st
@@ -34,6 +35,8 @@ HISTORY_COLUMNS = [
     "outcome_reason", "history_notes",
 ]
 ACTION_OPTIONS = ["New", "To be applied", "Maybe", "Skip"]
+ACTION_OPTIONS.append("Withdrawn")
+EMAIL_STAGING_PATH = Path(__file__).parent / "data" / "jobs_email_staging.csv"
 
 
 def _now() -> str:
@@ -42,7 +45,35 @@ def _now() -> str:
 
 def _legacy_action(value: object) -> str:
     action = str(value or "").strip()
-    return {"Apply": "To be applied", "Maybe": "Maybe", "Skip": "Skip"}.get(action, "New")
+    return {"Apply": "To be applied", "Maybe": "Maybe", "Skip": "Skip", "Withdrawn": "Withdrawn"}.get(action, "New")
+
+
+def _fallback_digest_row(opportunity_id: str) -> dict[str, str] | None:
+    """Recover a role when the digest archive lags the email click by one run."""
+    if not EMAIL_STAGING_PATH.exists() or not EMAIL_STAGING_PATH.stat().st_size:
+        return None
+    try:
+        email = pd.read_csv(EMAIL_STAGING_PATH).fillna("")
+    except Exception:
+        return None
+    if "job_id" not in email.columns:
+        return None
+    matches = email[email["job_id"].astype(str).eq(str(opportunity_id))]
+    if matches.empty:
+        return None
+    row = matches.iloc[-1]
+    return {
+        "selection_id": f"KSEL:{opportunity_id}",
+        "opportunity_id": str(opportunity_id),
+        "digest_sent_at": _now(),
+        "title": str(row.get("title", "")),
+        "company": str(row.get("company", "")),
+        "job_url": str(row.get("job_url", "")),
+        "email_action": "",
+        "selection_action": "New",
+        "selected_at": "",
+        "notes": "Recovered from email-alert staging; CV prepared manually.",
+    }
 
 
 def _load_history_actions(token: str | None) -> dict[str, str]:
@@ -106,10 +137,13 @@ def record_email_action(opportunity_id: str, action: str) -> tuple[str, str]:
     """Store an email click as a non-binding K selection, never as Applied."""
     token = github_token()
     selection, _ = _load_and_sync(token)
-    if selection.empty or opportunity_id not in set(selection["opportunity_id"].astype(str)):
-        return "", "The role was not found in the archived J digest log."
+    if opportunity_id not in set(selection.get("opportunity_id", pd.Series(dtype=str)).astype(str)):
+        fallback = _fallback_digest_row(opportunity_id)
+        if fallback is None:
+            return "", "The role was not found in the archived J digest log or email-alert staging."
+        selection = pd.concat([selection, pd.DataFrame([fallback])], ignore_index=True).reindex(columns=SELECTION_COLUMNS, fill_value="")
     selection_sha = load_csv_file(token, SELECTION_PATH, SELECTION_COLUMNS)[1] if token else None
-    mapped = {"Apply": "To be applied", "Maybe": "Maybe", "Skip": "Skip"}.get(action, "New")
+    mapped = {"Apply": "To be applied", "Maybe": "Maybe", "Skip": "Skip", "Withdrawn": "Withdrawn"}.get(action, "New")
     mask = selection["opportunity_id"].astype(str).eq(opportunity_id)
     selection.loc[mask, "email_action"] = action
     selection.loc[mask, "selection_action"] = mapped
@@ -133,7 +167,19 @@ def render_email_selection(token: str | None = None) -> None:
         st.info("V archivovaných J digestech zatím nejsou žádné role.")
         return
 
-    display = selection.sort_values("digest_sent_at", ascending=False).copy()
+    withdrawn_count = int(selection["selection_action"].astype(str).eq("Withdrawn").sum())
+    show_withdrawn = st.checkbox(
+        f"Zobrazit odebrané z K ({withdrawn_count})",
+        value=False,
+        disabled=withdrawn_count == 0,
+        key="k_email_show_withdrawn",
+    )
+    display = selection.copy()
+    if not show_withdrawn:
+        display = display[~display["selection_action"].astype(str).eq("Withdrawn")].copy()
+    if display.empty:
+        st.info("V aktivním K mezivýběru nejsou žádné role.")
+        return
     edited = st.data_editor(
         display,
         hide_index=True,
@@ -170,11 +216,19 @@ def render_email_selection(token: str | None = None) -> None:
         edited = edited.reindex(columns=SELECTION_COLUMNS, fill_value="").copy()
         old = display.set_index("opportunity_id")
         edited = edited.set_index("opportunity_id")
+        updated = selection.set_index("opportunity_id").copy()
         for opportunity_id in edited.index:
-            if opportunity_id in old.index and str(edited.at[opportunity_id, "selection_action"]) != str(old.at[opportunity_id, "selection_action"]):
+            if opportunity_id not in old.index:
+                continue
+            if str(edited.at[opportunity_id, "selection_action"]) != str(old.at[opportunity_id, "selection_action"]):
                 edited.at[opportunity_id, "selected_at"] = _now()
-                edited.at[opportunity_id, "notes"] = "Selected in K; CV prepared manually."
-        edited = edited.reset_index().reindex(columns=SELECTION_COLUMNS, fill_value="")
+                edited.at[opportunity_id, "notes"] = (
+                    "Withdrawn from K; retained for possible reactivation."
+                    if str(edited.at[opportunity_id, "selection_action"]) == "Withdrawn"
+                    else "Selected in K; CV prepared manually."
+                )
+            updated.loc[opportunity_id] = edited.loc[opportunity_id]
+        edited = updated.reset_index().reindex(columns=SELECTION_COLUMNS, fill_value="")
         try:
             save_csv_file(token, SELECTION_PATH, edited, selection_sha, "Save K email selection")
         except Exception as exc:

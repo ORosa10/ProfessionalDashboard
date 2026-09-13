@@ -111,7 +111,7 @@ For each job the user can:
 
 `Apply` and `Skip` leave the active shortlist after saving. `Maybe` can remain visible.
 
-J feedback is stored immediately in I. Accumulated company/role patterns can later be fed back to A/C in calibration batches.
+J feedback is stored in backend history. `Apply` is a non-binding selection that routes the role to K as `To be applied`; it does not create an actual I application. I is updated only after explicit confirmation from K once the user has submitted the application. Accumulated company/role patterns can later be fed back to A/C in calibration batches.
 
 ## I — Opportunity & Application History
 
@@ -122,6 +122,8 @@ It stores decisions from both B and J together with the job/company context avai
 Application stages include:
 
 `Not applied -> Applied -> 1st interview -> Case -> Final -> Offer`
+
+The email/J `Apply` action is not an application-stage transition. It means “to be applied” and routes the role to K for manual CV preparation and eventual submission.
 
 and terminal outcomes such as:
 

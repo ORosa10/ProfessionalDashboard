@@ -340,6 +340,66 @@ def _render_document_links(row: pd.Series) -> None:
         st.caption("Dokumentové odkazy se zobrazí, jakmile je K zapíše do registru.")
 
 
+def _render_manual_selection_card(
+    token: str | None,
+    selection_row: pd.Series,
+    history: pd.DataFrame,
+    history_sha: str | None,
+    requests: pd.DataFrame,
+    requests_sha: str | None,
+    packages: pd.DataFrame,
+    packages_sha: str | None,
+    legacy: pd.DataFrame,
+    legacy_sha: str | None,
+) -> None:
+    """Show an email Apply selection as a manual-CV K item."""
+    opportunity_id = _text(selection_row.get("opportunity_id"))
+    if not opportunity_id:
+        return
+    row = pd.Series({
+        "package_id": opportunity_id,
+        "opportunity_id": opportunity_id,
+        "title": _text(selection_row.get("title")),
+        "company": _text(selection_row.get("company")),
+        "location": "",
+        "market": "",
+        "job_url": _text(selection_row.get("job_url")),
+        "status": "To be applied",
+        "version": "manual",
+    })
+    selected_at = _text(selection_row.get("selected_at"))
+    with st.container(border=True):
+        st.markdown(f"### {_text(row.get('company'))} — {_text(row.get('title'))}")
+        caption = "Ruční CV · To be applied"
+        if selected_at:
+            caption += f" · vybráno {_text(selected_at)}"
+        st.caption(caption)
+        job_url = _text(row.get("job_url"))
+        if job_url.startswith(("https://", "http://")):
+            st.link_button("Otevřít původní nabídku", job_url, use_container_width=True)
+        action_cols = st.columns(2, gap="small")
+        with action_cols[0]:
+            _render_i_action(token, row, history, history_sha)
+        with action_cols[1]:
+            if st.button(
+                "Withdraw from K",
+                use_container_width=True,
+                disabled=not token,
+                key=f"k_withdraw_manual_{_safe_filename(opportunity_id)}",
+                help="Skryje roli z K, ale zachová ji v datech pro případné znovuaktivování.",
+            ):
+                try:
+                    _withdraw_k_item(
+                        token, row, requests, requests_sha, packages, packages_sha,
+                        legacy, legacy_sha,
+                    )
+                except Exception as exc:
+                    st.error(f"Role se nepodařilo odebrat z K: {exc}")
+                else:
+                    st.success("Role byla odebrána z K. Pořadí ostatních pozic zůstalo stejné.")
+                    st.rerun()
+
+
 def _render_attachment(token: str | None, attachment: pd.Series) -> None:
     path = _text(attachment.get("repository_path"))
     if not path:
@@ -546,9 +606,13 @@ def render_k_review() -> None:
     packages, packages_sha = _load_table(token, K_PACKAGE_PATH, PACKAGE_COLUMNS)
     legacy, legacy_sha = _load_table(token, K_LEGACY_REGISTRY_PATH, LEGACY_REGISTRY_COLUMNS)
     history, history_sha = _load_table(token, HISTORY_PATH, HISTORY_COLUMNS)
+    selection, selection_sha = _load_table(token, SELECTION_PATH, SELECTION_COLUMNS)
     messages, messages_sha = _load_table(token, K_REVIEW_MESSAGES_PATH, MESSAGE_COLUMNS)
     attachments, attachments_sha = _load_table(token, K_REVIEW_ATTACHMENTS_PATH, ATTACHMENT_COLUMNS)
-    if requests.empty and packages.empty and legacy.empty:
+    manual_selection = selection[
+        selection["selection_action"].astype(str).str.casefold().eq("to be applied")
+    ].copy() if not selection.empty else pd.DataFrame(columns=SELECTION_COLUMNS)
+    if requests.empty and packages.empty and legacy.empty and manual_selection.empty:
         st.info("V K zatím není žádný balíček připravený k review.")
         return
 
@@ -575,6 +639,24 @@ def render_k_review() -> None:
     visible = visible.drop_duplicates("package_id", keep="first")
     visible = visible[visible.apply(lambda row: _package_id(row, row.name) != "", axis=1)]
     visible = visible[~visible["status"].astype(str).str.casefold().eq("withdrawn")]
+
+    visible_ids = set(visible["package_id"].astype(str)) if not visible.empty else set()
+    manual_selection = manual_selection[
+        ~manual_selection["opportunity_id"].astype(str).isin(visible_ids)
+    ].copy()
+    if not manual_selection.empty:
+        st.subheader(f"Vybrané z e-mailu k ručnímu zpracování ({len(manual_selection)})")
+        st.caption(
+            "Zde jsou pouze role, u kterých jsi v e-mailu zvolil Apply. CV připravuješ ručně; "
+            "do I je přidej až po skutečném podání přihlášky."
+        )
+        for _, selection_row in manual_selection.iterrows():
+            _render_manual_selection_card(
+                token, selection_row, history, history_sha,
+                requests, requests_sha, packages, packages_sha,
+                legacy, legacy_sha,
+            )
+
     st.subheader(f"Balíčky k review ({len(visible)})")
     for index, row in visible.iterrows():
         package_id = _text(row.get("package_id")) or _package_id(row, int(index))

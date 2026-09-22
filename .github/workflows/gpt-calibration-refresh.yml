@@ -1,0 +1,38 @@
+name: GPT calibration-refresh
+
+# Náhrada Cowork úlohy `calibration-refresh` pro svět bez Claude. Spouští se
+# RUČNĚ (workflow_dispatch), jako původní úloha. Aktualizuje calibration_rules.json
+# (jen merge, nikdy tvrdé vyloučení), přegeneruje shortlisty přes existující modul
+# a upsertuje semantic_fit.csv. Vyžaduje repo secret OPENAI_API_KEY.
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  calibration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt || pip install requests pandas
+      - name: Calibration refresh
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+        run: python automation_gpt/calibration_refresh.py
+      - name: Commit
+        run: |
+          git config user.name "gpt-calibration-refresh[bot]"
+          git config user.email "actions@github.com"
+          git add data/calibration_rules.json data/semantic_fit.csv data/*_calibration_shortlist.csv docs/WORKSTREAMS.md *_TARGETING.md || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Calibration refresh ($(date -u +%Y-%m-%d)) [gpt]"
+            git push
+          else
+            echo "Zadne zmeny."
+          fi

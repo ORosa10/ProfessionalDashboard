@@ -1,0 +1,40 @@
+name: GPT opportunity-enrichment
+
+# Náhrada Cowork úlohy `opportunity-enrichment` pro svět bez Claude: denně
+# obohatí nové vložené pozice a ohodnocené promítne do sourcing kontextu.
+# Vyžaduje repo secret OPENAI_API_KEY. Úpravy CSV jsou po submission_id +
+# append-only do universe/job_sources (defenzivní).
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # denně ráno
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  enrichment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests pandas
+      - name: Opportunity enrichment
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+        run: python automation_gpt/opportunity_enrichment.py
+      - name: Commit
+        run: |
+          git config user.name "gpt-opportunity-enrichment[bot]"
+          git config user.email "actions@github.com"
+          git add data/ docs/WORKSTREAMS.md *_TARGETING.md || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Enrichment + onboarding ($(date -u +%Y-%m-%d)) [gpt]"
+            git push
+          else
+            echo "Nic ke zpracovani."
+          fi

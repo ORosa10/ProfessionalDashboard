@@ -1,0 +1,14 @@
+run_at,source_id,company,market,seed_url,pages_checked,candidate_job_pages,verified_jobs,errors,adapter_used,fallback_reason
+2026-09-26T09:54:50.618651+00:00,csg-global,Czechoslovak Group,Multi-region,https://czechoslovakgroup.com/en/career,2,2,0,,llm,
+2026-09-26T09:55:06.531985+00:00,cpi-property-group-global,CPI Property Group,Multi-region,https://www.cpipg.com/careers,0,0,0,"https://www.cpipg.com/careers: TimeoutError: Page.goto: Timeout 25000ms exceeded.
+Call log:
+  - navigating to ""https://www.cpipg.com/careers"", waiting until ""domcontentloaded""
+",llm,
+2026-09-26T09:55:57.169618+00:00,investor-ab-global,Investor AB,Multi-region,https://www.investorab.com/career/,2,2,0,,llm,
+2026-09-26T09:56:20.852639+00:00,industrivarden-global,Industrivärden,Multi-region,https://www.industrivarden.se/en-gb/career/,1,1,0,https://www.industrivarden.se/en-gb/career/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions,llm,
+2026-09-26T09:56:38.476611+00:00,kinnevik-global,Kinnevik,Multi-region,https://www.kinnevik.com/careers,1,1,0,https://www.kinnevik.com/careers: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions,llm,
+2026-09-26T09:56:55.570166+00:00,exor-global,Exor,Multi-region,https://www.exor.com/pages/exor/careers,1,1,0,https://www.exor.com/pages/exor/careers: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions,llm,
+2026-09-26T09:57:22.407921+00:00,porsche-se-global,Porsche Automobil Holding,Multi-region,https://www.porsche-se.com/en/company/career,1,1,0,https://www.porsche-se.com/en/company/career: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions,llm,
+2026-09-26T09:57:39.684098+00:00,ap-moller-holding-global,A.P. Moller Holding,Multi-region,https://apmoller.com/careers/,1,1,0,https://apmoller.com/careers/: RuntimeError: Gemini request failed: HTTPError: 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/interactions,llm,
+2026-09-26T09:57:57.501457+00:00,ppf-group-global,PPF Group,Multi-region,https://www.ppf.eu/en/careers,9,0,0,,generic,
+2026-09-26T09:58:06.440355+00:00,kkcg-global,KKCG,Multi-region,https://kkcg.com/en/careers,6,0,0,,generic,

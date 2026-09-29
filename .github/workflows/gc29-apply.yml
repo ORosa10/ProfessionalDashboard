@@ -1,0 +1,84 @@
+name: Apply temporary G-to-C batch 2026-09-29
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/.gc29_payload.json"
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Apply and validate batch
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv, json
+          from collections import Counter
+          from pathlib import Path
+
+          base = Path('data')
+          payload = json.loads((base / '.gc29_payload.json').read_text(encoding='utf-8'))
+
+          def load(name):
+              with (base / name).open(newline='', encoding='utf-8') as f:
+                  reader = csv.DictReader(f)
+                  return reader.fieldnames, list(reader)
+
+          def save(name, fields, rows):
+              with (base / name).open('w', newline='', encoding='utf-8') as f:
+                  writer = csv.DictWriter(f, fieldnames=fields, lineterminator='\n', extrasaction='raise')
+                  writer.writeheader()
+                  writer.writerows(rows)
+
+          s_fields, staging = load('jobs_email_staging.csv')
+          r_fields, registry = load('opportunity_registry.csv')
+          f_fields, fits = load('semantic_fit.csv')
+          s_ids = {row['job_id'] for row in staging}
+          r_ids = {row['opportunity_id'] for row in registry}
+          f_ids = {row['opportunity_id'] for row in fits}
+
+          for row in staging:
+              if row['job_id'] in payload['repeat_ids']:
+                  row['last_seen_at'] = payload['timestamp']
+                  row['duplicate_count'] = str(int(row.get('duplicate_count') or 0) + 1)
+
+          for row in payload['staging']:
+              if row['job_id'] not in s_ids:
+                  staging.append(row)
+          for row in payload['registry']:
+              if row['opportunity_id'] not in r_ids:
+                  registry.append(row)
+          for row in payload['fits']:
+              if row['opportunity_id'] not in f_ids:
+                  fits.append(row)
+
+          save('jobs_email_staging.csv', s_fields, staging)
+          save('opportunity_registry.csv', r_fields, registry)
+          save('semantic_fit.csv', f_fields, fits)
+
+          r_ids = {row['opportunity_id'] for row in registry}
+          f_ids = {row['opportunity_id'] for row in fits}
+          verified = [row for row in staging if row['verification'].startswith('verified email alert') and row['company'].strip() and len((row['description_en'] or row['description']).strip()) >= 80 and row['job_url'].startswith('http')]
+          assert not [row['job_id'] for row in verified if row['job_id'] not in r_ids]
+          assert not [row['job_id'] for row in verified if row['job_id'] not in f_ids]
+          assert not [key for key, count in Counter(row['job_id'] for row in staging).items() if count > 1]
+          assert not [key for key, count in Counter(row['opportunity_id'] for row in registry).items() if count > 1]
+          assert not [key for key, count in Counter(row['opportunity_id'] for row in fits).items() if count > 1]
+          PY
+      - name: Commit final data and remove temporary runner
+        shell: bash
+        run: |
+          rm data/.gc29_payload.json .github/workflows/gc29-apply.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/jobs_email_staging.csv data/opportunity_registry.csv data/semantic_fit.csv data/.gc29_payload.json .github/workflows/gc29-apply.yml
+          git commit -m "Run 2026-09-29 daily G-to-C email batch"
+          git push origin HEAD:main

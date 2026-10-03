@@ -1,0 +1,47 @@
+run_at,source_id,company,market,seed_url,pages_checked,candidate_job_pages,verified_jobs,errors
+2026-10-03T10:05:37.168164+00:00,partners-group-global,Partners Group,Multi-region,https://jobs.partnersgroup.com/,16,15,15,
+2026-10-03T10:05:53.650648+00:00,advent-global,Advent International,Multi-region,https://www.adventinternational.com/careers/,1,0,0,https://www.adventinternational.com/careers/: HTTPError
+2026-10-03T10:05:54.496686+00:00,cinven-global,Cinven,Multi-region,https://cinven.pinpointhq.com/,2,0,0,
+2026-10-03T10:05:56.580876+00:00,bc-partners-global,BC Partners,Multi-region,https://www.bcpartners.com/careers/,1,0,0,
+2026-10-03T10:05:58.213014+00:00,triton-global,Triton Partners,Multi-region,https://tritonpartners.wd3.myworkdayjobs.com/en-GB/External,6,0,0,
+2026-10-03T10:06:04.045062+00:00,ardian-global,Ardian,Multi-region,https://ardian.wd103.myworkdayjobs.com/ArdianCareers,9,3,3,
+2026-10-03T10:06:10.631262+00:00,tpg-global,TPG,Multi-region,https://job-boards.greenhouse.io/tpgcareers,1,0,0,
+2026-10-03T10:06:10.934014+00:00,bain-capital-global,Bain Capital,Multi-region,https://baincapital.wd1.myworkdayjobs.com/External_Public,15,7,7,
+2026-10-03T10:06:20.161779+00:00,ares-global,Ares Management,Multi-region,https://aresmgmt.wd1.myworkdayjobs.com/en-US/External,16,9,9,
+2026-10-03T10:06:27.543857+00:00,icg-global,Intermediate Capital Group,Multi-region,https://icg.wd3.myworkdayjobs.com/en-US/external_careers,9,3,3,
+2026-10-03T10:06:34.274694+00:00,pai-global,PAI Partners,Multi-region,https://www.paipartners.com/careers/,1,0,0,https://www.paipartners.com/careers/: HTTPError
+2026-10-03T10:06:35.057748+00:00,waterland-global,Waterland Private Equity,Multi-region,https://www.waterlandpe.com/careers/,30,0,0,
+2026-10-03T10:07:14.790844+00:00,nordic-capital-global,Nordic Capital,Multi-region,https://career.nordiccapital.com/jobs,11,1,1,
+2026-10-03T10:07:20.760561+00:00,altor-global,Altor,Multi-region,https://careers.altor.com/,1,0,0,
+2026-10-03T10:07:22.340045+00:00,axcel-global,Axcel,Multi-region,https://axcel.dk/career/,1,0,0,https://axcel.dk/career/: HTTPError
+2026-10-03T10:07:23.770221+00:00,fsn-capital-global,FSN Capital,Multi-region,https://www.fsncapital.com/careers,1,0,0,https://www.fsncapital.com/careers: HTTPError
+2026-10-03T10:07:25.394083+00:00,summa-equity-global,Summa Equity,Multi-region,https://summaequity.com/career/,3,0,0,
+2026-10-03T10:07:29.524612+00:00,dbag-global,Deutsche Beteiligungs AG,Germany,https://dbag.careers.hibob.com/jobs,1,0,0,
+2026-10-03T10:07:30.669455+00:00,mutares-global,Mutares,Multi-region,https://career.mutares.com/jobs,30,25,25,
+2026-10-03T10:07:46.928514+00:00,capvis-global,Capvis,Multi-region,https://www.capvis.com/careers/,2,0,0,
+2026-10-03T10:07:49.620761+00:00,ufenau-global,Ufenau Capital Partners,Multi-region,https://ufenau-capital-partners.jobs.personio.com/,1,0,0,
+2026-10-03T10:07:50.424927+00:00,apollo-global,Apollo Global Management,Multi-region,https://www.apollo.com/careers,1,0,0,
+2026-10-03T10:07:51.312131+00:00,kkr-global,KKR,Multi-region,https://www.kkr.com/careers,30,0,0,
+2026-10-03T10:08:08.631773+00:00,carlyle-global,Carlyle,Multi-region,https://www.carlyle.com/careers,1,0,0,https://www.carlyle.com/careers: HTTPError
+2026-10-03T10:08:08.965322+00:00,blackstone-global,Blackstone,Multi-region,https://www.blackstone.com/careers/,3,0,0,
+2026-10-03T10:08:11.026170+00:00,cvc-global,CVC,Multi-region,https://www.cvc.com/careers/,1,0,0,https://www.cvc.com/careers/: HTTPError
+2026-10-03T10:08:11.986951+00:00,eqt-global,EQT,Multi-region,https://eqtgroup.com/careers,1,0,0,https://eqtgroup.com/careers: HTTPError
+2026-10-03T10:08:12.871417+00:00,permira-global,Permira,Multi-region,https://www.permira.com/careers/,1,0,0,https://www.permira.com/careers/: HTTPError
+2026-10-03T10:08:13.640885+00:00,bridgepoint-global,Bridgepoint Group,Multi-region,https://www.bridgepoint.eu/careers,1,0,0,https://www.bridgepoint.eu/careers: HTTPError
+2026-10-03T10:08:15.086030+00:00,hg-global,Hg,Multi-region,https://hgcapital.com/careers,1,0,0,https://hgcapital.com/careers: HTTPError
+2026-10-03T10:08:15.399583+00:00,brookfield-global,Brookfield Asset Management,Multi-region,https://www.brookfield.com/careers,30,0,0,
+2026-10-03T10:08:43.018853+00:00,macquarie-global,Macquarie Group,Multi-region,https://www.macquarie.com/careers.html,22,0,0,
+2026-10-03T10:08:55.561698+00:00,antin-global,Antin Infrastructure Partners,Multi-region,https://www.antin-ip.com/careers,1,0,0,
+2026-10-03T10:08:56.823614+00:00,eurazeo-global,Eurazeo,Multi-region,https://www.eurazeo.com/en/group/careers,1,0,0,https://www.eurazeo.com/en/group/careers: HTTPError
+2026-10-03T10:08:57.824800+00:00,verdane-global,Verdane,Multi-region,https://verdane.com/careers/,1,0,0,https://verdane.com/careers/: HTTPError
+2026-10-03T10:08:58.088972+00:00,enterprise-investors-global,Enterprise Investors,Multi-region,https://www.ei.com.pl/en/career/,1,0,0,https://www.ei.com.pl/en/career/: HTTPError
+2026-10-03T10:08:58.482033+00:00,mid-europa-global,MidEuropa,Multi-region,https://mideuropa.com/careers/,1,0,0,https://mideuropa.com/careers/: HTTPError
+2026-10-03T10:08:59.254042+00:00,innova-capital-global,Innova Capital,Multi-region,https://innovacap.com/career/,1,0,0,https://innovacap.com/career/: HTTPError
+2026-10-03T10:08:59.973097+00:00,fidelity-international-global,Fidelity International,Multi-region,https://careers.fidelityinternational.com/,30,0,0,
+2026-10-03T10:09:33.145669+00:00,invesco-global,Invesco,Multi-region,https://careers.invesco.com/,30,0,0,https://careers.invesco.com/author/alphanbowman/: HTTPError | https://careers.invesco.com/?page_id=1029: HTTPError
+2026-10-03T10:09:50.013587+00:00,vanguard-global,Vanguard,Multi-region,https://www.vanguardjobs.com/,30,3,3,
+2026-10-03T10:10:08.873263+00:00,mg-global,M&G,Multi-region,https://www.mandg.com/careers,1,0,0,
+2026-10-03T10:10:10.213269+00:00,man-group-global,Man Group,Multi-region,https://www.man.com/careers,7,0,0,
+2026-10-03T10:10:22.165379+00:00,janus-henderson-global,Janus Henderson,Multi-region,https://www.janushenderson.com/corporate/careers/,7,0,0,
+2026-10-03T10:10:27.529508+00:00,baillie-gifford-global,Baillie Gifford,Multi-region,https://www.bailliegifford.com/en/uk/individual-investors/careers/,21,0,0,
+2026-10-03T10:11:00.917310+00:00,abrdn-global,abrdn,Multi-region,https://www.abrdn.com/en/corporate/careers,1,0,0,https://www.abrdn.com/en/corporate/careers: HTTPError

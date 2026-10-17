@@ -1,0 +1,47 @@
+run_at,source_id,company,market,seed_url,pages_checked,candidate_job_pages,verified_jobs,errors
+2026-10-17T08:52:24.332198+00:00,partners-group-global,Partners Group,Multi-region,https://jobs.partnersgroup.com/,14,13,13,
+2026-10-17T08:52:39.222498+00:00,advent-global,Advent International,Multi-region,https://www.adventinternational.com/careers/,1,0,0,https://www.adventinternational.com/careers/: HTTPError
+2026-10-17T08:52:40.008920+00:00,cinven-global,Cinven,Multi-region,https://cinven.pinpointhq.com/,2,0,0,
+2026-10-17T08:52:42.259978+00:00,bc-partners-global,BC Partners,Multi-region,https://www.bcpartners.com/careers/,1,0,0,
+2026-10-17T08:52:44.209952+00:00,triton-global,Triton Partners,Multi-region,https://tritonpartners.wd3.myworkdayjobs.com/en-GB/External,6,0,0,
+2026-10-17T08:52:52.239195+00:00,ardian-global,Ardian,Multi-region,https://ardian.wd103.myworkdayjobs.com/ArdianCareers,9,3,3,
+2026-10-17T08:53:00.363630+00:00,tpg-global,TPG,Multi-region,https://job-boards.greenhouse.io/tpgcareers,1,0,0,
+2026-10-17T08:53:00.664312+00:00,bain-capital-global,Bain Capital,Multi-region,https://baincapital.wd1.myworkdayjobs.com/External_Public,18,10,7,Workday Coinvest-Finance-Manager---Private-Markets_REQ_108326-13: JSONDecodeError | Workday Finance-Manager---Tech-Opportunities_REQ_108321-13: JSONDecodeError | Workday Senior-Finance-Associate---FP-A_REQ_108432: JSONDecodeError
+2026-10-17T08:53:15.481300+00:00,ares-global,Ares Management,Multi-region,https://aresmgmt.wd1.myworkdayjobs.com/en-US/External,11,8,0,Workday listing: JSONDecodeError: Expecting value: line 1 column 1 (char 0) | Workday Associate--Real-Estate-Asset-Management--Logistics-_R8640-1: MissingSchema | Workday Associate--Digital-Infrastructure-Portfolio-Management_R8216-1: MissingSchema | Workday Associate--Real-Estate-Asset-Management-Operations_R8113: MissingSchema | Workday Associate--Real-Estate-Asset-Management_R7935-1: MissingSchema
+2026-10-17T08:53:19.269736+00:00,icg-global,Intermediate Capital Group,Multi-region,https://icg.wd3.myworkdayjobs.com/en-US/external_careers,4,3,0,Workday listing: JSONDecodeError: Expecting value: line 1 column 1 (char 0) | Workday Vice-President--Group-Finance---Investments--Valuation---Financial-Control-_R3251: MissingSchema | Workday Associate--Private-Equity-Fund-Investments_R3274: MissingSchema | Workday Vice-President--Investment-Operations_R3154: MissingSchema
+2026-10-17T08:53:22.377655+00:00,pai-global,PAI Partners,Multi-region,https://www.paipartners.com/careers/,1,0,0,https://www.paipartners.com/careers/: HTTPError
+2026-10-17T08:53:23.074840+00:00,waterland-global,Waterland Private Equity,Multi-region,https://www.waterlandpe.com/careers/,30,0,0,
+2026-10-17T08:54:08.920440+00:00,nordic-capital-global,Nordic Capital,Multi-region,https://career.nordiccapital.com/jobs,12,2,2,
+2026-10-17T08:54:18.583214+00:00,altor-global,Altor,Multi-region,https://careers.altor.com/,1,0,0,
+2026-10-17T08:54:20.746204+00:00,axcel-global,Axcel,Multi-region,https://axcel.dk/career/,1,0,0,https://axcel.dk/career/: HTTPError
+2026-10-17T08:54:22.519411+00:00,fsn-capital-global,FSN Capital,Multi-region,https://www.fsncapital.com/careers,1,0,0,https://www.fsncapital.com/careers: HTTPError
+2026-10-17T08:54:24.326168+00:00,summa-equity-global,Summa Equity,Multi-region,https://summaequity.com/career/,4,0,0,
+2026-10-17T08:54:29.302106+00:00,dbag-global,Deutsche Beteiligungs AG,Germany,https://dbag.careers.hibob.com/jobs,1,0,0,
+2026-10-17T08:54:30.532374+00:00,mutares-global,Mutares,Multi-region,https://career.mutares.com/jobs,30,25,25,
+2026-10-17T08:54:44.237904+00:00,capvis-global,Capvis,Multi-region,https://www.capvis.com/careers/,2,0,0,
+2026-10-17T08:54:47.058927+00:00,ufenau-global,Ufenau Capital Partners,Multi-region,https://ufenau-capital-partners.jobs.personio.com/,1,0,0,
+2026-10-17T08:54:48.099759+00:00,apollo-global,Apollo Global Management,Multi-region,https://www.apollo.com/careers,1,0,0,
+2026-10-17T08:54:49.099927+00:00,kkr-global,KKR,Multi-region,https://www.kkr.com/careers,30,0,0,
+2026-10-17T08:55:09.776467+00:00,carlyle-global,Carlyle,Multi-region,https://www.carlyle.com/careers,1,0,0,https://www.carlyle.com/careers: HTTPError
+2026-10-17T08:55:10.042430+00:00,blackstone-global,Blackstone,Multi-region,https://www.blackstone.com/careers/,3,0,0,
+2026-10-17T08:55:11.800266+00:00,cvc-global,CVC,Multi-region,https://www.cvc.com/careers/,1,0,0,https://www.cvc.com/careers/: HTTPError
+2026-10-17T08:55:12.949976+00:00,eqt-global,EQT,Multi-region,https://eqtgroup.com/careers,1,0,0,https://eqtgroup.com/careers: HTTPError
+2026-10-17T08:55:15.655886+00:00,permira-global,Permira,Multi-region,https://www.permira.com/careers/,1,0,0,https://www.permira.com/careers/: HTTPError
+2026-10-17T08:55:16.208008+00:00,bridgepoint-global,Bridgepoint Group,Multi-region,https://www.bridgepoint.eu/careers,1,0,0,https://www.bridgepoint.eu/careers: HTTPError
+2026-10-17T08:55:18.100211+00:00,hg-global,Hg,Multi-region,https://hgcapital.com/careers,1,0,0,https://hgcapital.com/careers: HTTPError
+2026-10-17T08:55:18.421221+00:00,brookfield-global,Brookfield Asset Management,Multi-region,https://www.brookfield.com/careers,30,0,0,
+2026-10-17T08:55:35.734924+00:00,macquarie-global,Macquarie Group,Multi-region,https://www.macquarie.com/careers.html,22,0,0,
+2026-10-17T08:55:50.130566+00:00,antin-global,Antin Infrastructure Partners,Multi-region,https://www.antin-ip.com/careers,1,0,0,
+2026-10-17T08:55:51.652112+00:00,eurazeo-global,Eurazeo,Multi-region,https://www.eurazeo.com/en/group/careers,1,0,0,https://www.eurazeo.com/en/group/careers: HTTPError
+2026-10-17T08:55:53.032997+00:00,verdane-global,Verdane,Multi-region,https://verdane.com/careers/,1,0,0,https://verdane.com/careers/: HTTPError
+2026-10-17T08:55:53.293508+00:00,enterprise-investors-global,Enterprise Investors,Multi-region,https://www.ei.com.pl/en/career/,1,0,0,https://www.ei.com.pl/en/career/: HTTPError
+2026-10-17T08:55:54.150835+00:00,mid-europa-global,MidEuropa,Multi-region,https://mideuropa.com/careers/,1,0,0,https://mideuropa.com/careers/: HTTPError
+2026-10-17T08:55:54.961379+00:00,innova-capital-global,Innova Capital,Multi-region,https://innovacap.com/career/,1,0,0,https://innovacap.com/career/: HTTPError
+2026-10-17T08:55:55.863606+00:00,fidelity-international-global,Fidelity International,Multi-region,https://careers.fidelityinternational.com/,30,0,0,
+2026-10-17T08:56:33.623163+00:00,invesco-global,Invesco,Multi-region,https://careers.invesco.com/,30,0,0,https://careers.invesco.com/page/2/: HTTPError | https://careers.invesco.com/category/benefits/: HTTPError | https://careers.invesco.com/author/ccorrado/: HTTPError | https://careers.invesco.com/category/diversity-inclusion/: HTTPError | https://careers.invesco.com/blogs: HTTPError
+2026-10-17T08:56:42.596196+00:00,vanguard-global,Vanguard,Multi-region,https://www.vanguardjobs.com/,30,1,1,https://www.vanguardjobs.com/career-blog/tag/advice-from-crew/: HTTPError | https://www.vanguardjobs.com/career-blog/2026/09/16/from-contractor-to-crew/: HTTPError | https://www.vanguardjobs.com/home-aus/: HTTPError | https://www.vanguardjobs.com/benefits-rewards/: HTTPError | https://www.vanguardjobs.com/home-can/: HTTPError
+2026-10-17T08:56:48.665673+00:00,mg-global,M&G,Multi-region,https://www.mandg.com/careers,1,0,0,
+2026-10-17T08:56:49.994521+00:00,man-group-global,Man Group,Multi-region,https://www.man.com/careers,7,0,0,
+2026-10-17T08:57:01.071696+00:00,janus-henderson-global,Janus Henderson,Multi-region,https://www.janushenderson.com/corporate/careers/,7,0,0,
+2026-10-17T08:57:05.806365+00:00,baillie-gifford-global,Baillie Gifford,Multi-region,https://www.bailliegifford.com/en/uk/individual-investors/careers/,21,0,0,
+2026-10-17T08:57:38.325689+00:00,abrdn-global,abrdn,Multi-region,https://www.abrdn.com/en/corporate/careers,1,0,0,https://www.abrdn.com/en/corporate/careers: HTTPError

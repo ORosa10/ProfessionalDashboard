@@ -1,0 +1,43 @@
+run_at,source_id,company,market,seed_url,pages_checked,candidate_job_pages,verified_jobs,errors
+2026-10-24T09:04:57.342415+00:00,bain-global,Bain & Company,Multi-region,https://www.bain.com/careers/find-a-role/,30,0,0,
+2026-10-24T09:05:17.644734+00:00,roland-berger-global,Roland Berger,Multi-region,https://www.rolandberger.com/en/Join/All-Jobs/,1,0,0,
+2026-10-24T09:05:18.276049+00:00,oliver-wyman-global,Oliver Wyman,Multi-region,https://careers.marsh.com/global/en/oliver-wyman,1,0,0,
+2026-10-24T09:05:19.197110+00:00,alvarez-marsal-global,Alvarez & Marsal,Multi-region,https://careers.alvarezandmarsal.com/,1,0,0,https://careers.alvarezandmarsal.com/: HTTPError
+2026-10-24T09:05:19.444044+00:00,alixpartners-global,AlixPartners,Multi-region,https://job-boards.greenhouse.io/alixpartners,1,23,23,
+2026-10-24T09:05:19.779753+00:00,fti-consulting-global,FTI Consulting,Multi-region,https://fticonsult.referrals.selectminds.com/,2,0,0,
+2026-10-24T09:05:21.306314+00:00,lek-global,L.E.K. Consulting,Multi-region,https://www.lek.com/careers,30,0,0,
+2026-10-24T09:05:37.938880+00:00,horvath-global,Horváth,Multi-region,https://horvath.wd3.myworkdayjobs.com/en-US/Horvath_Careers,6,0,0,
+2026-10-24T09:05:43.990864+00:00,zeb-global,zeb consulting,Multi-region,https://career.zeb-consulting.com/jobs/,48,47,47,
+2026-10-24T09:06:38.386218+00:00,capco-global,Capco,Multi-region,https://job-boards.greenhouse.io/capco,1,71,71,
+2026-10-24T09:06:39.103233+00:00,grant-thornton-global,Grant Thornton,Multi-region,https://www.grantthornton.global/en/careers/,17,0,0,
+2026-10-24T09:06:54.631563+00:00,bdo-global,BDO,Multi-region,https://www.bdo.global/en-gb/careers,2,0,0,
+2026-10-24T09:07:00.960772+00:00,forvis-mazars-global,Forvis Mazars,Multi-region,https://www.forvismazars.com/group/en/join-us,30,0,0,
+2026-10-24T09:07:36.281981+00:00,rsm-global,RSM,Multi-region,https://www.rsm.global/careers,4,0,0,
+2026-10-24T09:07:39.097753+00:00,protiviti-global,Protiviti,Multi-region,https://www.protiviti.com/gl-en/careers,2,0,0,
+2026-10-24T09:07:40.256956+00:00,sia-partners-global,Sia Partners,Multi-region,https://www.sia-partners.com/en/careers,30,0,0,
+2026-10-24T09:08:10.849305+00:00,pa-consulting-global,PA Consulting,Multi-region,https://www.paconsulting.com/careers,30,0,0,
+2026-10-24T09:08:53.442235+00:00,capgemini-invent-global,Capgemini Invent,Multi-region,https://www.capgemini.com/careers/,30,0,0,
+2026-10-24T09:09:10.985344+00:00,ibm-consulting-global,IBM Consulting,Multi-region,https://www.ibm.com/careers/search,30,0,0,
+2026-10-24T09:09:27.298831+00:00,cgi-global,CGI,Multi-region,https://www.cgi.com/en/careers,30,0,0,
+2026-10-24T09:09:51.831640+00:00,infosys-consulting-global,Infosys Consulting,Multi-region,https://career.infosys.com/,1,0,0,https://career.infosys.com/: HTTPError
+2026-10-24T09:09:52.077011+00:00,tcs-consulting-global,Tata Consultancy Services,Multi-region,https://www.tcs.com/careers,1,0,0,https://www.tcs.com/careers: HTTPError
+2026-10-24T09:09:52.592856+00:00,cognizant-global,Cognizant,Multi-region,https://careers.cognizant.com/global-en/,30,0,0,
+2026-10-24T09:10:08.364889+00:00,occ-strategy-global,OC&C Strategy Consultants,Multi-region,https://www.occstrategy.com/en/careers/,30,0,0,
+2026-10-24T09:10:39.316695+00:00,implement-consulting-global,Implement Consulting Group,Multi-region,https://implementconsultinggroup.com/career,1,0,0,https://implementconsultinggroup.com/career: HTTPError
+2026-10-24T09:10:40.632900+00:00,valcon-global,Valcon,Multi-region,https://valcon.com/careers/,30,0,0,
+2026-10-24T09:11:19.198889+00:00,baringa-global,Baringa,Multi-region,https://www.baringa.com/en/careers/,11,0,0,
+2026-10-24T09:11:49.183019+00:00,newton-europe-global,Newton Europe,Multi-region,https://www.newtoneurope.com/careers/,1,0,0,
+2026-10-24T09:11:51.623709+00:00,porsche-consulting-global,Porsche Consulting,Multi-region,https://www.porsche-consulting.com/careers/,1,0,0,https://www.porsche-consulting.com/careers/: HTTPError
+2026-10-24T09:11:52.106202+00:00,d-fine-global,d-fine,Multi-region,https://www.d-fine.com/en/career/,30,0,0,
+2026-10-24T09:12:31.909017+00:00,zuehlke-global,Zühlke,Multi-region,https://www.zuehlke.com/en/careers,30,0,0,
+2026-10-24T09:12:56.684037+00:00,synpulse-global,Synpulse,Multi-region,https://www.synpulse.com/en/careers,4,0,0,
+2026-10-24T09:13:02.226530+00:00,nera-global,NERA Economic Consulting,Multi-region,https://careers.marshmclennan.com/global/en/nera,1,0,0,https://careers.marshmclennan.com/global/en/nera: HTTPError
+2026-10-24T09:13:04.472555+00:00,compass-lexecon-global,Compass Lexecon,Multi-region,https://www.compasslexecon.com/careers/,12,0,0,
+2026-10-24T09:13:12.572673+00:00,charles-river-associates-global,Charles River Associates,Multi-region,https://www.crai.com/careers/,30,0,0,
+2026-10-24T09:13:37.729031+00:00,mckinsey-global,McKinsey & Company,Multi-region,https://www.mckinsey.com/careers/search-jobs,1,0,0,https://www.mckinsey.com/careers/search-jobs: ReadTimeout
+2026-10-24T09:14:03.034075+00:00,bcg-global,Boston Consulting Group,Multi-region,https://careers.bcg.com/global/en/search-results,30,0,0,
+2026-10-24T09:14:52.249875+00:00,kearney-global,Kearney,Multi-region,https://www.kearney.com/careers,11,0,0,
+2026-10-24T09:15:01.724200+00:00,arthur-d-little-global,Arthur D. Little,Multi-region,https://careers.adlittle.com/,1,0,0,https://careers.adlittle.com/: ConnectTimeout
+2026-10-24T09:15:51.961070+00:00,bearingpoint-global,BearingPoint,Multi-region,https://www.bearingpoint.com/en/careers/,30,0,0,
+2026-10-24T09:16:29.308971+00:00,accenture-global,Accenture,Multi-region,https://www.accenture.com/us-en/careers/jobsearch,30,0,0,
+2026-10-24T09:16:43.573185+00:00,simon-kucher-global,Simon-Kucher,Multi-region,https://www.simon-kucher.com/en/careers,30,0,0,

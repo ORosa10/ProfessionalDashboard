@@ -1,256 +1,4 @@
 run_at,source_id,canonical_company_id,company,market,seed_url,adapter,source_file,source_status,pages_checked,candidate_job_pages,verified_jobs,errors
-2026-10-04T10:15:21.795345+00:00,carlyle-global,carlyle,Carlyle,Multi-region,https://www.carlyle.com/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.carlyle.com/careers: HTTPError
-2026-10-04T10:15:21.960731+00:00,macquarie-global,macquarie,Macquarie Group,Multi-region,https://www.macquarie.com/careers.html,generic,job_sources_pe.csv,zero_jobs,22.0,0.0,0,
-2026-10-04T10:15:38.568811+00:00,invesco-global,invesco,Invesco,Multi-region,https://careers.invesco.com/,generic,job_sources_pe.csv,error,30.0,0.0,0,https://careers.invesco.com/author/alphanbowman/: HTTPError | https://careers.invesco.com/?page_id=1029: HTTPError
-2026-10-04T10:15:59.389295+00:00,eon-global,eon,E.ON,Multi-region,https://careers.eon.com/,llm,job_sources_corporate.csv,zero_jobs,17.0,0.0,0,
-2026-10-04T10:16:21.902032+00:00,shell-global,shell,Shell,Multi-region,https://shell.wd3.myworkdayjobs.com/ShellCareers,workday,job_sources_corporate.csv,success,9.0,3.0,3,
-2026-10-04T10:16:31.672702+00:00,porsche-global,porsche,Porsche AG,Multi-region,https://jobs.porsche.com/index.php?ac=start,llm,job_sources_corporate.csv,error,30.0,0.0,0,https://jobs.porsche.com/(!'uid=lang'): HTTPError
-2026-10-04T10:17:04.603250+00:00,abb-global,abb,ABB,Multi-region,https://careers.abb/global/en/search-results,phenom,job_sources_corporate.csv,success,132.0,119.0,119,https://careers.abb/global/en/job/JR00039477: SourceTimeout
-2026-10-04T10:19:55.889485+00:00,novo-nordisk-global,novo-nordisk,Novo Nordisk,Multi-region,https://career2.successfactors.eu/careers?company=novonordisk,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
-2026-10-04T10:19:56.963586+00:00,unilever-global,unilever,Unilever,Multi-region,https://unilever.wd3.myworkdayjobs.com/Unilever_Experienced_Professionals,workday,job_sources_corporate.csv,success,27.0,16.0,16,
-2026-10-04T10:20:28.113938+00:00,capgemini-global,capgemini,Capgemini,Multi-region,https://www.capgemini.com/careers/,llm,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:20:44.845403+00:00,equinor-global,equinor,Equinor,Multi-region,https://www.equinor.com/careers,generic,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:21:24.028452+00:00,bayernlb-global,bayernlb,BayernLB,Multi-region,https://www.bayernlb.com/internet/en/blb/resp/career/career.jsp,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://www.bayernlb.com/internet/en/blb/resp/career/career.jsp: HTTPError
-2026-10-04T10:21:25.089769+00:00,julius-baer-global,julius-baer,Julius Baer,Multi-region,https://juliusbaer.wd3.myworkdayjobs.com/External,workday,job_sources_financial_services.csv,error,0.0,0.0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://juliusbaer.wd3.myworkdayjobs.com/wday/cxs/juliusbaer/External/jobs
-2026-10-04T10:21:29.162780+00:00,dnb-global,dnb,DNB Group,Multi-region,https://careers.smartrecruiters.com/DNB1,smartrecruiters,job_sources_financial_services.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:21:29.706924+00:00,standard-chartered-global,standard-chartered,Standard Chartered,Multi-region,https://jobs.standardchartered.com/,successfactors,job_sources_financial_services.csv,error,141.0,0.0,0,https://jobs.standardchartered.com/job/Bangalore-Senior-Manager%2C-Deal-Advisory-&-Research-COE/1360585857/: SourceTimeout
-2026-10-04T10:23:53.285603+00:00,munich-re-global,munich-re,Munich Re Group,Multi-region,https://careers.munichre.com/en/munichre,generic,job_sources_financial_services.csv,success,30.0,4.0,4,
-2026-10-04T10:24:34.318391+00:00,csg-global,csg,Czechoslovak Group,Multi-region,https://czechoslovakgroup.com/en/career,llm,job_sources_holdings.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:24:35.408790+00:00,ppf-group-global,ppf-group,PPF Group,Multi-region,https://www.ppf.eu/en/careers,generic,job_sources_holdings.csv,zero_jobs,9.0,0.0,0,
-2026-10-04T10:24:45.353886+00:00,rothschild-co-global,rothschild-co,Rothschild & Co,Multi-region,https://www.rothschildandco.com/en/careers/,generic,job_sources_investment_banking.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:25:15.788197+00:00,wood-company-global,wood-company,WOOD & Company,Multi-region,https://wood.cz/kariera/,generic,job_sources_investment_banking.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:25:17.278521+00:00,ninety-one-global,ninety-one,Ninety One,Multi-region,https://externalcareers.ninetyone.com/experienced-hires/,llm,job_sources_public_markets.csv,zero_jobs,2.0,0.0,0,
-2026-10-04T10:25:20.358134+00:00,dws-global,dws,DWS Group,Multi-region,https://www.dws.com/en-us/about-us/careers/,generic,job_sources_public_markets.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:25:21.761373+00:00,point72-global,point72,Point72,Multi-region,https://careers.point72.com/,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:25:23.214366+00:00,rsj-global,rsj,RSJ,Multi-region,https://www.rsj.com/cz/investments/kariera.html,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:13:45.373979+00:00,oliver-wyman-global,oliver-wyman,Oliver Wyman,Multi-region,https://careers.marsh.com/global/en/oliver-wyman,phenom,job_sources_consulting.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:13:45.985484+00:00,grant-thornton-global,grant-thornton,Grant Thornton,Multi-region,https://www.grantthornton.global/en/careers/,generic,job_sources_consulting.csv,zero_jobs,17.0,0.0,0,
-2026-10-04T10:13:57.874928+00:00,ibm-consulting-global,ibm-consulting,IBM Consulting,Multi-region,https://www.ibm.com/careers/search,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:14:11.929308+00:00,baringa-global,baringa,Baringa,Multi-region,https://www.baringa.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,12.0,0.0,0,
-2026-10-04T10:14:47.405518+00:00,charles-river-associates-global,charles-river-associates,Charles River Associates,Multi-region,https://www.crai.com/careers/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:15:04.631340+00:00,partners-group-global,partners-group,Partners Group,Multi-region,https://jobs.partnersgroup.com/,successfactors,job_sources_pe.csv,success,16.0,15.0,15,
-2026-10-04T10:15:18.477890+00:00,ares-global,ares,Ares Management,Multi-region,https://aresmgmt.wd1.myworkdayjobs.com/en-US/External,workday,job_sources_pe.csv,success,16.0,9.0,9,
-2026-10-04T10:15:25.346538+00:00,summa-equity-global,summa-equity,Summa Equity,Multi-region,https://summaequity.com/career/,generic,job_sources_pe.csv,zero_jobs,3.0,0.0,0,
-2026-10-04T10:15:29.274231+00:00,blackstone-global,blackstone,Blackstone,Multi-region,https://www.blackstone.com/careers/,generic,job_sources_pe.csv,zero_jobs,3.0,0.0,0,
-2026-10-04T10:15:31.063596+00:00,antin-global,antin,Antin Infrastructure Partners,Multi-region,https://www.antin-ip.com/careers,generic,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:15:32.231089+00:00,vanguard-global,vanguard,Vanguard,Multi-region,https://www.vanguardjobs.com/,generic,job_sources_pe.csv,success,30.0,1.0,1,https://www.vanguardjobs.com/career-blog/tag/advice-from-crew/: HTTPError | https://www.vanguardjobs.com/career-blog/2026/09/16/from-contractor-to-crew/: HTTPError | https://www.vanguardjobs.com/benefits-rewards/: HTTPError | https://www.vanguardjobs.com/career-blog/tag/career-development/: HTTPError | https://www.vanguardjobs.com/career-blog/2026/09/30/build-a-career-that-grows-with-you/: HTTPError
-2026-10-04T10:15:37.575133+00:00,enbw-global,enbw,EnBW,Multi-region,https://careers.enbw.com/de/de,phenom,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:15:38.079043+00:00,bp-global,bp,bp,Multi-region,https://bpinternational.wd3.myworkdayjobs.com/bpCareers,workday,job_sources_corporate.csv,success,30.0,19.0,19,
-2026-10-04T10:16:06.447150+00:00,bosch-global,bosch,Bosch,Multi-region,https://careers.smartrecruiters.com/BoschGroup,smartrecruiters,job_sources_corporate.csv,success,141.0,140.0,140,
-2026-10-04T10:17:42.916141+00:00,sap-global,sap,SAP,Multi-region,https://jobs.sap.com/,successfactors,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:17:43.081996+00:00,maersk-global,maersk,A.P. Moller - Maersk,Multi-region,https://maersk.wd3.myworkdayjobs.com/Maersk_Careers,workday,job_sources_corporate.csv,success,7.0,1.0,1,
-2026-10-04T10:17:48.014974+00:00,astrazeneca-global,astrazeneca,AstraZeneca,Multi-region,https://astrazeneca.wd3.myworkdayjobs.com/Careers,workday,job_sources_corporate.csv,success,14.0,7.0,7,
-2026-10-04T10:17:58.255810+00:00,ibm-global,ibm,IBM,Multi-region,https://careers.ibm.com/en_US/careers,llm,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:17:58.755482+00:00,evotec-se-global,evotec-se,Evotec SE,Multi-region,https://evotecgroup.wd3.myworkdayjobs.com/Evotec_Career_Site,workday,job_sources_corporate.csv,error,0.0,0.0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://evotecgroup.wd3.myworkdayjobs.com/wday/cxs/evotecgroup/Evotec_Career_Site/jobs
-2026-10-04T10:18:01.402914+00:00,ing-global,ing,ING Group,Multi-region,https://ing.wd3.myworkdayjobs.com/ICSGBLCOR,workday,job_sources_financial_services.csv,success,19.0,13.0,13,
-2026-10-04T10:18:13.421343+00:00,pictet-global,pictet,Pictet Group,Multi-region,https://career5.successfactors.eu/career?company=banquepict,successfactors,job_sources_financial_services.csv,error,1.0,0.0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
-2026-10-04T10:18:14.163843+00:00,op-financial-global,op-financial,OP Financial Group,Multi-region,https://www.op-careers.fi/,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://www.op-careers.fi/: SSLError
-2026-10-04T10:18:14.811363+00:00,lseg-global,lseg,London Stock Exchange Group,Multi-region,https://lseg.wd3.myworkdayjobs.com/Careers,workday,job_sources_financial_services.csv,error,0.0,0.0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://lseg.wd3.myworkdayjobs.com/wday/cxs/lseg/Careers/jobs
-2026-10-04T10:18:18.823063+00:00,rbi-global,rbi,Raiffeisen Bank International,Multi-region,https://jobs.rbinternational.com/,generic,job_sources_financial_services.csv,success,30.0,15.0,15,
-2026-10-04T10:18:42.051617+00:00,cpi-property-group-global,cpi-property-group,CPI Property Group,Multi-region,https://www.cpipg.com/careers,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.cpipg.com/careers: HTTPError
-2026-10-04T10:18:43.089840+00:00,kkcg-global,kkcg,KKCG,Multi-region,https://kkcg.com/en/careers,generic,job_sources_holdings.csv,zero_jobs,6.0,0.0,0,
-2026-10-04T10:18:47.450389+00:00,evercore-global,evercore,Evercore,Multi-region,https://www.evercore.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,10.0,0.0,0,
-2026-10-04T10:18:52.414478+00:00,capital-group-global,capital-group,Capital Group,Multi-region,https://capgroup.wd1.myworkdayjobs.com/capitalgroupcareers,workday,job_sources_public_markets.csv,success,11.0,4.0,4,
-2026-10-04T10:18:57.536776+00:00,union-investment-global,union-investment,Union Investment,Multi-region,https://unternehmen.union-investment.de/startseite-unternehmen/karriere,llm,job_sources_public_markets.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:18:58.877419+00:00,six-group-global,six-group,SIX Group,Multi-region,https://www.six-group.com/en/careers.html,generic,job_sources_public_markets.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:19:28.772020+00:00,marshall-wace-global,marshall-wace,Marshall Wace,Multi-region,https://www.mwam.com/careers/,generic,job_sources_specialist_funds.csv,error,1.0,0.0,0,https://www.mwam.com/careers/: HTTPError
-2026-10-04T10:19:29.190415+00:00,conseq-global,conseq,Conseq Investment Management,Multi-region,https://www.conseq.cz/kariera,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:13:46.559628+00:00,alvarez-marsal-global,alvarez-marsal,Alvarez & Marsal,Multi-region,https://careers.alvarezandmarsal.com/,selectminds,job_sources_consulting.csv,error,1.0,0.0,0,https://careers.alvarezandmarsal.com/: HTTPError
-2026-10-04T10:13:46.781402+00:00,bdo-global,bdo,BDO,Multi-region,https://www.bdo.global/en-gb/careers,generic,job_sources_consulting.csv,zero_jobs,2.0,0.0,0,
-2026-10-04T10:13:49.906677+00:00,cgi-global,cgi,CGI,Multi-region,https://www.cgi.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:14:10.995709+00:00,newton-europe-global,newton-europe,Newton Europe,Multi-region,https://www.newtoneurope.com/careers/,generic,job_sources_consulting.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:14:12.004297+00:00,mckinsey-global,mckinsey,McKinsey & Company,Multi-region,https://www.mckinsey.com/careers/search-jobs,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://www.mckinsey.com/careers/search-jobs: ReadTimeout
-2026-10-04T10:14:37.610274+00:00,advent-global,advent-international,Advent International,Multi-region,https://www.adventinternational.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.adventinternational.com/careers/: HTTPError
-2026-10-04T10:14:38.151720+00:00,icg-global,icg,Intermediate Capital Group,Multi-region,https://icg.wd3.myworkdayjobs.com/en-US/external_careers,workday,job_sources_pe.csv,success,9.0,3.0,3,
-2026-10-04T10:14:44.213276+00:00,dbag-global,dbag,Deutsche Beteiligungs AG,Germany,https://dbag.careers.hibob.com/jobs,generic,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:14:45.177297+00:00,cvc-global,cvc,CVC,Multi-region,https://www.cvc.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.cvc.com/careers/: HTTPError
-2026-10-04T10:14:45.944729+00:00,eurazeo-global,eurazeo,Eurazeo,Multi-region,https://www.eurazeo.com/en/group/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.eurazeo.com/en/group/careers: HTTPError
-2026-10-04T10:14:46.807499+00:00,mg-global,mg,M&G,Multi-region,https://www.mandg.com/careers,generic,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:14:48.777224+00:00,uniper-global,uniper,Uniper,Multi-region,https://career5.successfactors.eu/career?company=UniperProd,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
-2026-10-04T10:14:49.556457+00:00,trafigura-global,trafigura,Trafigura,Multi-region,https://trafigura.wd3.myworkdayjobs.com/TrafiguraCareerSite,workday,job_sources_corporate.csv,success,20.0,12.0,12,
-2026-10-04T10:15:07.717867+00:00,basf-global,basf,BASF,Multi-region,https://career5.successfactors.eu/career?company=C0000159936P,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
-2026-10-04T10:15:08.188829+00:00,dhl-global,dhl,DHL Group,Multi-region,https://careers.dhl.com/global/en/search-results,phenom,job_sources_corporate.csv,success,130.0,117.0,117,https://careers.dhl.com/global/en/job/AV-379486: SourceTimeout
-2026-10-04T10:17:37.443020+00:00,carlsberg-global,carlsberg,Carlsberg Group,Multi-region,https://career2.successfactors.eu/career?company=carlsbergg,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
-2026-10-04T10:17:37.964395+00:00,gsk-global,gsk,GSK,Multi-region,https://gsk.wd5.myworkdayjobs.com/GSKCareers,workday,job_sources_corporate.csv,success,13.0,5.0,5,
-2026-10-04T10:17:48.389667+00:00,infosys-global,infosys,Infosys,Multi-region,https://career.infosys.com/joblist,llm,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:17:48.954873+00:00,deutsche-bank-global,deutsche-bank,Deutsche Bank,Multi-region,https://db.wd3.myworkdayjobs.com/DBWebsite,workday,job_sources_financial_services.csv,error,0.0,0.0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://db.wd3.myworkdayjobs.com/wday/cxs/db/DBWebsite/jobs
-2026-10-04T10:17:52.020447+00:00,unicredit-global,unicredit,UniCredit,Multi-region,https://careers.unicredit.eu/,llm,job_sources_financial_services.csv,success,30.0,1.0,1,
-2026-10-04T10:18:57.901395+00:00,lombard-odier-global,lombard-odier,Lombard Odier,Multi-region,https://lombardodier.wd3.myworkdayjobs.com/Lombard_Odier_Careers,workday,job_sources_financial_services.csv,success,16.0,8.0,8,
-2026-10-04T10:19:09.259230+00:00,sampo-global,sampo,Sampo Group,Multi-region,https://www.sampo.com/careers/,llm,job_sources_financial_services.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:19:10.946456+00:00,aviva-global,aviva,Aviva,Multi-region,https://aviva.wd1.myworkdayjobs.com/External,workday,job_sources_financial_services.csv,success,8.0,2.0,2,
-2026-10-04T10:19:16.618794+00:00,ubs-global,ubs,UBS Group,Multi-region,https://www.ubs.com/global/en/careers/search-jobs.html,generic,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:19:35.225985+00:00,investor-ab-global,investor-ab,Investor AB,Multi-region,https://www.investorab.com/career/,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.investorab.com/career/: HTTPError
-2026-10-04T10:19:36.176097+00:00,goldman-sachs-global,goldman-sachs,Goldman Sachs,Multi-region,https://www.goldmansachs.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:19:50.232462+00:00,jefferies-global,jefferies,Jefferies,Multi-region,https://www.jefferies.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,11.0,0.0,0,
-2026-10-04T10:19:56.659104+00:00,wellington-management-global,wellington-management,Wellington Management,Multi-region,https://wellington.wd5.myworkdayjobs.com/External,workday,job_sources_public_markets.csv,success,43.0,32.0,32,
-2026-10-04T10:20:20.969763+00:00,flossbach-von-storch-global,flossbach-von-storch,Flossbach von Storch,Multi-region,https://flossbach-von-storch-ag.jobs.personio.de,personio,job_sources_public_markets.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:20:21.770058+00:00,vontobel-global,vontobel,Vontobel,Multi-region,https://www.vontobel.com/de-ch/ueber-vontobel/karriere/offene-stellen/,generic,job_sources_public_markets.csv,success,30.0,27.0,27,
-2026-10-04T10:21:14.622530+00:00,brevan-howard-global,brevan-howard,Brevan Howard,Multi-region,https://www.brevanhoward.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:21:15.960100+00:00,pale-fire-capital-global,pale-fire-capital,Pale Fire Capital,Multi-region,https://palefirecapital.com/,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:13:41.146365+00:00,alixpartners-global,alixpartners,AlixPartners,Multi-region,https://job-boards.greenhouse.io/alixpartners,greenhouse,job_sources_consulting.csv,success,1.0,20.0,20,
-2026-10-04T10:13:41.396595+00:00,forvis-mazars-global,forvis-mazars,Forvis Mazars,Multi-region,https://www.forvismazars.com/group/en/join-us,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:14:14.247954+00:00,infosys-consulting-global,infosys-consulting,Infosys Consulting,Multi-region,https://career.infosys.com/,generic,job_sources_consulting.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:14:14.847318+00:00,porsche-consulting-global,porsche-consulting,Porsche Consulting,Multi-region,https://www.porsche-consulting.com/careers/,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://www.porsche-consulting.com/careers/: HTTPError
-2026-10-04T10:14:16.100616+00:00,bcg-global,bcg,Boston Consulting Group,Multi-region,https://careers.bcg.com/global/en/search-results,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:14:53.173341+00:00,cinven-global,cinven,Cinven,Multi-region,https://cinven.pinpointhq.com/,generic,job_sources_pe.csv,zero_jobs,2.0,0.0,0,
-2026-10-04T10:14:55.382545+00:00,pai-global,pai-partners,PAI Partners,Multi-region,https://www.paipartners.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.paipartners.com/careers/: HTTPError
-2026-10-04T10:14:55.990844+00:00,mutares-global,mutares,Mutares,Multi-region,https://career.mutares.com/jobs,teamtailor,job_sources_pe.csv,success,30.0,25.0,25,
-2026-10-04T10:15:10.053422+00:00,eqt-global,eqt,EQT,Multi-region,https://eqtgroup.com/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://eqtgroup.com/careers: HTTPError
-2026-10-04T10:15:10.661438+00:00,verdane-global,verdane,Verdane,Multi-region,https://verdane.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://verdane.com/careers/: HTTPError
-2026-10-04T10:15:10.795725+00:00,man-group-global,man-group,Man Group,Multi-region,https://www.man.com/careers,generic,job_sources_pe.csv,zero_jobs,7.0,0.0,0,
-2026-10-04T10:15:21.824098+00:00,vattenfall-global,vattenfall,Vattenfall,Multi-region,https://careers.smartrecruiters.com/vattenfall,smartrecruiters,job_sources_corporate.csv,success,13.0,12.0,12,
-2026-10-04T10:15:30.278858+00:00,vitol-global,vitol,Vitol,Multi-region,https://careers.smartrecruiters.com/Vitol,smartrecruiters,job_sources_corporate.csv,success,3.0,2.0,2,
-2026-10-04T10:15:31.836528+00:00,bayer-global,bayer,Bayer,Multi-region,https://career.bayer.com/,llm,job_sources_corporate.csv,error,1.0,0.0,0,https://career.bayer.com/: HTTPError
-2026-10-04T10:15:32.540586+00:00,nestle-global,nestle,Nestlé,Multi-region,https://career2.successfactors.eu/careers?company=nestleHRprdBX,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
-2026-10-04T10:15:33.093984+00:00,volvo-group-global,volvo-group,Volvo Group,Multi-region,https://jobs.volvogroup.com/,successfactors,job_sources_corporate.csv,success,26.0,25.0,25,
-2026-10-04T10:15:59.148917+00:00,diageo-global,diageo,Diageo,Multi-region,https://diageo.wd3.myworkdayjobs.com/Diageo_Careers,workday,job_sources_corporate.csv,zero_jobs,6.0,0.0,0,
-2026-10-04T10:16:06.467409+00:00,wipro-global,wipro,Wipro,Multi-region,https://careers.wipro.com/,successfactors,job_sources_corporate.csv,success,141.0,139.0,139,https://careers.wipro.com/job/Hyderabad-BUSINESS-ANALYST-L2-IND-500032/1366212155/: SourceTimeout
-2026-10-04T10:19:22.956907+00:00,commerzbank-global,commerzbank,Commerzbank,Multi-region,https://jobs.commerzbank.com/index.php?ac=search_result,llm,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:20:02.065075+00:00,eex-global,eex,EEX Group,Multi-region,https://www.eex-group.com/en/career,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://www.eex-group.com/en/career: HTTPError
-2026-10-04T10:20:03.230171+00:00,zurich-insurance-global,zurich-insurance,Zurich Insurance Group,Multi-region,https://www.careers.zurich.com/,llm,job_sources_financial_services.csv,success,30.0,3.0,3,https://www.careers.zurich.com/\: HTTPError | https://www.careers.zurich.com/search/\: HTTPError
-2026-10-04T10:20:23.038387+00:00,storebrand-global,storebrand,Storebrand,Multi-region,https://storebrand.wd3.myworkdayjobs.com/Storebrand_Careers,workday,job_sources_financial_services.csv,zero_jobs,6.0,0.0,0,
-2026-10-04T10:20:28.981138+00:00,legal-general-global,legal-general,Legal & General,Multi-region,https://careers.legalandgeneral.com/,llm,job_sources_financial_services.csv,success,30.0,2.0,2,
-2026-10-04T10:20:57.987437+00:00,swiss-re-global,swiss-re,Swiss Re,Multi-region,https://www.swissre.com/careers/jobSearch.html,generic,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:21:22.286591+00:00,industrivarden-global,industrivarden,Industrivärden,Multi-region,https://www.industrivarden.se/en-gb/career/,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.industrivarden.se/en-gb/career/: HTTPError
-2026-10-04T10:21:23.669285+00:00,morgan-stanley-global,morgan-stanley,Morgan Stanley,Multi-region,https://www.morganstanley.com/people-opportunities,generic,job_sources_investment_banking.csv,zero_jobs,4.0,0.0,0,
-2026-10-04T10:21:25.849201+00:00,houlihan-lokey-global,houlihan-lokey,Houlihan Lokey,Multi-region,https://hl.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,12.0,0.0,0,
-2026-10-04T10:21:43.316600+00:00,t-rowe-price-global,t-rowe-price,T. Rowe Price,Multi-region,https://troweprice.wd5.myworkdayjobs.com/TRowePrice,workday,job_sources_public_markets.csv,success,7.0,1.0,1,
-2026-10-04T10:21:49.586912+00:00,carmignac-global,carmignac,Carmignac,Multi-region,https://www.carmignac.com/en/about-us/careers,llm,job_sources_public_markets.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:21:50.495412+00:00,nbim-global,nbim,Norges Bank Investment Management,Multi-region,https://www.nbim.no/en/about-us/career/vacancies/,generic,job_sources_public_markets.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:22:08.973967+00:00,qube-rt-global,qube-rt,Qube Research & Technologies,Multi-region,https://www.qube-rt.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:13:46.435046+00:00,fti-consulting-global,fti-consulting,FTI Consulting,Multi-region,https://fticonsult.referrals.selectminds.com/,selectminds,job_sources_consulting.csv,zero_jobs,2.0,0.0,0,
-2026-10-04T10:13:48.251069+00:00,rsm-global,rsm,RSM,Multi-region,https://www.rsm.global/careers,generic,job_sources_consulting.csv,zero_jobs,4.0,0.0,0,
-2026-10-04T10:13:50.625992+00:00,tcs-consulting-global,tcs-consulting,Tata Consultancy Services,Multi-region,https://www.tcs.com/careers,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://www.tcs.com/careers: HTTPError
-2026-10-04T10:13:51.144143+00:00,d-fine-global,d-fine,d-fine,Multi-region,https://www.d-fine.com/en/career/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:14:24.647771+00:00,kearney-global,kearney,Kearney,Multi-region,https://www.kearney.com/careers,generic,job_sources_consulting.csv,zero_jobs,13.0,0.0,0,
-2026-10-04T10:14:33.705480+00:00,bc-partners-global,bc-partners,BC Partners,Multi-region,https://www.bcpartners.com/careers/,generic,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:14:34.974621+00:00,waterland-global,waterland,Waterland Private Equity,Multi-region,https://www.waterlandpe.com/careers/,generic,job_sources_pe.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:15:14.070647+00:00,capvis-global,capvis,Capvis,Multi-region,https://www.capvis.com/careers/,generic,job_sources_pe.csv,zero_jobs,2.0,0.0,0,
-2026-10-04T10:15:16.431347+00:00,permira-global,permira,Permira,Multi-region,https://www.permira.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.permira.com/careers/: HTTPError
-2026-10-04T10:15:16.796491+00:00,enterprise-investors-global,enterprise-investors,Enterprise Investors,Multi-region,https://www.ei.com.pl/en/career/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.ei.com.pl/en/career/: HTTPError
-2026-10-04T10:15:17.482764+00:00,janus-henderson-global,janus-henderson,Janus Henderson,Multi-region,https://www.janushenderson.com/corporate/careers/,generic,job_sources_pe.csv,zero_jobs,7.0,0.0,0,
-2026-10-04T10:15:24.579024+00:00,statkraft-global,statkraft,Statkraft,Multi-region,https://careers.smartrecruiters.com/statkraft1,smartrecruiters,job_sources_corporate.csv,success,8.0,7.0,7,
-2026-10-04T10:15:29.334995+00:00,glencore-global,glencore,Glencore,Multi-region,https://www.glencore.com/en/careers/jobs,llm,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:15:53.241262+00:00,henkel-global,henkel,Henkel,Multi-region,https://www.henkel.com/careers/find-your-job-apply,llm,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:16:25.410584+00:00,novartis-global,novartis,Novartis,Multi-region,https://novartis.wd3.myworkdayjobs.com/Novartis_Careers,workday,job_sources_corporate.csv,success,41.0,31.0,31,
-2026-10-04T10:16:58.641790+00:00,ericsson-global,ericsson,Ericsson,Multi-region,https://www.ericsson.com/en/careers,llm,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:17:18.454145+00:00,bae-systems-global,bae-systems,BAE Systems,Multi-region,https://jobsearch.baesystems.com/,generic,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:17:43.086289+00:00,cez-group-global,cez-group,ČEZ Group,Multi-region,https://www.kdejinde.cz/,generic,job_sources_corporate.csv,error,1.0,0.0,0,https://www.kdejinde.cz/: HTTPError
-2026-10-04T10:17:44.043420+00:00,dz-bank-global,dz-bank,DZ BANK,Multi-region,https://career012.successfactors.eu/career?company=DZBank,successfactors,job_sources_financial_services.csv,error,1.0,0.0,0,https://career012.successfactors.eu/sitemap.xml: HTTPError
-2026-10-04T10:17:44.516764+00:00,bawag-global,bawag,BAWAG Group,Multi-region,https://jobs.bawaggroup.at,successfactors,job_sources_financial_services.csv,zero_jobs,9.0,0.0,0,
-2026-10-04T10:17:55.191267+00:00,swiss-life-global,swiss-life,Swiss Life Group,Multi-region,https://swisslife.wd3.myworkdayjobs.com/Swiss_Life_International_Division_Career_Site,workday,job_sources_financial_services.csv,zero_jobs,6.0,0.0,0,
-2026-10-04T10:18:00.096937+00:00,hsbc-global,hsbc,HSBC Holdings,Multi-region,https://www.hsbc.com/careers,llm,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:18:24.309366+00:00,marsh-mclennan-global,marsh-mclennan,Marsh McLennan,Multi-region,https://careers.marsh.com/global/en/marsh-search,phenom,job_sources_financial_services.csv,error,0.0,0.0,0,https://careers.marsh.com/global/en/marsh-search?keywords=finance&from=0&s=1: HTTPError
-2026-10-04T10:18:25.719622+00:00,nordea-global,nordea,Nordea,Multi-region,https://www.nordea.com/en/careers,generic,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:18:45.673494+00:00,kinnevik-global,kinnevik,Kinnevik,Multi-region,https://www.kinnevik.com/careers,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.kinnevik.com/careers: HTTPError
-2026-10-04T10:18:46.312762+00:00,jpmorgan-chase-global,jpmorgan-chase,JPMorgan Chase,Multi-region,https://careers.jpmorgan.com/global/en/home,generic,job_sources_investment_banking.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:18:47.301429+00:00,moelis-global,moelis,Moelis & Company,Multi-region,https://www.moelis.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,16.0,0.0,0,
-2026-10-04T10:18:54.598142+00:00,pimco-global,pimco,PIMCO,Multi-region,https://pimco.wd1.myworkdayjobs.com/pimco-careers,workday,job_sources_public_markets.csv,success,62.0,51.0,51,
-2026-10-04T10:19:19.256618+00:00,jupiter-fund-management-global,jupiter-fund-management,Jupiter Fund Management,Multi-region,https://jupiteram.wd3.myworkdayjobs.com/jupiter_careers,workday,job_sources_public_markets.csv,success,11.0,5.0,5,
-2026-10-04T10:19:28.110602+00:00,blackrock-global,blackrock,BlackRock,Multi-region,https://careers.blackrock.com/,generic,job_sources_public_markets.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:19:41.824119+00:00,winton-global,winton,Winton,Multi-region,https://www.winton.com/careers,generic,job_sources_specialist_funds.csv,error,1.0,0.0,0,https://www.winton.com/careers: HTTPError
-2026-10-04T10:13:48.793291+00:00,lek-global,lek-consulting,L.E.K. Consulting,Multi-region,https://www.lek.com/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:14:05.693099+00:00,protiviti-global,protiviti,Protiviti,Multi-region,https://www.protiviti.com/gl-en/careers,generic,job_sources_consulting.csv,zero_jobs,2.0,0.0,0,
-2026-10-04T10:14:06.726148+00:00,cognizant-global,cognizant,Cognizant,Multi-region,https://careers.cognizant.com/global-en/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:14:22.481656+00:00,zuehlke-global,zuehlke,Zühlke,Multi-region,https://www.zuehlke.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:14:44.468716+00:00,arthur-d-little-global,arthur-d-little,Arthur D. Little,Multi-region,https://careers.adlittle.com/,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://careers.adlittle.com/: ConnectTimeout
-2026-10-04T10:15:34.648278+00:00,triton-global,triton,Triton Partners,Multi-region,https://tritonpartners.wd3.myworkdayjobs.com/en-GB/External,workday,job_sources_pe.csv,zero_jobs,6.0,0.0,0,
-2026-10-04T10:15:41.588053+00:00,nordic-capital-global,nordic-capital,Nordic Capital,Multi-region,https://career.nordiccapital.com/jobs,teamtailor,job_sources_pe.csv,success,11.0,1.0,1,
-2026-10-04T10:15:47.995272+00:00,ufenau-global,ufenau,Ufenau Capital Partners,Multi-region,https://ufenau-capital-partners.jobs.personio.com/,personio,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:15:48.975034+00:00,bridgepoint-global,bridgepoint,Bridgepoint Group,Multi-region,https://www.bridgepoint.eu/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.bridgepoint.eu/careers: HTTPError
-2026-10-04T10:15:50.802909+00:00,mid-europa-global,mid-europa,MidEuropa,Multi-region,https://mideuropa.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://mideuropa.com/careers/: HTTPError
-2026-10-04T10:15:52.585472+00:00,baillie-gifford-global,baillie-gifford,Baillie Gifford,Multi-region,https://www.bailliegifford.com/en/uk/individual-investors/careers/,generic,job_sources_pe.csv,zero_jobs,21.0,0.0,0,
-2026-10-04T10:16:23.705984+00:00,fortum-global,fortum,Fortum,Multi-region,https://jobs.fortum.com/,successfactors,job_sources_corporate.csv,success,4.0,3.0,3,
-2026-10-04T10:16:30.015337+00:00,volkswagen-global,volkswagen,Volkswagen Group,Multi-region,https://career5.successfactors.eu/careers?company=VWAGLPPROD10,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
-2026-10-04T10:16:30.616027+00:00,continental-global,continental,Continental,Multi-region,https://careers.smartrecruiters.com/Continental,smartrecruiters,job_sources_corporate.csv,success,49.0,48.0,48,
-2026-10-04T10:17:02.268304+00:00,roche-global,roche,Roche,Multi-region,https://roche.wd3.myworkdayjobs.com/roche-ext,workday,job_sources_corporate.csv,success,10.0,4.0,4,
-2026-10-04T10:17:10.943237+00:00,nokia-global,nokia,Nokia,Multi-region,https://www.nokia.com/about-us/careers/,llm,job_sources_corporate.csv,error,1.0,0.0,0,https://www.nokia.com/about-us/careers/: HTTPError
-2026-10-04T10:17:11.279296+00:00,rolls-royce-global,rolls-royce,Rolls-Royce,Multi-region,https://rollsroyce.wd3.myworkdayjobs.com/professional,workday,job_sources_corporate.csv,error,0.0,0.0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://rollsroyce.wd3.myworkdayjobs.com/wday/cxs/rollsroyce/professional/jobs
-2026-10-04T10:17:15.196356+00:00,siemens-global,siemens,Siemens,Multi-region,https://www.siemens.com/de-de/company/jobs/,generic,job_sources_corporate.csv,zero_jobs,18.0,0.0,0,
-2026-10-04T10:17:25.674260+00:00,kfw-global,kfw,KfW Group,Multi-region,https://www.kfw.de/About-KfW/Career/,llm,job_sources_financial_services.csv,zero_jobs,17.0,0.0,0,
-2026-10-04T10:17:45.197499+00:00,oekb-global,oekb,OeKB Group,Multi-region,https://www.oekb.at/jobs-und-karriere.html,llm,job_sources_financial_services.csv,zero_jobs,26.0,0.0,0,
-2026-10-04T10:18:10.225140+00:00,zkb-global,zkb,Zürcher Kantonalbank,Multi-region,https://www.zkb.ch/en/home/career.html,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://www.zkb.ch/en/home/career.html: HTTPError
-2026-10-04T10:18:11.061672+00:00,barclays-global,barclays,Barclays,Multi-region,https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays,workday,job_sources_financial_services.csv,success,12.0,6.0,6,
-2026-10-04T10:18:21.576828+00:00,jt-finance-group-global,jt-finance-group,J&T Finance Group,Multi-region,https://www.jtfg.com/,generic,job_sources_financial_services.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:18:23.680660+00:00,seb-global,seb,SEB Group,Multi-region,https://sebgroup.com/career,generic,job_sources_financial_services.csv,zero_jobs,21.0,0.0,0,
-2026-10-04T10:18:45.116414+00:00,exor-global,exor,Exor,Multi-region,https://www.exor.com/pages/exor/careers,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.exor.com/pages/exor/careers: HTTPError
-2026-10-04T10:18:46.597910+00:00,citigroup-global,citigroup,Citi,Multi-region,https://jobs.citi.com/,generic,job_sources_investment_banking.csv,success,30.0,4.0,4,
-2026-10-04T10:19:02.649192+00:00,pjt-partners-global,pjt-partners,PJT Partners,Multi-region,https://pjtpartners.com/careers,generic,job_sources_investment_banking.csv,zero_jobs,3.0,0.0,0,
-2026-10-04T10:19:04.598346+00:00,franklin-templeton-global,franklin-templeton,Franklin Templeton,Multi-region,https://franklintempleton.wd5.myworkdayjobs.com/Primary-External-1,workday,job_sources_public_markets.csv,zero_jobs,6.0,0.0,0,
-2026-10-04T10:19:09.099426+00:00,federated-hermes-global,federated-hermes,Federated Hermes,Multi-region,https://www.federatedhermes.com/us/careers/,llm,job_sources_public_markets.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:19:09.865140+00:00,schroders-global,schroders,Schroders,Multi-region,https://www.schroders.com/en/global/individual/careers/,generic,job_sources_public_markets.csv,zero_jobs,26.0,0.0,0,
-2026-10-04T10:19:37.839816+00:00,aqr-global,aqr,AQR Capital Management,Multi-region,https://www.aqr.com/About-Us/Careers,generic,job_sources_specialist_funds.csv,zero_jobs,2.0,0.0,0,
-2026-10-04T10:13:50.647672+00:00,horvath-global,horvath,Horváth,Multi-region,https://horvath.wd3.myworkdayjobs.com/en-US/Horvath_Careers,workday,job_sources_consulting.csv,zero_jobs,6.0,0.0,0,
-2026-10-04T10:13:56.846002+00:00,sia-partners-global,sia-partners,Sia Partners,Multi-region,https://www.sia-partners.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:14:28.468892+00:00,occ-strategy-global,occ-strategy,OC&C Strategy Consultants,Multi-region,https://www.occstrategy.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:15:10.123851+00:00,synpulse-global,synpulse,Synpulse,Multi-region,https://www.synpulse.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,4.0,0.0,0,
-2026-10-04T10:15:16.051416+00:00,bearingpoint-global,bearingpoint,BearingPoint,Multi-region,https://www.bearingpoint.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:15:59.673875+00:00,ardian-global,ardian,Ardian,Multi-region,https://ardian.wd103.myworkdayjobs.com/ArdianCareers,workday,job_sources_pe.csv,success,9.0,3.0,3,
-2026-10-04T10:16:07.610963+00:00,altor-global,altor,Altor,Multi-region,https://careers.altor.com/,teamtailor,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:16:09.479362+00:00,apollo-global,apollo,Apollo Global Management,Multi-region,https://www.apollo.com/careers,generic,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:16:10.441588+00:00,hg-global,hg,Hg,Multi-region,https://hgcapital.com/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://hgcapital.com/careers: HTTPError
-2026-10-04T10:16:10.760754+00:00,innova-capital-global,innova-capital,Innova Capital,Multi-region,https://innovacap.com/career/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://innovacap.com/career/: HTTPError
-2026-10-04T10:16:11.434286+00:00,abrdn-global,abrdn,abrdn,Multi-region,https://www.abrdn.com/en/corporate/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.abrdn.com/en/corporate/careers: HTTPError
-2026-10-04T10:16:12.763655+00:00,neste-global,neste,Neste,Multi-region,https://jobs.neste.com/,successfactors,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:16:13.599908+00:00,bmw-global,bmw,BMW Group,Multi-region,https://www.bmwgroup.jobs/en/search.html,llm,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:16:30.825234+00:00,infineon-global,infineon,Infineon,Multi-region,https://www.infineon.com/cms/en/careers/,llm,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:17:14.706802+00:00,sandoz-global,sandoz,Sandoz,Multi-region,https://sandoz.wd103.myworkdayjobs.com/Sandoz_Careers,workday,job_sources_corporate.csv,zero_jobs,6.0,0.0,0,
-2026-10-04T10:17:19.458805+00:00,kone-global,kone,KONE,Multi-region,https://kone.wd3.myworkdayjobs.com/Careers,workday,job_sources_corporate.csv,success,8.0,2.0,2,
-2026-10-04T10:17:28.704185+00:00,national-grid-global,national-grid,National Grid,Multi-region,https://jobs.nationalgrid.com/uk/jobs,llm,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
-2026-10-04T10:17:30.337962+00:00,omv-global,omv,OMV Group,Multi-region,https://careers.omv.com/?locale=en_US,generic,job_sources_corporate.csv,success,30.0,15.0,15,
-2026-10-04T10:18:10.570694+00:00,helaba-global,helaba,Helaba,Multi-region,https://www.helaba.com/int/career/,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://www.helaba.com/int/career/: HTTPError
-2026-10-04T10:18:12.297551+00:00,vienna-insurance-group-global,vienna-insurance-group,Vienna Insurance Group,Multi-region,https://group.vig/career/,llm,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
-2026-10-04T10:19:03.722114+00:00,swedbank-global,swedbank,Swedbank,Multi-region,https://jobs.swedbank.com/,llm,job_sources_financial_services.csv,success,30.0,16.0,16,
-2026-10-04T10:19:24.028806+00:00,lloyds-banking-group-global,lloyds-banking-group,Lloyds Banking Group,Multi-region,https://lbg.wd3.myworkdayjobs.com/LBG_Careers,workday,job_sources_financial_services.csv,success,19.0,11.0,11,
-2026-10-04T10:19:43.720471+00:00,erste-group-global,erste-group,Erste Group,Multi-region,https://www.erstegroup.com/en/career,generic,job_sources_financial_services.csv,zero_jobs,15.0,0.0,0,
-2026-10-04T10:19:52.318299+00:00,danske-bank-global,danske-bank,Danske Bank,Multi-region,https://danskebank.com/careers,generic,job_sources_financial_services.csv,error,18.0,0.0,0,https://danskebank.com/careers/professionals: ReadTimeout | https://danskebank.com/careers/flexible-work: ReadTimeout
-2026-10-04T10:21:04.408559+00:00,porsche-se-global,porsche-se,Porsche Automobil Holding,Multi-region,https://www.porsche-se.com/en/company/career,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.porsche-se.com/en/company/career: HTTPError
-2026-10-04T10:21:05.192801+00:00,bank-of-america-global,bank-of-america,Bank of America,Multi-region,https://careers.bankofamerica.com/en-us,generic,job_sources_investment_banking.csv,success,30.0,10.0,10,
-2026-10-04T10:21:30.775643+00:00,perella-weinberg-global,perella-weinberg,Perella Weinberg Partners,Multi-region,https://pwpartners.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,9.0,0.0,0,
-2026-10-04T10:21:35.056052+00:00,robeco-global,robeco,Robeco,Multi-region,https://robeco.wd3.myworkdayjobs.com/robecoexternalcareers,workday,job_sources_public_markets.csv,success,7.0,1.0,1,
-2026-10-04T10:21:40.856479+00:00,neuberger-berman-global,neuberger-berman,Neuberger Berman,Multi-region,https://nb.wd1.myworkdayjobs.com/NBCareers,workday,job_sources_public_markets.csv,success,8.0,2.0,2,
-2026-10-04T10:21:45.906644+00:00,citadel-global,citadel,Citadel,Multi-region,https://www.citadel.com/careers/,generic,job_sources_specialist_funds.csv,error,1.0,0.0,0,https://www.citadel.com/careers/: HTTPError
-2026-10-04T10:21:46.061732+00:00,two-sigma-global,two-sigma,Two Sigma,Multi-region,https://www.twosigma.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,28.0,0.0,0,
-2026-10-05T10:52:37.795746+00:00,bain-global,bain,Bain & Company,Multi-region,https://www.bain.com/careers/find-a-role/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:52:53.466382+00:00,zeb-global,zeb-consulting,zeb consulting,Multi-region,https://career.zeb-consulting.com/jobs/,successfactors,job_sources_consulting.csv,success,51.0,50.0,50,
-2026-10-05T10:53:45.858117+00:00,pa-consulting-global,pa-consulting,PA Consulting,Multi-region,https://www.paconsulting.com/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:54:25.393596+00:00,implement-consulting-global,implement-consulting,Implement Consulting Group,Multi-region,https://implementconsultinggroup.com/career,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://implementconsultinggroup.com/career: HTTPError
-2026-10-05T10:54:26.389970+00:00,nera-global,nera,NERA Economic Consulting,Multi-region,https://careers.marshmclennan.com/global/en/nera,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://careers.marshmclennan.com/global/en/nera: HTTPError
-2026-10-05T10:54:28.341670+00:00,accenture-global,accenture,Accenture,Multi-region,https://www.accenture.com/us-en/careers/jobsearch,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:54:43.089510+00:00,tpg-global,tpg,TPG,Multi-region,https://job-boards.greenhouse.io/tpgcareers,greenhouse,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
-2026-10-05T10:54:43.307965+00:00,axcel-global,axcel,Axcel,Multi-region,https://axcel.dk/career/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://axcel.dk/career/: HTTPError
-2026-10-05T10:54:44.592797+00:00,kkr-global,kkr,KKR,Multi-region,https://www.kkr.com/careers,generic,job_sources_pe.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:55:00.787340+00:00,brookfield-global,brookfield,Brookfield Asset Management,Multi-region,https://www.brookfield.com/careers,generic,job_sources_pe.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:55:24.183734+00:00,fidelity-international-global,fidelity-international,Fidelity International,Multi-region,https://careers.fidelityinternational.com/,generic,job_sources_pe.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:56:00.815241+00:00,rwe-global,rwe,RWE,Multi-region,https://jobs.rwe.com/,successfactors,job_sources_corporate.csv,success,37.0,36.0,36,
-2026-10-05T10:56:40.948324+00:00,mol-global,mol,MOL Group,Multi-region,https://molgroup.taleo.net/careersection/external/jobsearch.ftl,llm,job_sources_corporate.csv,zero_jobs,2.0,0.0,0,
-2026-10-05T10:56:42.533623+00:00,mercedes-benz-global,mercedes-benz,Mercedes-Benz Group,Multi-region,https://jobs.mercedes-benz.com/enUS,llm,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
-2026-10-05T10:56:43.392723+00:00,airbus-global,airbus,Airbus,Multi-region,https://ag.wd3.myworkdayjobs.com/Airbus,workday,job_sources_corporate.csv,success,8.0,1.0,1,
-2026-10-05T10:56:54.769689+00:00,holcim-global,holcim,Holcim,Multi-region,https://careers.holcimgroup.com/?locale=en_US,successfactors,job_sources_corporate.csv,success,8.0,7.0,7,
-2026-10-05T10:57:02.783799+00:00,wartsila-global,wartsila,Wärtsilä,Multi-region,https://career2.successfactors.eu/career?company=Wartsila,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
-2026-10-05T10:57:03.335243+00:00,reckitt-global,reckitt,Reckitt,Multi-region,https://career2.successfactors.eu/careers?company=reckittb01,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
-2026-10-05T10:57:03.890671+00:00,orsted-global,orsted,Ørsted,Multi-region,https://orsted.com/en/careers/vacancies-list,generic,job_sources_corporate.csv,error,1.0,0.0,0,https://orsted.com/en/careers/vacancies-list: HTTPError
-2026-10-05T10:57:04.399818+00:00,lbbw-global,lbbw,LBBW,Multi-region,https://karriere.lbbw.de/,successfactors,job_sources_financial_services.csv,zero_jobs,45.0,0.0,0,
-2026-10-05T10:57:50.348958+00:00,uniqa-global,uniqa,UNIQA Insurance Group,Multi-region,https://careers.uniqagroup.com/,successfactors,job_sources_financial_services.csv,success,5.0,4.0,4,
-2026-10-05T10:57:55.560765+00:00,handelsbanken-global,handelsbanken,Handelsbanken,Multi-region,https://www.handelsbanken.com/en/careers/vacancies,llm,job_sources_financial_services.csv,zero_jobs,1.0,0.0,0,
-2026-10-05T10:57:57.375482+00:00,natwest-global,natwest,NatWest Group,Multi-region,https://jobs.natwestgroup.com/search/jobs,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://jobs.natwestgroup.com/search/jobs: HTTPError
-2026-10-05T10:57:57.504854+00:00,allianz-group-global,allianz-group,Allianz Group,Multi-region,https://careers.allianz.com/global/en,generic,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:58:24.798433+00:00,ebrd-global,ebrd,European Bank for Reconstruction and Development,Multi-region,https://jobs.ebrd.com/,generic,job_sources_financial_services.csv,success,30.0,8.0,8,
-2026-10-05T10:58:58.580600+00:00,ap-moller-holding-global,ap-moller-holding,A.P. Moller Holding,Multi-region,https://apmoller.com/careers/,llm,job_sources_holdings.csv,zero_jobs,1.0,0.0,0,
-2026-10-05T10:58:59.901927+00:00,lazard-global,lazard,Lazard,Multi-region,https://www.lazard.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:59:19.078541+00:00,nomura-global,nomura,Nomura,Multi-region,https://www.nomura.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,22.0,0.0,0,
-2026-10-05T10:59:31.903986+00:00,columbia-threadneedle-global,columbia-threadneedle,Columbia Threadneedle Investments,Multi-region,https://ameriprise.wd5.myworkdayjobs.com/Ameriprise,workday,job_sources_public_markets.csv,error,0.0,0.0,0,Workday listing: HTTPError: 502 Server Error: Bad Gateway for url: https://ameriprise.wd5.myworkdayjobs.com/wday/cxs/ameriprise/Ameriprise/jobs
-2026-10-05T10:59:34.766865+00:00,deutsche-boerse-global,deutsche-boerse,Deutsche Börse Group,Multi-region,https://careers.deutsche-boerse.com/,generic,job_sources_public_markets.csv,success,30.0,14.0,14,
-2026-10-05T11:00:16.412761+00:00,millennium-management-global,millennium-management,Millennium Management,Multi-region,https://www.mlp.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,4.0,0.0,0,
-2026-10-05T11:00:18.577821+00:00,de-shaw-global,de-shaw,D. E. Shaw,Multi-region,https://www.deshaw.com/careers,generic,job_sources_specialist_funds.csv,success,30.0,25.0,25,
-2026-10-05T10:52:35.234676+00:00,roland-berger-global,roland-berger,Roland Berger,Multi-region,https://www.rolandberger.com/en/Join/All-Jobs/,smartrecruiters,job_sources_consulting.csv,zero_jobs,1.0,0.0,0,
-2026-10-05T10:52:35.769372+00:00,capco-global,capco,Capco,Multi-region,https://job-boards.greenhouse.io/capco,greenhouse,job_sources_consulting.csv,success,1.0,50.0,50,
-2026-10-05T10:52:36.219995+00:00,capgemini-invent-global,capgemini-invent,Capgemini Invent,Multi-region,https://www.capgemini.com/careers/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:52:58.983440+00:00,valcon-global,valcon,Valcon,Multi-region,https://valcon.com/careers/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:53:38.295770+00:00,compass-lexecon-global,compass-lexecon,Compass Lexecon,Multi-region,https://www.compasslexecon.com/careers/,generic,job_sources_consulting.csv,zero_jobs,12.0,0.0,0,
-2026-10-05T10:53:45.947636+00:00,simon-kucher-global,simon-kucher,Simon-Kucher,Multi-region,https://www.simon-kucher.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
-2026-10-05T10:54:04.880768+00:00,bain-capital-global,bain-capital,Bain Capital,Multi-region,https://baincapital.wd1.myworkdayjobs.com/External_Public,workday,job_sources_pe.csv,success,15.0,7.0,7,
-2026-10-05T10:54:14.981450+00:00,fsn-capital-global,fsn-capital,FSN Capital,Multi-region,https://www.fsncapital.com/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.fsncapital.com/careers: HTTPError
 2026-10-05T10:54:16.452977+00:00,carlyle-global,carlyle,Carlyle,Multi-region,https://www.carlyle.com/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.carlyle.com/careers: HTTPError
 2026-10-05T10:54:16.533397+00:00,macquarie-global,macquarie,Macquarie Group,Multi-region,https://www.macquarie.com/careers.html,generic,job_sources_pe.csv,zero_jobs,22.0,0.0,0,
 2026-10-05T10:54:30.011175+00:00,invesco-global,invesco,Invesco,Multi-region,https://careers.invesco.com/,generic,job_sources_pe.csv,error,30.0,0.0,0,https://careers.invesco.com/author/alphanbowman/: HTTPError | https://careers.invesco.com/?page_id=1029: HTTPError
@@ -4747,38 +4495,38 @@ run_at,source_id,canonical_company_id,company,market,seed_url,adapter,source_fil
 2026-10-22T09:04:14.856683+00:00,neuberger-berman-global,neuberger-berman,Neuberger Berman,Multi-region,https://nb.wd1.myworkdayjobs.com/NBCareers,workday,job_sources_public_markets.csv,success,9.0,3.0,3,
 2026-10-22T09:04:19.913019+00:00,citadel-global,citadel,Citadel,Multi-region,https://www.citadel.com/careers/,generic,job_sources_specialist_funds.csv,error,1.0,0.0,0,https://www.citadel.com/careers/: HTTPError
 2026-10-22T09:04:20.063522+00:00,two-sigma-global,two-sigma,Two Sigma,Multi-region,https://www.twosigma.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,30.0,0.0,0,
-2026-10-23T08:51:22.205223+00:00,bain-global,bain,Bain & Company,Multi-region,https://www.bain.com/careers/find-a-role/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:51:38.043156+00:00,zeb-global,zeb-consulting,zeb consulting,Multi-region,https://career.zeb-consulting.com/jobs/,successfactors,job_sources_consulting.csv,success,49,48,48,
-2026-10-23T08:52:20.805345+00:00,pa-consulting-global,pa-consulting,PA Consulting,Multi-region,https://www.paconsulting.com/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:53:01.679358+00:00,implement-consulting-global,implement-consulting,Implement Consulting Group,Multi-region,https://implementconsultinggroup.com/career,generic,job_sources_consulting.csv,error,1,0,0,https://implementconsultinggroup.com/career: HTTPError
-2026-10-23T08:53:03.028781+00:00,nera-global,nera,NERA Economic Consulting,Multi-region,https://careers.marshmclennan.com/global/en/nera,generic,job_sources_consulting.csv,error,1,0,0,https://careers.marshmclennan.com/global/en/nera: HTTPError
-2026-10-23T08:53:03.720858+00:00,accenture-global,accenture,Accenture,Multi-region,https://www.accenture.com/us-en/careers/jobsearch,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:53:19.524273+00:00,tpg-global,tpg,TPG,Multi-region,https://job-boards.greenhouse.io/tpgcareers,greenhouse,job_sources_pe.csv,zero_jobs,1,0,0,
-2026-10-23T08:53:19.594044+00:00,axcel-global,axcel,Axcel,Multi-region,https://axcel.dk/career/,generic,job_sources_pe.csv,error,1,0,0,https://axcel.dk/career/: HTTPError
-2026-10-23T08:53:20.760564+00:00,kkr-global,kkr,KKR,Multi-region,https://www.kkr.com/careers,generic,job_sources_pe.csv,zero_jobs,30,0,0,
-2026-10-23T08:53:35.074676+00:00,brookfield-global,brookfield,Brookfield Asset Management,Multi-region,https://www.brookfield.com/careers,generic,job_sources_pe.csv,zero_jobs,30,0,0,
-2026-10-23T08:53:58.359040+00:00,fidelity-international-global,fidelity-international,Fidelity International,Multi-region,https://careers.fidelityinternational.com/,generic,job_sources_pe.csv,zero_jobs,30,0,0,
-2026-10-23T08:54:37.531641+00:00,rwe-global,rwe,RWE,Multi-region,https://jobs.rwe.com/,successfactors,job_sources_corporate.csv,success,30,29,29,
-2026-10-23T08:55:05.112223+00:00,mol-global,mol,MOL Group,Multi-region,https://molgroup.taleo.net/careersection/external/jobsearch.ftl,llm,job_sources_corporate.csv,zero_jobs,2,0,0,
-2026-10-23T08:55:06.461395+00:00,mercedes-benz-global,mercedes-benz,Mercedes-Benz Group,Multi-region,https://jobs.mercedes-benz.com/enUS,llm,job_sources_corporate.csv,zero_jobs,1,0,0,
-2026-10-23T08:55:07.225019+00:00,airbus-global,airbus,Airbus,Multi-region,https://ag.wd3.myworkdayjobs.com/Airbus,workday,job_sources_corporate.csv,success,12,5,5,
-2026-10-23T08:55:20.924038+00:00,holcim-global,holcim,Holcim,Multi-region,https://careers.holcimgroup.com/?locale=en_US,successfactors,job_sources_corporate.csv,success,9,6,6,
-2026-10-23T08:55:27.855329+00:00,wartsila-global,wartsila,Wärtsilä,Multi-region,https://career2.successfactors.eu/career?company=Wartsila,successfactors,job_sources_corporate.csv,error,1,0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
-2026-10-23T08:55:28.245946+00:00,reckitt-global,reckitt,Reckitt,Multi-region,https://career2.successfactors.eu/careers?company=reckittb01,successfactors,job_sources_corporate.csv,error,1,0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
-2026-10-23T08:55:28.603043+00:00,orsted-global,orsted,Ørsted,Multi-region,https://orsted.com/en/careers/vacancies-list,generic,job_sources_corporate.csv,error,1,0,0,https://orsted.com/en/careers/vacancies-list: HTTPError
-2026-10-23T08:55:28.962408+00:00,lbbw-global,lbbw,LBBW,Multi-region,https://karriere.lbbw.de/,successfactors,job_sources_financial_services.csv,zero_jobs,45,0,0,
-2026-10-23T08:56:09.039579+00:00,uniqa-global,uniqa,UNIQA Insurance Group,Multi-region,https://careers.uniqagroup.com/,successfactors,job_sources_financial_services.csv,success,4,3,3,
-2026-10-23T08:56:12.592115+00:00,handelsbanken-global,handelsbanken,Handelsbanken,Multi-region,https://www.handelsbanken.com/en/careers/vacancies,llm,job_sources_financial_services.csv,zero_jobs,1,0,0,
-2026-10-23T08:56:13.990212+00:00,natwest-global,natwest,NatWest Group,Multi-region,https://jobs.natwestgroup.com/search/jobs,llm,job_sources_financial_services.csv,error,1,0,0,https://jobs.natwestgroup.com/search/jobs: HTTPError
-2026-10-23T08:56:14.077355+00:00,allianz-group-global,allianz-group,Allianz Group,Multi-region,https://careers.allianz.com/global/en,generic,job_sources_financial_services.csv,zero_jobs,30,0,0,
-2026-10-23T08:56:36.788284+00:00,ebrd-global,ebrd,European Bank for Reconstruction and Development,Multi-region,https://jobs.ebrd.com/,generic,job_sources_financial_services.csv,success,30,5,5,
-2026-10-23T08:57:06.345045+00:00,ap-moller-holding-global,ap-moller-holding,A.P. Moller Holding,Multi-region,https://apmoller.com/careers/,llm,job_sources_holdings.csv,zero_jobs,1,0,0,
-2026-10-23T08:57:07.482657+00:00,lazard-global,lazard,Lazard,Multi-region,https://www.lazard.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,30,0,0,
-2026-10-23T08:57:20.968265+00:00,nomura-global,nomura,Nomura,Multi-region,https://www.nomura.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,22,0,0,
-2026-10-23T08:57:31.888731+00:00,columbia-threadneedle-global,columbia-threadneedle,Columbia Threadneedle Investments,Multi-region,https://ameriprise.wd5.myworkdayjobs.com/Ameriprise,workday,job_sources_public_markets.csv,error,0,0,0,Workday listing: HTTPError: 502 Server Error: Bad Gateway for url: https://ameriprise.wd5.myworkdayjobs.com/wday/cxs/ameriprise/Ameriprise/jobs
-2026-10-23T08:57:34.665511+00:00,deutsche-boerse-global,deutsche-boerse,Deutsche Börse Group,Multi-region,https://careers.deutsche-boerse.com/,generic,job_sources_public_markets.csv,success,30,15,15,
-2026-10-23T08:58:10.307381+00:00,millennium-management-global,millennium-management,Millennium Management,Multi-region,https://www.mlp.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,4,0,0,
-2026-10-23T08:58:12.172970+00:00,de-shaw-global,de-shaw,D. E. Shaw,Multi-region,https://www.deshaw.com/careers,generic,job_sources_specialist_funds.csv,success,30,25,25,
+2026-10-23T08:51:22.205223+00:00,bain-global,bain,Bain & Company,Multi-region,https://www.bain.com/careers/find-a-role/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:51:38.043156+00:00,zeb-global,zeb-consulting,zeb consulting,Multi-region,https://career.zeb-consulting.com/jobs/,successfactors,job_sources_consulting.csv,success,49.0,48.0,48,
+2026-10-23T08:52:20.805345+00:00,pa-consulting-global,pa-consulting,PA Consulting,Multi-region,https://www.paconsulting.com/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:53:01.679358+00:00,implement-consulting-global,implement-consulting,Implement Consulting Group,Multi-region,https://implementconsultinggroup.com/career,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://implementconsultinggroup.com/career: HTTPError
+2026-10-23T08:53:03.028781+00:00,nera-global,nera,NERA Economic Consulting,Multi-region,https://careers.marshmclennan.com/global/en/nera,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://careers.marshmclennan.com/global/en/nera: HTTPError
+2026-10-23T08:53:03.720858+00:00,accenture-global,accenture,Accenture,Multi-region,https://www.accenture.com/us-en/careers/jobsearch,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:53:19.524273+00:00,tpg-global,tpg,TPG,Multi-region,https://job-boards.greenhouse.io/tpgcareers,greenhouse,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:53:19.594044+00:00,axcel-global,axcel,Axcel,Multi-region,https://axcel.dk/career/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://axcel.dk/career/: HTTPError
+2026-10-23T08:53:20.760564+00:00,kkr-global,kkr,KKR,Multi-region,https://www.kkr.com/careers,generic,job_sources_pe.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:53:35.074676+00:00,brookfield-global,brookfield,Brookfield Asset Management,Multi-region,https://www.brookfield.com/careers,generic,job_sources_pe.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:53:58.359040+00:00,fidelity-international-global,fidelity-international,Fidelity International,Multi-region,https://careers.fidelityinternational.com/,generic,job_sources_pe.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:54:37.531641+00:00,rwe-global,rwe,RWE,Multi-region,https://jobs.rwe.com/,successfactors,job_sources_corporate.csv,success,30.0,29.0,29,
+2026-10-23T08:55:05.112223+00:00,mol-global,mol,MOL Group,Multi-region,https://molgroup.taleo.net/careersection/external/jobsearch.ftl,llm,job_sources_corporate.csv,zero_jobs,2.0,0.0,0,
+2026-10-23T08:55:06.461395+00:00,mercedes-benz-global,mercedes-benz,Mercedes-Benz Group,Multi-region,https://jobs.mercedes-benz.com/enUS,llm,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:55:07.225019+00:00,airbus-global,airbus,Airbus,Multi-region,https://ag.wd3.myworkdayjobs.com/Airbus,workday,job_sources_corporate.csv,success,12.0,5.0,5,
+2026-10-23T08:55:20.924038+00:00,holcim-global,holcim,Holcim,Multi-region,https://careers.holcimgroup.com/?locale=en_US,successfactors,job_sources_corporate.csv,success,9.0,6.0,6,
+2026-10-23T08:55:27.855329+00:00,wartsila-global,wartsila,Wärtsilä,Multi-region,https://career2.successfactors.eu/career?company=Wartsila,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
+2026-10-23T08:55:28.245946+00:00,reckitt-global,reckitt,Reckitt,Multi-region,https://career2.successfactors.eu/careers?company=reckittb01,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
+2026-10-23T08:55:28.603043+00:00,orsted-global,orsted,Ørsted,Multi-region,https://orsted.com/en/careers/vacancies-list,generic,job_sources_corporate.csv,error,1.0,0.0,0,https://orsted.com/en/careers/vacancies-list: HTTPError
+2026-10-23T08:55:28.962408+00:00,lbbw-global,lbbw,LBBW,Multi-region,https://karriere.lbbw.de/,successfactors,job_sources_financial_services.csv,zero_jobs,45.0,0.0,0,
+2026-10-23T08:56:09.039579+00:00,uniqa-global,uniqa,UNIQA Insurance Group,Multi-region,https://careers.uniqagroup.com/,successfactors,job_sources_financial_services.csv,success,4.0,3.0,3,
+2026-10-23T08:56:12.592115+00:00,handelsbanken-global,handelsbanken,Handelsbanken,Multi-region,https://www.handelsbanken.com/en/careers/vacancies,llm,job_sources_financial_services.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:56:13.990212+00:00,natwest-global,natwest,NatWest Group,Multi-region,https://jobs.natwestgroup.com/search/jobs,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://jobs.natwestgroup.com/search/jobs: HTTPError
+2026-10-23T08:56:14.077355+00:00,allianz-group-global,allianz-group,Allianz Group,Multi-region,https://careers.allianz.com/global/en,generic,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:56:36.788284+00:00,ebrd-global,ebrd,European Bank for Reconstruction and Development,Multi-region,https://jobs.ebrd.com/,generic,job_sources_financial_services.csv,success,30.0,5.0,5,
+2026-10-23T08:57:06.345045+00:00,ap-moller-holding-global,ap-moller-holding,A.P. Moller Holding,Multi-region,https://apmoller.com/careers/,llm,job_sources_holdings.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:57:07.482657+00:00,lazard-global,lazard,Lazard,Multi-region,https://www.lazard.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:57:20.968265+00:00,nomura-global,nomura,Nomura,Multi-region,https://www.nomura.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,22.0,0.0,0,
+2026-10-23T08:57:31.888731+00:00,columbia-threadneedle-global,columbia-threadneedle,Columbia Threadneedle Investments,Multi-region,https://ameriprise.wd5.myworkdayjobs.com/Ameriprise,workday,job_sources_public_markets.csv,error,0.0,0.0,0,Workday listing: HTTPError: 502 Server Error: Bad Gateway for url: https://ameriprise.wd5.myworkdayjobs.com/wday/cxs/ameriprise/Ameriprise/jobs
+2026-10-23T08:57:34.665511+00:00,deutsche-boerse-global,deutsche-boerse,Deutsche Börse Group,Multi-region,https://careers.deutsche-boerse.com/,generic,job_sources_public_markets.csv,success,30.0,15.0,15,
+2026-10-23T08:58:10.307381+00:00,millennium-management-global,millennium-management,Millennium Management,Multi-region,https://www.mlp.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,4.0,0.0,0,
+2026-10-23T08:58:12.172970+00:00,de-shaw-global,de-shaw,D. E. Shaw,Multi-region,https://www.deshaw.com/careers,generic,job_sources_specialist_funds.csv,success,30.0,25.0,25,
 2026-10-23T08:51:17.151696+00:00,roland-berger-global,roland-berger,Roland Berger,Multi-region,https://www.rolandberger.com/en/Join/All-Jobs/,smartrecruiters,job_sources_consulting.csv,zero_jobs,1.0,0.0,0,
 2026-10-23T08:51:17.612944+00:00,capco-global,capco,Capco,Multi-region,https://job-boards.greenhouse.io/capco,greenhouse,job_sources_consulting.csv,success,1.0,70.0,70,
 2026-10-23T08:51:18.182771+00:00,capgemini-invent-global,capgemini-invent,Capgemini Invent,Multi-region,https://www.capgemini.com/careers/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
@@ -4811,191 +4559,443 @@ run_at,source_id,canonical_company_id,company,market,seed_url,adapter,source_fil
 2026-10-23T09:01:05.812636+00:00,dws-global,dws,DWS Group,Multi-region,https://www.dws.com/en-us/about-us/careers/,generic,job_sources_public_markets.csv,zero_jobs,1.0,0.0,0,
 2026-10-23T09:01:07.280514+00:00,point72-global,point72,Point72,Multi-region,https://careers.point72.com/,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
 2026-10-23T09:01:08.364107+00:00,rsj-global,rsj,RSJ,Multi-region,https://www.rsj.com/cz/investments/kariera.html,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
-2026-10-23T08:51:30.819655+00:00,oliver-wyman-global,oliver-wyman,Oliver Wyman,Multi-region,https://careers.marsh.com/global/en/oliver-wyman,phenom,job_sources_consulting.csv,zero_jobs,1,0,0,
-2026-10-23T08:51:31.261662+00:00,grant-thornton-global,grant-thornton,Grant Thornton,Multi-region,https://www.grantthornton.global/en/careers/,generic,job_sources_consulting.csv,zero_jobs,17,0,0,
-2026-10-23T08:51:43.188795+00:00,ibm-consulting-global,ibm-consulting,IBM Consulting,Multi-region,https://www.ibm.com/careers/search,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:51:57.489172+00:00,baringa-global,baringa,Baringa,Multi-region,https://www.baringa.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,11,0,0,
-2026-10-23T08:52:42.297484+00:00,charles-river-associates-global,charles-river-associates,Charles River Associates,Multi-region,https://www.crai.com/careers/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:52:58.083243+00:00,partners-group-global,partners-group,Partners Group,Multi-region,https://jobs.partnersgroup.com/,successfactors,job_sources_pe.csv,success,14,13,13,
-2026-10-23T08:53:09.864218+00:00,ares-global,ares,Ares Management,Multi-region,https://aresmgmt.wd1.myworkdayjobs.com/en-US/External,workday,job_sources_pe.csv,success,15,8,8,
-2026-10-23T08:53:15.711512+00:00,summa-equity-global,summa-equity,Summa Equity,Multi-region,https://summaequity.com/career/,generic,job_sources_pe.csv,zero_jobs,4,0,0,
-2026-10-23T08:53:20.482560+00:00,blackstone-global,blackstone,Blackstone,Multi-region,https://www.blackstone.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://www.blackstone.com/careers/: HTTPError
-2026-10-23T08:53:20.609470+00:00,antin-global,antin,Antin Infrastructure Partners,Multi-region,https://www.antin-ip.com/careers,generic,job_sources_pe.csv,zero_jobs,1,0,0,
-2026-10-23T08:53:21.527828+00:00,vanguard-global,vanguard,Vanguard,Multi-region,https://www.vanguardjobs.com/,generic,job_sources_pe.csv,success,30,2,2,
-2026-10-23T08:53:48.801288+00:00,enbw-global,enbw,EnBW,Multi-region,https://careers.enbw.com/de/de,phenom,job_sources_corporate.csv,zero_jobs,1,0,0,
-2026-10-23T08:53:49.552691+00:00,bp-global,bp,bp,Multi-region,https://bpinternational.wd3.myworkdayjobs.com/bpCareers,workday,job_sources_corporate.csv,success,39,28,28,
-2026-10-23T08:54:31.931759+00:00,bosch-global,bosch,Bosch,Multi-region,https://careers.smartrecruiters.com/BoschGroup,smartrecruiters,job_sources_corporate.csv,success,141,140,140,
-2026-10-23T08:56:07.510275+00:00,sap-global,sap,SAP,Multi-region,https://jobs.sap.com/,successfactors,job_sources_corporate.csv,zero_jobs,1,0,0,
-2026-10-23T08:56:07.764247+00:00,maersk-global,maersk,A.P. Moller - Maersk,Multi-region,https://maersk.wd3.myworkdayjobs.com/Maersk_Careers,workday,job_sources_corporate.csv,success,7,1,1,
-2026-10-23T08:56:12.615713+00:00,astrazeneca-global,astrazeneca,AstraZeneca,Multi-region,https://astrazeneca.wd3.myworkdayjobs.com/Careers,workday,job_sources_corporate.csv,success,18,9,9,
-2026-10-23T08:56:26.444978+00:00,ibm-global,ibm,IBM,Multi-region,https://careers.ibm.com/en_US/careers,llm,job_sources_corporate.csv,zero_jobs,1,0,0,
-2026-10-23T08:56:26.954129+00:00,evotec-se-global,evotec-se,Evotec SE,Multi-region,https://evotecgroup.wd3.myworkdayjobs.com/Evotec_Career_Site,workday,job_sources_corporate.csv,error,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://evotecgroup.wd3.myworkdayjobs.com/wday/cxs/evotecgroup/Evotec_Career_Site/jobs
-2026-10-23T08:56:29.836591+00:00,ing-global,ing,ING Group,Multi-region,https://ing.wd3.myworkdayjobs.com/ICSGBLCOR,workday,job_sources_financial_services.csv,success,22,16,16,
-2026-10-23T08:56:46.016287+00:00,pictet-global,pictet,Pictet Group,Multi-region,https://career5.successfactors.eu/career?company=banquepict,successfactors,job_sources_financial_services.csv,error,1,0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
-2026-10-23T08:56:46.363452+00:00,op-financial-global,op-financial,OP Financial Group,Multi-region,https://www.op-careers.fi/,llm,job_sources_financial_services.csv,error,1,0,0,https://www.op-careers.fi/: SSLError
-2026-10-23T08:56:47.020418+00:00,lseg-global,lseg,London Stock Exchange Group,Multi-region,https://lseg.wd3.myworkdayjobs.com/Careers,workday,job_sources_financial_services.csv,error,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://lseg.wd3.myworkdayjobs.com/wday/cxs/lseg/Careers/jobs
-2026-10-23T08:56:50.369666+00:00,rbi-global,rbi,Raiffeisen Bank International,Multi-region,https://jobs.rbinternational.com/,generic,job_sources_financial_services.csv,success,30,15,15,
-2026-10-23T08:57:15.478592+00:00,cpi-property-group-global,cpi-property-group,CPI Property Group,Multi-region,https://www.cpipg.com/careers,llm,job_sources_holdings.csv,error,1,0,0,https://www.cpipg.com/careers: HTTPError
-2026-10-23T08:57:16.358615+00:00,kkcg-global,kkcg,KKCG,Multi-region,https://kkcg.com/en/careers,generic,job_sources_holdings.csv,zero_jobs,6,0,0,
-2026-10-23T08:57:20.964287+00:00,evercore-global,evercore,Evercore,Multi-region,https://www.evercore.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,10,0,0,
-2026-10-23T08:57:25.626961+00:00,capital-group-global,capital-group,Capital Group,Multi-region,https://capgroup.wd1.myworkdayjobs.com/capitalgroupcareers,workday,job_sources_public_markets.csv,success,17,10,10,
-2026-10-23T08:57:32.979716+00:00,union-investment-global,union-investment,Union Investment,Multi-region,https://unternehmen.union-investment.de/startseite-unternehmen/karriere,llm,job_sources_public_markets.csv,zero_jobs,1,0,0,
-2026-10-23T08:57:34.237354+00:00,six-group-global,six-group,SIX Group,Multi-region,https://www.six-group.com/en/careers.html,generic,job_sources_public_markets.csv,zero_jobs,30,0,0,
-2026-10-23T08:58:19.584639+00:00,marshall-wace-global,marshall-wace,Marshall Wace,Multi-region,https://www.mwam.com/careers/,generic,job_sources_specialist_funds.csv,error,1,0,0,https://www.mwam.com/careers/: HTTPError
-2026-10-23T08:58:20.048141+00:00,conseq-global,conseq,Conseq Investment Management,Multi-region,https://www.conseq.cz/kariera,generic,job_sources_specialist_funds.csv,zero_jobs,1,0,0,
-2026-10-23T08:51:22.966938+00:00,alvarez-marsal-global,alvarez-marsal,Alvarez & Marsal,Multi-region,https://careers.alvarezandmarsal.com/,selectminds,job_sources_consulting.csv,error,1,0,0,https://careers.alvarezandmarsal.com/: HTTPError
-2026-10-23T08:51:23.157833+00:00,bdo-global,bdo,BDO,Multi-region,https://www.bdo.global/en-gb/careers,generic,job_sources_consulting.csv,zero_jobs,2,0,0,
-2026-10-23T08:51:26.307808+00:00,cgi-global,cgi,CGI,Multi-region,https://www.cgi.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:52:03.791013+00:00,newton-europe-global,newton-europe,Newton Europe,Multi-region,https://www.newtoneurope.com/careers/,generic,job_sources_consulting.csv,zero_jobs,1,0,0,
-2026-10-23T08:52:05.798724+00:00,mckinsey-global,mckinsey,McKinsey & Company,Multi-region,https://www.mckinsey.com/careers/search-jobs,generic,job_sources_consulting.csv,error,1,0,0,https://www.mckinsey.com/careers/search-jobs: ReadTimeout
-2026-10-23T08:52:30.892873+00:00,advent-global,advent-international,Advent International,Multi-region,https://www.adventinternational.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://www.adventinternational.com/careers/: HTTPError
-2026-10-23T08:52:31.591356+00:00,icg-global,icg,Intermediate Capital Group,Multi-region,https://icg.wd3.myworkdayjobs.com/en-US/external_careers,workday,job_sources_pe.csv,success,9,3,3,
-2026-10-23T08:52:39.902202+00:00,dbag-global,dbag,Deutsche Beteiligungs AG,Germany,https://dbag.careers.hibob.com/jobs,generic,job_sources_pe.csv,zero_jobs,1,0,0,
-2026-10-23T08:52:41.019270+00:00,cvc-global,cvc,CVC,Multi-region,https://www.cvc.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://www.cvc.com/careers/: HTTPError
-2026-10-23T08:52:42.064883+00:00,eurazeo-global,eurazeo,Eurazeo,Multi-region,https://www.eurazeo.com/en/group/careers,generic,job_sources_pe.csv,error,1,0,0,https://www.eurazeo.com/en/group/careers: HTTPError
-2026-10-23T08:52:43.303702+00:00,mg-global,mg,M&G,Multi-region,https://www.mandg.com/careers,generic,job_sources_pe.csv,zero_jobs,1,0,0,
-2026-10-23T08:52:44.457897+00:00,uniper-global,uniper,Uniper,Multi-region,https://career5.successfactors.eu/career?company=UniperProd,successfactors,job_sources_corporate.csv,error,1,0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
-2026-10-23T08:52:44.986195+00:00,trafigura-global,trafigura,Trafigura,Multi-region,https://trafigura.wd3.myworkdayjobs.com/TrafiguraCareerSite,workday,job_sources_corporate.csv,success,19,11,11,
-2026-10-23T08:53:06.397517+00:00,basf-global,basf,BASF,Multi-region,https://career5.successfactors.eu/career?company=C0000159936P,successfactors,job_sources_corporate.csv,error,1,0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
-2026-10-23T08:53:06.919365+00:00,dhl-global,dhl,DHL Group,Multi-region,https://careers.dhl.com/global/en/search-results,phenom,job_sources_corporate.csv,success,131,118,118,https://careers.dhl.com/global/en/job/11154656: SourceTimeout
-2026-10-23T08:55:41.841427+00:00,carlsberg-global,carlsberg,Carlsberg Group,Multi-region,https://career2.successfactors.eu/career?company=carlsbergg,successfactors,job_sources_corporate.csv,error,1,0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
-2026-10-23T08:55:42.602301+00:00,gsk-global,gsk,GSK,Multi-region,https://gsk.wd5.myworkdayjobs.com/GSKCareers,workday,job_sources_corporate.csv,success,18,9,9,
-2026-10-23T08:55:57.035510+00:00,infosys-global,infosys,Infosys,Multi-region,https://career.infosys.com/joblist,llm,job_sources_corporate.csv,zero_jobs,1,0,0,
-2026-10-23T08:55:57.578238+00:00,deutsche-bank-global,deutsche-bank,Deutsche Bank,Multi-region,https://db.wd3.myworkdayjobs.com/DBWebsite,workday,job_sources_financial_services.csv,error,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://db.wd3.myworkdayjobs.com/wday/cxs/db/DBWebsite/jobs
-2026-10-23T08:56:01.164632+00:00,unicredit-global,unicredit,UniCredit,Multi-region,https://careers.unicredit.eu/,llm,job_sources_financial_services.csv,success,30,5,5,
-2026-10-23T08:57:15.652927+00:00,lombard-odier-global,lombard-odier,Lombard Odier,Multi-region,https://lombardodier.wd3.myworkdayjobs.com/Lombard_Odier_Careers,workday,job_sources_financial_services.csv,success,17,9,9,
-2026-10-23T08:57:32.045751+00:00,sampo-global,sampo,Sampo Group,Multi-region,https://www.sampo.com/careers/,llm,job_sources_financial_services.csv,zero_jobs,1,0,0,
-2026-10-23T08:57:33.335737+00:00,aviva-global,aviva,Aviva,Multi-region,https://aviva.wd1.myworkdayjobs.com/External,workday,job_sources_financial_services.csv,success,7,1,1,
-2026-10-23T08:57:39.719209+00:00,ubs-global,ubs,UBS Group,Multi-region,https://www.ubs.com/global/en/careers/search-jobs.html,generic,job_sources_financial_services.csv,zero_jobs,30,0,0,
-2026-10-23T08:58:01.353254+00:00,investor-ab-global,investor-ab,Investor AB,Multi-region,https://www.investorab.com/career/,llm,job_sources_holdings.csv,error,1,0,0,https://www.investorab.com/career/: HTTPError
-2026-10-23T08:58:02.612260+00:00,goldman-sachs-global,goldman-sachs,Goldman Sachs,Multi-region,https://www.goldmansachs.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,30,0,0,
-2026-10-23T08:58:20.991857+00:00,jefferies-global,jefferies,Jefferies,Multi-region,https://www.jefferies.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,11,0,0,
-2026-10-23T08:58:27.960713+00:00,wellington-management-global,wellington-management,Wellington Management,Multi-region,https://wellington.wd5.myworkdayjobs.com/External,workday,job_sources_public_markets.csv,success,41,31,31,
-2026-10-23T08:58:52.034360+00:00,flossbach-von-storch-global,flossbach-von-storch,Flossbach von Storch,Multi-region,https://flossbach-von-storch-ag.jobs.personio.de,personio,job_sources_public_markets.csv,zero_jobs,1,0,0,
-2026-10-23T08:58:53.275109+00:00,vontobel-global,vontobel,Vontobel,Multi-region,https://www.vontobel.com/de-ch/ueber-vontobel/karriere/offene-stellen/,generic,job_sources_public_markets.csv,success,30,27,27,
-2026-10-23T08:59:43.758357+00:00,brevan-howard-global,brevan-howard,Brevan Howard,Multi-region,https://www.brevanhoward.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,1,0,0,
-2026-10-23T08:59:45.577206+00:00,pale-fire-capital-global,pale-fire-capital,Pale Fire Capital,Multi-region,https://palefirecapital.com/,generic,job_sources_specialist_funds.csv,zero_jobs,1,0,0,
-2026-10-23T08:51:20.709470+00:00,alixpartners-global,alixpartners,AlixPartners,Multi-region,https://job-boards.greenhouse.io/alixpartners,greenhouse,job_sources_consulting.csv,success,1,24,24,
-2026-10-23T08:51:20.952305+00:00,forvis-mazars-global,forvis-mazars,Forvis Mazars,Multi-region,https://www.forvismazars.com/group/en/join-us,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:51:53.231073+00:00,infosys-consulting-global,infosys-consulting,Infosys Consulting,Multi-region,https://career.infosys.com/,generic,job_sources_consulting.csv,zero_jobs,1,0,0,
-2026-10-23T08:51:53.719950+00:00,porsche-consulting-global,porsche-consulting,Porsche Consulting,Multi-region,https://www.porsche-consulting.com/careers/,generic,job_sources_consulting.csv,error,1,0,0,https://www.porsche-consulting.com/careers/: HTTPError
-2026-10-23T08:51:54.468983+00:00,bcg-global,bcg,Boston Consulting Group,Multi-region,https://careers.bcg.com/global/en/search-results,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:52:24.592461+00:00,cinven-global,cinven,Cinven,Multi-region,https://cinven.pinpointhq.com/,generic,job_sources_pe.csv,zero_jobs,2,0,0,
-2026-10-23T08:52:26.733711+00:00,pai-global,pai-partners,PAI Partners,Multi-region,https://www.paipartners.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://www.paipartners.com/careers/: HTTPError
-2026-10-23T08:52:27.358882+00:00,mutares-global,mutares,Mutares,Multi-region,https://career.mutares.com/jobs,teamtailor,job_sources_pe.csv,success,30,25,25,
-2026-10-23T08:53:02.173241+00:00,eqt-global,eqt,EQT,Multi-region,https://eqtgroup.com/careers,generic,job_sources_pe.csv,error,1,0,0,https://eqtgroup.com/careers: HTTPError
-2026-10-23T08:53:03.049013+00:00,verdane-global,verdane,Verdane,Multi-region,https://verdane.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://verdane.com/careers/: HTTPError
-2026-10-23T08:53:03.214670+00:00,man-group-global,man-group,Man Group,Multi-region,https://www.man.com/careers,generic,job_sources_pe.csv,zero_jobs,7,0,0,
-2026-10-23T08:53:14.867399+00:00,vattenfall-global,vattenfall,Vattenfall,Multi-region,https://careers.smartrecruiters.com/vattenfall,smartrecruiters,job_sources_corporate.csv,success,16,15,15,
-2026-10-23T08:53:26.281972+00:00,vitol-global,vitol,Vitol,Multi-region,https://careers.smartrecruiters.com/Vitol,smartrecruiters,job_sources_corporate.csv,success,5,4,4,
-2026-10-23T08:53:29.355991+00:00,bayer-global,bayer,Bayer,Multi-region,https://career.bayer.com/,llm,job_sources_corporate.csv,error,1,0,0,https://career.bayer.com/: HTTPError
-2026-10-23T08:53:30.339890+00:00,nestle-global,nestle,Nestlé,Multi-region,https://career2.successfactors.eu/careers?company=nestleHRprdBX,successfactors,job_sources_corporate.csv,error,1,0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
-2026-10-23T08:53:31.009079+00:00,volvo-group-global,volvo-group,Volvo Group,Multi-region,https://jobs.volvogroup.com/,successfactors,job_sources_corporate.csv,success,30,29,29,
-2026-10-23T08:54:09.143353+00:00,diageo-global,diageo,Diageo,Multi-region,https://diageo.wd3.myworkdayjobs.com/Diageo_Careers,workday,job_sources_corporate.csv,success,7,1,1,
-2026-10-23T08:54:18.067027+00:00,wipro-global,wipro,Wipro,Multi-region,https://careers.wipro.com/,successfactors,job_sources_corporate.csv,success,141,138,138,https://careers.wipro.com/job/Curitiba-Financial-Planning-and-Analysis-BRA-80215-432/1359418455/: SourceTimeout
-2026-10-23T08:58:25.243328+00:00,commerzbank-global,commerzbank,Commerzbank,Multi-region,https://jobs.commerzbank.com/index.php?ac=search_result,llm,job_sources_financial_services.csv,zero_jobs,30,0,0,
-2026-10-23T08:59:04.922831+00:00,eex-global,eex,EEX Group,Multi-region,https://www.eex-group.com/en/career,llm,job_sources_financial_services.csv,error,1,0,0,https://www.eex-group.com/en/career: HTTPError
-2026-10-23T08:59:06.164096+00:00,zurich-insurance-global,zurich-insurance,Zurich Insurance Group,Multi-region,https://www.careers.zurich.com/,llm,job_sources_financial_services.csv,success,30,4,4,https://www.careers.zurich.com/\: HTTPError | https://www.careers.zurich.com/search/\: HTTPError
-2026-10-23T08:59:33.864151+00:00,storebrand-global,storebrand,Storebrand,Multi-region,https://storebrand.wd3.myworkdayjobs.com/Storebrand_Careers,workday,job_sources_financial_services.csv,zero_jobs,6,0,0,
-2026-10-23T08:59:40.708179+00:00,legal-general-global,legal-general,Legal & General,Multi-region,https://careers.legalandgeneral.com/,llm,job_sources_financial_services.csv,success,30,1,1,
-2026-10-23T09:00:12.609393+00:00,swiss-re-global,swiss-re,Swiss Re,Multi-region,https://www.swissre.com/careers/jobSearch.html,generic,job_sources_financial_services.csv,zero_jobs,30,0,0,
-2026-10-23T09:00:44.622979+00:00,industrivarden-global,industrivarden,Industrivärden,Multi-region,https://www.industrivarden.se/en-gb/career/,llm,job_sources_holdings.csv,error,1,0,0,https://www.industrivarden.se/en-gb/career/: HTTPError
-2026-10-23T09:00:46.188477+00:00,morgan-stanley-global,morgan-stanley,Morgan Stanley,Multi-region,https://www.morganstanley.com/people-opportunities,generic,job_sources_investment_banking.csv,zero_jobs,4,0,0,
-2026-10-23T09:00:48.122314+00:00,houlihan-lokey-global,houlihan-lokey,Houlihan Lokey,Multi-region,https://hl.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,12,0,0,
-2026-10-23T09:00:56.141887+00:00,t-rowe-price-global,t-rowe-price,T. Rowe Price,Multi-region,https://troweprice.wd5.myworkdayjobs.com/TRowePrice,workday,job_sources_public_markets.csv,success,7,1,1,
-2026-10-23T09:01:02.650054+00:00,carmignac-global,carmignac,Carmignac,Multi-region,https://www.carmignac.com/en/about-us/careers,llm,job_sources_public_markets.csv,zero_jobs,1,0,0,
-2026-10-23T09:01:03.537262+00:00,nbim-global,nbim,Norges Bank Investment Management,Multi-region,https://www.nbim.no/en/about-us/career/vacancies/,generic,job_sources_public_markets.csv,zero_jobs,30,0,0,
-2026-10-23T09:01:25.082482+00:00,qube-rt-global,qube-rt,Qube Research & Technologies,Multi-region,https://www.qube-rt.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,1,0,0,
-2026-10-23T08:51:19.684357+00:00,fti-consulting-global,fti-consulting,FTI Consulting,Multi-region,https://fticonsult.referrals.selectminds.com/,selectminds,job_sources_consulting.csv,zero_jobs,2,0,0,
-2026-10-23T08:51:20.922839+00:00,rsm-global,rsm,RSM,Multi-region,https://www.rsm.global/careers,generic,job_sources_consulting.csv,zero_jobs,4,0,0,
-2026-10-23T08:51:23.398539+00:00,tcs-consulting-global,tcs-consulting,Tata Consultancy Services,Multi-region,https://www.tcs.com/careers,generic,job_sources_consulting.csv,error,1,0,0,https://www.tcs.com/careers: HTTPError
-2026-10-23T08:51:23.832353+00:00,d-fine-global,d-fine,d-fine,Multi-region,https://www.d-fine.com/en/career/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:52:02.669015+00:00,kearney-global,kearney,Kearney,Multi-region,https://www.kearney.com/careers,generic,job_sources_consulting.csv,zero_jobs,12,0,0,
-2026-10-23T08:52:14.952365+00:00,bc-partners-global,bc-partners,BC Partners,Multi-region,https://www.bcpartners.com/careers/,generic,job_sources_pe.csv,zero_jobs,1,0,0,
-2026-10-23T08:52:16.753578+00:00,waterland-global,waterland,Waterland Private Equity,Multi-region,https://www.waterlandpe.com/careers/,generic,job_sources_pe.csv,zero_jobs,30,0,0,
-2026-10-23T08:53:03.689393+00:00,capvis-global,capvis,Capvis,Multi-region,https://www.capvis.com/careers/,generic,job_sources_pe.csv,zero_jobs,2,0,0,
-2026-10-23T08:53:06.393256+00:00,permira-global,permira,Permira,Multi-region,https://www.permira.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://www.permira.com/careers/: HTTPError
-2026-10-23T08:53:07.175476+00:00,enterprise-investors-global,enterprise-investors,Enterprise Investors,Multi-region,https://www.ei.com.pl/en/career/,generic,job_sources_pe.csv,error,1,0,0,https://www.ei.com.pl/en/career/: HTTPError
-2026-10-23T08:53:07.666981+00:00,janus-henderson-global,janus-henderson,Janus Henderson,Multi-region,https://www.janushenderson.com/corporate/careers/,generic,job_sources_pe.csv,zero_jobs,19,0,0,
-2026-10-23T08:53:21.664199+00:00,statkraft-global,statkraft,Statkraft,Multi-region,https://careers.smartrecruiters.com/statkraft1,smartrecruiters,job_sources_corporate.csv,success,8,7,7,
-2026-10-23T08:53:26.452428+00:00,glencore-global,glencore,Glencore,Multi-region,https://www.glencore.com/en/careers/jobs,llm,job_sources_corporate.csv,zero_jobs,30,0,0,
-2026-10-23T08:53:44.974461+00:00,henkel-global,henkel,Henkel,Multi-region,https://www.henkel.com/careers/find-your-job-apply,llm,job_sources_corporate.csv,error,30,0,0,https://www.henkel.com/careers?view=: ReadTimeout
-2026-10-23T08:54:43.457744+00:00,novartis-global,novartis,Novartis,Multi-region,https://novartis.wd3.myworkdayjobs.com/Novartis_Careers,workday,job_sources_corporate.csv,success,46,36,36,
-2026-10-23T08:55:33.190207+00:00,ericsson-global,ericsson,Ericsson,Multi-region,https://www.ericsson.com/en/careers,llm,job_sources_corporate.csv,error,1,0,0,https://www.ericsson.com/en/careers: HTTPError
-2026-10-23T08:55:33.319732+00:00,bae-systems-global,bae-systems,BAE Systems,Multi-region,https://jobsearch.baesystems.com/,generic,job_sources_corporate.csv,zero_jobs,30,0,0,
-2026-10-23T08:55:59.670260+00:00,cez-group-global,cez-group,ČEZ Group,Multi-region,https://www.kdejinde.cz/,generic,job_sources_corporate.csv,zero_jobs,1,0,0,
-2026-10-23T08:56:02.566905+00:00,dz-bank-global,dz-bank,DZ BANK,Multi-region,https://career012.successfactors.eu/career?company=DZBank,successfactors,job_sources_financial_services.csv,error,1,0,0,https://career012.successfactors.eu/sitemap.xml: HTTPError
-2026-10-23T08:56:03.616731+00:00,bawag-global,bawag,BAWAG Group,Multi-region,https://jobs.bawaggroup.at,successfactors,job_sources_financial_services.csv,zero_jobs,9,0,0,
-2026-10-23T08:56:18.339943+00:00,swiss-life-global,swiss-life,Swiss Life Group,Multi-region,https://swisslife.wd3.myworkdayjobs.com/Swiss_Life_International_Division_Career_Site,workday,job_sources_financial_services.csv,zero_jobs,6,0,0,
-2026-10-23T08:56:25.606840+00:00,hsbc-global,hsbc,HSBC Holdings,Multi-region,https://www.hsbc.com/careers,llm,job_sources_financial_services.csv,zero_jobs,30,0,0,
-2026-10-23T08:56:45.628938+00:00,marsh-mclennan-global,marsh-mclennan,Marsh McLennan,Multi-region,https://careers.marsh.com/global/en/marsh-search,phenom,job_sources_financial_services.csv,error,0,0,0,https://careers.marsh.com/global/en/marsh-search?keywords=finance&from=0&s=1: HTTPError
-2026-10-23T08:56:46.549626+00:00,nordea-global,nordea,Nordea,Multi-region,https://www.nordea.com/en/careers,generic,job_sources_financial_services.csv,zero_jobs,30,0,0,
-2026-10-23T08:57:07.094592+00:00,kinnevik-global,kinnevik,Kinnevik,Multi-region,https://www.kinnevik.com/careers,llm,job_sources_holdings.csv,error,1,0,0,https://www.kinnevik.com/careers: HTTPError
-2026-10-23T08:57:07.880478+00:00,jpmorgan-chase-global,jpmorgan-chase,JPMorgan Chase,Multi-region,https://careers.jpmorgan.com/global/en/home,generic,job_sources_investment_banking.csv,zero_jobs,1,0,0,
-2026-10-23T08:57:08.990088+00:00,moelis-global,moelis,Moelis & Company,Multi-region,https://www.moelis.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,16,0,0,
-2026-10-23T08:57:16.843494+00:00,pimco-global,pimco,PIMCO,Multi-region,https://pimco.wd1.myworkdayjobs.com/pimco-careers,workday,job_sources_public_markets.csv,success,58,47,47,
-2026-10-23T08:57:46.526713+00:00,jupiter-fund-management-global,jupiter-fund-management,Jupiter Fund Management,Multi-region,https://jupiteram.wd3.myworkdayjobs.com/jupiter_careers,workday,job_sources_public_markets.csv,success,12,6,6,
-2026-10-23T08:57:58.718384+00:00,blackrock-global,blackrock,BlackRock,Multi-region,https://careers.blackrock.com/,generic,job_sources_public_markets.csv,zero_jobs,30,0,0,
-2026-10-23T08:58:18.112279+00:00,winton-global,winton,Winton,Multi-region,https://www.winton.com/careers,generic,job_sources_specialist_funds.csv,error,1,0,0,https://www.winton.com/careers: HTTPError
-2026-10-23T08:51:25.128586+00:00,lek-global,lek-consulting,L.E.K. Consulting,Multi-region,https://www.lek.com/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:51:45.961104+00:00,protiviti-global,protiviti,Protiviti,Multi-region,https://www.protiviti.com/gl-en/careers,generic,job_sources_consulting.csv,zero_jobs,2,0,0,
-2026-10-23T08:51:46.939518+00:00,cognizant-global,cognizant,Cognizant,Multi-region,https://careers.cognizant.com/global-en/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:52:01.232689+00:00,zuehlke-global,zuehlke,Zühlke,Multi-region,https://www.zuehlke.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:52:22.352869+00:00,arthur-d-little-global,arthur-d-little,Arthur D. Little,Multi-region,https://careers.adlittle.com/,generic,job_sources_consulting.csv,error,1,0,0,https://careers.adlittle.com/: ConnectTimeout
-2026-10-23T08:53:12.421084+00:00,triton-global,triton,Triton Partners,Multi-region,https://tritonpartners.wd3.myworkdayjobs.com/en-GB/External,workday,job_sources_pe.csv,zero_jobs,6,0,0,
-2026-10-23T08:53:17.262305+00:00,nordic-capital-global,nordic-capital,Nordic Capital,Multi-region,https://career.nordiccapital.com/jobs,teamtailor,job_sources_pe.csv,success,14,4,4,
-2026-10-23T08:53:23.470318+00:00,ufenau-global,ufenau,Ufenau Capital Partners,Multi-region,https://ufenau-capital-partners.jobs.personio.com/,personio,job_sources_pe.csv,zero_jobs,1,0,0,
-2026-10-23T08:53:24.007154+00:00,bridgepoint-global,bridgepoint,Bridgepoint Group,Multi-region,https://www.bridgepoint.eu/careers,generic,job_sources_pe.csv,error,1,0,0,https://www.bridgepoint.eu/careers: HTTPError
-2026-10-23T08:53:25.216768+00:00,mid-europa-global,mid-europa,MidEuropa,Multi-region,https://mideuropa.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://mideuropa.com/careers/: HTTPError
-2026-10-23T08:53:26.288100+00:00,baillie-gifford-global,baillie-gifford,Baillie Gifford,Multi-region,https://www.bailliegifford.com/en/uk/individual-investors/careers/,generic,job_sources_pe.csv,zero_jobs,21,0,0,
-2026-10-23T08:54:04.919279+00:00,fortum-global,fortum,Fortum,Multi-region,https://jobs.fortum.com/,successfactors,job_sources_corporate.csv,success,3,2,2,
-2026-10-23T08:54:07.953266+00:00,volkswagen-global,volkswagen,Volkswagen Group,Multi-region,https://career5.successfactors.eu/careers?company=VWAGLPPROD10,successfactors,job_sources_corporate.csv,error,1,0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
-2026-10-23T08:54:08.432587+00:00,continental-global,continental,Continental,Multi-region,https://careers.smartrecruiters.com/Continental,smartrecruiters,job_sources_corporate.csv,success,30,29,29,
-2026-10-23T08:54:26.077479+00:00,roche-global,roche,Roche,Multi-region,https://roche.wd3.myworkdayjobs.com/roche-ext,workday,job_sources_corporate.csv,success,11,4,4,
-2026-10-23T08:54:34.921486+00:00,nokia-global,nokia,Nokia,Multi-region,https://www.nokia.com/about-us/careers/,llm,job_sources_corporate.csv,error,1,0,0,https://www.nokia.com/about-us/careers/: HTTPError
-2026-10-23T08:54:35.138824+00:00,rolls-royce-global,rolls-royce,Rolls-Royce,Multi-region,https://rollsroyce.wd3.myworkdayjobs.com/professional,workday,job_sources_corporate.csv,error,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://rollsroyce.wd3.myworkdayjobs.com/wday/cxs/rollsroyce/professional/jobs
-2026-10-23T08:54:39.141436+00:00,siemens-global,siemens,Siemens,Multi-region,https://www.siemens.com/de-de/company/jobs/,generic,job_sources_corporate.csv,zero_jobs,18,0,0,
-2026-10-23T08:54:53.686013+00:00,kfw-global,kfw,KfW Group,Multi-region,https://www.kfw.de/About-KfW/Career/,llm,job_sources_financial_services.csv,zero_jobs,17,0,0,
-2026-10-23T08:55:09.376805+00:00,oekb-global,oekb,OeKB Group,Multi-region,https://www.oekb.at/jobs-und-karriere.html,llm,job_sources_financial_services.csv,zero_jobs,26,0,0,
-2026-10-23T08:55:32.533970+00:00,zkb-global,zkb,Zürcher Kantonalbank,Multi-region,https://www.zkb.ch/en/home/career.html,llm,job_sources_financial_services.csv,error,1,0,0,https://www.zkb.ch/en/home/career.html: HTTPError
-2026-10-23T08:55:33.134379+00:00,barclays-global,barclays,Barclays,Multi-region,https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays,workday,job_sources_financial_services.csv,success,12,6,6,
-2026-10-23T08:55:42.141948+00:00,jt-finance-group-global,jt-finance-group,J&T Finance Group,Multi-region,https://www.jtfg.com/,generic,job_sources_financial_services.csv,zero_jobs,1,0,0,
-2026-10-23T08:55:43.593674+00:00,seb-global,seb,SEB Group,Multi-region,https://sebgroup.com/career,generic,job_sources_financial_services.csv,zero_jobs,21,0,0,
-2026-10-23T08:55:59.367519+00:00,exor-global,exor,Exor,Multi-region,https://www.exor.com/pages/exor/careers,llm,job_sources_holdings.csv,error,1,0,0,https://www.exor.com/pages/exor/careers: HTTPError
-2026-10-23T08:56:00.034757+00:00,citigroup-global,citigroup,Citi,Multi-region,https://jobs.citi.com/,generic,job_sources_investment_banking.csv,success,30,4,4,
-2026-10-23T08:56:14.237509+00:00,pjt-partners-global,pjt-partners,PJT Partners,Multi-region,https://pjtpartners.com/careers,generic,job_sources_investment_banking.csv,zero_jobs,3,0,0,
-2026-10-23T08:56:15.861278+00:00,franklin-templeton-global,franklin-templeton,Franklin Templeton,Multi-region,https://franklintempleton.wd5.myworkdayjobs.com/Primary-External-1,workday,job_sources_public_markets.csv,zero_jobs,6,0,0,
-2026-10-23T08:56:21.109027+00:00,federated-hermes-global,federated-hermes,Federated Hermes,Multi-region,https://www.federatedhermes.com/us/careers/,llm,job_sources_public_markets.csv,zero_jobs,1,0,0,
-2026-10-23T08:56:21.830362+00:00,schroders-global,schroders,Schroders,Multi-region,https://www.schroders.com/en/global/individual/careers/,generic,job_sources_public_markets.csv,zero_jobs,26,0,0,
-2026-10-23T08:56:43.964626+00:00,aqr-global,aqr,AQR Capital Management,Multi-region,https://www.aqr.com/About-Us/Careers,generic,job_sources_specialist_funds.csv,zero_jobs,2,0,0,
-2026-10-23T08:51:26.855266+00:00,horvath-global,horvath,Horváth,Multi-region,https://horvath.wd3.myworkdayjobs.com/en-US/Horvath_Careers,workday,job_sources_consulting.csv,zero_jobs,6,0,0,
-2026-10-23T08:51:33.483624+00:00,sia-partners-global,sia-partners,Sia Partners,Multi-region,https://www.sia-partners.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:52:01.098887+00:00,occ-strategy-global,occ-strategy,OC&C Strategy Consultants,Multi-region,https://www.occstrategy.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:52:32.202204+00:00,synpulse-global,synpulse,Synpulse,Multi-region,https://www.synpulse.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,4,0,0,
-2026-10-23T08:52:35.999029+00:00,bearingpoint-global,bearingpoint,BearingPoint,Multi-region,https://www.bearingpoint.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
-2026-10-23T08:53:31.162718+00:00,ardian-global,ardian,Ardian,Multi-region,https://ardian.wd103.myworkdayjobs.com/ArdianCareers,workday,job_sources_pe.csv,success,9,3,3,
-2026-10-23T08:53:40.469089+00:00,altor-global,altor,Altor,Multi-region,https://careers.altor.com/,teamtailor,job_sources_pe.csv,zero_jobs,1,0,0,
-2026-10-23T08:53:42.193186+00:00,apollo-global,apollo,Apollo Global Management,Multi-region,https://www.apollo.com/careers,generic,job_sources_pe.csv,zero_jobs,1,0,0,
-2026-10-23T08:53:42.957699+00:00,hg-global,hg,Hg,Multi-region,https://hgcapital.com/careers,generic,job_sources_pe.csv,error,1,0,0,https://hgcapital.com/careers: HTTPError
-2026-10-23T08:53:43.192281+00:00,innova-capital-global,innova-capital,Innova Capital,Multi-region,https://innovacap.com/career/,generic,job_sources_pe.csv,error,1,0,0,https://innovacap.com/career/: HTTPError
-2026-10-23T08:53:43.785679+00:00,abrdn-global,abrdn,abrdn,Multi-region,https://www.abrdn.com/en/corporate/careers,generic,job_sources_pe.csv,error,1,0,0,https://www.abrdn.com/en/corporate/careers: HTTPError
-2026-10-23T08:53:44.776114+00:00,neste-global,neste,Neste,Multi-region,https://jobs.neste.com/,successfactors,job_sources_corporate.csv,zero_jobs,1,0,0,
-2026-10-23T08:53:45.287573+00:00,bmw-global,bmw,BMW Group,Multi-region,https://www.bmwgroup.jobs/en/search.html,llm,job_sources_corporate.csv,zero_jobs,30,0,0,
-2026-10-23T08:54:03.484801+00:00,infineon-global,infineon,Infineon,Multi-region,https://www.infineon.com/cms/en/careers/,llm,job_sources_corporate.csv,zero_jobs,30,0,0,
-2026-10-23T08:54:45.875173+00:00,sandoz-global,sandoz,Sandoz,Multi-region,https://sandoz.wd103.myworkdayjobs.com/Sandoz_Careers,workday,job_sources_corporate.csv,zero_jobs,6,0,0,
-2026-10-23T08:54:50.327506+00:00,kone-global,kone,KONE,Multi-region,https://kone.wd3.myworkdayjobs.com/Careers,workday,job_sources_corporate.csv,success,18,9,9,
-2026-10-23T08:55:10.149264+00:00,national-grid-global,national-grid,National Grid,Multi-region,https://jobs.nationalgrid.com/uk/jobs,llm,job_sources_corporate.csv,zero_jobs,1,0,0,
-2026-10-23T08:55:11.791194+00:00,omv-global,omv,OMV Group,Multi-region,https://careers.omv.com/?locale=en_US,generic,job_sources_corporate.csv,success,30,13,13,
-2026-10-23T08:55:47.205279+00:00,helaba-global,helaba,Helaba,Multi-region,https://www.helaba.com/int/career/,llm,job_sources_financial_services.csv,error,1,0,0,https://www.helaba.com/int/career/: HTTPError
-2026-10-23T08:55:48.673355+00:00,vienna-insurance-group-global,vienna-insurance-group,Vienna Insurance Group,Multi-region,https://group.vig/career/,llm,job_sources_financial_services.csv,zero_jobs,30,0,0,
-2026-10-23T08:56:28.629955+00:00,swedbank-global,swedbank,Swedbank,Multi-region,https://jobs.swedbank.com/,llm,job_sources_financial_services.csv,success,30,15,15,
-2026-10-23T08:56:51.271840+00:00,lloyds-banking-group-global,lloyds-banking-group,Lloyds Banking Group,Multi-region,https://lbg.wd3.myworkdayjobs.com/LBG_Careers,workday,job_sources_financial_services.csv,success,16,8,8,
-2026-10-23T08:57:09.378889+00:00,erste-group-global,erste-group,Erste Group,Multi-region,https://www.erstegroup.com/en/career,generic,job_sources_financial_services.csv,zero_jobs,15,0,0,
-2026-10-23T08:57:21.745631+00:00,danske-bank-global,danske-bank,Danske Bank,Multi-region,https://danskebank.com/careers,generic,job_sources_financial_services.csv,error,19,0,0,https://danskebank.com/careers/flexible-work: ReadTimeout
-2026-10-23T08:58:10.865707+00:00,porsche-se-global,porsche-se,Porsche Automobil Holding,Multi-region,https://www.porsche-se.com/en/company/career,llm,job_sources_holdings.csv,error,1,0,0,https://www.porsche-se.com/en/company/career: HTTPError
-2026-10-23T08:58:11.520729+00:00,bank-of-america-global,bank-of-america,Bank of America,Multi-region,https://careers.bankofamerica.com/en-us,generic,job_sources_investment_banking.csv,success,30,10,10,
-2026-10-23T08:58:36.626754+00:00,perella-weinberg-global,perella-weinberg,Perella Weinberg Partners,Multi-region,https://pwpartners.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,9,0,0,
-2026-10-23T08:58:41.035143+00:00,robeco-global,robeco,Robeco,Multi-region,https://robeco.wd3.myworkdayjobs.com/robecoexternalcareers,workday,job_sources_public_markets.csv,success,9,3,3,
-2026-10-23T08:58:48.530528+00:00,neuberger-berman-global,neuberger-berman,Neuberger Berman,Multi-region,https://nb.wd1.myworkdayjobs.com/NBCareers,workday,job_sources_public_markets.csv,success,9,3,3,
-2026-10-23T08:58:54.842829+00:00,citadel-global,citadel,Citadel,Multi-region,https://www.citadel.com/careers/,generic,job_sources_specialist_funds.csv,error,1,0,0,https://www.citadel.com/careers/: HTTPError
-2026-10-23T08:58:54.957907+00:00,two-sigma-global,two-sigma,Two Sigma,Multi-region,https://www.twosigma.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,30,0,0,
+2026-10-23T08:51:30.819655+00:00,oliver-wyman-global,oliver-wyman,Oliver Wyman,Multi-region,https://careers.marsh.com/global/en/oliver-wyman,phenom,job_sources_consulting.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:51:31.261662+00:00,grant-thornton-global,grant-thornton,Grant Thornton,Multi-region,https://www.grantthornton.global/en/careers/,generic,job_sources_consulting.csv,zero_jobs,17.0,0.0,0,
+2026-10-23T08:51:43.188795+00:00,ibm-consulting-global,ibm-consulting,IBM Consulting,Multi-region,https://www.ibm.com/careers/search,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:51:57.489172+00:00,baringa-global,baringa,Baringa,Multi-region,https://www.baringa.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,11.0,0.0,0,
+2026-10-23T08:52:42.297484+00:00,charles-river-associates-global,charles-river-associates,Charles River Associates,Multi-region,https://www.crai.com/careers/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:52:58.083243+00:00,partners-group-global,partners-group,Partners Group,Multi-region,https://jobs.partnersgroup.com/,successfactors,job_sources_pe.csv,success,14.0,13.0,13,
+2026-10-23T08:53:09.864218+00:00,ares-global,ares,Ares Management,Multi-region,https://aresmgmt.wd1.myworkdayjobs.com/en-US/External,workday,job_sources_pe.csv,success,15.0,8.0,8,
+2026-10-23T08:53:15.711512+00:00,summa-equity-global,summa-equity,Summa Equity,Multi-region,https://summaequity.com/career/,generic,job_sources_pe.csv,zero_jobs,4.0,0.0,0,
+2026-10-23T08:53:20.482560+00:00,blackstone-global,blackstone,Blackstone,Multi-region,https://www.blackstone.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.blackstone.com/careers/: HTTPError
+2026-10-23T08:53:20.609470+00:00,antin-global,antin,Antin Infrastructure Partners,Multi-region,https://www.antin-ip.com/careers,generic,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:53:21.527828+00:00,vanguard-global,vanguard,Vanguard,Multi-region,https://www.vanguardjobs.com/,generic,job_sources_pe.csv,success,30.0,2.0,2,
+2026-10-23T08:53:48.801288+00:00,enbw-global,enbw,EnBW,Multi-region,https://careers.enbw.com/de/de,phenom,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:53:49.552691+00:00,bp-global,bp,bp,Multi-region,https://bpinternational.wd3.myworkdayjobs.com/bpCareers,workday,job_sources_corporate.csv,success,39.0,28.0,28,
+2026-10-23T08:54:31.931759+00:00,bosch-global,bosch,Bosch,Multi-region,https://careers.smartrecruiters.com/BoschGroup,smartrecruiters,job_sources_corporate.csv,success,141.0,140.0,140,
+2026-10-23T08:56:07.510275+00:00,sap-global,sap,SAP,Multi-region,https://jobs.sap.com/,successfactors,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:56:07.764247+00:00,maersk-global,maersk,A.P. Moller - Maersk,Multi-region,https://maersk.wd3.myworkdayjobs.com/Maersk_Careers,workday,job_sources_corporate.csv,success,7.0,1.0,1,
+2026-10-23T08:56:12.615713+00:00,astrazeneca-global,astrazeneca,AstraZeneca,Multi-region,https://astrazeneca.wd3.myworkdayjobs.com/Careers,workday,job_sources_corporate.csv,success,18.0,9.0,9,
+2026-10-23T08:56:26.444978+00:00,ibm-global,ibm,IBM,Multi-region,https://careers.ibm.com/en_US/careers,llm,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:56:26.954129+00:00,evotec-se-global,evotec-se,Evotec SE,Multi-region,https://evotecgroup.wd3.myworkdayjobs.com/Evotec_Career_Site,workday,job_sources_corporate.csv,error,0.0,0.0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://evotecgroup.wd3.myworkdayjobs.com/wday/cxs/evotecgroup/Evotec_Career_Site/jobs
+2026-10-23T08:56:29.836591+00:00,ing-global,ing,ING Group,Multi-region,https://ing.wd3.myworkdayjobs.com/ICSGBLCOR,workday,job_sources_financial_services.csv,success,22.0,16.0,16,
+2026-10-23T08:56:46.016287+00:00,pictet-global,pictet,Pictet Group,Multi-region,https://career5.successfactors.eu/career?company=banquepict,successfactors,job_sources_financial_services.csv,error,1.0,0.0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
+2026-10-23T08:56:46.363452+00:00,op-financial-global,op-financial,OP Financial Group,Multi-region,https://www.op-careers.fi/,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://www.op-careers.fi/: SSLError
+2026-10-23T08:56:47.020418+00:00,lseg-global,lseg,London Stock Exchange Group,Multi-region,https://lseg.wd3.myworkdayjobs.com/Careers,workday,job_sources_financial_services.csv,error,0.0,0.0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://lseg.wd3.myworkdayjobs.com/wday/cxs/lseg/Careers/jobs
+2026-10-23T08:56:50.369666+00:00,rbi-global,rbi,Raiffeisen Bank International,Multi-region,https://jobs.rbinternational.com/,generic,job_sources_financial_services.csv,success,30.0,15.0,15,
+2026-10-23T08:57:15.478592+00:00,cpi-property-group-global,cpi-property-group,CPI Property Group,Multi-region,https://www.cpipg.com/careers,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.cpipg.com/careers: HTTPError
+2026-10-23T08:57:16.358615+00:00,kkcg-global,kkcg,KKCG,Multi-region,https://kkcg.com/en/careers,generic,job_sources_holdings.csv,zero_jobs,6.0,0.0,0,
+2026-10-23T08:57:20.964287+00:00,evercore-global,evercore,Evercore,Multi-region,https://www.evercore.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,10.0,0.0,0,
+2026-10-23T08:57:25.626961+00:00,capital-group-global,capital-group,Capital Group,Multi-region,https://capgroup.wd1.myworkdayjobs.com/capitalgroupcareers,workday,job_sources_public_markets.csv,success,17.0,10.0,10,
+2026-10-23T08:57:32.979716+00:00,union-investment-global,union-investment,Union Investment,Multi-region,https://unternehmen.union-investment.de/startseite-unternehmen/karriere,llm,job_sources_public_markets.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:57:34.237354+00:00,six-group-global,six-group,SIX Group,Multi-region,https://www.six-group.com/en/careers.html,generic,job_sources_public_markets.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:58:19.584639+00:00,marshall-wace-global,marshall-wace,Marshall Wace,Multi-region,https://www.mwam.com/careers/,generic,job_sources_specialist_funds.csv,error,1.0,0.0,0,https://www.mwam.com/careers/: HTTPError
+2026-10-23T08:58:20.048141+00:00,conseq-global,conseq,Conseq Investment Management,Multi-region,https://www.conseq.cz/kariera,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:51:22.966938+00:00,alvarez-marsal-global,alvarez-marsal,Alvarez & Marsal,Multi-region,https://careers.alvarezandmarsal.com/,selectminds,job_sources_consulting.csv,error,1.0,0.0,0,https://careers.alvarezandmarsal.com/: HTTPError
+2026-10-23T08:51:23.157833+00:00,bdo-global,bdo,BDO,Multi-region,https://www.bdo.global/en-gb/careers,generic,job_sources_consulting.csv,zero_jobs,2.0,0.0,0,
+2026-10-23T08:51:26.307808+00:00,cgi-global,cgi,CGI,Multi-region,https://www.cgi.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:52:03.791013+00:00,newton-europe-global,newton-europe,Newton Europe,Multi-region,https://www.newtoneurope.com/careers/,generic,job_sources_consulting.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:52:05.798724+00:00,mckinsey-global,mckinsey,McKinsey & Company,Multi-region,https://www.mckinsey.com/careers/search-jobs,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://www.mckinsey.com/careers/search-jobs: ReadTimeout
+2026-10-23T08:52:30.892873+00:00,advent-global,advent-international,Advent International,Multi-region,https://www.adventinternational.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.adventinternational.com/careers/: HTTPError
+2026-10-23T08:52:31.591356+00:00,icg-global,icg,Intermediate Capital Group,Multi-region,https://icg.wd3.myworkdayjobs.com/en-US/external_careers,workday,job_sources_pe.csv,success,9.0,3.0,3,
+2026-10-23T08:52:39.902202+00:00,dbag-global,dbag,Deutsche Beteiligungs AG,Germany,https://dbag.careers.hibob.com/jobs,generic,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:52:41.019270+00:00,cvc-global,cvc,CVC,Multi-region,https://www.cvc.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.cvc.com/careers/: HTTPError
+2026-10-23T08:52:42.064883+00:00,eurazeo-global,eurazeo,Eurazeo,Multi-region,https://www.eurazeo.com/en/group/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.eurazeo.com/en/group/careers: HTTPError
+2026-10-23T08:52:43.303702+00:00,mg-global,mg,M&G,Multi-region,https://www.mandg.com/careers,generic,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:52:44.457897+00:00,uniper-global,uniper,Uniper,Multi-region,https://career5.successfactors.eu/career?company=UniperProd,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
+2026-10-23T08:52:44.986195+00:00,trafigura-global,trafigura,Trafigura,Multi-region,https://trafigura.wd3.myworkdayjobs.com/TrafiguraCareerSite,workday,job_sources_corporate.csv,success,19.0,11.0,11,
+2026-10-23T08:53:06.397517+00:00,basf-global,basf,BASF,Multi-region,https://career5.successfactors.eu/career?company=C0000159936P,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
+2026-10-23T08:53:06.919365+00:00,dhl-global,dhl,DHL Group,Multi-region,https://careers.dhl.com/global/en/search-results,phenom,job_sources_corporate.csv,success,131.0,118.0,118,https://careers.dhl.com/global/en/job/11154656: SourceTimeout
+2026-10-23T08:55:41.841427+00:00,carlsberg-global,carlsberg,Carlsberg Group,Multi-region,https://career2.successfactors.eu/career?company=carlsbergg,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
+2026-10-23T08:55:42.602301+00:00,gsk-global,gsk,GSK,Multi-region,https://gsk.wd5.myworkdayjobs.com/GSKCareers,workday,job_sources_corporate.csv,success,18.0,9.0,9,
+2026-10-23T08:55:57.035510+00:00,infosys-global,infosys,Infosys,Multi-region,https://career.infosys.com/joblist,llm,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:55:57.578238+00:00,deutsche-bank-global,deutsche-bank,Deutsche Bank,Multi-region,https://db.wd3.myworkdayjobs.com/DBWebsite,workday,job_sources_financial_services.csv,error,0.0,0.0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://db.wd3.myworkdayjobs.com/wday/cxs/db/DBWebsite/jobs
+2026-10-23T08:56:01.164632+00:00,unicredit-global,unicredit,UniCredit,Multi-region,https://careers.unicredit.eu/,llm,job_sources_financial_services.csv,success,30.0,5.0,5,
+2026-10-23T08:57:15.652927+00:00,lombard-odier-global,lombard-odier,Lombard Odier,Multi-region,https://lombardodier.wd3.myworkdayjobs.com/Lombard_Odier_Careers,workday,job_sources_financial_services.csv,success,17.0,9.0,9,
+2026-10-23T08:57:32.045751+00:00,sampo-global,sampo,Sampo Group,Multi-region,https://www.sampo.com/careers/,llm,job_sources_financial_services.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:57:33.335737+00:00,aviva-global,aviva,Aviva,Multi-region,https://aviva.wd1.myworkdayjobs.com/External,workday,job_sources_financial_services.csv,success,7.0,1.0,1,
+2026-10-23T08:57:39.719209+00:00,ubs-global,ubs,UBS Group,Multi-region,https://www.ubs.com/global/en/careers/search-jobs.html,generic,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:58:01.353254+00:00,investor-ab-global,investor-ab,Investor AB,Multi-region,https://www.investorab.com/career/,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.investorab.com/career/: HTTPError
+2026-10-23T08:58:02.612260+00:00,goldman-sachs-global,goldman-sachs,Goldman Sachs,Multi-region,https://www.goldmansachs.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:58:20.991857+00:00,jefferies-global,jefferies,Jefferies,Multi-region,https://www.jefferies.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,11.0,0.0,0,
+2026-10-23T08:58:27.960713+00:00,wellington-management-global,wellington-management,Wellington Management,Multi-region,https://wellington.wd5.myworkdayjobs.com/External,workday,job_sources_public_markets.csv,success,41.0,31.0,31,
+2026-10-23T08:58:52.034360+00:00,flossbach-von-storch-global,flossbach-von-storch,Flossbach von Storch,Multi-region,https://flossbach-von-storch-ag.jobs.personio.de,personio,job_sources_public_markets.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:58:53.275109+00:00,vontobel-global,vontobel,Vontobel,Multi-region,https://www.vontobel.com/de-ch/ueber-vontobel/karriere/offene-stellen/,generic,job_sources_public_markets.csv,success,30.0,27.0,27,
+2026-10-23T08:59:43.758357+00:00,brevan-howard-global,brevan-howard,Brevan Howard,Multi-region,https://www.brevanhoward.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:59:45.577206+00:00,pale-fire-capital-global,pale-fire-capital,Pale Fire Capital,Multi-region,https://palefirecapital.com/,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:51:20.709470+00:00,alixpartners-global,alixpartners,AlixPartners,Multi-region,https://job-boards.greenhouse.io/alixpartners,greenhouse,job_sources_consulting.csv,success,1.0,24.0,24,
+2026-10-23T08:51:20.952305+00:00,forvis-mazars-global,forvis-mazars,Forvis Mazars,Multi-region,https://www.forvismazars.com/group/en/join-us,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:51:53.231073+00:00,infosys-consulting-global,infosys-consulting,Infosys Consulting,Multi-region,https://career.infosys.com/,generic,job_sources_consulting.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:51:53.719950+00:00,porsche-consulting-global,porsche-consulting,Porsche Consulting,Multi-region,https://www.porsche-consulting.com/careers/,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://www.porsche-consulting.com/careers/: HTTPError
+2026-10-23T08:51:54.468983+00:00,bcg-global,bcg,Boston Consulting Group,Multi-region,https://careers.bcg.com/global/en/search-results,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:52:24.592461+00:00,cinven-global,cinven,Cinven,Multi-region,https://cinven.pinpointhq.com/,generic,job_sources_pe.csv,zero_jobs,2.0,0.0,0,
+2026-10-23T08:52:26.733711+00:00,pai-global,pai-partners,PAI Partners,Multi-region,https://www.paipartners.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.paipartners.com/careers/: HTTPError
+2026-10-23T08:52:27.358882+00:00,mutares-global,mutares,Mutares,Multi-region,https://career.mutares.com/jobs,teamtailor,job_sources_pe.csv,success,30.0,25.0,25,
+2026-10-23T08:53:02.173241+00:00,eqt-global,eqt,EQT,Multi-region,https://eqtgroup.com/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://eqtgroup.com/careers: HTTPError
+2026-10-23T08:53:03.049013+00:00,verdane-global,verdane,Verdane,Multi-region,https://verdane.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://verdane.com/careers/: HTTPError
+2026-10-23T08:53:03.214670+00:00,man-group-global,man-group,Man Group,Multi-region,https://www.man.com/careers,generic,job_sources_pe.csv,zero_jobs,7.0,0.0,0,
+2026-10-23T08:53:14.867399+00:00,vattenfall-global,vattenfall,Vattenfall,Multi-region,https://careers.smartrecruiters.com/vattenfall,smartrecruiters,job_sources_corporate.csv,success,16.0,15.0,15,
+2026-10-23T08:53:26.281972+00:00,vitol-global,vitol,Vitol,Multi-region,https://careers.smartrecruiters.com/Vitol,smartrecruiters,job_sources_corporate.csv,success,5.0,4.0,4,
+2026-10-23T08:53:29.355991+00:00,bayer-global,bayer,Bayer,Multi-region,https://career.bayer.com/,llm,job_sources_corporate.csv,error,1.0,0.0,0,https://career.bayer.com/: HTTPError
+2026-10-23T08:53:30.339890+00:00,nestle-global,nestle,Nestlé,Multi-region,https://career2.successfactors.eu/careers?company=nestleHRprdBX,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
+2026-10-23T08:53:31.009079+00:00,volvo-group-global,volvo-group,Volvo Group,Multi-region,https://jobs.volvogroup.com/,successfactors,job_sources_corporate.csv,success,30.0,29.0,29,
+2026-10-23T08:54:09.143353+00:00,diageo-global,diageo,Diageo,Multi-region,https://diageo.wd3.myworkdayjobs.com/Diageo_Careers,workday,job_sources_corporate.csv,success,7.0,1.0,1,
+2026-10-23T08:54:18.067027+00:00,wipro-global,wipro,Wipro,Multi-region,https://careers.wipro.com/,successfactors,job_sources_corporate.csv,success,141.0,138.0,138,https://careers.wipro.com/job/Curitiba-Financial-Planning-and-Analysis-BRA-80215-432/1359418455/: SourceTimeout
+2026-10-23T08:58:25.243328+00:00,commerzbank-global,commerzbank,Commerzbank,Multi-region,https://jobs.commerzbank.com/index.php?ac=search_result,llm,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:59:04.922831+00:00,eex-global,eex,EEX Group,Multi-region,https://www.eex-group.com/en/career,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://www.eex-group.com/en/career: HTTPError
+2026-10-23T08:59:06.164096+00:00,zurich-insurance-global,zurich-insurance,Zurich Insurance Group,Multi-region,https://www.careers.zurich.com/,llm,job_sources_financial_services.csv,success,30.0,4.0,4,https://www.careers.zurich.com/\: HTTPError | https://www.careers.zurich.com/search/\: HTTPError
+2026-10-23T08:59:33.864151+00:00,storebrand-global,storebrand,Storebrand,Multi-region,https://storebrand.wd3.myworkdayjobs.com/Storebrand_Careers,workday,job_sources_financial_services.csv,zero_jobs,6.0,0.0,0,
+2026-10-23T08:59:40.708179+00:00,legal-general-global,legal-general,Legal & General,Multi-region,https://careers.legalandgeneral.com/,llm,job_sources_financial_services.csv,success,30.0,1.0,1,
+2026-10-23T09:00:12.609393+00:00,swiss-re-global,swiss-re,Swiss Re,Multi-region,https://www.swissre.com/careers/jobSearch.html,generic,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T09:00:44.622979+00:00,industrivarden-global,industrivarden,Industrivärden,Multi-region,https://www.industrivarden.se/en-gb/career/,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.industrivarden.se/en-gb/career/: HTTPError
+2026-10-23T09:00:46.188477+00:00,morgan-stanley-global,morgan-stanley,Morgan Stanley,Multi-region,https://www.morganstanley.com/people-opportunities,generic,job_sources_investment_banking.csv,zero_jobs,4.0,0.0,0,
+2026-10-23T09:00:48.122314+00:00,houlihan-lokey-global,houlihan-lokey,Houlihan Lokey,Multi-region,https://hl.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,12.0,0.0,0,
+2026-10-23T09:00:56.141887+00:00,t-rowe-price-global,t-rowe-price,T. Rowe Price,Multi-region,https://troweprice.wd5.myworkdayjobs.com/TRowePrice,workday,job_sources_public_markets.csv,success,7.0,1.0,1,
+2026-10-23T09:01:02.650054+00:00,carmignac-global,carmignac,Carmignac,Multi-region,https://www.carmignac.com/en/about-us/careers,llm,job_sources_public_markets.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T09:01:03.537262+00:00,nbim-global,nbim,Norges Bank Investment Management,Multi-region,https://www.nbim.no/en/about-us/career/vacancies/,generic,job_sources_public_markets.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T09:01:25.082482+00:00,qube-rt-global,qube-rt,Qube Research & Technologies,Multi-region,https://www.qube-rt.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:51:19.684357+00:00,fti-consulting-global,fti-consulting,FTI Consulting,Multi-region,https://fticonsult.referrals.selectminds.com/,selectminds,job_sources_consulting.csv,zero_jobs,2.0,0.0,0,
+2026-10-23T08:51:20.922839+00:00,rsm-global,rsm,RSM,Multi-region,https://www.rsm.global/careers,generic,job_sources_consulting.csv,zero_jobs,4.0,0.0,0,
+2026-10-23T08:51:23.398539+00:00,tcs-consulting-global,tcs-consulting,Tata Consultancy Services,Multi-region,https://www.tcs.com/careers,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://www.tcs.com/careers: HTTPError
+2026-10-23T08:51:23.832353+00:00,d-fine-global,d-fine,d-fine,Multi-region,https://www.d-fine.com/en/career/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:52:02.669015+00:00,kearney-global,kearney,Kearney,Multi-region,https://www.kearney.com/careers,generic,job_sources_consulting.csv,zero_jobs,12.0,0.0,0,
+2026-10-23T08:52:14.952365+00:00,bc-partners-global,bc-partners,BC Partners,Multi-region,https://www.bcpartners.com/careers/,generic,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:52:16.753578+00:00,waterland-global,waterland,Waterland Private Equity,Multi-region,https://www.waterlandpe.com/careers/,generic,job_sources_pe.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:53:03.689393+00:00,capvis-global,capvis,Capvis,Multi-region,https://www.capvis.com/careers/,generic,job_sources_pe.csv,zero_jobs,2.0,0.0,0,
+2026-10-23T08:53:06.393256+00:00,permira-global,permira,Permira,Multi-region,https://www.permira.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.permira.com/careers/: HTTPError
+2026-10-23T08:53:07.175476+00:00,enterprise-investors-global,enterprise-investors,Enterprise Investors,Multi-region,https://www.ei.com.pl/en/career/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.ei.com.pl/en/career/: HTTPError
+2026-10-23T08:53:07.666981+00:00,janus-henderson-global,janus-henderson,Janus Henderson,Multi-region,https://www.janushenderson.com/corporate/careers/,generic,job_sources_pe.csv,zero_jobs,19.0,0.0,0,
+2026-10-23T08:53:21.664199+00:00,statkraft-global,statkraft,Statkraft,Multi-region,https://careers.smartrecruiters.com/statkraft1,smartrecruiters,job_sources_corporate.csv,success,8.0,7.0,7,
+2026-10-23T08:53:26.452428+00:00,glencore-global,glencore,Glencore,Multi-region,https://www.glencore.com/en/careers/jobs,llm,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:53:44.974461+00:00,henkel-global,henkel,Henkel,Multi-region,https://www.henkel.com/careers/find-your-job-apply,llm,job_sources_corporate.csv,error,30.0,0.0,0,https://www.henkel.com/careers?view=: ReadTimeout
+2026-10-23T08:54:43.457744+00:00,novartis-global,novartis,Novartis,Multi-region,https://novartis.wd3.myworkdayjobs.com/Novartis_Careers,workday,job_sources_corporate.csv,success,46.0,36.0,36,
+2026-10-23T08:55:33.190207+00:00,ericsson-global,ericsson,Ericsson,Multi-region,https://www.ericsson.com/en/careers,llm,job_sources_corporate.csv,error,1.0,0.0,0,https://www.ericsson.com/en/careers: HTTPError
+2026-10-23T08:55:33.319732+00:00,bae-systems-global,bae-systems,BAE Systems,Multi-region,https://jobsearch.baesystems.com/,generic,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:55:59.670260+00:00,cez-group-global,cez-group,ČEZ Group,Multi-region,https://www.kdejinde.cz/,generic,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:56:02.566905+00:00,dz-bank-global,dz-bank,DZ BANK,Multi-region,https://career012.successfactors.eu/career?company=DZBank,successfactors,job_sources_financial_services.csv,error,1.0,0.0,0,https://career012.successfactors.eu/sitemap.xml: HTTPError
+2026-10-23T08:56:03.616731+00:00,bawag-global,bawag,BAWAG Group,Multi-region,https://jobs.bawaggroup.at,successfactors,job_sources_financial_services.csv,zero_jobs,9.0,0.0,0,
+2026-10-23T08:56:18.339943+00:00,swiss-life-global,swiss-life,Swiss Life Group,Multi-region,https://swisslife.wd3.myworkdayjobs.com/Swiss_Life_International_Division_Career_Site,workday,job_sources_financial_services.csv,zero_jobs,6.0,0.0,0,
+2026-10-23T08:56:25.606840+00:00,hsbc-global,hsbc,HSBC Holdings,Multi-region,https://www.hsbc.com/careers,llm,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:56:45.628938+00:00,marsh-mclennan-global,marsh-mclennan,Marsh McLennan,Multi-region,https://careers.marsh.com/global/en/marsh-search,phenom,job_sources_financial_services.csv,error,0.0,0.0,0,https://careers.marsh.com/global/en/marsh-search?keywords=finance&from=0&s=1: HTTPError
+2026-10-23T08:56:46.549626+00:00,nordea-global,nordea,Nordea,Multi-region,https://www.nordea.com/en/careers,generic,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:57:07.094592+00:00,kinnevik-global,kinnevik,Kinnevik,Multi-region,https://www.kinnevik.com/careers,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.kinnevik.com/careers: HTTPError
+2026-10-23T08:57:07.880478+00:00,jpmorgan-chase-global,jpmorgan-chase,JPMorgan Chase,Multi-region,https://careers.jpmorgan.com/global/en/home,generic,job_sources_investment_banking.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:57:08.990088+00:00,moelis-global,moelis,Moelis & Company,Multi-region,https://www.moelis.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,16.0,0.0,0,
+2026-10-23T08:57:16.843494+00:00,pimco-global,pimco,PIMCO,Multi-region,https://pimco.wd1.myworkdayjobs.com/pimco-careers,workday,job_sources_public_markets.csv,success,58.0,47.0,47,
+2026-10-23T08:57:46.526713+00:00,jupiter-fund-management-global,jupiter-fund-management,Jupiter Fund Management,Multi-region,https://jupiteram.wd3.myworkdayjobs.com/jupiter_careers,workday,job_sources_public_markets.csv,success,12.0,6.0,6,
+2026-10-23T08:57:58.718384+00:00,blackrock-global,blackrock,BlackRock,Multi-region,https://careers.blackrock.com/,generic,job_sources_public_markets.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:58:18.112279+00:00,winton-global,winton,Winton,Multi-region,https://www.winton.com/careers,generic,job_sources_specialist_funds.csv,error,1.0,0.0,0,https://www.winton.com/careers: HTTPError
+2026-10-23T08:51:25.128586+00:00,lek-global,lek-consulting,L.E.K. Consulting,Multi-region,https://www.lek.com/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:51:45.961104+00:00,protiviti-global,protiviti,Protiviti,Multi-region,https://www.protiviti.com/gl-en/careers,generic,job_sources_consulting.csv,zero_jobs,2.0,0.0,0,
+2026-10-23T08:51:46.939518+00:00,cognizant-global,cognizant,Cognizant,Multi-region,https://careers.cognizant.com/global-en/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:52:01.232689+00:00,zuehlke-global,zuehlke,Zühlke,Multi-region,https://www.zuehlke.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:52:22.352869+00:00,arthur-d-little-global,arthur-d-little,Arthur D. Little,Multi-region,https://careers.adlittle.com/,generic,job_sources_consulting.csv,error,1.0,0.0,0,https://careers.adlittle.com/: ConnectTimeout
+2026-10-23T08:53:12.421084+00:00,triton-global,triton,Triton Partners,Multi-region,https://tritonpartners.wd3.myworkdayjobs.com/en-GB/External,workday,job_sources_pe.csv,zero_jobs,6.0,0.0,0,
+2026-10-23T08:53:17.262305+00:00,nordic-capital-global,nordic-capital,Nordic Capital,Multi-region,https://career.nordiccapital.com/jobs,teamtailor,job_sources_pe.csv,success,14.0,4.0,4,
+2026-10-23T08:53:23.470318+00:00,ufenau-global,ufenau,Ufenau Capital Partners,Multi-region,https://ufenau-capital-partners.jobs.personio.com/,personio,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:53:24.007154+00:00,bridgepoint-global,bridgepoint,Bridgepoint Group,Multi-region,https://www.bridgepoint.eu/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.bridgepoint.eu/careers: HTTPError
+2026-10-23T08:53:25.216768+00:00,mid-europa-global,mid-europa,MidEuropa,Multi-region,https://mideuropa.com/careers/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://mideuropa.com/careers/: HTTPError
+2026-10-23T08:53:26.288100+00:00,baillie-gifford-global,baillie-gifford,Baillie Gifford,Multi-region,https://www.bailliegifford.com/en/uk/individual-investors/careers/,generic,job_sources_pe.csv,zero_jobs,21.0,0.0,0,
+2026-10-23T08:54:04.919279+00:00,fortum-global,fortum,Fortum,Multi-region,https://jobs.fortum.com/,successfactors,job_sources_corporate.csv,success,3.0,2.0,2,
+2026-10-23T08:54:07.953266+00:00,volkswagen-global,volkswagen,Volkswagen Group,Multi-region,https://career5.successfactors.eu/careers?company=VWAGLPPROD10,successfactors,job_sources_corporate.csv,error,1.0,0.0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
+2026-10-23T08:54:08.432587+00:00,continental-global,continental,Continental,Multi-region,https://careers.smartrecruiters.com/Continental,smartrecruiters,job_sources_corporate.csv,success,30.0,29.0,29,
+2026-10-23T08:54:26.077479+00:00,roche-global,roche,Roche,Multi-region,https://roche.wd3.myworkdayjobs.com/roche-ext,workday,job_sources_corporate.csv,success,11.0,4.0,4,
+2026-10-23T08:54:34.921486+00:00,nokia-global,nokia,Nokia,Multi-region,https://www.nokia.com/about-us/careers/,llm,job_sources_corporate.csv,error,1.0,0.0,0,https://www.nokia.com/about-us/careers/: HTTPError
+2026-10-23T08:54:35.138824+00:00,rolls-royce-global,rolls-royce,Rolls-Royce,Multi-region,https://rollsroyce.wd3.myworkdayjobs.com/professional,workday,job_sources_corporate.csv,error,0.0,0.0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://rollsroyce.wd3.myworkdayjobs.com/wday/cxs/rollsroyce/professional/jobs
+2026-10-23T08:54:39.141436+00:00,siemens-global,siemens,Siemens,Multi-region,https://www.siemens.com/de-de/company/jobs/,generic,job_sources_corporate.csv,zero_jobs,18.0,0.0,0,
+2026-10-23T08:54:53.686013+00:00,kfw-global,kfw,KfW Group,Multi-region,https://www.kfw.de/About-KfW/Career/,llm,job_sources_financial_services.csv,zero_jobs,17.0,0.0,0,
+2026-10-23T08:55:09.376805+00:00,oekb-global,oekb,OeKB Group,Multi-region,https://www.oekb.at/jobs-und-karriere.html,llm,job_sources_financial_services.csv,zero_jobs,26.0,0.0,0,
+2026-10-23T08:55:32.533970+00:00,zkb-global,zkb,Zürcher Kantonalbank,Multi-region,https://www.zkb.ch/en/home/career.html,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://www.zkb.ch/en/home/career.html: HTTPError
+2026-10-23T08:55:33.134379+00:00,barclays-global,barclays,Barclays,Multi-region,https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays,workday,job_sources_financial_services.csv,success,12.0,6.0,6,
+2026-10-23T08:55:42.141948+00:00,jt-finance-group-global,jt-finance-group,J&T Finance Group,Multi-region,https://www.jtfg.com/,generic,job_sources_financial_services.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:55:43.593674+00:00,seb-global,seb,SEB Group,Multi-region,https://sebgroup.com/career,generic,job_sources_financial_services.csv,zero_jobs,21.0,0.0,0,
+2026-10-23T08:55:59.367519+00:00,exor-global,exor,Exor,Multi-region,https://www.exor.com/pages/exor/careers,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.exor.com/pages/exor/careers: HTTPError
+2026-10-23T08:56:00.034757+00:00,citigroup-global,citigroup,Citi,Multi-region,https://jobs.citi.com/,generic,job_sources_investment_banking.csv,success,30.0,4.0,4,
+2026-10-23T08:56:14.237509+00:00,pjt-partners-global,pjt-partners,PJT Partners,Multi-region,https://pjtpartners.com/careers,generic,job_sources_investment_banking.csv,zero_jobs,3.0,0.0,0,
+2026-10-23T08:56:15.861278+00:00,franklin-templeton-global,franklin-templeton,Franklin Templeton,Multi-region,https://franklintempleton.wd5.myworkdayjobs.com/Primary-External-1,workday,job_sources_public_markets.csv,zero_jobs,6.0,0.0,0,
+2026-10-23T08:56:21.109027+00:00,federated-hermes-global,federated-hermes,Federated Hermes,Multi-region,https://www.federatedhermes.com/us/careers/,llm,job_sources_public_markets.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:56:21.830362+00:00,schroders-global,schroders,Schroders,Multi-region,https://www.schroders.com/en/global/individual/careers/,generic,job_sources_public_markets.csv,zero_jobs,26.0,0.0,0,
+2026-10-23T08:56:43.964626+00:00,aqr-global,aqr,AQR Capital Management,Multi-region,https://www.aqr.com/About-Us/Careers,generic,job_sources_specialist_funds.csv,zero_jobs,2.0,0.0,0,
+2026-10-23T08:51:26.855266+00:00,horvath-global,horvath,Horváth,Multi-region,https://horvath.wd3.myworkdayjobs.com/en-US/Horvath_Careers,workday,job_sources_consulting.csv,zero_jobs,6.0,0.0,0,
+2026-10-23T08:51:33.483624+00:00,sia-partners-global,sia-partners,Sia Partners,Multi-region,https://www.sia-partners.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:52:01.098887+00:00,occ-strategy-global,occ-strategy,OC&C Strategy Consultants,Multi-region,https://www.occstrategy.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:52:32.202204+00:00,synpulse-global,synpulse,Synpulse,Multi-region,https://www.synpulse.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,4.0,0.0,0,
+2026-10-23T08:52:35.999029+00:00,bearingpoint-global,bearingpoint,BearingPoint,Multi-region,https://www.bearingpoint.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:53:31.162718+00:00,ardian-global,ardian,Ardian,Multi-region,https://ardian.wd103.myworkdayjobs.com/ArdianCareers,workday,job_sources_pe.csv,success,9.0,3.0,3,
+2026-10-23T08:53:40.469089+00:00,altor-global,altor,Altor,Multi-region,https://careers.altor.com/,teamtailor,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:53:42.193186+00:00,apollo-global,apollo,Apollo Global Management,Multi-region,https://www.apollo.com/careers,generic,job_sources_pe.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:53:42.957699+00:00,hg-global,hg,Hg,Multi-region,https://hgcapital.com/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://hgcapital.com/careers: HTTPError
+2026-10-23T08:53:43.192281+00:00,innova-capital-global,innova-capital,Innova Capital,Multi-region,https://innovacap.com/career/,generic,job_sources_pe.csv,error,1.0,0.0,0,https://innovacap.com/career/: HTTPError
+2026-10-23T08:53:43.785679+00:00,abrdn-global,abrdn,abrdn,Multi-region,https://www.abrdn.com/en/corporate/careers,generic,job_sources_pe.csv,error,1.0,0.0,0,https://www.abrdn.com/en/corporate/careers: HTTPError
+2026-10-23T08:53:44.776114+00:00,neste-global,neste,Neste,Multi-region,https://jobs.neste.com/,successfactors,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:53:45.287573+00:00,bmw-global,bmw,BMW Group,Multi-region,https://www.bmwgroup.jobs/en/search.html,llm,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:54:03.484801+00:00,infineon-global,infineon,Infineon,Multi-region,https://www.infineon.com/cms/en/careers/,llm,job_sources_corporate.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:54:45.875173+00:00,sandoz-global,sandoz,Sandoz,Multi-region,https://sandoz.wd103.myworkdayjobs.com/Sandoz_Careers,workday,job_sources_corporate.csv,zero_jobs,6.0,0.0,0,
+2026-10-23T08:54:50.327506+00:00,kone-global,kone,KONE,Multi-region,https://kone.wd3.myworkdayjobs.com/Careers,workday,job_sources_corporate.csv,success,18.0,9.0,9,
+2026-10-23T08:55:10.149264+00:00,national-grid-global,national-grid,National Grid,Multi-region,https://jobs.nationalgrid.com/uk/jobs,llm,job_sources_corporate.csv,zero_jobs,1.0,0.0,0,
+2026-10-23T08:55:11.791194+00:00,omv-global,omv,OMV Group,Multi-region,https://careers.omv.com/?locale=en_US,generic,job_sources_corporate.csv,success,30.0,13.0,13,
+2026-10-23T08:55:47.205279+00:00,helaba-global,helaba,Helaba,Multi-region,https://www.helaba.com/int/career/,llm,job_sources_financial_services.csv,error,1.0,0.0,0,https://www.helaba.com/int/career/: HTTPError
+2026-10-23T08:55:48.673355+00:00,vienna-insurance-group-global,vienna-insurance-group,Vienna Insurance Group,Multi-region,https://group.vig/career/,llm,job_sources_financial_services.csv,zero_jobs,30.0,0.0,0,
+2026-10-23T08:56:28.629955+00:00,swedbank-global,swedbank,Swedbank,Multi-region,https://jobs.swedbank.com/,llm,job_sources_financial_services.csv,success,30.0,15.0,15,
+2026-10-23T08:56:51.271840+00:00,lloyds-banking-group-global,lloyds-banking-group,Lloyds Banking Group,Multi-region,https://lbg.wd3.myworkdayjobs.com/LBG_Careers,workday,job_sources_financial_services.csv,success,16.0,8.0,8,
+2026-10-23T08:57:09.378889+00:00,erste-group-global,erste-group,Erste Group,Multi-region,https://www.erstegroup.com/en/career,generic,job_sources_financial_services.csv,zero_jobs,15.0,0.0,0,
+2026-10-23T08:57:21.745631+00:00,danske-bank-global,danske-bank,Danske Bank,Multi-region,https://danskebank.com/careers,generic,job_sources_financial_services.csv,error,19.0,0.0,0,https://danskebank.com/careers/flexible-work: ReadTimeout
+2026-10-23T08:58:10.865707+00:00,porsche-se-global,porsche-se,Porsche Automobil Holding,Multi-region,https://www.porsche-se.com/en/company/career,llm,job_sources_holdings.csv,error,1.0,0.0,0,https://www.porsche-se.com/en/company/career: HTTPError
+2026-10-23T08:58:11.520729+00:00,bank-of-america-global,bank-of-america,Bank of America,Multi-region,https://careers.bankofamerica.com/en-us,generic,job_sources_investment_banking.csv,success,30.0,10.0,10,
+2026-10-23T08:58:36.626754+00:00,perella-weinberg-global,perella-weinberg,Perella Weinberg Partners,Multi-region,https://pwpartners.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,9.0,0.0,0,
+2026-10-23T08:58:41.035143+00:00,robeco-global,robeco,Robeco,Multi-region,https://robeco.wd3.myworkdayjobs.com/robecoexternalcareers,workday,job_sources_public_markets.csv,success,9.0,3.0,3,
+2026-10-23T08:58:48.530528+00:00,neuberger-berman-global,neuberger-berman,Neuberger Berman,Multi-region,https://nb.wd1.myworkdayjobs.com/NBCareers,workday,job_sources_public_markets.csv,success,9.0,3.0,3,
+2026-10-23T08:58:54.842829+00:00,citadel-global,citadel,Citadel,Multi-region,https://www.citadel.com/careers/,generic,job_sources_specialist_funds.csv,error,1.0,0.0,0,https://www.citadel.com/careers/: HTTPError
+2026-10-23T08:58:54.957907+00:00,two-sigma-global,two-sigma,Two Sigma,Multi-region,https://www.twosigma.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,30.0,0.0,0,
+2026-10-24T08:25:26.247291+00:00,bain-global,bain,Bain & Company,Multi-region,https://www.bain.com/careers/find-a-role/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:25:42.103479+00:00,zeb-global,zeb-consulting,zeb consulting,Multi-region,https://career.zeb-consulting.com/jobs/,successfactors,job_sources_consulting.csv,success,48,47,47,
+2026-10-24T08:26:23.528562+00:00,pa-consulting-global,pa-consulting,PA Consulting,Multi-region,https://www.paconsulting.com/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:27:08.842046+00:00,implement-consulting-global,implement-consulting,Implement Consulting Group,Multi-region,https://implementconsultinggroup.com/career,generic,job_sources_consulting.csv,error,1,0,0,https://implementconsultinggroup.com/career: HTTPError
+2026-10-24T08:27:09.600451+00:00,nera-global,nera,NERA Economic Consulting,Multi-region,https://careers.marshmclennan.com/global/en/nera,generic,job_sources_consulting.csv,error,1,0,0,https://careers.marshmclennan.com/global/en/nera: HTTPError
+2026-10-24T08:27:11.195000+00:00,accenture-global,accenture,Accenture,Multi-region,https://www.accenture.com/us-en/careers/jobsearch,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:27:24.912127+00:00,tpg-global,tpg,TPG,Multi-region,https://job-boards.greenhouse.io/tpgcareers,greenhouse,job_sources_pe.csv,zero_jobs,1,0,0,
+2026-10-24T08:27:25.024395+00:00,axcel-global,axcel,Axcel,Multi-region,https://axcel.dk/career/,generic,job_sources_pe.csv,error,1,0,0,https://axcel.dk/career/: HTTPError
+2026-10-24T08:27:26.029818+00:00,kkr-global,kkr,KKR,Multi-region,https://www.kkr.com/careers,generic,job_sources_pe.csv,zero_jobs,30,0,0,
+2026-10-24T08:27:40.441693+00:00,brookfield-global,brookfield,Brookfield Asset Management,Multi-region,https://www.brookfield.com/careers,generic,job_sources_pe.csv,zero_jobs,30,0,0,
+2026-10-24T08:28:02.340577+00:00,fidelity-international-global,fidelity-international,Fidelity International,Multi-region,https://careers.fidelityinternational.com/,generic,job_sources_pe.csv,zero_jobs,30,0,0,
+2026-10-24T08:28:36.350091+00:00,rwe-global,rwe,RWE,Multi-region,https://jobs.rwe.com/,successfactors,job_sources_corporate.csv,success,30,29,29,
+2026-10-24T08:29:03.880017+00:00,mol-global,mol,MOL Group,Multi-region,https://molgroup.taleo.net/careersection/external/jobsearch.ftl,llm,job_sources_corporate.csv,zero_jobs,2,0,0,
+2026-10-24T08:29:05.246263+00:00,mercedes-benz-global,mercedes-benz,Mercedes-Benz Group,Multi-region,https://jobs.mercedes-benz.com/enUS,llm,job_sources_corporate.csv,zero_jobs,1,0,0,
+2026-10-24T08:29:06.194868+00:00,airbus-global,airbus,Airbus,Multi-region,https://ag.wd3.myworkdayjobs.com/Airbus,workday,job_sources_corporate.csv,success,12,5,5,
+2026-10-24T08:29:18.132310+00:00,holcim-global,holcim,Holcim,Multi-region,https://careers.holcimgroup.com/?locale=en_US,successfactors,job_sources_corporate.csv,success,8,6,6,
+2026-10-24T08:29:24.137494+00:00,wartsila-global,wartsila,Wärtsilä,Multi-region,https://career2.successfactors.eu/career?company=Wartsila,successfactors,job_sources_corporate.csv,error,1,0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
+2026-10-24T08:29:24.488792+00:00,reckitt-global,reckitt,Reckitt,Multi-region,https://career2.successfactors.eu/careers?company=reckittb01,successfactors,job_sources_corporate.csv,error,1,0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
+2026-10-24T08:29:24.847234+00:00,orsted-global,orsted,Ørsted,Multi-region,https://orsted.com/en/careers/vacancies-list,generic,job_sources_corporate.csv,error,1,0,0,https://orsted.com/en/careers/vacancies-list: HTTPError
+2026-10-24T08:29:25.251366+00:00,lbbw-global,lbbw,LBBW,Multi-region,https://karriere.lbbw.de/,successfactors,job_sources_financial_services.csv,zero_jobs,46,0,0,
+2026-10-24T08:30:04.969483+00:00,uniqa-global,uniqa,UNIQA Insurance Group,Multi-region,https://careers.uniqagroup.com/,successfactors,job_sources_financial_services.csv,success,4,3,3,
+2026-10-24T08:30:08.357333+00:00,handelsbanken-global,handelsbanken,Handelsbanken,Multi-region,https://www.handelsbanken.com/en/careers/vacancies,llm,job_sources_financial_services.csv,zero_jobs,1,0,0,
+2026-10-24T08:30:09.762308+00:00,natwest-global,natwest,NatWest Group,Multi-region,https://jobs.natwestgroup.com/search/jobs,llm,job_sources_financial_services.csv,error,1,0,0,https://jobs.natwestgroup.com/search/jobs: HTTPError
+2026-10-24T08:30:09.851173+00:00,allianz-group-global,allianz-group,Allianz Group,Multi-region,https://careers.allianz.com/global/en,generic,job_sources_financial_services.csv,zero_jobs,30,0,0,
+2026-10-24T08:30:34.352321+00:00,ebrd-global,ebrd,European Bank for Reconstruction and Development,Multi-region,https://jobs.ebrd.com/,generic,job_sources_financial_services.csv,success,30,6,6,
+2026-10-24T08:31:03.508420+00:00,ap-moller-holding-global,ap-moller-holding,A.P. Moller Holding,Multi-region,https://apmoller.com/careers/,llm,job_sources_holdings.csv,zero_jobs,1,0,0,
+2026-10-24T08:31:04.640137+00:00,lazard-global,lazard,Lazard,Multi-region,https://www.lazard.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,30,0,0,
+2026-10-24T08:31:18.278587+00:00,nomura-global,nomura,Nomura,Multi-region,https://www.nomura.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,22,0,0,
+2026-10-24T08:31:30.866906+00:00,columbia-threadneedle-global,columbia-threadneedle,Columbia Threadneedle Investments,Multi-region,https://ameriprise.wd5.myworkdayjobs.com/Ameriprise,workday,job_sources_public_markets.csv,error,0,0,0,Workday listing: HTTPError: 502 Server Error: Bad Gateway for url: https://ameriprise.wd5.myworkdayjobs.com/wday/cxs/ameriprise/Ameriprise/jobs
+2026-10-24T08:31:33.846256+00:00,deutsche-boerse-global,deutsche-boerse,Deutsche Börse Group,Multi-region,https://careers.deutsche-boerse.com/,generic,job_sources_public_markets.csv,success,30,15,15,
+2026-10-24T08:32:09.898996+00:00,millennium-management-global,millennium-management,Millennium Management,Multi-region,https://www.mlp.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,4,0,0,
+2026-10-24T08:32:11.754877+00:00,de-shaw-global,de-shaw,D. E. Shaw,Multi-region,https://www.deshaw.com/careers,generic,job_sources_specialist_funds.csv,success,30,25,25,
+2026-10-24T08:25:25.867199+00:00,roland-berger-global,roland-berger,Roland Berger,Multi-region,https://www.rolandberger.com/en/Join/All-Jobs/,smartrecruiters,job_sources_consulting.csv,zero_jobs,1,0,0,
+2026-10-24T08:25:26.349554+00:00,capco-global,capco,Capco,Multi-region,https://job-boards.greenhouse.io/capco,greenhouse,job_sources_consulting.csv,success,1,71,71,
+2026-10-24T08:25:27.323820+00:00,capgemini-invent-global,capgemini-invent,Capgemini Invent,Multi-region,https://www.capgemini.com/careers/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:25:43.933613+00:00,valcon-global,valcon,Valcon,Multi-region,https://valcon.com/careers/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:26:22.174190+00:00,compass-lexecon-global,compass-lexecon,Compass Lexecon,Multi-region,https://www.compasslexecon.com/careers/,generic,job_sources_consulting.csv,zero_jobs,12,0,0,
+2026-10-24T08:26:29.705885+00:00,simon-kucher-global,simon-kucher,Simon-Kucher,Multi-region,https://www.simon-kucher.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:26:47.195227+00:00,bain-capital-global,bain-capital,Bain Capital,Multi-region,https://baincapital.wd1.myworkdayjobs.com/External_Public,workday,job_sources_pe.csv,success,18,10,10,
+2026-10-24T08:27:00.665347+00:00,fsn-capital-global,fsn-capital,FSN Capital,Multi-region,https://www.fsncapital.com/careers,generic,job_sources_pe.csv,error,1,0,0,https://www.fsncapital.com/careers: HTTPError
+2026-10-24T08:27:02.385725+00:00,carlyle-global,carlyle,Carlyle,Multi-region,https://www.carlyle.com/careers,generic,job_sources_pe.csv,error,1,0,0,https://www.carlyle.com/careers: HTTPError
+2026-10-24T08:27:02.587681+00:00,macquarie-global,macquarie,Macquarie Group,Multi-region,https://www.macquarie.com/careers.html,generic,job_sources_pe.csv,zero_jobs,22,0,0,
+2026-10-24T08:27:15.346441+00:00,invesco-global,invesco,Invesco,Multi-region,https://careers.invesco.com/,generic,job_sources_pe.csv,error,30,0,0,https://careers.invesco.com/author/alphanbowman/: HTTPError | https://careers.invesco.com/?page_id=1029: HTTPError
+2026-10-24T08:27:42.540431+00:00,eon-global,eon,E.ON,Multi-region,https://careers.eon.com/,llm,job_sources_corporate.csv,zero_jobs,17,0,0,
+2026-10-24T08:28:05.470437+00:00,shell-global,shell,Shell,Multi-region,https://shell.wd3.myworkdayjobs.com/ShellCareers,workday,job_sources_corporate.csv,success,10,4,4,
+2026-10-24T08:28:16.791241+00:00,porsche-global,porsche,Porsche AG,Multi-region,https://jobs.porsche.com/index.php?ac=start,llm,job_sources_corporate.csv,error,30,0,0,https://jobs.porsche.com/(!'uid=lang'): HTTPError
+2026-10-24T08:28:49.234767+00:00,abb-global,abb,ABB,Multi-region,https://careers.abb/global/en/search-results,phenom,job_sources_corporate.csv,success,131,118,118,https://careers.abb/global/en/job/JR00047993: SourceTimeout
+2026-10-24T08:31:37.068269+00:00,novo-nordisk-global,novo-nordisk,Novo Nordisk,Multi-region,https://career2.successfactors.eu/careers?company=novonordisk,successfactors,job_sources_corporate.csv,error,1,0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
+2026-10-24T08:31:37.808742+00:00,unilever-global,unilever,Unilever,Multi-region,https://unilever.wd3.myworkdayjobs.com/Unilever_Experienced_Professionals,workday,job_sources_corporate.csv,success,36,25,25,
+2026-10-24T08:32:17.604762+00:00,capgemini-global,capgemini,Capgemini,Multi-region,https://www.capgemini.com/careers/,llm,job_sources_corporate.csv,zero_jobs,30,0,0,
+2026-10-24T08:32:34.490427+00:00,equinor-global,equinor,Equinor,Multi-region,https://www.equinor.com/careers,generic,job_sources_corporate.csv,zero_jobs,30,0,0,
+2026-10-24T08:33:17.047312+00:00,bayernlb-global,bayernlb,BayernLB,Multi-region,https://www.bayernlb.com/internet/en/blb/resp/career/career.jsp,llm,job_sources_financial_services.csv,error,1,0,0,https://www.bayernlb.com/internet/en/blb/resp/career/career.jsp: HTTPError
+2026-10-24T08:33:18.280979+00:00,julius-baer-global,julius-baer,Julius Baer,Multi-region,https://juliusbaer.wd3.myworkdayjobs.com/External,workday,job_sources_financial_services.csv,error,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://juliusbaer.wd3.myworkdayjobs.com/wday/cxs/juliusbaer/External/jobs
+2026-10-24T08:33:22.324138+00:00,dnb-global,dnb,DNB Group,Multi-region,https://careers.smartrecruiters.com/DNB1,smartrecruiters,job_sources_financial_services.csv,zero_jobs,1,0,0,
+2026-10-24T08:33:22.787635+00:00,standard-chartered-global,standard-chartered,Standard Chartered,Multi-region,https://jobs.standardchartered.com/,successfactors,job_sources_financial_services.csv,error,141,0,0,https://jobs.standardchartered.com/job/Shanghai-Senior-Investment-Advisor/1370315657/: SourceTimeout
+2026-10-24T08:35:50.354187+00:00,munich-re-global,munich-re,Munich Re Group,Multi-region,https://careers.munichre.com/en/munichre,generic,job_sources_financial_services.csv,success,30,3,3,
+2026-10-24T08:36:10.410700+00:00,csg-global,csg,Czechoslovak Group,Multi-region,https://czechoslovakgroup.com/en/career,llm,job_sources_holdings.csv,zero_jobs,1,0,0,
+2026-10-24T08:36:11.561180+00:00,ppf-group-global,ppf-group,PPF Group,Multi-region,https://www.ppf.eu/en/careers,generic,job_sources_holdings.csv,zero_jobs,12,0,0,
+2026-10-24T08:36:23.451907+00:00,rothschild-co-global,rothschild-co,Rothschild & Co,Multi-region,https://www.rothschildandco.com/en/careers/,generic,job_sources_investment_banking.csv,zero_jobs,30,0,0,
+2026-10-24T08:36:53.093555+00:00,wood-company-global,wood-company,WOOD & Company,Multi-region,https://wood.cz/kariera/,generic,job_sources_investment_banking.csv,zero_jobs,1,0,0,
+2026-10-24T08:36:54.642606+00:00,ninety-one-global,ninety-one,Ninety One,Multi-region,https://externalcareers.ninetyone.com/experienced-hires/,llm,job_sources_public_markets.csv,zero_jobs,2,0,0,
+2026-10-24T08:36:57.424358+00:00,dws-global,dws,DWS Group,Multi-region,https://www.dws.com/en-us/about-us/careers/,generic,job_sources_public_markets.csv,zero_jobs,1,0,0,
+2026-10-24T08:36:58.754907+00:00,point72-global,point72,Point72,Multi-region,https://careers.point72.com/,generic,job_sources_specialist_funds.csv,zero_jobs,1,0,0,
+2026-10-24T08:37:00.030381+00:00,rsj-global,rsj,RSJ,Multi-region,https://www.rsj.com/cz/investments/kariera.html,generic,job_sources_specialist_funds.csv,zero_jobs,1,0,0,
+2026-10-24T08:25:24.188313+00:00,oliver-wyman-global,oliver-wyman,Oliver Wyman,Multi-region,https://careers.marsh.com/global/en/oliver-wyman,phenom,job_sources_consulting.csv,zero_jobs,1,0,0,
+2026-10-24T08:25:24.584484+00:00,grant-thornton-global,grant-thornton,Grant Thornton,Multi-region,https://www.grantthornton.global/en/careers/,generic,job_sources_consulting.csv,zero_jobs,17,0,0,
+2026-10-24T08:25:36.350345+00:00,ibm-consulting-global,ibm-consulting,IBM Consulting,Multi-region,https://www.ibm.com/careers/search,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:25:51.374019+00:00,baringa-global,baringa,Baringa,Multi-region,https://www.baringa.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,11,0,0,
+2026-10-24T08:25:59.919300+00:00,charles-river-associates-global,charles-river-associates,Charles River Associates,Multi-region,https://www.crai.com/careers/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:26:16.873966+00:00,partners-group-global,partners-group,Partners Group,Multi-region,https://jobs.partnersgroup.com/,successfactors,job_sources_pe.csv,success,14,13,13,
+2026-10-24T08:26:28.693705+00:00,ares-global,ares,Ares Management,Multi-region,https://aresmgmt.wd1.myworkdayjobs.com/en-US/External,workday,job_sources_pe.csv,success,15,8,8,
+2026-10-24T08:26:36.348019+00:00,summa-equity-global,summa-equity,Summa Equity,Multi-region,https://summaequity.com/career/,generic,job_sources_pe.csv,zero_jobs,4,0,0,
+2026-10-24T08:26:41.035865+00:00,blackstone-global,blackstone,Blackstone,Multi-region,https://www.blackstone.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://www.blackstone.com/careers/: HTTPError
+2026-10-24T08:26:41.147857+00:00,antin-global,antin,Antin Infrastructure Partners,Multi-region,https://www.antin-ip.com/careers,generic,job_sources_pe.csv,zero_jobs,1,0,0,
+2026-10-24T08:26:42.126898+00:00,vanguard-global,vanguard,Vanguard,Multi-region,https://www.vanguardjobs.com/,generic,job_sources_pe.csv,success,30,3,3,
+2026-10-24T08:27:01.793111+00:00,enbw-global,enbw,EnBW,Multi-region,https://careers.enbw.com/de/de,phenom,job_sources_corporate.csv,zero_jobs,1,0,0,
+2026-10-24T08:27:02.527841+00:00,bp-global,bp,bp,Multi-region,https://bpinternational.wd3.myworkdayjobs.com/bpCareers,workday,job_sources_corporate.csv,success,37,26,26,
+2026-10-24T08:27:32.998721+00:00,bosch-global,bosch,Bosch,Multi-region,https://careers.smartrecruiters.com/BoschGroup,smartrecruiters,job_sources_corporate.csv,success,141,140,140,
+2026-10-24T08:29:07.545468+00:00,sap-global,sap,SAP,Multi-region,https://jobs.sap.com/,successfactors,job_sources_corporate.csv,zero_jobs,1,0,0,
+2026-10-24T08:29:07.763739+00:00,maersk-global,maersk,A.P. Moller - Maersk,Multi-region,https://maersk.wd3.myworkdayjobs.com/Maersk_Careers,workday,job_sources_corporate.csv,success,7,1,1,
+2026-10-24T08:29:12.150623+00:00,astrazeneca-global,astrazeneca,AstraZeneca,Multi-region,https://astrazeneca.wd3.myworkdayjobs.com/Careers,workday,job_sources_corporate.csv,success,18,9,9,
+2026-10-24T08:29:25.128502+00:00,ibm-global,ibm,IBM,Multi-region,https://careers.ibm.com/en_US/careers,llm,job_sources_corporate.csv,zero_jobs,1,0,0,
+2026-10-24T08:29:25.584157+00:00,evotec-se-global,evotec-se,Evotec SE,Multi-region,https://evotecgroup.wd3.myworkdayjobs.com/Evotec_Career_Site,workday,job_sources_corporate.csv,error,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://evotecgroup.wd3.myworkdayjobs.com/wday/cxs/evotecgroup/Evotec_Career_Site/jobs
+2026-10-24T08:29:28.169496+00:00,ing-global,ing,ING Group,Multi-region,https://ing.wd3.myworkdayjobs.com/ICSGBLCOR,workday,job_sources_financial_services.csv,success,22,16,16,
+2026-10-24T08:29:41.322591+00:00,pictet-global,pictet,Pictet Group,Multi-region,https://career5.successfactors.eu/career?company=banquepict,successfactors,job_sources_financial_services.csv,error,1,0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
+2026-10-24T08:29:41.898790+00:00,op-financial-global,op-financial,OP Financial Group,Multi-region,https://www.op-careers.fi/,llm,job_sources_financial_services.csv,error,1,0,0,https://www.op-careers.fi/: SSLError
+2026-10-24T08:29:42.459108+00:00,lseg-global,lseg,London Stock Exchange Group,Multi-region,https://lseg.wd3.myworkdayjobs.com/Careers,workday,job_sources_financial_services.csv,error,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://lseg.wd3.myworkdayjobs.com/wday/cxs/lseg/Careers/jobs
+2026-10-24T08:29:45.718824+00:00,rbi-global,rbi,Raiffeisen Bank International,Multi-region,https://jobs.rbinternational.com/,generic,job_sources_financial_services.csv,success,30,15,15,
+2026-10-24T08:30:11.015138+00:00,cpi-property-group-global,cpi-property-group,CPI Property Group,Multi-region,https://www.cpipg.com/careers,llm,job_sources_holdings.csv,error,1,0,0,https://www.cpipg.com/careers: HTTPError
+2026-10-24T08:30:12.065452+00:00,kkcg-global,kkcg,KKCG,Multi-region,https://kkcg.com/en/careers,generic,job_sources_holdings.csv,zero_jobs,6,0,0,
+2026-10-24T08:30:16.872674+00:00,evercore-global,evercore,Evercore,Multi-region,https://www.evercore.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,10,0,0,
+2026-10-24T08:30:21.479276+00:00,capital-group-global,capital-group,Capital Group,Multi-region,https://capgroup.wd1.myworkdayjobs.com/capitalgroupcareers,workday,job_sources_public_markets.csv,success,17,10,10,
+2026-10-24T08:30:29.315989+00:00,union-investment-global,union-investment,Union Investment,Multi-region,https://unternehmen.union-investment.de/startseite-unternehmen/karriere,llm,job_sources_public_markets.csv,zero_jobs,1,0,0,
+2026-10-24T08:30:30.730261+00:00,six-group-global,six-group,SIX Group,Multi-region,https://www.six-group.com/en/careers.html,generic,job_sources_public_markets.csv,zero_jobs,30,0,0,
+2026-10-24T08:30:59.566948+00:00,marshall-wace-global,marshall-wace,Marshall Wace,Multi-region,https://www.mwam.com/careers/,generic,job_sources_specialist_funds.csv,error,1,0,0,https://www.mwam.com/careers/: HTTPError
+2026-10-24T08:30:59.980774+00:00,conseq-global,conseq,Conseq Investment Management,Multi-region,https://www.conseq.cz/kariera,generic,job_sources_specialist_funds.csv,zero_jobs,1,0,0,
+2026-10-24T08:25:28.452969+00:00,alvarez-marsal-global,alvarez-marsal,Alvarez & Marsal,Multi-region,https://careers.alvarezandmarsal.com/,selectminds,job_sources_consulting.csv,error,1,0,0,https://careers.alvarezandmarsal.com/: HTTPError
+2026-10-24T08:25:28.693810+00:00,bdo-global,bdo,BDO,Multi-region,https://www.bdo.global/en-gb/careers,generic,job_sources_consulting.csv,zero_jobs,2,0,0,
+2026-10-24T08:25:32.114974+00:00,cgi-global,cgi,CGI,Multi-region,https://www.cgi.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:25:59.062512+00:00,newton-europe-global,newton-europe,Newton Europe,Multi-region,https://www.newtoneurope.com/careers/,generic,job_sources_consulting.csv,zero_jobs,1,0,0,
+2026-10-24T08:26:01.707660+00:00,mckinsey-global,mckinsey,McKinsey & Company,Multi-region,https://www.mckinsey.com/careers/search-jobs,generic,job_sources_consulting.csv,error,1,0,0,https://www.mckinsey.com/careers/search-jobs: ReadTimeout
+2026-10-24T08:26:26.940265+00:00,advent-global,advent-international,Advent International,Multi-region,https://www.adventinternational.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://www.adventinternational.com/careers/: HTTPError
+2026-10-24T08:26:27.534452+00:00,icg-global,icg,Intermediate Capital Group,Multi-region,https://icg.wd3.myworkdayjobs.com/en-US/external_careers,workday,job_sources_pe.csv,success,9,3,3,
+2026-10-24T08:26:34.934391+00:00,dbag-global,dbag,Deutsche Beteiligungs AG,Germany,https://dbag.careers.hibob.com/jobs,generic,job_sources_pe.csv,zero_jobs,1,0,0,
+2026-10-24T08:26:35.941468+00:00,cvc-global,cvc,CVC,Multi-region,https://www.cvc.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://www.cvc.com/careers/: HTTPError
+2026-10-24T08:26:36.864925+00:00,eurazeo-global,eurazeo,Eurazeo,Multi-region,https://www.eurazeo.com/en/group/careers,generic,job_sources_pe.csv,error,1,0,0,https://www.eurazeo.com/en/group/careers: HTTPError
+2026-10-24T08:26:38.022302+00:00,mg-global,mg,M&G,Multi-region,https://www.mandg.com/careers,generic,job_sources_pe.csv,zero_jobs,1,0,0,
+2026-10-24T08:26:40.147964+00:00,uniper-global,uniper,Uniper,Multi-region,https://career5.successfactors.eu/career?company=UniperProd,successfactors,job_sources_corporate.csv,error,1,0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
+2026-10-24T08:26:42.031295+00:00,trafigura-global,trafigura,Trafigura,Multi-region,https://trafigura.wd3.myworkdayjobs.com/TrafiguraCareerSite,workday,job_sources_corporate.csv,success,18,10,10,
+2026-10-24T08:27:02.872161+00:00,basf-global,basf,BASF,Multi-region,https://career5.successfactors.eu/career?company=C0000159936P,successfactors,job_sources_corporate.csv,error,1,0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
+2026-10-24T08:27:03.512359+00:00,dhl-global,dhl,DHL Group,Multi-region,https://careers.dhl.com/global/en/search-results,phenom,job_sources_corporate.csv,success,126,113,113,https://careers.dhl.com/global/en/job/11144102: SourceTimeout
+2026-10-24T08:29:28.300710+00:00,carlsberg-global,carlsberg,Carlsberg Group,Multi-region,https://career2.successfactors.eu/career?company=carlsbergg,successfactors,job_sources_corporate.csv,error,1,0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
+2026-10-24T08:29:29.062891+00:00,gsk-global,gsk,GSK,Multi-region,https://gsk.wd5.myworkdayjobs.com/GSKCareers,workday,job_sources_corporate.csv,success,21,12,12,
+2026-10-24T08:29:45.317718+00:00,infosys-global,infosys,Infosys,Multi-region,https://career.infosys.com/joblist,llm,job_sources_corporate.csv,error,1,0,0,https://career.infosys.com/joblist: HTTPError
+2026-10-24T08:29:45.553734+00:00,deutsche-bank-global,deutsche-bank,Deutsche Bank,Multi-region,https://db.wd3.myworkdayjobs.com/DBWebsite,workday,job_sources_financial_services.csv,error,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://db.wd3.myworkdayjobs.com/wday/cxs/db/DBWebsite/jobs
+2026-10-24T08:29:48.816795+00:00,unicredit-global,unicredit,UniCredit,Multi-region,https://careers.unicredit.eu/,llm,job_sources_financial_services.csv,success,30,5,5,
+2026-10-24T08:30:58.492370+00:00,lombard-odier-global,lombard-odier,Lombard Odier,Multi-region,https://lombardodier.wd3.myworkdayjobs.com/Lombard_Odier_Careers,workday,job_sources_financial_services.csv,success,17,9,9,
+2026-10-24T08:31:13.336808+00:00,sampo-global,sampo,Sampo Group,Multi-region,https://www.sampo.com/careers/,llm,job_sources_financial_services.csv,zero_jobs,1,0,0,
+2026-10-24T08:31:14.781662+00:00,aviva-global,aviva,Aviva,Multi-region,https://aviva.wd1.myworkdayjobs.com/External,workday,job_sources_financial_services.csv,success,7,1,1,
+2026-10-24T08:31:21.306538+00:00,ubs-global,ubs,UBS Group,Multi-region,https://www.ubs.com/global/en/careers/search-jobs.html,generic,job_sources_financial_services.csv,zero_jobs,30,0,0,
+2026-10-24T08:31:41.986533+00:00,investor-ab-global,investor-ab,Investor AB,Multi-region,https://www.investorab.com/career/,llm,job_sources_holdings.csv,error,1,0,0,https://www.investorab.com/career/: HTTPError
+2026-10-24T08:31:43.187978+00:00,goldman-sachs-global,goldman-sachs,Goldman Sachs,Multi-region,https://www.goldmansachs.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,30,0,0,
+2026-10-24T08:32:04.368548+00:00,jefferies-global,jefferies,Jefferies,Multi-region,https://www.jefferies.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,11,0,0,
+2026-10-24T08:32:11.451412+00:00,wellington-management-global,wellington-management,Wellington Management,Multi-region,https://wellington.wd5.myworkdayjobs.com/External,workday,job_sources_public_markets.csv,success,40,30,30,
+2026-10-24T08:32:39.077689+00:00,flossbach-von-storch-global,flossbach-von-storch,Flossbach von Storch,Multi-region,https://flossbach-von-storch-ag.jobs.personio.de,personio,job_sources_public_markets.csv,zero_jobs,1,0,0,
+2026-10-24T08:32:40.450995+00:00,vontobel-global,vontobel,Vontobel,Multi-region,https://www.vontobel.com/de-ch/ueber-vontobel/karriere/offene-stellen/,generic,job_sources_public_markets.csv,success,30,27,27,
+2026-10-24T08:33:33.710276+00:00,brevan-howard-global,brevan-howard,Brevan Howard,Multi-region,https://www.brevanhoward.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,1,0,0,
+2026-10-24T08:33:35.062064+00:00,pale-fire-capital-global,pale-fire-capital,Pale Fire Capital,Multi-region,https://palefirecapital.com/,generic,job_sources_specialist_funds.csv,zero_jobs,1,0,0,
+2026-10-24T08:25:25.214127+00:00,alixpartners-global,alixpartners,AlixPartners,Multi-region,https://job-boards.greenhouse.io/alixpartners,greenhouse,job_sources_consulting.csv,success,1,23,23,
+2026-10-24T08:25:25.490343+00:00,forvis-mazars-global,forvis-mazars,Forvis Mazars,Multi-region,https://www.forvismazars.com/group/en/join-us,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:25:52.940182+00:00,infosys-consulting-global,infosys-consulting,Infosys Consulting,Multi-region,https://career.infosys.com/,generic,job_sources_consulting.csv,error,1,0,0,https://career.infosys.com/: HTTPError
+2026-10-24T08:25:53.142386+00:00,porsche-consulting-global,porsche-consulting,Porsche Consulting,Multi-region,https://www.porsche-consulting.com/careers/,generic,job_sources_consulting.csv,error,1,0,0,https://www.porsche-consulting.com/careers/: HTTPError
+2026-10-24T08:25:53.790179+00:00,bcg-global,bcg,Boston Consulting Group,Multi-region,https://careers.bcg.com/global/en/search-results,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:26:29.958364+00:00,cinven-global,cinven,Cinven,Multi-region,https://cinven.pinpointhq.com/,generic,job_sources_pe.csv,zero_jobs,2,0,0,
+2026-10-24T08:26:31.604634+00:00,pai-global,pai-partners,PAI Partners,Multi-region,https://www.paipartners.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://www.paipartners.com/careers/: HTTPError
+2026-10-24T08:26:32.024220+00:00,mutares-global,mutares,Mutares,Multi-region,https://career.mutares.com/jobs,teamtailor,job_sources_pe.csv,success,30,24,24,
+2026-10-24T08:26:45.800044+00:00,eqt-global,eqt,EQT,Multi-region,https://eqtgroup.com/careers,generic,job_sources_pe.csv,error,1,0,0,https://eqtgroup.com/careers: HTTPError
+2026-10-24T08:26:46.310260+00:00,verdane-global,verdane,Verdane,Multi-region,https://verdane.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://verdane.com/careers/: HTTPError
+2026-10-24T08:26:46.401109+00:00,man-group-global,man-group,Man Group,Multi-region,https://www.man.com/careers,generic,job_sources_pe.csv,zero_jobs,7,0,0,
+2026-10-24T08:26:55.880555+00:00,vattenfall-global,vattenfall,Vattenfall,Multi-region,https://careers.smartrecruiters.com/vattenfall,smartrecruiters,job_sources_corporate.csv,success,17,16,16,
+2026-10-24T08:27:06.164761+00:00,vitol-global,vitol,Vitol,Multi-region,https://careers.smartrecruiters.com/Vitol,smartrecruiters,job_sources_corporate.csv,success,5,4,4,
+2026-10-24T08:27:08.609484+00:00,bayer-global,bayer,Bayer,Multi-region,https://career.bayer.com/,llm,job_sources_corporate.csv,error,1,0,0,https://career.bayer.com/: HTTPError
+2026-10-24T08:27:09.071168+00:00,nestle-global,nestle,Nestlé,Multi-region,https://career2.successfactors.eu/careers?company=nestleHRprdBX,successfactors,job_sources_corporate.csv,error,1,0,0,https://career2.successfactors.eu/sitemap.xml: HTTPError
+2026-10-24T08:27:09.421567+00:00,volvo-group-global,volvo-group,Volvo Group,Multi-region,https://jobs.volvogroup.com/,successfactors,job_sources_corporate.csv,success,29,28,28,
+2026-10-24T08:27:37.098597+00:00,diageo-global,diageo,Diageo,Multi-region,https://diageo.wd3.myworkdayjobs.com/Diageo_Careers,workday,job_sources_corporate.csv,success,7,1,1,
+2026-10-24T08:27:43.676300+00:00,wipro-global,wipro,Wipro,Multi-region,https://careers.wipro.com/,successfactors,job_sources_corporate.csv,success,141,139,139,https://careers.wipro.com/job/Hyderabad-BUSINESS-ANALYST-L4-IND-500032/1368073255/: SourceTimeout
+2026-10-24T08:30:56.156119+00:00,commerzbank-global,commerzbank,Commerzbank,Multi-region,https://jobs.commerzbank.com/index.php?ac=search_result,llm,job_sources_financial_services.csv,zero_jobs,30,0,0,
+2026-10-24T08:31:30.206862+00:00,eex-global,eex,EEX Group,Multi-region,https://www.eex-group.com/en/career,llm,job_sources_financial_services.csv,error,1,0,0,https://www.eex-group.com/en/career: HTTPError
+2026-10-24T08:31:31.090677+00:00,zurich-insurance-global,zurich-insurance,Zurich Insurance Group,Multi-region,https://www.careers.zurich.com/,llm,job_sources_financial_services.csv,success,30,4,4,https://www.careers.zurich.com/\: HTTPError | https://www.careers.zurich.com/search/\: HTTPError
+2026-10-24T08:31:52.125932+00:00,storebrand-global,storebrand,Storebrand,Multi-region,https://storebrand.wd3.myworkdayjobs.com/Storebrand_Careers,workday,job_sources_financial_services.csv,zero_jobs,6,0,0,
+2026-10-24T08:31:57.885426+00:00,legal-general-global,legal-general,Legal & General,Multi-region,https://careers.legalandgeneral.com/,llm,job_sources_financial_services.csv,success,30,3,3,
+2026-10-24T08:32:23.391356+00:00,swiss-re-global,swiss-re,Swiss Re,Multi-region,https://www.swissre.com/careers/jobSearch.html,generic,job_sources_financial_services.csv,zero_jobs,30,0,0,
+2026-10-24T08:32:50.009461+00:00,industrivarden-global,industrivarden,Industrivärden,Multi-region,https://www.industrivarden.se/en-gb/career/,llm,job_sources_holdings.csv,error,1,0,0,https://www.industrivarden.se/en-gb/career/: HTTPError
+2026-10-24T08:32:50.943492+00:00,morgan-stanley-global,morgan-stanley,Morgan Stanley,Multi-region,https://www.morganstanley.com/people-opportunities,generic,job_sources_investment_banking.csv,zero_jobs,3,0,0,
+2026-10-24T08:32:52.674741+00:00,houlihan-lokey-global,houlihan-lokey,Houlihan Lokey,Multi-region,https://hl.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,12,0,0,
+2026-10-24T08:33:02.065537+00:00,t-rowe-price-global,t-rowe-price,T. Rowe Price,Multi-region,https://troweprice.wd5.myworkdayjobs.com/TRowePrice,workday,job_sources_public_markets.csv,success,7,1,1,
+2026-10-24T08:33:08.567219+00:00,carmignac-global,carmignac,Carmignac,Multi-region,https://www.carmignac.com/en/about-us/careers,llm,job_sources_public_markets.csv,zero_jobs,1,0,0,
+2026-10-24T08:33:09.252823+00:00,nbim-global,nbim,Norges Bank Investment Management,Multi-region,https://www.nbim.no/en/about-us/career/vacancies/,generic,job_sources_public_markets.csv,zero_jobs,30,0,0,
+2026-10-24T08:33:25.811740+00:00,qube-rt-global,qube-rt,Qube Research & Technologies,Multi-region,https://www.qube-rt.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,2,0,0,
+2026-10-24T08:25:19.678541+00:00,fti-consulting-global,fti-consulting,FTI Consulting,Multi-region,https://fticonsult.referrals.selectminds.com/,selectminds,job_sources_consulting.csv,zero_jobs,2,0,0,
+2026-10-24T08:25:21.395909+00:00,rsm-global,rsm,RSM,Multi-region,https://www.rsm.global/careers,generic,job_sources_consulting.csv,zero_jobs,4,0,0,
+2026-10-24T08:25:23.911076+00:00,tcs-consulting-global,tcs-consulting,Tata Consultancy Services,Multi-region,https://www.tcs.com/careers,generic,job_sources_consulting.csv,error,1,0,0,https://www.tcs.com/careers: HTTPError
+2026-10-24T08:25:24.415380+00:00,d-fine-global,d-fine,d-fine,Multi-region,https://www.d-fine.com/en/career/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:26:01.778241+00:00,kearney-global,kearney,Kearney,Multi-region,https://www.kearney.com/careers,generic,job_sources_consulting.csv,zero_jobs,11,0,0,
+2026-10-24T08:26:08.982435+00:00,bc-partners-global,bc-partners,BC Partners,Multi-region,https://www.bcpartners.com/careers/,generic,job_sources_pe.csv,zero_jobs,1,0,0,
+2026-10-24T08:26:10.351080+00:00,waterland-global,waterland,Waterland Private Equity,Multi-region,https://www.waterlandpe.com/careers/,generic,job_sources_pe.csv,zero_jobs,30,0,0,
+2026-10-24T08:27:00.545593+00:00,capvis-global,capvis,Capvis,Multi-region,https://www.capvis.com/careers/,generic,job_sources_pe.csv,zero_jobs,2,0,0,
+2026-10-24T08:27:02.940291+00:00,permira-global,permira,Permira,Multi-region,https://www.permira.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://www.permira.com/careers/: HTTPError
+2026-10-24T08:27:03.330337+00:00,enterprise-investors-global,enterprise-investors,Enterprise Investors,Multi-region,https://www.ei.com.pl/en/career/,generic,job_sources_pe.csv,error,1,0,0,https://www.ei.com.pl/en/career/: HTTPError
+2026-10-24T08:27:03.652378+00:00,janus-henderson-global,janus-henderson,Janus Henderson,Multi-region,https://www.janushenderson.com/corporate/careers/,generic,job_sources_pe.csv,zero_jobs,19,0,0,
+2026-10-24T08:27:19.064194+00:00,statkraft-global,statkraft,Statkraft,Multi-region,https://careers.smartrecruiters.com/statkraft1,smartrecruiters,job_sources_corporate.csv,success,7,6,6,
+2026-10-24T08:27:23.022705+00:00,glencore-global,glencore,Glencore,Multi-region,https://www.glencore.com/en/careers/jobs,llm,job_sources_corporate.csv,zero_jobs,30,0,0,
+2026-10-24T08:27:43.810289+00:00,henkel-global,henkel,Henkel,Multi-region,https://www.henkel.com/careers/find-your-job-apply,llm,job_sources_corporate.csv,zero_jobs,30,0,0,
+2026-10-24T08:28:15.175547+00:00,novartis-global,novartis,Novartis,Multi-region,https://novartis.wd3.myworkdayjobs.com/Novartis_Careers,workday,job_sources_corporate.csv,success,46,36,36,
+2026-10-24T08:28:58.409236+00:00,ericsson-global,ericsson,Ericsson,Multi-region,https://www.ericsson.com/en/careers,llm,job_sources_corporate.csv,error,1,0,0,https://www.ericsson.com/en/careers: HTTPError
+2026-10-24T08:28:58.513777+00:00,bae-systems-global,bae-systems,BAE Systems,Multi-region,https://jobsearch.baesystems.com/,generic,job_sources_corporate.csv,zero_jobs,30,0,0,
+2026-10-24T08:29:23.368786+00:00,cez-group-global,cez-group,ČEZ Group,Multi-region,https://www.kdejinde.cz/,generic,job_sources_corporate.csv,zero_jobs,1,0,0,
+2026-10-24T08:29:26.105049+00:00,dz-bank-global,dz-bank,DZ BANK,Multi-region,https://career012.successfactors.eu/career?company=DZBank,successfactors,job_sources_financial_services.csv,error,1,0,0,https://career012.successfactors.eu/sitemap.xml: HTTPError
+2026-10-24T08:29:26.835561+00:00,bawag-global,bawag,BAWAG Group,Multi-region,https://jobs.bawaggroup.at,successfactors,job_sources_financial_services.csv,zero_jobs,9,0,0,
+2026-10-24T08:29:40.669183+00:00,swiss-life-global,swiss-life,Swiss Life Group,Multi-region,https://swisslife.wd3.myworkdayjobs.com/Swiss_Life_International_Division_Career_Site,workday,job_sources_financial_services.csv,zero_jobs,6,0,0,
+2026-10-24T08:29:46.892003+00:00,hsbc-global,hsbc,HSBC Holdings,Multi-region,https://www.hsbc.com/careers,llm,job_sources_financial_services.csv,zero_jobs,30,0,0,
+2026-10-24T08:30:09.638165+00:00,marsh-mclennan-global,marsh-mclennan,Marsh McLennan,Multi-region,https://careers.marsh.com/global/en/marsh-search,phenom,job_sources_financial_services.csv,error,0,0,0,https://careers.marsh.com/global/en/marsh-search?keywords=finance&from=0&s=1: HTTPError
+2026-10-24T08:30:11.192711+00:00,nordea-global,nordea,Nordea,Multi-region,https://www.nordea.com/en/careers,generic,job_sources_financial_services.csv,zero_jobs,30,0,0,
+2026-10-24T08:30:35.483574+00:00,kinnevik-global,kinnevik,Kinnevik,Multi-region,https://www.kinnevik.com/careers,llm,job_sources_holdings.csv,error,1,0,0,https://www.kinnevik.com/careers: HTTPError
+2026-10-24T08:30:36.145826+00:00,jpmorgan-chase-global,jpmorgan-chase,JPMorgan Chase,Multi-region,https://careers.jpmorgan.com/global/en/home,generic,job_sources_investment_banking.csv,zero_jobs,1,0,0,
+2026-10-24T08:30:37.322386+00:00,moelis-global,moelis,Moelis & Company,Multi-region,https://www.moelis.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,16,0,0,
+2026-10-24T08:30:44.561839+00:00,pimco-global,pimco,PIMCO,Multi-region,https://pimco.wd1.myworkdayjobs.com/pimco-careers,workday,job_sources_public_markets.csv,success,58,47,47,
+2026-10-24T08:31:14.365402+00:00,jupiter-fund-management-global,jupiter-fund-management,Jupiter Fund Management,Multi-region,https://jupiteram.wd3.myworkdayjobs.com/jupiter_careers,workday,job_sources_public_markets.csv,success,12,6,6,
+2026-10-24T08:31:26.030666+00:00,blackrock-global,blackrock,BlackRock,Multi-region,https://careers.blackrock.com/,generic,job_sources_public_markets.csv,zero_jobs,30,0,0,
+2026-10-24T08:31:40.497247+00:00,winton-global,winton,Winton,Multi-region,https://www.winton.com/careers,generic,job_sources_specialist_funds.csv,error,1,0,0,https://www.winton.com/careers: HTTPError
+2026-10-24T08:25:26.968469+00:00,lek-global,lek-consulting,L.E.K. Consulting,Multi-region,https://www.lek.com/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:25:40.722769+00:00,protiviti-global,protiviti,Protiviti,Multi-region,https://www.protiviti.com/gl-en/careers,generic,job_sources_consulting.csv,zero_jobs,2,0,0,
+2026-10-24T08:25:41.682460+00:00,cognizant-global,cognizant,Cognizant,Multi-region,https://careers.cognizant.com/global-en/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:25:55.590829+00:00,zuehlke-global,zuehlke,Zühlke,Multi-region,https://www.zuehlke.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:26:15.810141+00:00,arthur-d-little-global,arthur-d-little,Arthur D. Little,Multi-region,https://careers.adlittle.com/,generic,job_sources_consulting.csv,error,1,0,0,https://careers.adlittle.com/: ConnectTimeout
+2026-10-24T08:27:05.930631+00:00,triton-global,triton,Triton Partners,Multi-region,https://tritonpartners.wd3.myworkdayjobs.com/en-GB/External,workday,job_sources_pe.csv,zero_jobs,6,0,0,
+2026-10-24T08:27:10.839634+00:00,nordic-capital-global,nordic-capital,Nordic Capital,Multi-region,https://career.nordiccapital.com/jobs,teamtailor,job_sources_pe.csv,success,13,3,3,
+2026-10-24T08:27:16.552516+00:00,ufenau-global,ufenau,Ufenau Capital Partners,Multi-region,https://ufenau-capital-partners.jobs.personio.com/,personio,job_sources_pe.csv,zero_jobs,1,0,0,
+2026-10-24T08:27:17.201292+00:00,bridgepoint-global,bridgepoint,Bridgepoint Group,Multi-region,https://www.bridgepoint.eu/careers,generic,job_sources_pe.csv,error,1,0,0,https://www.bridgepoint.eu/careers: HTTPError
+2026-10-24T08:27:18.388233+00:00,mid-europa-global,mid-europa,MidEuropa,Multi-region,https://mideuropa.com/careers/,generic,job_sources_pe.csv,error,1,0,0,https://mideuropa.com/careers/: HTTPError
+2026-10-24T08:27:19.507079+00:00,baillie-gifford-global,baillie-gifford,Baillie Gifford,Multi-region,https://www.bailliegifford.com/en/uk/individual-investors/careers/,generic,job_sources_pe.csv,zero_jobs,21,0,0,
+2026-10-24T08:27:55.326136+00:00,fortum-global,fortum,Fortum,Multi-region,https://jobs.fortum.com/,successfactors,job_sources_corporate.csv,success,3,2,2,
+2026-10-24T08:27:58.268406+00:00,volkswagen-global,volkswagen,Volkswagen Group,Multi-region,https://career5.successfactors.eu/careers?company=VWAGLPPROD10,successfactors,job_sources_corporate.csv,error,1,0,0,https://career5.successfactors.eu/sitemap.xml: HTTPError
+2026-10-24T08:27:58.725690+00:00,continental-global,continental,Continental,Multi-region,https://careers.smartrecruiters.com/Continental,smartrecruiters,job_sources_corporate.csv,success,30,29,29,
+2026-10-24T08:28:16.467358+00:00,roche-global,roche,Roche,Multi-region,https://roche.wd3.myworkdayjobs.com/roche-ext,workday,job_sources_corporate.csv,success,11,4,4,
+2026-10-24T08:28:23.486273+00:00,nokia-global,nokia,Nokia,Multi-region,https://www.nokia.com/about-us/careers/,llm,job_sources_corporate.csv,error,1,0,0,https://www.nokia.com/about-us/careers/: HTTPError
+2026-10-24T08:28:23.708976+00:00,rolls-royce-global,rolls-royce,Rolls-Royce,Multi-region,https://rollsroyce.wd3.myworkdayjobs.com/professional,workday,job_sources_corporate.csv,error,0,0,0,Workday listing: HTTPError: 400 Client Error: Bad Request for url: https://rollsroyce.wd3.myworkdayjobs.com/wday/cxs/rollsroyce/professional/jobs
+2026-10-24T08:28:27.226337+00:00,siemens-global,siemens,Siemens,Multi-region,https://www.siemens.com/de-de/company/jobs/,generic,job_sources_corporate.csv,zero_jobs,18,0,0,
+2026-10-24T08:28:38.017571+00:00,kfw-global,kfw,KfW Group,Multi-region,https://www.kfw.de/About-KfW/Career/,llm,job_sources_financial_services.csv,zero_jobs,17,0,0,
+2026-10-24T08:28:53.432517+00:00,oekb-global,oekb,OeKB Group,Multi-region,https://www.oekb.at/jobs-und-karriere.html,llm,job_sources_financial_services.csv,zero_jobs,26,0,0,
+2026-10-24T08:29:15.450818+00:00,zkb-global,zkb,Zürcher Kantonalbank,Multi-region,https://www.zkb.ch/en/home/career.html,llm,job_sources_financial_services.csv,error,1,0,0,https://www.zkb.ch/en/home/career.html: HTTPError
+2026-10-24T08:29:15.993611+00:00,barclays-global,barclays,Barclays,Multi-region,https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays,workday,job_sources_financial_services.csv,success,12,6,6,
+2026-10-24T08:29:23.481388+00:00,jt-finance-group-global,jt-finance-group,J&T Finance Group,Multi-region,https://www.jtfg.com/,generic,job_sources_financial_services.csv,zero_jobs,1,0,0,
+2026-10-24T08:29:24.944965+00:00,seb-global,seb,SEB Group,Multi-region,https://sebgroup.com/career,generic,job_sources_financial_services.csv,zero_jobs,21,0,0,
+2026-10-24T08:29:41.132945+00:00,exor-global,exor,Exor,Multi-region,https://www.exor.com/pages/exor/careers,llm,job_sources_holdings.csv,error,1,0,0,https://www.exor.com/pages/exor/careers: HTTPError
+2026-10-24T08:29:42.116337+00:00,citigroup-global,citigroup,Citi,Multi-region,https://jobs.citi.com/,generic,job_sources_investment_banking.csv,success,30,4,4,
+2026-10-24T08:29:55.456343+00:00,pjt-partners-global,pjt-partners,PJT Partners,Multi-region,https://pjtpartners.com/careers,generic,job_sources_investment_banking.csv,zero_jobs,3,0,0,
+2026-10-24T08:29:57.026876+00:00,franklin-templeton-global,franklin-templeton,Franklin Templeton,Multi-region,https://franklintempleton.wd5.myworkdayjobs.com/Primary-External-1,workday,job_sources_public_markets.csv,zero_jobs,6,0,0,
+2026-10-24T08:30:03.022240+00:00,federated-hermes-global,federated-hermes,Federated Hermes,Multi-region,https://www.federatedhermes.com/us/careers/,llm,job_sources_public_markets.csv,zero_jobs,1,0,0,
+2026-10-24T08:30:03.786545+00:00,schroders-global,schroders,Schroders,Multi-region,https://www.schroders.com/en/global/individual/careers/,generic,job_sources_public_markets.csv,zero_jobs,26,0,0,
+2026-10-24T08:30:14.829227+00:00,aqr-global,aqr,AQR Capital Management,Multi-region,https://www.aqr.com/About-Us/Careers,generic,job_sources_specialist_funds.csv,zero_jobs,2,0,0,
+2026-10-24T08:25:23.212905+00:00,horvath-global,horvath,Horváth,Multi-region,https://horvath.wd3.myworkdayjobs.com/en-US/Horvath_Careers,workday,job_sources_consulting.csv,zero_jobs,6,0,0,
+2026-10-24T08:25:29.382544+00:00,sia-partners-global,sia-partners,Sia Partners,Multi-region,https://www.sia-partners.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:25:57.494783+00:00,occ-strategy-global,occ-strategy,OC&C Strategy Consultants,Multi-region,https://www.occstrategy.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:26:31.324728+00:00,synpulse-global,synpulse,Synpulse,Multi-region,https://www.synpulse.com/en/careers,generic,job_sources_consulting.csv,zero_jobs,4,0,0,
+2026-10-24T08:26:41.284852+00:00,bearingpoint-global,bearingpoint,BearingPoint,Multi-region,https://www.bearingpoint.com/en/careers/,generic,job_sources_consulting.csv,zero_jobs,30,0,0,
+2026-10-24T08:27:22.510601+00:00,ardian-global,ardian,Ardian,Multi-region,https://ardian.wd103.myworkdayjobs.com/ArdianCareers,workday,job_sources_pe.csv,success,9,3,3,
+2026-10-24T08:27:29.626893+00:00,altor-global,altor,Altor,Multi-region,https://careers.altor.com/,teamtailor,job_sources_pe.csv,zero_jobs,1,0,0,
+2026-10-24T08:27:31.428197+00:00,apollo-global,apollo,Apollo Global Management,Multi-region,https://www.apollo.com/careers,generic,job_sources_pe.csv,zero_jobs,1,0,0,
+2026-10-24T08:27:32.375513+00:00,hg-global,hg,Hg,Multi-region,https://hgcapital.com/careers,generic,job_sources_pe.csv,error,1,0,0,https://hgcapital.com/careers: HTTPError
+2026-10-24T08:27:32.644388+00:00,innova-capital-global,innova-capital,Innova Capital,Multi-region,https://innovacap.com/career/,generic,job_sources_pe.csv,error,1,0,0,https://innovacap.com/career/: HTTPError
+2026-10-24T08:27:33.388533+00:00,abrdn-global,abrdn,abrdn,Multi-region,https://www.abrdn.com/en/corporate/careers,generic,job_sources_pe.csv,error,1,0,0,https://www.abrdn.com/en/corporate/careers: HTTPError
+2026-10-24T08:27:34.871418+00:00,neste-global,neste,Neste,Multi-region,https://jobs.neste.com/,successfactors,job_sources_corporate.csv,zero_jobs,1,0,0,
+2026-10-24T08:27:35.636472+00:00,bmw-global,bmw,BMW Group,Multi-region,https://www.bmwgroup.jobs/en/search.html,llm,job_sources_corporate.csv,zero_jobs,30,0,0,
+2026-10-24T08:27:52.610658+00:00,infineon-global,infineon,Infineon,Multi-region,https://www.infineon.com/cms/en/careers/,llm,job_sources_corporate.csv,zero_jobs,30,0,0,
+2026-10-24T08:28:29.568843+00:00,sandoz-global,sandoz,Sandoz,Multi-region,https://sandoz.wd103.myworkdayjobs.com/Sandoz_Careers,workday,job_sources_corporate.csv,zero_jobs,6,0,0,
+2026-10-24T08:28:34.438210+00:00,kone-global,kone,KONE,Multi-region,https://kone.wd3.myworkdayjobs.com/Careers,workday,job_sources_corporate.csv,success,7,1,1,
+2026-10-24T08:28:43.147374+00:00,national-grid-global,national-grid,National Grid,Multi-region,https://jobs.nationalgrid.com/uk/jobs,llm,job_sources_corporate.csv,zero_jobs,1,0,0,
+2026-10-24T08:28:44.549805+00:00,omv-global,omv,OMV Group,Multi-region,https://careers.omv.com/?locale=en_US,generic,job_sources_corporate.csv,success,30,13,13,
+2026-10-24T08:29:21.926682+00:00,helaba-global,helaba,Helaba,Multi-region,https://www.helaba.com/int/career/,llm,job_sources_financial_services.csv,error,1,0,0,https://www.helaba.com/int/career/: HTTPError
+2026-10-24T08:29:23.671416+00:00,vienna-insurance-group-global,vienna-insurance-group,Vienna Insurance Group,Multi-region,https://group.vig/career/,llm,job_sources_financial_services.csv,zero_jobs,30,0,0,
+2026-10-24T08:30:01.424177+00:00,swedbank-global,swedbank,Swedbank,Multi-region,https://jobs.swedbank.com/,llm,job_sources_financial_services.csv,success,30,15,15,
+2026-10-24T08:30:38.380826+00:00,lloyds-banking-group-global,lloyds-banking-group,Lloyds Banking Group,Multi-region,https://lbg.wd3.myworkdayjobs.com/LBG_Careers,workday,job_sources_financial_services.csv,success,15,7,7,
+2026-10-24T08:30:55.952244+00:00,erste-group-global,erste-group,Erste Group,Multi-region,https://www.erstegroup.com/en/career,generic,job_sources_financial_services.csv,zero_jobs,15,0,0,
+2026-10-24T08:31:05.744298+00:00,danske-bank-global,danske-bank,Danske Bank,Multi-region,https://danskebank.com/careers,generic,job_sources_financial_services.csv,error,18,0,0,https://danskebank.com/careers/professionals: ReadTimeout | https://danskebank.com/careers/flexible-work: ReadTimeout
+2026-10-24T08:32:15.380481+00:00,porsche-se-global,porsche-se,Porsche Automobil Holding,Multi-region,https://www.porsche-se.com/en/company/career,llm,job_sources_holdings.csv,error,1,0,0,https://www.porsche-se.com/en/company/career: HTTPError
+2026-10-24T08:32:16.099636+00:00,bank-of-america-global,bank-of-america,Bank of America,Multi-region,https://careers.bankofamerica.com/en-us,generic,job_sources_investment_banking.csv,success,30,9,9,
+2026-10-24T08:32:43.037825+00:00,perella-weinberg-global,perella-weinberg,Perella Weinberg Partners,Multi-region,https://pwpartners.com/careers/,generic,job_sources_investment_banking.csv,zero_jobs,9,0,0,
+2026-10-24T08:32:46.906385+00:00,robeco-global,robeco,Robeco,Multi-region,https://robeco.wd3.myworkdayjobs.com/robecoexternalcareers,workday,job_sources_public_markets.csv,success,9,3,3,
+2026-10-24T08:32:55.237754+00:00,neuberger-berman-global,neuberger-berman,Neuberger Berman,Multi-region,https://nb.wd1.myworkdayjobs.com/NBCareers,workday,job_sources_public_markets.csv,success,9,3,3,
+2026-10-24T08:33:01.321977+00:00,citadel-global,citadel,Citadel,Multi-region,https://www.citadel.com/careers/,generic,job_sources_specialist_funds.csv,error,1,0,0,https://www.citadel.com/careers/: HTTPError
+2026-10-24T08:33:01.599521+00:00,two-sigma-global,two-sigma,Two Sigma,Multi-region,https://www.twosigma.com/careers/,generic,job_sources_specialist_funds.csv,zero_jobs,30,0,0,

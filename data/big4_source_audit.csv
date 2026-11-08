@@ -1,37 +1,37 @@
 company,market,source_id,seed_url,status,last_run,verified_jobs,errors
-Deloitte,Czechia,deloitte-cz,https://apply.deloittece.com/en_US/careers/SearchJobs/?jobOffset=0&jobRecordsPerPage=10&listFilterMode=1,verified,2026-11-07T11:30:43.892527+00:00,2,
-Deloitte,Germany,deloitte-de,https://jobs.deloitte.de/search/?q=finance&locationsearch=Germany,verified,2026-11-07T11:32:26.785921+00:00,12,
-Deloitte,Austria,deloitte-at,https://careers.smartrecruiters.com/DeloitteAT/deloitte-jobs,verified,2026-11-07T11:33:14.690502+00:00,24,
-Deloitte,Switzerland,deloitte-ch,https://apply.deloitte.ch/CHCareers/SearchJobs/,verified,2026-11-07T11:33:28.982122+00:00,43,
-Deloitte,United Kingdom,deloitte-uk,https://apply.deloitte.co.uk/UKCareers/SearchJobs/,verified,2026-11-07T11:34:36.441420+00:00,138,
-Deloitte,Sweden,deloitte-se,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,verified,2026-11-07T11:37:12.734411+00:00,25,
-Deloitte,Norway,deloitte-no,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,verified,2026-11-07T11:37:39.474371+00:00,5,
-Deloitte,Denmark,deloitte-dk,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,verified,2026-11-07T11:38:05.677867+00:00,10,
-Deloitte,Finland,deloitte-fi,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,verified,2026-11-07T11:38:32.327871+00:00,4,
-EY,Czechia,ey-cz,https://careers.ey.com/ey/search/?q=finance&locationsearch=Czech%20Republic,verified,2026-11-07T11:21:30.670398+00:00,7,
-EY,Germany,ey-de,https://careers.ey.com/ey/search/?q=finance&locationsearch=Germany,verified,2026-11-07T11:22:33.096456+00:00,25,
-EY,Austria,ey-at,https://careers.ey.com/ey/search/?q=finance&locationsearch=Austria,verified,2026-11-07T11:23:34.972768+00:00,11,
-EY,Switzerland,ey-ch,https://careers.ey.com/ey/search/?q=finance&locationsearch=Switzerland,verified,2026-11-07T11:24:36.324897+00:00,25,
-EY,United Kingdom,ey-uk,https://careers.ey.com/ey/search/?q=finance&locationsearch=United%20Kingdom,verified,2026-11-07T11:25:37.281726+00:00,25,
-EY,Sweden,ey-se,https://careers.ey.com/ey/search/?q=finance&locationsearch=Sweden,verified,2026-11-07T11:26:38.737485+00:00,4,
-EY,Norway,ey-no,https://careers.ey.com/ey/search/?q=finance&locationsearch=Norway,verified,2026-11-07T11:28:39.941883+00:00,2,
-EY,Denmark,ey-dk,https://careers.ey.com/ey/search/?q=finance&locationsearch=Denmark,error,2026-11-07T11:27:39.289225+00:00,0,No verified postings returned; source requires review
-EY,Finland,ey-fi,https://careers.ey.com/ey/search/?q=finance&locationsearch=Finland,error,2026-11-07T11:29:41.041676+00:00,0,No verified postings returned; source requires review
-KPMG,Czechia,kpmg-cz,https://kpmg.jobs.cz/,verified,2026-11-07T11:38:58.776953+00:00,3,
-KPMG,Germany,kpmg-de,https://jobs.kpmg.de/?currentPage=1&keyword=finance&pageSize=25,verified,2026-11-07T11:38:59.771833+00:00,84,
-KPMG,Austria,kpmg-at,https://bewerbung.kpmg.at/go/Alle-Stellen/9402055/,verified,2026-11-07T11:39:02.049467+00:00,40,
-KPMG,Switzerland,kpmg-ch,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,verified,2026-11-07T11:40:14.434343+00:00,22,
-KPMG,United Kingdom,kpmg-uk,https://www.kpmgcareers.co.uk/search/vacancies/?intakeType=Experienced,verified,2026-11-07T11:40:15.631849+00:00,48,
-KPMG,Sweden,kpmg-se,https://cdn.jobylon.com/jobs/companies/1532/embed/v2/?page_size=100,verified,2026-11-07T11:40:59.368686+00:00,3,
-KPMG,Norway,kpmg-no,https://www.kpmg.no/ledigestillinger,error,2026-11-07T11:41:03.312749+00:00,0,No verified postings returned; source requires review
-KPMG,Denmark,kpmg-dk,https://candidate.hr-manager.net/Vacancies/List.aspx?customer=kpmg,error,2026-11-07T11:41:04.979502+00:00,0,No verified postings returned; source requires review
-KPMG,Finland,kpmg-fi,https://www.kpmg.fi/rekry,error,2026-11-07T11:41:06.480215+00:00,0,No verified postings returned; source requires review
-PwC,Czechia,pwc-cz,https://jobs-cee.pwc.com/cz/cz/search-results?keywords=finance,verified,2026-11-07T11:04:43.195030+00:00,63,
-PwC,Germany,pwc-de,https://jobs.pwc.de/de/de/search-results?keywords=finance,verified,2026-11-07T11:05:20.763812+00:00,91,
-PwC,Austria,pwc-at,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,verified,2026-11-07T11:06:48.430716+00:00,1,
-PwC,Switzerland,pwc-ch,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,verified,2026-11-07T11:06:57.214231+00:00,17,
-PwC,United Kingdom,pwc-uk,https://jobs.pwc.co.uk/uk/en/search-results?keywords=finance,verified,2026-11-07T11:07:23.276579+00:00,91,
-PwC,Sweden,pwc-se,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,verified,2026-11-07T11:08:23.866500+00:00,3,
-PwC,Norway,pwc-no,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,verified,2026-11-07T11:12:52.167504+00:00,3,
-PwC,Denmark,pwc-dk,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,error,2026-11-07T11:17:05.697752+00:00,0,No verified postings returned; source requires review
-PwC,Finland,pwc-fi,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,verified,2026-11-07T11:17:12.893874+00:00,3,
+Deloitte,Czechia,deloitte-cz,https://apply.deloittece.com/en_US/careers/SearchJobs/?jobOffset=0&jobRecordsPerPage=10&listFilterMode=1,verified,2026-11-08T11:38:13.363372+00:00,2,
+Deloitte,Germany,deloitte-de,https://jobs.deloitte.de/search/?q=finance&locationsearch=Germany,verified,2026-11-08T11:39:41.637547+00:00,12,
+Deloitte,Austria,deloitte-at,https://careers.smartrecruiters.com/DeloitteAT/deloitte-jobs,verified,2026-11-08T11:40:20.897859+00:00,24,
+Deloitte,Switzerland,deloitte-ch,https://apply.deloitte.ch/CHCareers/SearchJobs/,verified,2026-11-08T11:40:33.356567+00:00,43,
+Deloitte,United Kingdom,deloitte-uk,https://apply.deloitte.co.uk/UKCareers/SearchJobs/,verified,2026-11-08T11:41:29.890283+00:00,138,
+Deloitte,Sweden,deloitte-se,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,verified,2026-11-08T11:43:41.157869+00:00,25,
+Deloitte,Norway,deloitte-no,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,verified,2026-11-08T11:44:04.189617+00:00,5,
+Deloitte,Denmark,deloitte-dk,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,verified,2026-11-08T11:44:27.436259+00:00,10,
+Deloitte,Finland,deloitte-fi,https://careers.smartrecruiters.com/DeloitteNordic?oga=true,verified,2026-11-08T11:44:50.438636+00:00,4,
+EY,Czechia,ey-cz,https://careers.ey.com/ey/search/?q=finance&locationsearch=Czech%20Republic,verified,2026-11-08T11:30:49.124051+00:00,7,
+EY,Germany,ey-de,https://careers.ey.com/ey/search/?q=finance&locationsearch=Germany,verified,2026-11-08T11:31:39.472216+00:00,25,
+EY,Austria,ey-at,https://careers.ey.com/ey/search/?q=finance&locationsearch=Austria,verified,2026-11-08T11:32:29.501827+00:00,11,
+EY,Switzerland,ey-ch,https://careers.ey.com/ey/search/?q=finance&locationsearch=Switzerland,verified,2026-11-08T11:33:18.364192+00:00,25,
+EY,United Kingdom,ey-uk,https://careers.ey.com/ey/search/?q=finance&locationsearch=United%20Kingdom,verified,2026-11-08T11:34:08.118380+00:00,25,
+EY,Sweden,ey-se,https://careers.ey.com/ey/search/?q=finance&locationsearch=Sweden,verified,2026-11-08T11:34:57.909804+00:00,4,
+EY,Norway,ey-no,https://careers.ey.com/ey/search/?q=finance&locationsearch=Norway,verified,2026-11-08T11:36:35.361861+00:00,2,
+EY,Denmark,ey-dk,https://careers.ey.com/ey/search/?q=finance&locationsearch=Denmark,error,2026-11-08T11:35:46.708242+00:00,0,No verified postings returned; source requires review
+EY,Finland,ey-fi,https://careers.ey.com/ey/search/?q=finance&locationsearch=Finland,error,2026-11-08T11:37:24.678071+00:00,0,No verified postings returned; source requires review
+KPMG,Czechia,kpmg-cz,https://kpmg.jobs.cz/,verified,2026-11-08T11:45:13.825091+00:00,3,
+KPMG,Germany,kpmg-de,https://jobs.kpmg.de/?currentPage=1&keyword=finance&pageSize=25,verified,2026-11-08T11:45:14.445450+00:00,84,
+KPMG,Austria,kpmg-at,https://bewerbung.kpmg.at/go/Alle-Stellen/9402055/,verified,2026-11-08T11:45:16.190020+00:00,40,
+KPMG,Switzerland,kpmg-ch,https://jobs.kpmg.ch/index.cfm?seq=4&sprCd=en&wlgo=1,verified,2026-11-08T11:46:09.229513+00:00,21,
+KPMG,United Kingdom,kpmg-uk,https://www.kpmgcareers.co.uk/search/vacancies/?intakeType=Experienced,verified,2026-11-08T11:46:10.016535+00:00,48,
+KPMG,Sweden,kpmg-se,https://cdn.jobylon.com/jobs/companies/1532/embed/v2/?page_size=100,verified,2026-11-08T11:46:40.551607+00:00,3,
+KPMG,Norway,kpmg-no,https://www.kpmg.no/ledigestillinger,error,2026-11-08T11:46:42.850512+00:00,0,No verified postings returned; source requires review
+KPMG,Denmark,kpmg-dk,https://candidate.hr-manager.net/Vacancies/List.aspx?customer=kpmg,error,2026-11-08T11:46:44.575257+00:00,0,No verified postings returned; source requires review
+KPMG,Finland,kpmg-fi,https://www.kpmg.fi/rekry,error,2026-11-08T11:46:45.928897+00:00,0,No verified postings returned; source requires review
+PwC,Czechia,pwc-cz,https://jobs-cee.pwc.com/cz/cz/search-results?keywords=finance,verified,2026-11-08T11:17:24.817535+00:00,64,
+PwC,Germany,pwc-de,https://jobs.pwc.de/de/de/search-results?keywords=finance,verified,2026-11-08T11:18:00.592717+00:00,90,
+PwC,Austria,pwc-at,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,verified,2026-11-08T11:19:11.628805+00:00,1,
+PwC,Switzerland,pwc-ch,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,verified,2026-11-08T11:19:17.713076+00:00,17,
+PwC,United Kingdom,pwc-uk,https://jobs.pwc.co.uk/uk/en/search-results?keywords=finance,verified,2026-11-08T11:19:38.104688+00:00,93,
+PwC,Sweden,pwc-se,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,verified,2026-11-08T11:20:35.233915+00:00,3,
+PwC,Norway,pwc-no,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,verified,2026-11-08T11:24:00.436875+00:00,3,
+PwC,Denmark,pwc-dk,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,error,2026-11-08T11:27:20.555296+00:00,0,No verified postings returned; source requires review
+PwC,Finland,pwc-fi,https://pwc.wd3.myworkdayjobs.com/en-US/Global_Experienced_Careers,verified,2026-11-08T11:27:26.101845+00:00,3,
